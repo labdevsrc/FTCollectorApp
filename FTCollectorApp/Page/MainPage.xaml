@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.MainPage">
+
+    <StackLayout VerticalOptions="CenterAndExpand" Margin="20">
+        <Image WidthRequest="70" Source=""/>
+        <Label Text="Login" FontSize="Large"  HorizontalOptions="Center"/>
+        <Entry x:Name="entryEmail" Placeholder="Username" Keyboard="Email" HorizontalOptions="FillAndExpand"/>
+        <Entry x:Name="entryPassword" Placeholder="Password" IsPassword="true" HorizontalOptions="FillAndExpand"/>
+        <Button x:Name="btnLogin" Text="Sign In"  HorizontalOptions="FillAndExpand" 
+                BackgroundColor="{StaticResource blueColor}" TextColor="White" Clicked="btnLogin_Clicked"/>
+    </StackLayout>
+
+</ContentPage>

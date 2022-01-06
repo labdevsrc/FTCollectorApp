@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.VerifyJobPage">
+    <ContentPage.Content>
+        <Grid Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Verify Job" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
+            <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
+            <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" 
+                    SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" 
+                    SelectedIndex="{Binding Owner, Mode=TwoWay}"
+                    >
+            </Picker>
+
+            <!--<Frame Grid.Row="2" Grid.Column="0" Padding="0" CornerRadius="10" IsClippedToBounds="True" BackgroundColor="LightGray">
+            </Frame>-->
+            <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged="jobNumbersPicker_SelectedIndexChanged"  >
+                <Picker.SelectedIndex>0</Picker.SelectedIndex>
+            </Picker>
+            <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Job Location *"/>
+            <Entry x:Name="jobLocation"    Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Contact Name *"/>
+            <Entry x:Name="contactName" Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Customer Name *"/>
+            <Entry x:Name="custName" Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
+            <Entry Text=""  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Button Grid.Row="11" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference custPhoneNum},
+                                       Path=Text.Length}"
+                     Value="0">
+                        <Setter Property="IsEnabled" Value="False" />
+                        <!-- multiple Setters elements are allowed -->
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
