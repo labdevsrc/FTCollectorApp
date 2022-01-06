@@ -18,7 +18,10 @@ namespace FTCollectorApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            // Maps Initial
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
 
+            // SQLite initial
             string dbName = "myfibertrak_db.sqlite";
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string fullPath = Path.Combine(folderPath, dbName);
