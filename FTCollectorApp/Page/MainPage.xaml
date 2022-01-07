@@ -1,15 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FTCollectorApp.MainPage">
+             x:Class="FTCollectorApp.MainPage"
+             NavigationPage.HasNavigationBar="False" 
+             >
 
     <StackLayout VerticalOptions="CenterAndExpand" Margin="20">
         <Image WidthRequest="70" Source=""/>
         <Label Text="Login" FontSize="Large"  HorizontalOptions="Center"/>
-        <Entry x:Name="entryEmail" Placeholder="Username" Keyboard="Email" HorizontalOptions="FillAndExpand"/>
-        <Entry x:Name="entryPassword" Placeholder="Password" IsPassword="true" HorizontalOptions="FillAndExpand"/>
+        <Entry x:Name="entryEmail" Placeholder="Username" Keyboard="Email" HorizontalOptions="FillAndExpand" TextChanged="entryEmail_TextChanged"/>
+        <Entry x:Name="entryPassword" Placeholder="Password" IsPassword="true" HorizontalOptions="FillAndExpand" TextChanged="entryPassword_TextChanged"/>
+        <Entry x:Name="txtFirstName"  HorizontalOptions="FillAndExpand" />
+        <Entry x:Name="txtLastName" HorizontalOptions="FillAndExpand"  />
+
+
         <Button x:Name="btnLogin" Text="Sign In"  HorizontalOptions="FillAndExpand" 
-                BackgroundColor="{StaticResource blueColor}" TextColor="White" Clicked="btnLogin_Clicked"/>
+            BackgroundColor="{StaticResource blueColor}" TextColor="White" Clicked="btnLogin_Clicked">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button"
+                    Binding="{Binding Source={x:Reference txtFirstName},
+                                    Path=Text.Length}"
+                    Value="0">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <!-- multiple Setters elements are allowed -->
+                </DataTrigger>
+            </Button.Triggers>
+
+        </Button>
     </StackLayout>
 
 </ContentPage>

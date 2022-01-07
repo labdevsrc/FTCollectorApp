@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Page"
+             xmlns:fa="clr-namespace:FontAwesome"
              x:Class="FTCollectorApp.VerifyJobPage">
     <ContentPage.Content>
         <Grid Padding="20">
@@ -47,7 +49,7 @@
             <Button Grid.Row="11" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button"
-                     Binding="{Binding Source={x:Reference custPhoneNum},
+                     Binding="{Binding Source={x:Reference jobLocation},
                                        Path=Text.Length}"
                      Value="0">
                         <Setter Property="IsEnabled" Value="False" />

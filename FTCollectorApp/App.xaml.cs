@@ -6,11 +6,21 @@ namespace FTCollectorApp
 {
     public partial class App : Application
     {
+        public static string DatabaseLocation = string.Empty;
         public App()
         {
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());
+        }
+
+        public App(string databaseLoc)
+        {
+            InitializeComponent();
+
+            MainPage = new NavigationPage(new MainPage());
+            DatabaseLocation = databaseLoc;
+
         }
 
         protected override void OnStart()
