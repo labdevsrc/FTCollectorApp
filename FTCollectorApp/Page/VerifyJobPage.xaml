@@ -39,20 +39,23 @@
                 <Picker.SelectedIndex>0</Picker.SelectedIndex>
             </Picker>
             <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Job Location *"/>
-            <Entry x:Name="jobLocation"    Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Entry Text="" x:Name="jobLocation"    Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>
             <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Contact Name *"/>
-            <Entry x:Name="contactName" Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Entry x:Name="contactName" Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="False"/>
             <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Customer Name *"/>
-            <Entry x:Name="custName" Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <Entry x:Name="custName" Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="False"/>
             <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
             <Entry Text=""  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
-            <Button Grid.Row="11" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand">
+            <Button x:Name="submit"  Grid.Row="11" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
+                    Clicked="submit_Clicked"
+                    >
                 <Button.Triggers>
                     <DataTrigger TargetType="Button"
                      Binding="{Binding Source={x:Reference jobLocation},
                                        Path=Text.Length}"
                      Value="0">
                         <Setter Property="IsEnabled" Value="False" />
+                        <Setter Property="BackgroundColor" Value="Gray"/>
                         <!-- multiple Setters elements are allowed -->
                     </DataTrigger>
                 </Button.Triggers>

@@ -5,14 +5,20 @@
              NavigationPage.HasNavigationBar="False" 
              >
 
-    <StackLayout VerticalOptions="CenterAndExpand" Margin="20">
-        <Image WidthRequest="70" Source=""/>
+    <StackLayout VerticalOptions="CenterAndExpand" Margin="10">
+        <Image Source="logo.png" WidthRequest="300" HeightRequest="80"/>
+        
         <Label Text="Login" FontSize="Large"  HorizontalOptions="Center"/>
         <Entry x:Name="entryEmail" Placeholder="Username" Keyboard="Email" HorizontalOptions="FillAndExpand" TextChanged="entryEmail_TextChanged"/>
         <Entry x:Name="entryPassword" Placeholder="Password" IsPassword="true" HorizontalOptions="FillAndExpand" TextChanged="entryPassword_TextChanged"/>
-        <Entry x:Name="txtFirstName"  HorizontalOptions="FillAndExpand" />
-        <Entry x:Name="txtLastName" HorizontalOptions="FillAndExpand"  />
-
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Entry Margin="0,0,5,0" Grid.Column="0" Text="" x:Name="txtFirstName" IsEnabled="False"/>
+            <Entry Margin="5,0,0,0" Grid.Column="1"  x:Name="txtLastName" IsEnabled="False" />
+        </Grid>
 
         <Button x:Name="btnLogin" Text="Sign In"  HorizontalOptions="FillAndExpand" 
             BackgroundColor="{StaticResource blueColor}" TextColor="White" Clicked="btnLogin_Clicked">
@@ -22,6 +28,7 @@
                                     Path=Text.Length}"
                     Value="0">
                     <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="BackgroundColor" Value="Gray" />
                     <!-- multiple Setters elements are allowed -->
                 </DataTrigger>
             </Button.Triggers>

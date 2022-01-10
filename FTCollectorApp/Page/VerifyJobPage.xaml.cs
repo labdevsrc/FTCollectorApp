@@ -12,6 +12,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SQLite;
 using Xamarin.Essentials;
+using FTCollectorApp.Page;
+using System.Net.Http.Headers;
 
 namespace FTCollectorApp
 {
@@ -26,6 +28,7 @@ namespace FTCollectorApp
         // Rajib API variables
         private HttpClient httpClient = new HttpClient();
         private const string Url = "https://collector.fibertrak.com/phonev4/xamarinJob.php";
+        private const string SubmitUrl = "https://collector.fibertrak.com/phonev4/xPostTimesCheck.php";
         private ObservableCollection<Job> _jobdetails;
 
         public VerifyJobPage()
@@ -48,8 +51,9 @@ namespace FTCollectorApp
             {
                 // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
                 _jobdetails.Clear();
-                var response = await httpClient.GetStringAsync(Url);
+                var response = await httpClient.GetStringAsync(Constants.GetJobTableUrl);
                 var content = JsonConvert.DeserializeObject<List<Job>>(response);
+
                 _jobdetails = new ObservableCollection<Job>(content);
                 Console.WriteLine(response);
 
@@ -119,6 +123,41 @@ namespace FTCollectorApp
             contactName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.ContactName).First();
             custName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerName).First();
             custPhoneNum.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerPhone).First();
+
+            Session.jobnum = jobNumber;
+        }
+
+        private void submit_Clicked(object sender, EventArgs e)
+        {
+
+            OnSubmit();
+            Navigation.PushAsync(new SelectCrewPage());
+        }
+
+        async void OnSubmit()
+        {
+            // POST properties in TimeSheetParams 
+            // Properties in TimeSheetParams similar with SESSION 
+            // POST Not worked yet
+            // POST need header with application/x-www-form-urlencoded
+            TimeSheetParams param = new TimeSheetParams
+            {
+                jobnum = Session.jobnum,
+                uid = Session.uid
+            };
+            Uri uri = new Uri(string.Format(Constants.InsertTimeSheetUrl, string.Empty));
+            string json = JsonConvert.SerializeObject(param);
+            Console.WriteLine("json "+ json);
+
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            // content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded"); // not worked yet
+            
+            HttpResponseMessage response = null;
+            response = await httpClient.PostAsync(uri, content);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("OK 200");
+            }
         }
     }
 }

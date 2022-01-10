@@ -20,7 +20,6 @@ namespace FTCollectorApp
 
         // Rajib API variables
         private HttpClient httpClient = new HttpClient();
-        private const string Url = "https://collector.fibertrak.com/phonev4/xamarinLogin.php";
         private ObservableCollection<User> Users;
 
         // View variables
@@ -43,9 +42,9 @@ namespace FTCollectorApp
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
+                
                 Users.Clear();
-                var response = await httpClient.GetStringAsync(Url);
+                var response = await httpClient.GetStringAsync(Constants.GetEndUserTableUrl); // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
                 var content = JsonConvert.DeserializeObject<List<User>>(response);
                 Users = new ObservableCollection<User>(content);
                 Console.WriteLine(response);
@@ -72,7 +71,11 @@ namespace FTCollectorApp
         }
         private void btnLogin_Clicked(object sender, EventArgs e)
         {
+            Session.uid = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
+
             Navigation.PushModalAsync(new VerifyJobPage());
+            // update timesheet table in AWS
+            // update end_user table in AWS
         }
 
 

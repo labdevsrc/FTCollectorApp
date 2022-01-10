@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.Model;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,6 +8,7 @@ namespace FTCollectorApp
     public partial class App : Application
     {
         public static string DatabaseLocation = string.Empty;
+       
         public App()
         {
             InitializeComponent();
