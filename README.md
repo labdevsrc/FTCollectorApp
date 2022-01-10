@@ -1,4 +1,4 @@
-# FTCollectorApp
+# Fibertrak CollectorApp
 
 
-*Overview
+(assets/verifyjob_empty.png)
