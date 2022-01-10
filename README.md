@@ -4,8 +4,8 @@
 
 ## Login (MainPage.xaml.cs)
 ### Ajax request / API access to `backup_of_myfibertrak.end_user` as below :
-`
-        protected override async void OnAppearing()
+
+        `protected override async void OnAppearing()
         {
             base.OnAppearing();
             
