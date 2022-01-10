@@ -13,11 +13,33 @@ Almost all page in colector apps has similar process :
 
 
 ## 1. Create Local SQLite
-Download sqlite-net-pcl from NuGET repo
+* Download sqlite-net-pcl from NuGET repo
 ![NuGet sqlite-net=pcl](assets/sqlite-net.png)
+* Add below code on Solution.Android file MainActivity.cs
+```
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+        ....
+            // SQLite initial
+            string dbName = "myfibertrak_db.sqlite";
+            string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string fullPath = Path.Combine(folderPath, dbName);
 
+            LoadApplication(new App());
+         }
 ```
+* Add below code on Solution.iOS file AppDelegate.cs
 ```
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+        ....
+            // SQLite Dependency for iOS
+            string dbName = "myfibertrak_db.sqlite";
+            string folderPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
+            string fullPath = Path.Combine(folderPath, dbName);
+         }
+```
+
 ## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` as below :
 ```
 protected override async void OnAppearing()
