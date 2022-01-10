@@ -12,7 +12,10 @@ Almost all page in colector apps has similar process :
 
 
 
-## 1. Create class Job
+## 1. Create Local SQLite
+Download sqlite-net-pcl from NuGET repo
+![NuGet sqlite-net=pcl](assets/sqlite-net.png)
+
 ```
 ```
 ## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` as below :
