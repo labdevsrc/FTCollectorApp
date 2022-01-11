@@ -1,6 +1,5 @@
 # Fibertrak CollectorApp
-
-
+> This repo recap Xamarin cross platform implementation from collector.fibertrak.com/phonev4 Web-App.
 
 Almost all page in colector apps has similar process :
 * [Create Local SQLite](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#1-create-local-sqlite)
