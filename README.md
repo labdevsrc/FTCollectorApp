@@ -145,7 +145,7 @@ In this repo , downloaded MySQL table will be stored in local SQLite, and then p
             }
 ```
         
-## 3. Populate local SQLite and Xamarin LINQ
+## 3. Populate local SQLite and Query with Xamarin LINQ
 refer to previous section [link to source code](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L52)
 	
 ```
@@ -175,8 +175,9 @@ in case user not online or no internet network, apps will read from local SQLite
              }
 ```
 ### Query with Xamarin LINQ	
-Class that populated with datas simply can do Query with Xamarin LINQ. For example, we want to select first_name or last_name from known email input `entryEmail.Text` and password entry `entryPassword.Text`.
-We can do query like this 
+Class that populated with datas simply can do Query with Xamarin LINQ. For example, we want to select first_name or last_name from class Users where  email input `entryEmail.Text` and password entry `entryPassword.Text` we're known.
+	
+So, We can do query like this 
 `SELECT first_name FROM Users WHERE email =  entryEmail.Text and password = entryPassword.Text`
 with LINQ as below :
 	
