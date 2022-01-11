@@ -102,8 +102,7 @@ public class User{
 # 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
 Each page has default event handler right after Page appearing , called : OnAppearing().
 In this repo , downloaded MySQL table will be stored in local SQLite, and then populate to List<T> or ObservableCollection<Object>.
-Example : Login Page.
-API script : Select all from 
+[link to OnAppearing() in MainPage.xaml.cs](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L37)
 
 ```
     public partial class MainPage : ContentPage
