@@ -21,7 +21,7 @@ Almost all page in colector apps has similar process :
         {
         ....
             // SQLite initial
-            string dbName = "myfibertrak_db.sqlite";
+            string dbName = "myfibertrak_db.sqlite"; // SQLite db filename
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string fullPath = Path.Combine(folderPath, dbName);
 
@@ -34,11 +34,25 @@ Almost all page in colector apps has similar process :
         {
         ....
             // SQLite Dependency for iOS
-            string dbName = "myfibertrak_db.sqlite";
+            string dbName = "myfibertrak_db.sqlite"; // SQLite db filename
             string folderPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
             string fullPath = Path.Combine(folderPath, dbName);
          }
 ```
+* Add constructor overloading in App.xaml.cs
+```
+    public partial class App : Application
+    {
+        public static string DatabaseLocation = string.Empty;
+        public App(string databaseLoc) // database location as param
+        {
+            InitializeComponent();
+
+            MainPage = new NavigationPage(new MainPage());
+            DatabaseLocation = databaseLoc;
+
+        }
+```        
 
 ## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` as below :
 ```
@@ -62,7 +76,7 @@ protected override async void OnAppearing()
 
         using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
         {
-            conn.CreateTable<User>();
+            conn.CreateTable<User>(); // here , we create table from filename specified in App.Databaselocation or "myfibertrak_db.sqlite"
             conn.InsertAll(content);
         }
     }
