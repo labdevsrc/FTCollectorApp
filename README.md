@@ -5,7 +5,7 @@
 Almost all page in colector apps has similar process :
 * [Create Local SQLite](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#1-create-local-sqlite)
 * Ajax /API Request via HttpClient
-* Populate local SQLite and List var with table from MySQL
+* [Populate local SQLite and List var with table from MySQL](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#3-populate-local-sqlite-and-xamarin-linq)
 * Use table's columns to populate entries in each pages
 * If there's change , submit change with button 
 Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak. 
