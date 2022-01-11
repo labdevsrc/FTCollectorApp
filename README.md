@@ -135,4 +135,8 @@ API script : Select all from
             }
 ```
         
+* Xamarin LINQ
+MainPage.xaml.cs
+	
+`txtFirstName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.first_name).First();`
 
