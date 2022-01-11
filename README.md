@@ -65,6 +65,7 @@ Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak
 
 ### Create AJAX / API script in collector.fibertrak.com cloud
 example collector.fibertrak.com/phonev4/xamarinLogin.php 
+[source code link](https://github.com/labdevsrc/FTCollectorApp/blob/3ee92bf7366ab83679f04040ffa418596dc43234/collector.fibertrak.com/phonev4/xamarinLogin.php#L1)
 ```
 <?php
 	include "conn.php";
@@ -196,3 +197,27 @@ with above LINQ expression, we want to query like this
 ![Verify Job Page](assets/verifyjob_empty.png)
 
 ### Job Class
+[class link](https://github.com/labdevsrc/FTCollectorApp/blob/3ee92bf7366ab83679f04040ffa418596dc43234/FTCollectorApp/Model/Job.cs#L8)
+	
+```
+using SQLite;
+
+namespace FTCollectorApp.Model
+{
+    public class Job
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public int OwnerKey { get; set; }
+        public string OWNER_CD { get; set; }
+        public string OwnerName { get; set; }
+        public string JobNumber { get; set; }
+        public string JobLocation { get; set; }
+        public string ContactName { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhone { get; set; }
+        public string table_name { get; set; }
+    }
+}
+```
+	
