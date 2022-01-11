@@ -46,6 +46,7 @@ This will be changed to GET whole tables at first time Collector installation la
 ```
 
 ### Add constructor overloading in App.xaml.cs
+
 ```
     public partial class App : Application
     {
@@ -99,7 +100,9 @@ public class User{
 }
 ```
 
-# 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
+## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
+### install NUGet NewtonSoft
+![NewtonSoft](assets/newtonsoft.png)
 Each page has default event handler right after Page appearing , called : OnAppearing().
 In this repo , downloaded MySQL table will be stored in local SQLite, and then populate to List<T> or ObservableCollection<Object>.
 [link to OnAppearing() in MainPage.xaml.cs](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L37)
