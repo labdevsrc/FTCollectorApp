@@ -80,8 +80,12 @@ For Login page, we use end_user table with column id, key,first_name, last_name,
 using SQLite; // sqlite-net-pcl library directive 
 
 public class User{
+
+	// set id as PK and autoincrement
+	[PrimaryKey, AutoIncrement] 
         public int id {get; set;}   // use snippet by typing "prop" then tab2x
-        public int UserKey {get; set;}
+        
+	public int UserKey {get; set;} 
         public string email {get;set;}
         public string password {get;set;} 
         public string first_name {get;set;}    
@@ -126,7 +130,7 @@ API script : Select all from
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<User>();
-                    conn.InsertAll(content);
+                    conn.InsertAll(content); // populate SQLite table myfibertrak_db.db3
                 }
             }
 ```
