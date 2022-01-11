@@ -1,8 +1,7 @@
 # Fibertrak CollectorApp
-![Login Page](assets/Login.png)
 
 
-## Login (MainPage.xaml.cs)
+
 Almost all page in colector apps has similar process :
 * Create Local SQLite
 * Ajax /API Request via HttpClient
@@ -12,7 +11,8 @@ Almost all page in colector apps has similar process :
 Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak. 
 This will be changed to GET whole tables at first time Collector installation later
 
-
+## Login (MainPage.xaml.cs)
+![Login Page](assets/Login.png)
 
 ## 1. Create Local SQLite
 * Download sqlite-net-pcl from NuGET's Visual Studio
@@ -152,7 +152,7 @@ with above LINQ expression, we want to query like this
 
 
 
-	
-=====================================================================================================================
+## Verify Job Page 
+> VerifyJobPage.xaml and VerifyJobPage.xaml.cs 
 ![Verify Job Page](assets/verifyjob_empty.png)
-# Verify Job Page (VerifyJobPage.xaml and VerifyJobPage.xaml.cs)
+
