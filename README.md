@@ -5,11 +5,12 @@
 # Login (MainPage.xaml.cs)
 Almost all page in colector apps has similar process :
 * Create Local SQLite
-* Ajax /API Request 
-	*GET each table from AWS MySQL myfibertrak --> this will be changed to GET whole tables at first time Collector install
+* Ajax /API Request via HttpClient
 * Populate local SQLite and List var with table from MySQL
 * Use table's columns to populate entries in each pages
 * If there's change , submit change with button 
+Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak. 
+This will be changed to GET whole tables at first time Collector installation later
 
 
 
