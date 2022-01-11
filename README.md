@@ -130,7 +130,7 @@ API script : Select all from
                 Users = new ObservableCollection<User>(content);
                 Console.WriteLine(response);
 
-
+		// Populate local SQLite 
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<User>();
@@ -139,8 +139,35 @@ API script : Select all from
             }
 ```
         
-# 3. Xamarin LINQ
-in MainPage.xaml.cs, end_user table already populated in local SQLite and IList Users.
+# 3. Populate local SQLite and Xamarin LINQ
+refer to previous section 
+```
+		// Populate local SQLite 
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<User>();
+                    conn.InsertAll(content); // populate SQLite table myfibertrak_db.db3
+                }
+```
+now, end_user table's content already populated to local SQLite.
+in case no internet network, apps will read from local SQLite 
+```
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+		// 
+	     }
+	     else
+	     {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<User>();
+                    var userdetails = conn.Table<User>().ToList();
+                    Users = new ObservableCollection<User>(userdetails);
+                }
+             }
+```
+	
+Sometime we need specific or certain entry from SQLite.
 With Xamarin LINQ, we can do Query example get first_name or last_name from known email and password like below :
 	
 `txtFirstName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.first_name).First();`
