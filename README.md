@@ -2,7 +2,7 @@
 ![Login Page](assets/Login.png)
 
 
-> Login (MainPage.xaml.cs)
+## Login (MainPage.xaml.cs)
 Almost all page in colector apps has similar process :
 * Create Local SQLite
 * Ajax /API Request via HttpClient
