@@ -139,7 +139,8 @@ In this repo , downloaded MySQL table will be stored in local SQLite, and then p
 ```
         
 # 3. Populate local SQLite and Xamarin LINQ
-refer to previous section 
+refer to previous section [link to source code](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L52)
+	
 ```
 		// Populate local SQLite 
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -148,8 +149,9 @@ refer to previous section
                     conn.InsertAll(content); // populate SQLite table myfibertrak_db.db3
                 }
 ```
-now, end_user table's content already populated to local SQLite.
-in case no internet network, apps will read from local SQLite 
+now, if user online, end_user table's content already populated to local SQLite.
+in case user not online or no internet network, apps will read from local SQLite   [link to source code](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L62)
+	
 ```
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
