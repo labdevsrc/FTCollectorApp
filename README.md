@@ -1,6 +1,6 @@
 # Fibertrak CollectorApp
 ![Login Page](assets/Login.png)
-![Verify Job Page](assets/verifyjob_empty.png)
+
 
 # Login (MainPage.xaml.cs)
 Almost all page in colector apps has similar process :
@@ -146,3 +146,7 @@ entryEmail.Text is email from user input.
 entryPassword.Text is password from user input.
 with above LINQ expression, we want to query like this SELECT first_name FROM Users WHERE email =  entryEmail.Text and password = entryPassword.Text
 
+
+	
+![Verify Job Page](assets/verifyjob_empty.png)
+# Verify Job Page (VerifyJobPage.xaml and VerifyJobPage.xaml.cs)
