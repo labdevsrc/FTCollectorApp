@@ -97,7 +97,7 @@ In this repo , downloaded MySQL table will be stored in local SQLite, and then p
 Example : Login Page.
 API script : Select all from 
 
-`
+```
     public partial class MainPage : ContentPage
     {
         private HttpClient httpClient = new HttpClient(); // create new HttpClient
@@ -129,6 +129,6 @@ API script : Select all from
                     conn.InsertAll(content);
                 }
             }
-`
+```
         
 
