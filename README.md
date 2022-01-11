@@ -53,6 +53,22 @@ Almost all page in colector apps has similar process :
 
         }
 ```        
+* Create class that same structure with MySQL table
+for Login page, we use end_user table with column id, key,first_name, last_name, password,...
+``` 
+using SQLite; // sqlite-net-pcl library directive 
+
+public class User{
+        public int id {get; set;}   // use snippet by typing "prop" then tab2x
+        public int UserKey {get; set;}
+        public string email {get;set;}
+        public string password {get;set;} 
+        public string first_name {get;set;}    
+        public string last_name {get;set;}    
+        ...
+        public string created_on {get;set;}        
+}
+```
 
 ## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` as below :
 ```
