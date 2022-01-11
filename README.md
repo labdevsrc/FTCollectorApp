@@ -13,7 +13,7 @@ Almost all page in colector apps has similar process :
 
 
 ## 1. Create Local SQLite
-* Download sqlite-net-pcl from NuGET repo
+* Download sqlite-net-pcl from NuGET's Visual Studio
 ![NuGet sqlite-net=pcl](assets/sqlite-net.png)
 * Add below code on Solution.Android file MainActivity.cs
 ```
