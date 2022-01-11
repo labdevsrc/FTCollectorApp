@@ -83,7 +83,7 @@ Note : JSON column key in , must match with User class properties in User.cs
 
 ### Create User or End_User class that has same structure with MySQL table.
 For Login page, we use end_user table with column id, key,first_name, last_name, password,...
-
+[source code link](https://github.com/labdevsrc/FTCollectorApp/blob/9a33cec3d2cb25e169538dc2ee12cfdbd62e8cb4/FTCollectorApp/Model/User.cs#L4)
 ``` 
 using SQLite; // sqlite-net-pcl library directive 
 
