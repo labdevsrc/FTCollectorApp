@@ -49,7 +49,7 @@ Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak
 ```
 
 ### Add constructor overloading in App.xaml.cs
-
+[source code link](https://github.com/labdevsrc/FTCollectorApp/blob/e1ad57815275c9dd32af659c0d17cdf0ec6cc0e3/FTCollectorApp/App.xaml.cs#L19)
 ```
     public partial class App : Application
     {
