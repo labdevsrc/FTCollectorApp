@@ -60,7 +60,7 @@ Almost all page in colector apps has similar process :
 example collector.fibertrak.com/phonev4/xamarinLogin.php 
 ```
 <?php
-	include "conn.php"
+	include "conn.php";
 	
 	$sql="select email, end_user.key as UserKey, password, first_name, last_name, created_on from end_user where record_state='L' and field_data_collection='Y'";
 	$res= mysqli_query($con,$sql);	
@@ -71,9 +71,11 @@ example collector.fibertrak.com/phonev4/xamarinLogin.php
 	echo json_encode($data);
 ?>
 ```
+Note : JSON column key in , must match with User class properties in User.cs
 
-* Create class that same structure with MySQL table
-for Login page, we use end_user table with column id, key,first_name, last_name, password,...
+* Create User or End_User class that has same structure with MySQL table.
+For Login page, we use end_user table with column id, key,first_name, last_name, password,...
+
 ``` 
 using SQLite; // sqlite-net-pcl library directive 
 
@@ -91,7 +93,7 @@ public class User{
 
 ## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
 Each page has default event handler right after Page appearing , called : OnAppearing().
-Currently, this repo FTCollector app, will download MySQL table (GET) and store on local SQLite, and then populate to List<T> or ObservableCollection<Object>.
+In this repo , downloaded MySQL table will be stored in local SQLite, and then populate to List<T> or ObservableCollection<Object>.
 Example : Login Page.
 API script : Select all from 
 
@@ -122,4 +124,4 @@ protected override async void OnAppearing()
     }
 ```
         
-Note : JSON column key, must match with User class properties in User.cs
+
