@@ -151,6 +151,8 @@ with above LINQ expression, we want to query like this
 `SELECT first_name FROM Users WHERE email =  entryEmail.Text and password = entryPassword.Text`
 
 
+
 	
+=====================================================================================================================
 ![Verify Job Page](assets/verifyjob_empty.png)
 # Verify Job Page (VerifyJobPage.xaml and VerifyJobPage.xaml.cs)
