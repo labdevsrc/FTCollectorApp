@@ -17,9 +17,9 @@ This will be changed to GET whole tables at first time Collector installation la
 ![Login Page](assets/Login.png)
 
 ## 1. Create Local SQLite
-* Download sqlite-net-pcl from NuGET's Visual Studio
+### Download sqlite-net-pcl from NuGET's Visual Studio
 ![NuGet sqlite-net=pcl](assets/sqlite-net.png)
-* Add below code on Solution.Android file MainActivity.cs
+### Add below code on Solution.Android file MainActivity.cs
 ```
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -33,7 +33,7 @@ This will be changed to GET whole tables at first time Collector installation la
          }
 ```
 
-* Add below code on Solution.iOS file AppDelegate.cs
+### Add below code on Solution.iOS file AppDelegate.cs
 ```
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -45,7 +45,7 @@ This will be changed to GET whole tables at first time Collector installation la
          }
 ```
 
-* Add constructor overloading in App.xaml.cs
+### Add constructor overloading in App.xaml.cs
 ```
     public partial class App : Application
     {
@@ -60,7 +60,7 @@ This will be changed to GET whole tables at first time Collector installation la
         }
 ```   
 
-* Create AJAX / API script in collector.fibertrak.com cloud
+### Create AJAX / API script in collector.fibertrak.com cloud
 example collector.fibertrak.com/phonev4/xamarinLogin.php 
 ```
 <?php
@@ -77,7 +77,7 @@ example collector.fibertrak.com/phonev4/xamarinLogin.php
 ```
 Note : JSON column key in , must match with User class properties in User.cs
 
-* Create User or End_User class that has same structure with MySQL table.
+### Create User or End_User class that has same structure with MySQL table.
 For Login page, we use end_user table with column id, key,first_name, last_name, password,...
 
 ``` 
@@ -99,7 +99,7 @@ public class User{
 }
 ```
 
-## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
+# 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
 Each page has default event handler right after Page appearing , called : OnAppearing().
 In this repo , downloaded MySQL table will be stored in local SQLite, and then populate to List<T> or ObservableCollection<Object>.
 Example : Login Page.
@@ -139,7 +139,7 @@ API script : Select all from
             }
 ```
         
-3. Xamarin LINQ
+# 3. Xamarin LINQ
 in MainPage.xaml.cs, end_user table already populated in local SQLite and IList Users.
 With Xamarin LINQ, we can do Query example get first_name or last_name from known email and password like below :
 	
