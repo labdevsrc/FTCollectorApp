@@ -21,6 +21,7 @@ Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak
 ### Download sqlite-net-pcl from NuGET's Visual Studio
 ![NuGet sqlite-net=pcl](assets/sqlite-net.png)
 ### Add below code on Solution.Android file MainActivity.cs
+[source code link](https://github.com/labdevsrc/FTCollectorApp/blob/911e1be4d5d3fd0e7b1bc48602ae7a3effc1835c/FTCollectorApp.Android/MainActivity.cs#L24)
 ```
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -35,6 +36,7 @@ Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak
 ```
 
 ### Add below code on Solution.iOS file AppDelegate.cs
+[source code link](https://github.com/labdevsrc/FTCollectorApp/blob/911e1be4d5d3fd0e7b1bc48602ae7a3effc1835c/FTCollectorApp.iOS/AppDelegate.cs#L29)
 ```
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
