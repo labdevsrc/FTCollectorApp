@@ -97,31 +97,38 @@ In this repo , downloaded MySQL table will be stored in local SQLite, and then p
 Example : Login Page.
 API script : Select all from 
 
-```
-protected override async void OnAppearing()
-{
-    base.OnAppearing();
-
-    Console.WriteLine("Connectivity : " + Connectivity.NetworkAccess);
-    
-    // if Internet connection available 
-    if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+`
+    public partial class MainPage : ContentPage
     {
-
-        Users.Clear();
-        // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
-        // Constants.GetEndUserTableUrl = "https://collector.fibertrak.com/phonev4/xamarinLogin.php"
-        var response = await httpClient.GetStringAsync(Constants.GetEndUserTableUrl); 
-        var content = JsonConvert.DeserializeObject<List<User>>(response);
-        Users = new ObservableCollection<User>(content);
-        Console.WriteLine(response);
-
-        using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+        private HttpClient httpClient = new HttpClient(); // create new HttpClient
+        private ObservableCollection<User> Users;
+        ...
+        
+        protected override async void OnAppearing()
         {
-            conn.CreateTable<User>(); // here , we create table from filename specified in App.Databaselocation or "myfibertrak_db.sqlite"
-            conn.InsertAll(content);
-        }
-    }
-```
+            base.OnAppearing();
+
+            Console.WriteLine("Connectivity : " + Connectivity.NetworkAccess);
+
+            // if Internet connection available 
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                Users.Clear();
+                // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
+                // Constants.GetEndUserTableUrl = "https://collector.fibertrak.com/phonev4/xamarinLogin.php"
+                var response = await httpClient.GetStringAsync(Constants.GetEndUserTableUrl); 
+                var content = JsonConvert.DeserializeObject<List<User>>(response);
+                Users = new ObservableCollection<User>(content);
+                Console.WriteLine(response);
+
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<User>();
+                    conn.InsertAll(content);
+                }
+            }
+`
         
 
