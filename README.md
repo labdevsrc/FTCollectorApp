@@ -3,7 +3,7 @@
 
 
 Almost all page in colector apps has similar process :
-* Create Local SQLite
+* [Create Local SQLite](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#1-create-local-sqlite)
 * Ajax /API Request via HttpClient
 * Populate local SQLite and List var with table from MySQL
 * Use table's columns to populate entries in each pages
