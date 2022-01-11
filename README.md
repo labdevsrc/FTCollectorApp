@@ -174,20 +174,17 @@ in case user not online or no internet network, apps will read from local SQLite
                 }
              }
 ```
-### Xamarin LINQ	
-Sometime we need specific or certain entry from SQLite. With Xamarin LINQ, we can do Query example get first_name or last_name from known email and password like below :
+### Query with Xamarin LINQ	
+Class that populated with datas simply can do Query with Xamarin LINQ. For example, we want to select first_name or last_name from known email input `entryEmail.Text` and password entry `entryPassword.Text`.
+We can do query like this 
+`SELECT first_name FROM Users WHERE email =  entryEmail.Text and password = entryPassword.Text`
+with LINQ as below :
+	
 [source code link](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L86)
 ```
 	txtFirstName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.first_name).First();
 	txtLastName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.last_name).First();
 ```
-	
-`entryEmail.Text` is email from user input.
-	
-`entryPassword.Text` is password from user input.
-	
-with above LINQ expression, we want to query like this 
-`SELECT first_name FROM Users WHERE email =  entryEmail.Text and password = entryPassword.Text`
 
 
 
