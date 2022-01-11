@@ -127,36 +127,47 @@ namespace FTCollectorApp
             Session.jobnum = jobNumber;
         }
 
-        private void submit_Clicked(object sender, EventArgs e)
+        private async void submit_Clicked(object sender, EventArgs e)
         {
 
             OnSubmit();
-            Navigation.PushAsync(new SelectCrewPage());
+
+            //await Navigation.PushAsync(new SelectCrewPage());
         }
 
         async void OnSubmit()
         {
-            // POST properties in TimeSheetParams 
-            // Properties in TimeSheetParams similar with SESSION 
-            // POST Not worked yet
-            // POST need header with application/x-www-form-urlencoded
-            TimeSheetParams param = new TimeSheetParams
-            {
-                jobnum = Session.jobnum,
-                uid = Session.uid
-            };
             Uri uri = new Uri(string.Format(Constants.InsertTimeSheetUrl, string.Empty));
-            string json = JsonConvert.SerializeObject(param);
-            Console.WriteLine("json "+ json);
 
-            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-            // content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded"); // not worked yet
-            
+            // obsolete : POST properties in TimeSheetParams 
+            // this metode not worked for x-wwww-url-formencoded
+            //
+            // Properties in TimeSheetParams similar with SESSION 
+            //TimeSheetParams param = new TimeSheetParams
+            //{
+            //    jobnum = Session.jobnum,
+            //    uid = Session.uid
+            //};
+            // string json = JsonConvert.SerializeObject(param);
+            // HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            // Console.WriteLine("json "+ json);
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+            };
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+
+
             HttpResponseMessage response = null;
             response = await httpClient.PostAsync(uri, content);
+            
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("OK 200");
+                var isi = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("OK 200 " + isi);
             }
         }
     }

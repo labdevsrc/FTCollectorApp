@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 namespace FTCollectorApp.Page
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SelectCrewPage : NavigationPage
+    public partial class SelectCrewPage : ContentPage
     {
         public SelectCrewPage()
         {
