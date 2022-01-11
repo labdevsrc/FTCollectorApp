@@ -7,9 +7,8 @@ Almost all page in colector apps has similar process :
 * [Populate local SQLite and List var with table from MySQL](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#3-populate-local-sqlite-and-xamarin-linq)
 * Use table's columns to populate entries in each pages
 * If there's change , submit change with button 
-Note : for Ajax/ API request , for now GET each table from AWS MySQL myfibertrak.
-
-> This will be changed to GET whole tables at first time Collector installation later
+> this repo : HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
+> v2 :  GET whole tables at first time Collector installation later
 
 ## Login 
 >MainPage.xaml.cs
