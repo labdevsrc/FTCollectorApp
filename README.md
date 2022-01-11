@@ -103,6 +103,7 @@ public class User{
 ## 2. Ajax request / API access to `backup_of_myfibertrak.end_user` 
 ### install NUGet NewtonSoft
 ![NewtonSoft](assets/newtonsoft.png)
+
 Each page has default event handler right after Page appearing , called : OnAppearing().
 In this repo , downloaded MySQL table will be stored in local SQLite, and then populate to List<T> or ObservableCollection<Object>.
 [link to OnAppearing() in MainPage.xaml.cs](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L37)
@@ -141,7 +142,7 @@ In this repo , downloaded MySQL table will be stored in local SQLite, and then p
             }
 ```
         
-# 3. Populate local SQLite and Xamarin LINQ
+## 3. Populate local SQLite and Xamarin LINQ
 refer to previous section [link to source code](https://github.com/labdevsrc/FTCollectorApp/blob/095c644593bf3ad4ec01366bf75a8ad3358191af/FTCollectorApp/Page/MainPage.xaml.cs#L52)
 	
 ```
