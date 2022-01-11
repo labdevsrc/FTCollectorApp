@@ -142,6 +142,7 @@ in MainPage.xaml.cs, end_user table already populated in local SQLite and IList 
 With Xamarin LINQ, we can do Query example get first_name or last_name from known email and password like below :
 	
 `txtFirstName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.first_name).First();`
+	
 entryEmail.Text is email from user input.
 entryPassword.Text is password from user input.
 with above LINQ expression, we want to query like this SELECT first_name FROM Users WHERE email =  entryEmail.Text and password = entryPassword.Text
