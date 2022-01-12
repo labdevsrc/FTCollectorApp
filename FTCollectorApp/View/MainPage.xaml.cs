@@ -12,6 +12,7 @@ using FTCollectorApp.Model;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using Newtonsoft.Json;
+//using FTCollectorApp.ViewModel;
 
 namespace FTCollectorApp
 {
@@ -20,18 +21,12 @@ namespace FTCollectorApp
 
         // Rajib API variables
         private HttpClient httpClient = new HttpClient();
-        private ObservableCollection<User> Users;
+        private ObservableCollection<User> Users = new ObservableCollection<User>();
 
-        // View variables
-        public string txt_first_name;
-        public string txt_last_name;
         public MainPage()
         {
             InitializeComponent();
-            Users = new ObservableCollection<User>();
-            txt_first_name = string.Empty;
-            txt_last_name = string.Empty;
-
+            //BindingContext = new MainPageViewModel();
         }
 
         protected override async void OnAppearing()
@@ -69,28 +64,17 @@ namespace FTCollectorApp
 
 
         }
-        private void btnLogin_Clicked(object sender, EventArgs e)
+        private async void btnLogin_Clicked(object sender, EventArgs e)
         {
             Session.uid = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
 
-            Navigation.PushModalAsync(new VerifyJobPage());
+            await Navigation.PushModalAsync(new VerifyJobPage());
             // update timesheet table in AWS
             // update end_user table in AWS
         }
 
 
         private void entryEmail_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            onEmailorPasswordChanged();
-        }
-
-        private void entryPassword_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            onEmailorPasswordChanged();
-        }
-
-
-        void onEmailorPasswordChanged()
         {
             try
             {
@@ -100,8 +84,28 @@ namespace FTCollectorApp
             }
             catch (Exception exception)
             {
+                txtFirstName.Text = "";
+                txtLastName.Text = "";
                 Console.WriteLine(exception.ToString());
             }
         }
+
+        private void entryPassword_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                txtFirstName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.first_name).First();
+                txtLastName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.last_name).First();
+                Console.WriteLine(txtFirstName.Text + " " + txtLastName.Text);
+            }
+            catch (Exception exception)
+            {
+                txtFirstName.Text = "";
+                txtLastName.Text = "";
+
+                Console.WriteLine(exception.ToString());
+            }
+        }
+
     }
 }

@@ -6,11 +6,19 @@
              >
 
     <StackLayout VerticalOptions="CenterAndExpand" Margin="10">
-        <Image Source="logo.png" WidthRequest="300" HeightRequest="80"/>
-        
-        <Label Text="Login" FontSize="Large"  HorizontalOptions="Center"/>
-        <Entry x:Name="entryEmail" Placeholder="Username" Keyboard="Email" HorizontalOptions="FillAndExpand" TextChanged="entryEmail_TextChanged"/>
-        <Entry x:Name="entryPassword" Placeholder="Password" IsPassword="true" HorizontalOptions="FillAndExpand" TextChanged="entryPassword_TextChanged"/>
+        <Image Source="logo.png" HorizontalOptions="Center"/>
+        <Entry x:Name="entryEmail" Placeholder="Username" 
+            Keyboard="Email" 
+            HorizontalOptions="FillAndExpand" 
+            TextChanged="entryEmail_TextChanged"/>
+        <Entry x:Name="entryPassword" Placeholder="Password"  
+               IsPassword="true" HorizontalOptions="FillAndExpand" 
+               TextChanged="entryPassword_TextChanged"/>
+
+        <!--<Entry Placeholder="Username" Text="{Binding Email, Mode=TwoWay}" 
+        Keyboard="Email" HorizontalOptions="FillAndExpand" TextChanged="entryEmail_TextChanged"/>-->
+        <!--<Entry Placeholder="Password"  Text="{Binding Email, Mode=TwoWay}" IsPassword="true" 
+        HorizontalOptions="FillAndExpand" TextChanged="entryPassword_TextChanged"/>-->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
