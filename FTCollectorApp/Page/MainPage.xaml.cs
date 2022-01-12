@@ -81,19 +81,16 @@ namespace FTCollectorApp
 
         private void entryEmail_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                txtFirstName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.first_name).First();
-                txtLastName.Text = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.last_name).First();
-                Console.WriteLine(txtFirstName.Text + " " + txtLastName.Text);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.ToString());
-            }
+            onEmailorPasswordChanged();
         }
 
         private void entryPassword_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            onEmailorPasswordChanged();
+        }
+
+
+        void onEmailorPasswordChanged()
         {
             try
             {
