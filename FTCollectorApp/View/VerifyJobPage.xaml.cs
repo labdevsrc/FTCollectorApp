@@ -14,6 +14,7 @@ using SQLite;
 using Xamarin.Essentials;
 using FTCollectorApp.Page;
 using System.Net.Http.Headers;
+using Plugin.Connectivity;
 
 namespace FTCollectorApp
 {
@@ -27,18 +28,12 @@ namespace FTCollectorApp
 
         // Rajib API variables
         private HttpClient httpClient = new HttpClient();
-        private const string Url = "https://collector.fibertrak.com/phonev4/xamarinJob.php";
-        private const string SubmitUrl = "https://collector.fibertrak.com/phonev4/xPostTimesCheck.php";
-        private ObservableCollection<Job> _jobdetails;
+        private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
 
         public VerifyJobPage()
         {
             InitializeComponent();
-            //_job = GetJobs();
-            _jobdetails = new ObservableCollection<Job>();
-            //var _ownergrouped = _job.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
-            //foreach (var ownergrouped in _ownergrouped)
-            //    jobOwnersPicker.Items.Add(ownergrouped.OwnerName);
+
             BindingContext = _jobdetails;
         }
 
@@ -46,6 +41,8 @@ namespace FTCollectorApp
         {
             base.OnAppearing();
             Console.WriteLine("Connection : "+ Connectivity.NetworkAccess.ToString());
+
+            CrossConnectivity.Current.ConnectivityChanged += OnConnectivityHandler;
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
@@ -89,6 +86,28 @@ namespace FTCollectorApp
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
         }
 
+        private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
+        {
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
+                _jobdetails.Clear();
+                var response = await httpClient.GetStringAsync(Constants.GetJobTableUrl);
+                var content = JsonConvert.DeserializeObject<List<Job>>(response);
+
+                _jobdetails = new ObservableCollection<Job>(content);
+                Console.WriteLine(response);
+
+                // push Job Tables to local SQLite. Model is in Model.Job
+                // with using(SQLiteConnection) we didn't have to do conn.close()
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Job>();
+                    conn.InsertAll(content);
+                }
+            }
+        }
+
         private void jobOwnersPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -127,7 +146,7 @@ namespace FTCollectorApp
             Session.jobnum = jobNumber;
         }
 
-        private async void submit_Clicked(object sender, EventArgs e)
+        private void submit_Clicked(object sender, EventArgs e)
         {
 
             OnSubmit();
