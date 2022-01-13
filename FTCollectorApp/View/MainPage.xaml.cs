@@ -88,7 +88,9 @@ namespace FTCollectorApp
         {
             Session.uid = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
 
-            await Navigation.PushModalAsync(new VerifyJobPage());
+            await Navigation.PushAsync(new VerifyJobPage());
+            // await Navigation.PushModalAsync(new VerifyJobPage());
+
             // update timesheet table in AWS
             // update end_user table in AWS
         }

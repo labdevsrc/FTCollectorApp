@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage Title="Select Crew" xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage Title="Odometer" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                          NavigationPage.HasNavigationBar="False"
-             x:Class="FTCollectorApp.Page.SelectCrewPage">
+             NavigationPage.HasNavigationBar="False"
+             x:Class="FTCollectorApp.View.OdometerInputPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Button">
@@ -12,13 +12,13 @@
             </Style>
 
         </ResourceDictionary>
-    </ContentPage.Resources>    
+    </ContentPage.Resources>
     <ContentPage.Content>
 
-        <StackLayout Padding="10" >
-            <Label Text="Select Crew Page"
+        <StackLayout Padding="10">
+            <Label Text="Odometer Page"
                 VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />            
+                HorizontalOptions="CenterAndExpand" />
             <Button x:Name="btnFinish" Text="Save and Continue" Clicked="btnFinish_Clicked"/>
             <Button x:Name="btnLogOut" Text="LogOut" Clicked="btnLogOut_Clicked"/>
         </StackLayout>

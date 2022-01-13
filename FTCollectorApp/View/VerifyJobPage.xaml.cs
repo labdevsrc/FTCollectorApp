@@ -15,6 +15,7 @@ using Xamarin.Essentials;
 using FTCollectorApp.Page;
 using System.Net.Http.Headers;
 using Plugin.Connectivity;
+using FTCollectorApp.View;
 
 namespace FTCollectorApp
 {
@@ -146,12 +147,12 @@ namespace FTCollectorApp
             Session.jobnum = jobNumber;
         }
 
-        private void submit_Clicked(object sender, EventArgs e)
+        private async void submit_Clicked(object sender, EventArgs e)
         {
 
             OnSubmit();
 
-            //await Navigation.PushAsync(new SelectCrewPage());
+            await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async void OnSubmit()

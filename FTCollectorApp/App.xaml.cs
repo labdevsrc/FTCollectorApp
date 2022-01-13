@@ -13,14 +13,14 @@ namespace FTCollectorApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new FTCollectorApp.MainPage()); // root page  is MainPage()
         }
 
         public App(string databaseLoc)
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new FTCollectorApp.MainPage());
             DatabaseLocation = databaseLoc;
 
         }
