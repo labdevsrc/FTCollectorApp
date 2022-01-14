@@ -1,4 +1,4 @@
-﻿using FTCollectorApp.Page;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using Plugin.Connectivity;
 //using FTCollectorApp.ViewModel;
 
-namespace FTCollectorApp
+namespace FTCollectorApp.View
 {
     public partial class MainPage : ContentPage
     {

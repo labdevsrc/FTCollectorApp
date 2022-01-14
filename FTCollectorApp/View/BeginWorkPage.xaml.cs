@@ -1,4 +1,4 @@
-﻿using FTCollectorApp.Page;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using Xamarin.Forms.Xaml;
 namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BeginWorkPage : ContentPage
+    public partial class BeginWorkPage : TabbedPage
     {
         public BeginWorkPage()
         {

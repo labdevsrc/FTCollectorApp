@@ -12,9 +12,16 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WorkItem : MasterDetailPage
     {
+        List<WorkStep> workStep;
         public WorkItem()
         {
             InitializeComponent();
+            workStep = new List<WorkStep>();
+
         }
+    }
+
+    public class WorkStep {
+        public string WorkStepItem { get; set; }
     }
 }

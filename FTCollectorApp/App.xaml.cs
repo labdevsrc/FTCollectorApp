@@ -1,4 +1,5 @@
 ﻿using FTCollectorApp.Model;
+using FTCollectorApp.View;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,14 +14,14 @@ namespace FTCollectorApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new FTCollectorApp.MainPage()); // root page  is MainPage()
+            MainPage = new NavigationPage(new MainPage()); // root page  is MainPage()
         }
 
         public App(string databaseLoc)
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new FTCollectorApp.MainPage());
+            MainPage = new NavigationPage(new MainPage());
             DatabaseLocation = databaseLoc;
 
         }

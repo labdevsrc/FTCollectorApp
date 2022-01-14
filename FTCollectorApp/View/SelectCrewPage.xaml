@@ -2,7 +2,7 @@
 <ContentPage Title="Select Crew" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                           NavigationPage.HasNavigationBar="False"
-             x:Class="FTCollectorApp.Page.SelectCrewPage">
+             x:Class="FTCollectorApp.View.SelectCrewPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Button">

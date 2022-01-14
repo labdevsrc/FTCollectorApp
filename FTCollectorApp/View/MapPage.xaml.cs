@@ -7,15 +7,18 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FTCollectorApp
+namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapPage : ContentPage
     {
+        string Coords = string.Empty;
+        string Accuracy = string.Empty;
+
         public MapPage()
         {
             InitializeComponent();
-            GetLocation();
+            
         }
 
         private async void GetLocation()
@@ -25,6 +28,8 @@ namespace FTCollectorApp
             {
                 var location = await Geolocation.GetLocationAsync();
                 locationsMap.IsShowingUser = true;
+                Coords = $"{location.Latitude},{location.Longitude}";
+                Accuracy = $"{location.Accuracy}";
             }
         }
 
@@ -43,6 +48,15 @@ namespace FTCollectorApp
             return status;
 
 
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            GetLocation();
+            txtLocation.Text = Coords;
+            txtAccuracy.Text = Accuracy;
+            // .Text = $"{location.Latitude}, {location.Longitude}";
         }
     }
 }

@@ -2,7 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:Class="FTCollectorApp.MapPage">
+             x:Class="FTCollectorApp.View.MapPage">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Start">
+            <Label x:Name="txtLocation" Text="" ></Label>
+            <Label x:Name="txtAccuracy" Text="" ></Label>            
+        </StackLayout>
+        
+    </ContentPage.Content>
     <maps:Map x:Name="locationsMap"
               IsShowingUser="False"
                     HorizontalOptions="FillAndExpand"

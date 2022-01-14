@@ -12,12 +12,11 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SQLite;
 using Xamarin.Essentials;
-using FTCollectorApp.Page;
 using System.Net.Http.Headers;
 using Plugin.Connectivity;
 using FTCollectorApp.View;
 
-namespace FTCollectorApp
+namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VerifyJobPage : ContentPage

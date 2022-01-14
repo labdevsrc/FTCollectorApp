@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage Title="Begin Work"  xmlns="http://xamarin.com/schemas/2014/forms"
+<TabbedPage Title="Begin Work"  xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.View"
+            xmlns:fa="clr-namespace:FontAwesome"
              x:Class="FTCollectorApp.View.BeginWorkPage">
-    <ContentPage.Resources>
+
+    <ContentPage Title="BeginWork">
+        <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"/>
@@ -12,12 +16,17 @@
 
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.Content>
+        <ContentPage.Content>
         <StackLayout Padding="20" >
             <Button x:Name="btnCrewList" Text="Crew List"/>
             <Button x:Name="btnEqCheckOut" Text="Equipment CheckOut" />
             <Button x:Name="btnEqCheckIn" Text="Equipment CheckIn" />
-            <Button x:Name="btnOdometer" Text="Odometer Input" />            
+            <Button x:Name="btnOdometer" Text="Odometer Input" />         
+            
         </StackLayout>
-    </ContentPage.Content>
-</ContentPage>
+        </ContentPage.Content>
+        
+    </ContentPage>
+    <local:MapPage Title="Find Me"/>
+    <local:MainPage Title="LogOut" Chan/>
+</TabbedPage>

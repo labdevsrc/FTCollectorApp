@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FTCollectorApp.Page
+namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SelectCrewPage : ContentPage
