@@ -18,5 +18,7 @@ namespace FTCollectorApp.Model
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public string table_name { get; set; }
+
+        public int UserId { get; set; } //FK
     }
 }

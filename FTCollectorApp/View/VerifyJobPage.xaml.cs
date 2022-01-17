@@ -15,14 +15,14 @@ using Xamarin.Essentials;
 using System.Net.Http.Headers;
 using Plugin.Connectivity;
 using FTCollectorApp.View;
+using FTCollectorApp.Service;
 
 namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VerifyJobPage : ContentPage
     {
-        private IList<Job> _job;
-        private Job _currjob;
+
         public List<string> OwnerName;
 
 
@@ -84,6 +84,9 @@ namespace FTCollectorApp.View
             // populate to JobOwnerPicker
             foreach (var ownerName in ownerNames)
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
+
+            await LocateService.GetLocation(); // get current location
+
         }
 
         private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
@@ -149,31 +152,22 @@ namespace FTCollectorApp.View
         private async void submit_Clicked(object sender, EventArgs e)
         {
 
-            OnSubmit();
+            await OnSubmit();
 
             await Navigation.PushAsync(new BeginWorkPage());
         }
 
-        async void OnSubmit()
+        async Task OnSubmit()
         {
-            Uri uri = new Uri(string.Format(Constants.InsertTimeSheetUrl, string.Empty));
 
-            // obsolete : POST properties in TimeSheetParams 
-            // this metode not worked for x-wwww-url-formencoded
-            //
-            // Properties in TimeSheetParams similar with SESSION 
-            //TimeSheetParams param = new TimeSheetParams
-            //{
-            //    jobnum = Session.jobnum,
-            //    uid = Session.uid
-            //};
-            // string json = JsonConvert.SerializeObject(param);
-            // HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-            // Console.WriteLine("json "+ json);
+            
+            Uri uri = new Uri(string.Format(Constants.InsertTimeSheetUrl, string.Empty));
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("lattitude", $"{LocateService.Coords.Latitude}"),
+                new KeyValuePair<string, string>("longitude", $"{LocateService.Coords.Longitude}"),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
             };
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST

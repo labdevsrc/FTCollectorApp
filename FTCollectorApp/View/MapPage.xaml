@@ -4,15 +4,17 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="FTCollectorApp.View.MapPage">
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Start">
-            <Label x:Name="txtLocation" Text="" ></Label>
-            <Label x:Name="txtAccuracy" Text="" ></Label>            
-        </StackLayout>
-        
-    </ContentPage.Content>
+        <StackLayout Padding="20" VerticalOptions="FillAndExpand">
+            <Label x:Name="txtLocation" Text="StringFormat='Accuracy'" ></Label>
+            <Label x:Name="txtAccuracy" Text="" ></Label>
+            <Button Text="Get Location" x:Name="btnClick" Clicked="btnClick_Clicked"/>
+
     <maps:Map x:Name="locationsMap"
               IsShowingUser="False"
                     HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"
+              VerticalOptions="FillAndExpand"
               MapType="Hybrid"/>
+        </StackLayout>
+
+    </ContentPage.Content>
 </ContentPage>

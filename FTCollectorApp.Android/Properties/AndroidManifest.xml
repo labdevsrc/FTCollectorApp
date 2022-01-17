@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.ftcollectorapp">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
     <application android:label="FTCollectorApp.Android" android:theme="@style/MainTheme">
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyABS5HQDZVCLCRyUSTuLBTewtYQ6ZUFZ1E"/>
+		
+		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyABS5HQDZVCLCRyUSTuLBTewtYQ6ZUFZ1E"/>
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
 		<uses-library android:name="org.apache.http.legacy" android:required="false" />
 	</application>
@@ -15,4 +16,6 @@
 	<uses-feature android:name="android.hardware.location" android:required="false" />
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
+	
+	
 </manifest>

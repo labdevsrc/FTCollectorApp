@@ -1,6 +1,9 @@
 ﻿using FTCollectorApp.Model;
+using FTCollectorApp.Service;
 using FTCollectorApp.View;
 using System;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -9,7 +12,6 @@ namespace FTCollectorApp
     public partial class App : Application
     {
         public static string DatabaseLocation = string.Empty;
-       
         public App()
         {
             InitializeComponent();
@@ -24,6 +26,8 @@ namespace FTCollectorApp
             MainPage = new NavigationPage(new MainPage());
             DatabaseLocation = databaseLoc;
 
+            
+
         }
 
         protected override void OnStart()
@@ -37,5 +41,8 @@ namespace FTCollectorApp
         protected override void OnResume()
         {
         }
+
+
+
     }
 }

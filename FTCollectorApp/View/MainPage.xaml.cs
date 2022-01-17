@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
+using FTCollectorApp.Service;
 //using FTCollectorApp.ViewModel;
 
 namespace FTCollectorApp.View
@@ -22,13 +23,47 @@ namespace FTCollectorApp.View
 
         // Rajib API variables
         private HttpClient httpClient = new HttpClient();
-        private ObservableCollection<User> Users = new ObservableCollection<User>();
+        private ObservableCollection<User> Users;
 
         public MainPage()
         {
             InitializeComponent();
             //BindingContext = new MainPageViewModel();
+            Users = new ObservableCollection<User>();
         }
+
+
+        /*protected override async void OnAppearing()
+        {
+            Console.WriteLine("Connectivity : " + Connectivity.NetworkAccess);
+
+            // https://stackoverflow.com/questions/40458842/internet-connectivity-listener-in-xamarin-forms
+            // https://www.youtube.com/watch?v=aA-sA0ACum0
+            CrossConnectivity.Current.ConnectivityChanged += OnConnectivityHandler;
+
+            Users.Clear();
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<User>();
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    //await GetEndUserFromAWSMySQLTable();
+
+                    var users = await CloudDBService.GetEndUserFromAWSMySQLTable();
+                    conn.InsertAll(users);
+                    Users = new ObservableCollection<User>(users);
+
+                }
+                else
+                {
+                    var users = conn.Table<User>().ToList();
+                    Users = new ObservableCollection<User>(users);
+                }
+            }
+            base.OnAppearing();
+        }*/
 
 
         protected override async void OnAppearing()
@@ -41,7 +76,20 @@ namespace FTCollectorApp.View
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                await GetEndUserFromAWSMySQLTable();
+                //await GetEndUserFromAWSMySQLTable();
+                Users.Clear();
+                var users = await CloudDBService.GetEndUserFromAWSMySQLTable();
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    //Type classname = object1.GetType();
+
+                    conn.CreateTable<User>();
+                    Console.WriteLine("CreateTable<User> ");
+                    conn.InsertAll(users);
+                }
+
+                Users = new ObservableCollection<User>(users);
             }
             else
             {
@@ -53,7 +101,6 @@ namespace FTCollectorApp.View
                     Users = new ObservableCollection<User>(userdetails);
                 }
             }
-
             base.OnAppearing();
         }
 
@@ -90,6 +137,7 @@ namespace FTCollectorApp.View
 
             await Navigation.PushAsync(new VerifyJobPage());
             // await Navigation.PushModalAsync(new VerifyJobPage());
+
 
             // update timesheet table in AWS
             // update end_user table in AWS

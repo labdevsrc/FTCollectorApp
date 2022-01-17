@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +13,13 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapPage : ContentPage
     {
-        string Coords = string.Empty;
-        string Accuracy = string.Empty;
 
         public MapPage()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
         }
 
-        private async void GetLocation()
+        /*private async void GetLocation()
         {
             var status = await CheckAndRequestLocationPermission();
             if (status == PermissionStatus.Granted)
@@ -30,6 +28,8 @@ namespace FTCollectorApp.View
                 locationsMap.IsShowingUser = true;
                 Coords = $"{location.Latitude},{location.Longitude}";
                 Accuracy = $"{location.Accuracy}";
+                txtLocation.Text = Coords;
+                txtAccuracy.Text = Accuracy;
             }
         }
 
@@ -48,15 +48,22 @@ namespace FTCollectorApp.View
             return status;
 
 
-        }
+        }*/
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            GetLocation();
-            txtLocation.Text = Coords;
-            txtAccuracy.Text = Accuracy;
-            // .Text = $"{location.Latitude}, {location.Longitude}";
+            await LocateService.GetLocation();
+            txtLocation.Text = $"{LocateService.Coords.Latitude}, {LocateService.Coords.Longitude}";
+            txtAccuracy.Text = $"{LocateService.Coords.Accuracy}";
+
+        }
+
+        private async void btnClick_Clicked(object sender, EventArgs e)
+        {
+            await LocateService.GetLocation();
+            txtLocation.Text = $"{LocateService.Coords.Latitude}, {LocateService.Coords.Longitude}";
+            txtAccuracy.Text = $"{LocateService.Coords.Accuracy}";
         }
     }
 }

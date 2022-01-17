@@ -21,6 +21,21 @@ namespace FTCollectorApp.View
             btnEqCheckOut.Clicked += (s, e) => Navigation.PushAsync(new EqCheckOutPage());
             btnEqCheckIn.Clicked += (s, e) => Navigation.PushAsync(new EqCheckInPage());
             btnOdometer.Clicked += (s, e) => Navigation.PushAsync(new OdometerInputPage());
+
+            
+
+        }
+
+        protected override void OnAppearing()
+        {
+            
+
+            base.OnAppearing();
+        }
+
+        private async void btnLogOut_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopToRootAsync();
         }
     }
 }

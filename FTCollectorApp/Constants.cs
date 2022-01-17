@@ -7,8 +7,10 @@ namespace FTCollectorApp
 
     public class Constants
     {
-        public const string InsertTimeSheetUrl = "https://collector.fibertrak.com/phonev4/xPostTimesCheck.php";
-        public const string GetJobTableUrl = "https://collector.fibertrak.com/phonev4/xamarinJob.php";
-        public const string GetEndUserTableUrl = "https://collector.fibertrak.com/phonev4/xamarinLogin.php";
+        public const string BaseUrl = "https://collector.fibertrak.com/phonev4/";
+        public const string InsertTimeSheetUrl = "xPostTimesCheck.php";
+        public const string GetJobTableUrl = "xamarinJob.php";
+        public const string GetEndUserTableUrl = "xamarinLogin.php";
+        public const string InsertJobEvents = "xSaveJobEvents.php";
     }
 }
