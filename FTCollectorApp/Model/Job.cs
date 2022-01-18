@@ -20,5 +20,8 @@ namespace FTCollectorApp.Model
         public string table_name { get; set; }
 
         public int UserId { get; set; } //FK
+
+        public int JobKey { get; set; }
+        public string TimesheetStatus { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace FTCollectorApp.Service
             if (status == PermissionStatus.Granted)
             {
                 Coords = await Geolocation.GetLocationAsync();
+                Session.gps_sts = "1";
             }
         }
 
@@ -22,11 +24,16 @@ namespace FTCollectorApp.Service
         {
             var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
             if (status == PermissionStatus.Granted)
+            {
+                Session.gps_sts = "1";
                 return status;
+            }
+
 
             if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 // permission 
+                Session.gps_sts = "0";
             }
 
             status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();

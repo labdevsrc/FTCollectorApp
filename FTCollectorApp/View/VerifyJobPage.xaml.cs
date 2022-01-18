@@ -27,14 +27,29 @@ namespace FTCollectorApp.View
 
 
         // Rajib API variables
-        private HttpClient httpClient = new HttpClient();
+        private HttpClient httpClient; // = new HttpClient();
         private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
+
+
+
 
         public VerifyJobPage()
         {
             InitializeComponent();
 
             BindingContext = _jobdetails;
+
+            try
+            {
+                httpClient = new HttpClient()
+                {
+                    BaseAddress = new Uri(Constants.BaseUrl)
+                };
+            }
+            catch
+            {
+
+            }
         }
 
         protected override async void OnAppearing()
@@ -48,11 +63,11 @@ namespace FTCollectorApp.View
             {
                 // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
                 _jobdetails.Clear();
-                var response = await httpClient.GetStringAsync(Constants.GetJobTableUrl);
-                var content = JsonConvert.DeserializeObject<List<Job>>(response);
+               
+                var content = await CloudDBService.GetJobFromAWSMySQLTable();
 
                 _jobdetails = new ObservableCollection<Job>(content);
-                Console.WriteLine(response);
+                Console.WriteLine(content);
 
                 // push Job Tables to local SQLite. Model is in Model.Job
                 // with using(SQLiteConnection) we didn't have to do conn.close()
@@ -95,11 +110,10 @@ namespace FTCollectorApp.View
             {
                 // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
                 _jobdetails.Clear();
-                var response = await httpClient.GetStringAsync(Constants.GetJobTableUrl);
-                var content = JsonConvert.DeserializeObject<List<Job>>(response);
+                var content = await CloudDBService.GetJobFromAWSMySQLTable();
 
                 _jobdetails = new ObservableCollection<Job>(content);
-                Console.WriteLine(response);
+                Console.WriteLine(content);
 
                 // push Job Tables to local SQLite. Model is in Model.Job
                 // with using(SQLiteConnection) we didn't have to do conn.close()
@@ -153,34 +167,60 @@ namespace FTCollectorApp.View
         {
 
             await OnSubmit();
-
-            await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async Task OnSubmit()
         {
 
+            if(Session.gps_sts == "1")
+            {
+                Session.manual_latti = string.Empty;
+                Session.manual_longi = string.Empty;
+            }
+            Session.event_type = 2;
+
             
-            Uri uri = new Uri(string.Format(Constants.InsertTimeSheetUrl, string.Empty));
+            //Uri uri = new Uri(string.Format(Constants.InsertJobEvents, string.Empty));
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
-                new KeyValuePair<string, string>("lattitude", $"{LocateService.Coords.Latitude}"),
-                new KeyValuePair<string, string>("longitude", $"{LocateService.Coords.Longitude}"),
+
+                new KeyValuePair<string, string>("min", "0"),
+                new KeyValuePair<string, string>("hr", "0"),
+
+
+                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
+                
+                // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
+                // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
+                new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
+                new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
+
+                // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
+                // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
+                new KeyValuePair<string, string>("lattitude2", $"{LocateService.Coords.Latitude}"),
+                new KeyValuePair<string, string>("longitude2", $"{LocateService.Coords.Longitude}"),
+
+                new KeyValuePair<string, string>("evtype", "2"), // event_type 2 : verified job
+
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
             };
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
             HttpContent content = new FormUrlEncodedContent(keyValues);
 
-
             HttpResponseMessage response = null;
-            response = await httpClient.PostAsync(uri, content);
-            
-            if (response.IsSuccessStatusCode)
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                var isi = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("OK 200 " + isi);
+                response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var isi = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("OK 200 " + isi);
+
+                }
             }
         }
     }
