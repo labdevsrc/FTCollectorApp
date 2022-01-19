@@ -23,6 +23,8 @@ namespace FTCollectorApp.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+
+
             global::Xamarin.Forms.Forms.Init();
             // Xamarin maps for iOS
             Xamarin.FormsMaps.Init();
@@ -30,6 +32,7 @@ namespace FTCollectorApp.iOS
             string dbName = "myfibertrak_db.sqlite";
             string folderPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
             string fullPath = Path.Combine(folderPath, dbName);
+            Rg.Plugins.Popup.Popup.Init();
 
             LoadApplication(new App(fullPath));
 
