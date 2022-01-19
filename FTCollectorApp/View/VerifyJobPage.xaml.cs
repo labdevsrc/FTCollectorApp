@@ -28,10 +28,8 @@ namespace FTCollectorApp.View
 
 
         // Rajib API variables
-        private HttpClient httpClient; // = new HttpClient();
+        private HttpClient httpClient; 
         private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
-
-
 
 
         public VerifyJobPage()
@@ -169,6 +167,8 @@ namespace FTCollectorApp.View
         {
 
             await OnSubmit();
+
+            await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async Task OnSubmit()
@@ -176,15 +176,14 @@ namespace FTCollectorApp.View
 
             if(Session.gps_sts == "1")
             {
-                Session.manual_latti = string.Empty;
-                Session.manual_longi = string.Empty;
+                Session.manual_latti = "0";
+                Session.manual_longi = "0";
             }
-            Session.event_type = 2;
+            Session.event_type = Session.JobVerified;
 
-            
-            //Uri uri = new Uri(string.Format(Constants.InsertJobEvents, string.Empty));
+            await CloudDBService.PostJobEvent(); //still working on it
 
-            var keyValues = new List<KeyValuePair<string, string>>{
+            /*    var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
@@ -204,7 +203,7 @@ namespace FTCollectorApp.View
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
 
-                new KeyValuePair<string, string>("evtype", "2"), // event_type 2 : verified job
+                new KeyValuePair<string, string>("evtype", Session.JobVerified), // event_type 2 : verified job
 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
 
@@ -217,19 +216,26 @@ namespace FTCollectorApp.View
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("OK 200 " + isi);
+                    response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("OK 200 " + isi);
 
+                    }
+                }
+                catch (Exception err)
+                {
+                    Console.WriteLine("Exception " +err.ToString());
                 }
             }
             else
             {
+                // Put to Pending Sync
 
-
-            }
+            }*/
         }
     }
 }

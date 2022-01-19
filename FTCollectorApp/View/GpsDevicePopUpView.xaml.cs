@@ -21,15 +21,15 @@ namespace FTCollectorApp.View
         public GpsDevicePopUpView()
         {
             InitializeComponent();
-            //_location = loc;
+            Session.manual_latti = "0";
+            Session.manual_longi = "0";
+            Session.lattitude2 = "0";
+            Session.longitude2 = "0";
         }
 
         protected override async void OnAppearing()
         {
-            Session.manual_latti = String.Empty;
-            Session.manual_longi = String.Empty;
-            Session.lattitude2 = String.Empty;
-            Session.longitude2 = String.Empty;
+
 
             await LocationService.GetLocation();
             if (LocationService.Coords != null)
@@ -38,12 +38,15 @@ namespace FTCollectorApp.View
                 txtAccuracy.Text = $"Accuracy is {String.Format("{0:0.###} m", _location.Accuracy.ToString())}";
                 txtCoords.Text = $"Current Point is {String.Format("{0:0.#######}", _location.Latitude.ToString())} ,{String.Format("{0:0.#######}", _location.Longitude.ToString())} ";
                 Session.gps_sts = "1";
+
             }
             else
             {
                 Session.gps_sts = "0";
 
             }
+
+            Console.WriteLine($"GpsPopupView [OnAppearing]");
             base.OnAppearing();
         }
 
@@ -58,8 +61,8 @@ namespace FTCollectorApp.View
             if (_location == null)
             {
                 await LocationService.GetLocation();
-                
 
+                Console.WriteLine($"[DeviceChecked] Retry GPS");
             }
 
             if (_location != null)
@@ -72,29 +75,38 @@ namespace FTCollectorApp.View
                 Session.gps_sts = "1";
                 Session.lattitude2 = lattitude;
                 Session.longitude2 = longitude;
+                Console.WriteLine($"[DeviceChecked] Coords {lattitude}, {longitude}");
             }
+
+
         }
 
         private async void ExternalChecked(object sender, CheckedChangedEventArgs e)
         {
-            _location = LocationService.Coords;
-            if (_location == null)
+            try
             {
-                await LocationService.GetLocation();
+                _location = LocationService.Coords;
+                if (_location == null)
+                {
+                    await LocationService.GetLocation();
+                }
 
-
+                if (_location != null)
+                {
+                    var accuracy = String.Format("{0:0.###} m", _location.Accuracy.ToString());
+                    var lattitude = String.Format("{0:0.#######}", _location.Latitude.ToString());
+                    var longitude = String.Format("{0:0.#######}", _location.Longitude.ToString());
+                    txtAccuracy.Text = $"Accuracy is {accuracy}";
+                    txtCoords.Text = $"Current Point is {lattitude} ,{longitude} ";
+                    Session.gps_sts = "1";
+                    Session.lattitude2 = lattitude;
+                    Session.longitude2 = longitude;
+                    Console.WriteLine($"[ExternalChecked] Coords {lattitude}, {longitude}");
+                }
             }
-
-            if (_location != null)
+            catch (Exception exp)
             {
-                var accuracy = String.Format("{0:0.###} m", _location.Accuracy.ToString());
-                var lattitude = String.Format("{0:0.#######}", _location.Latitude.ToString());
-                var longitude = String.Format("{0:0.#######}", _location.Longitude.ToString());
-                txtAccuracy.Text = $"Accuracy is {accuracy}";
-                txtCoords.Text = $"Current Point is {lattitude} ,{longitude} ";
-                Session.gps_sts = "1";
-                Session.lattitude2 = lattitude;
-                Session.longitude2 = longitude;
+                Console.WriteLine($"[ExternalChecked] Exception {exp.ToString()}");
             }
         }
 
@@ -102,6 +114,9 @@ namespace FTCollectorApp.View
         {
 
             Session.gps_sts = "0";
+            if (string.IsNullOrEmpty(entryLat.Text) || string.IsNullOrEmpty(entryLon.Text))
+                return;
+
             Session.manual_latti = String.Format("{0:0.#######}", entryLat.Text);
             Session.manual_longi = String.Format("{0:0.#######}", entryLon.Text);
 

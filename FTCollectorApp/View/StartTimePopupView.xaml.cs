@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SQLite;
-using System.Net.Http;
-using Newtonsoft.Json;
-using Plugin.Connectivity;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+using Rg.Plugins.Popup.Pages;
+using Rg.Plugins.Popup.Services;
+using FTCollectorApp.Service;
 using FTCollectorApp.Model;
+using System.Net.Http;
 using Xamarin.Essentials;
 
-namespace FTCollectorApp.Service
+namespace FTCollectorApp.View
 {
-    public static class CloudDBService
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class StartTimePopupView
     {
-        static HttpClient client;
-
-        static CloudDBService()
+        private HttpClient httpClient;
+        public StartTimePopupView()
         {
+            InitializeComponent();
+
             try
             {
-                client = new HttpClient()
+                httpClient = new HttpClient()
                 {
                     BaseAddress = new Uri(Constants.BaseUrl)
                 };
@@ -30,52 +36,42 @@ namespace FTCollectorApp.Service
             }
         }
 
-        // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
-        public static Task<IEnumerable<User>> GetEndUserFromAWSMySQLTable() =>
-            GetAsync<IEnumerable<User>>(Constants.GetEndUserTableUrl);
-        public static Task<IEnumerable<Job>> GetJobFromAWSMySQLTable() =>
-            GetAsync<IEnumerable<Job>>(Constants.GetJobTableUrl);
 
-        async static Task<T> GetAsync<T>(String Url)
+        protected override void OnAppearing()
         {
-            var json = string.Empty;
+            base.OnAppearing();
             
-            try
-            {
-                json = await client.GetStringAsync(Url);
-                Console.WriteLine($"[CloudDBService] response : {json}");
-                var content = JsonConvert.DeserializeObject<T>(json);
-                //var sqliteContent = JsonConvert.DeserializeObject<List<User>>(response);
-
-                Console.WriteLine($"[CloudDBService] content : {content.ToString()}");             
-                return content;
-            }
-            catch(Exception exp)
-            {
-                Console.WriteLine("Exception {0}", exp.ToString());
-            }
-
-            return JsonConvert.DeserializeObject<T>(json); 
+            btnClose.Clicked += (s,e) => PopupNavigation.Instance.PopAsync(true);
+            
         }
-        public static  Task PostJobEvent() => PostJobEvent("0:0");
-        public static async Task PostJobEvent(string param1)
-        {
-            string hour = "0";
-            string minutes = "0";
-            if (Session.event_type == Session.ClockIn)
-            {
-                DateTime dt = DateTime.Parse(param1);
-                hour = dt.ToString("h");
-                minutes = dt.ToString("m");
-            }
 
+        private async void btnSave_Clicked(object sender, EventArgs e)
+        {
+            Session.event_type = Session.LunchOut;
+            await OnJobSaveEvent();
+            await PopupNavigation.Instance.PopAsync(true);
+        }
+
+        async Task OnJobSaveEvent()
+        {
+
+            if (Session.gps_sts == "1")
+            {
+                Session.manual_latti = string.Empty;
+                Session.manual_longi = string.Empty;
+            }
+            DateTime dt = DateTime.Parse(entryStartTime.Text);
+            var user_hours = dt.ToString("h");
+            var user_minutes = dt.ToString("m");
+
+            //await CloudDBService.PostJobEvent(); still working on it
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
-                new KeyValuePair<string, string>("min", minutes),
-                new KeyValuePair<string, string>("hr", hour),
+                new KeyValuePair<string, string>("min", user_hours),
+                new KeyValuePair<string, string>("hr", user_minutes),
 
 
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
@@ -90,7 +86,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
 
-                new KeyValuePair<string, string>("evtype", Session.event_type), 
+                new KeyValuePair<string, string>("evtype", Session.LunchOut), 
 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
 
@@ -103,16 +99,18 @@ namespace FTCollectorApp.Service
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                response = await client.PostAsync(Constants.InsertJobEvents, content);
+                response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
                 if (response.IsSuccessStatusCode)
                 {
                     var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"[CloudService] Response from {Constants.InsertJobEvents} OK = 200 , content :" + isi);
+                    Console.WriteLine("OK 200 " + isi);
+
                 }
             }
             else
             {
                 // Put to Pending Sync
+
             }
         }
     }

@@ -20,7 +20,7 @@ namespace FTCollectorApp.Service
             }
         }
 
-        public static async Task<PermissionStatus> CheckAndRequestLocationPermission()
+        static async Task<PermissionStatus> CheckAndRequestLocationPermission()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
             if (status == PermissionStatus.Granted)
@@ -34,6 +34,7 @@ namespace FTCollectorApp.Service
             {
                 // permission 
                 Session.gps_sts = "0";
+                return status;
             }
 
             status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();

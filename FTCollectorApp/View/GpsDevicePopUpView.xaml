@@ -24,7 +24,7 @@
         <Button x:Name="btnSave" Text="Save" BackgroundColor="{StaticResource blueColor}" 
                 Clicked="btnSave_Clicked">
             <Button.Triggers>
-                <!--<MultiTrigger TargetType="Button">
+               <MultiTrigger TargetType="Button">
                     <MultiTrigger.Conditions>
                         <BindingCondition Binding="{Binding Source={x:Reference entryLat},
                                    Path=Text.Length}"
@@ -34,14 +34,14 @@
                                Value="0" />
                         <BindingCondition Binding="{Binding Source={x:Reference deviceChecked},
                                    Path=IsChecked}"
-                               Value="0" />
+                               Value="true" />
                         <BindingCondition Binding="{Binding Source={x:Reference externalChecked},
                                    Path=IsChecked}"
-                               Value="0" />                        
+                               Value="true" />                        
                     </MultiTrigger.Conditions>
                     <Setter Property="IsEnabled" Value="False" />
                     <Setter Property="BackgroundColor" Value="Gray"/>
-                </MultiTrigger>-->
+                </MultiTrigger>
                 
                 <!--<DataTrigger TargetType="Button"
                     Binding="{Binding Source={x:Reference entryLat},

@@ -24,7 +24,7 @@ namespace FTCollectorApp.View
     {
 
         // Rajib API variables
-        private HttpClient httpClient = new HttpClient();
+        //private HttpClient httpClient = new HttpClient();
         private ObservableCollection<User> Users;
 
         public MainPage()
@@ -115,16 +115,14 @@ namespace FTCollectorApp.View
             Users.Clear();
 
             // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
-            var response = await httpClient.GetStringAsync(Constants.GetEndUserTableUrl);
-
-            var content = JsonConvert.DeserializeObject<List<User>>(response);
-            Users = new ObservableCollection<User>(content);
-            Console.WriteLine(response);
+            var users = await CloudDBService.GetEndUserFromAWSMySQLTable();
+            Users = new ObservableCollection<User>(users);
+            Console.WriteLine(users);
 
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<User>();
-                conn.InsertAll(content);
+                conn.InsertAll(users);
             }
         }
 
