@@ -16,6 +16,7 @@ using System.Net.Http.Headers;
 using Plugin.Connectivity;
 using FTCollectorApp.View;
 using FTCollectorApp.Service;
+using Rg.Plugins.Popup.Services;
 
 namespace FTCollectorApp.View
 {
@@ -100,7 +101,8 @@ namespace FTCollectorApp.View
             foreach (var ownerName in ownerNames)
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
 
-            await LocateService.GetLocation(); // get current location
+            //await LocateService.GetLocation(); // get current location
+            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
         }
 
@@ -199,12 +201,14 @@ namespace FTCollectorApp.View
 
                 // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("lattitude2", $"{LocateService.Coords.Latitude}"),
-                new KeyValuePair<string, string>("longitude2", $"{LocateService.Coords.Longitude}"),
+                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
+                new KeyValuePair<string, string>("longitude2", Session.longitude2),
 
                 new KeyValuePair<string, string>("evtype", "2"), // event_type 2 : verified job
 
-                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+
+                new KeyValuePair<string, string>("ajaxname", Constants.InsertJobEvents)
             };
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
             HttpContent content = new FormUrlEncodedContent(keyValues);
@@ -214,13 +218,17 @@ namespace FTCollectorApp.View
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
-
                 if (response.IsSuccessStatusCode)
                 {
                     var isi = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("OK 200 " + isi);
 
                 }
+            }
+            else
+            {
+
+
             }
         }
     }

@@ -14,10 +14,12 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 using FTCollectorApp.Service;
-//using FTCollectorApp.ViewModel;
+using Rg.Plugins.Popup.Services;
+//using Rg.Plugins.Popup.Services;
 
 namespace FTCollectorApp.View
 {
+
     public partial class MainPage : ContentPage
     {
 
@@ -102,6 +104,9 @@ namespace FTCollectorApp.View
                 }
             }
             base.OnAppearing();
+
+            //await LocationService.GetLocation();
+
         }
 
 
@@ -134,13 +139,12 @@ namespace FTCollectorApp.View
         private async void btnLogin_Clicked(object sender, EventArgs e)
         {
             Session.uid = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
+           //location = LocateService.Coords;
 
-            await Navigation.PushAsync(new VerifyJobPage());
-            // await Navigation.PushModalAsync(new VerifyJobPage());
+            await Navigation.PushAsync(new VerifyJobPage()); // VerifyJobPage
+            //await Navigation.PushModalAsync(new VerifyJobPage());  // this cause crash
 
 
-            // update timesheet table in AWS
-            // update end_user table in AWS
         }
 
 
@@ -177,5 +181,5 @@ namespace FTCollectorApp.View
             }
         }
 
-    }
+        }
 }
