@@ -7,13 +7,18 @@ Almost all page in colector apps has similar process :
 * [Populate local SQLite and List var with table from MySQL](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#3-populate-local-sqlite-and-xamarin-linq)
 * Use table's columns to populate entries in each pages
 * If there's change , submit change with button 
-> this repo : HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
+> Note 
+> Now : Do HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
 > v2 :  GET whole tables at first time Collector installation later
+Extras :
+* [Popup View](https://github.com/labdevsrc/FTCollectorApp#popup-view)
+* [Signature Pad](https://github.com/labdevsrc/FTCollectorApp#signature-pad)
+
 
 ## Login 
 >MainPage.xaml.cs
 
-![Login Page](assets/Login.png)
+![Login Page](assets/login_page.png)
 
 ## 1. Create Local SQLite
 ### Download sqlite-net-pcl from NuGET's Visual Studio
@@ -217,4 +222,25 @@ namespace FTCollectorApp.Model
     }
 }
 ```
+	
+## Popup View
+> Example [GPS popup]()
+
+![Login Page](assets/gps_popup.jpg)
+![Login Page](assets/starttime_popup.jpg)
+	
+	
+## 1. Create Popup View
+* [Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
+* Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
+AppDelegate.cs
+`Rg.Plugins.Popup.Popup.Init();`
+
+	
+## Signature Pad
+> Example [Signature Pad]()
+[Source link :](https://www.c-sharpcorner.com/article/how-to-create-a-signaturepad-using-xamarin-forms/)
+
+## 1. Create Signature pad
+* [Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
 	
