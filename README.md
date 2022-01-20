@@ -11,14 +11,14 @@ Almost all page in colector apps has similar process :
 > Now : Do HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
 > v2 :  GET whole tables at first time Collector installation later
 Extras :
-* [Popup View] 
-* [Signature Pad]
+* [Popup View] (https://github.com/labdevsrc/FTCollectorApp#popup-view)
+* [Signature Pad] (https://github.com/labdevsrc/FTCollectorApp#signature-pad)
 
 
 ## Login 
 >MainPage.xaml.cs
 
-![Login Page](assets/Login.png)
+![Login Page](assets/login_page.png)
 
 ## 1. Create Local SQLite
 ### Download sqlite-net-pcl from NuGET's Visual Studio
@@ -226,8 +226,10 @@ namespace FTCollectorApp.Model
 ## Popup View
 > Example [GPS popup]()
 
-![Login Page](assets/Login.png)
-
+![Login Page](assets/gps_popup.jpg)
+![Login Page](assets/starttime_popup.jpg)
+	
+	
 ## 1. Create Popup View
 * [Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
 * Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
