@@ -168,7 +168,8 @@ namespace FTCollectorApp.View
 
             await OnSubmit();
 
-            await Navigation.PushAsync(new BeginWorkPage());
+            await Navigation.PushAsync(new EquipmenReturnPage());
+            //await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async Task OnSubmit()

@@ -4,7 +4,7 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              x:Class="FTCollectorApp.View.StartTimePopupView">
     <ContentPage.Content>
-        <StackLayout
+        <StackLayout 
         Margin="12"
         Padding="24"
         BackgroundColor="White"
@@ -12,7 +12,9 @@
         VerticalOptions="Center"     
             >
             <Label Text="Time:"/>
-            <Entry x:Name="entryStartTime" Placeholder="StartTime"/>
+            <Entry x:Name="entryStartTime" 
+                   Text="{Binding HourMins, Mode=TwoWay}"
+                   Placeholder="StartTime" TextChanged="entryStartTime_TextChanged"/>
             <Label Text="Per Diem:"/>
             <Picker x:Name="pickPerDiem" >
                 <Picker.Items>
@@ -23,7 +25,7 @@
             </Picker>
             <Grid ColumnDefinitions="*,*,*,*">
                 <Button x:Name="btnSave" Grid.Column="2" Text="Save" Clicked="btnSave_Clicked"/>
-                <Button x:Name="btnClose" Grid.Column="3" Text="Close"/>
+                <Button x:Name="btnClose" Grid.Column="3" Text="Close" />
             </Grid>
         </StackLayout>
     </ContentPage.Content>

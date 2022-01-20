@@ -19,6 +19,7 @@ namespace FTCollectorApp.View
     public partial class StartTimePopupView
     {
         private HttpClient httpClient;
+        public string HourMins;
         public StartTimePopupView()
         {
             InitializeComponent();
@@ -40,6 +41,7 @@ namespace FTCollectorApp.View
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            HourMins = DateTime.Now.ToString("HH:mm");
             
             btnClose.Clicked += (s,e) => PopupNavigation.Instance.PopAsync(true);
             
@@ -112,6 +114,11 @@ namespace FTCollectorApp.View
                 // Put to Pending Sync
 
             }
+        }
+
+        private void entryStartTime_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
