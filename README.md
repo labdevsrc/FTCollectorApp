@@ -11,8 +11,8 @@ Almost all page in colector apps has similar process :
 > Now : Do HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
 > v2 :  GET whole tables at first time Collector installation later
 Extras :
-* [Popup View] (https://github.com/labdevsrc/FTCollectorApp#popup-view)
-* [Signature Pad] (https://github.com/labdevsrc/FTCollectorApp#signature-pad)
+* [Popup View](https://github.com/labdevsrc/FTCollectorApp#popup-view)
+* [Signature Pad](https://github.com/labdevsrc/FTCollectorApp#signature-pad)
 
 
 ## Login 
