@@ -17,6 +17,7 @@ using Plugin.Connectivity;
 using FTCollectorApp.View;
 using FTCollectorApp.Service;
 using Rg.Plugins.Popup.Services;
+using FTCollectorApp.Utils;
 
 namespace FTCollectorApp.View
 {
@@ -26,35 +27,34 @@ namespace FTCollectorApp.View
 
         public List<string> OwnerName;
 
-
-        // Rajib API variables
-        private HttpClient httpClient; 
         private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
-
+        private bool _isBusy;
+        public bool isBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                if (_isBusy == value)
+                    return;
+                _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
 
         public VerifyJobPage()
         {
             InitializeComponent();
 
             BindingContext = _jobdetails;
-
-            try
-            {
-                httpClient = new HttpClient()
-                {
-                    BaseAddress = new Uri(Constants.BaseUrl)
-                };
-            }
-            catch
-            {
-
-            }
         }
+
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            Console.WriteLine("Connection : "+ Connectivity.NetworkAccess.ToString());
+
+            isBusy = true;
+            Console.WriteLine("Connection : " + Connectivity.NetworkAccess.ToString());
 
             CrossConnectivity.Current.ConnectivityChanged += OnConnectivityHandler;
 
@@ -62,7 +62,7 @@ namespace FTCollectorApp.View
             {
                 // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
                 _jobdetails.Clear();
-               
+
                 var content = await CloudDBService.GetJobFromAWSMySQLTable();
 
                 _jobdetails = new ObservableCollection<Job>(content);
@@ -102,6 +102,7 @@ namespace FTCollectorApp.View
             //await LocateService.GetLocation(); // get current location
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
+            isBusy = false;
         }
 
         private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
@@ -167,7 +168,16 @@ namespace FTCollectorApp.View
         {
 
             await OnSubmit();
+            
+            var speaker = DependencyService.Get<ITextToSpeech>();
+            speaker?.Speak("Job verified!");
 
+            //speak.Clicked += (sender, e) => {
+            //    DependencyService.Get<ITextToSpeech>().Speak("Hello from Xamarin Forms");
+            //};
+            //Content = speak;
+
+            //await Navigation.PushAsync(new SitePage());
             await Navigation.PushAsync(new EquipmenReturnPage());
             //await Navigation.PushAsync(new BeginWorkPage());
         }
@@ -181,9 +191,10 @@ namespace FTCollectorApp.View
                 Session.manual_longi = "0";
             }
             Session.event_type = Session.JobVerified;
-
-            await CloudDBService.PostJobEvent(); //still working on it
-
+            
+            IsBusy = true;
+            await CloudDBService.PostJobEvent(); 
+            IsBusy = false;
             /*    var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),

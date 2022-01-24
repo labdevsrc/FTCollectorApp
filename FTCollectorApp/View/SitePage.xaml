@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage Title="Site" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.SitePage">
+    <ContentPage.Content>
+        <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+            <Label Text="Site" FontSize="Large" HorizontalOptions="Center"/>
+            <Label Text="Major Site Type*" HorizontalOptions="Start"/>
+            <Picker ItemsSource="{Binding MajorSites}" x:Name="majorSitePicker" />
+            <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
+            <Picker ItemsSource="{Binding MinorSites}" x:Name="minorSitePicker"/>
+            <Label Text="Enter PC tag" HorizontalOptions="Start"/>
+            <Entry Placeholder="tag number" x:Name="entryTagNum" />
+            <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
+            <Entry Placeholder="tag number" x:Name="entryTagNum2" />
+            <Label Text="Stage" HorizontalOptions="Start"/>
+            <Picker ItemsSource="{Binding stage}" x:Name="stagePicker" IsEnabled="false" />
+            <Button x:Name="btnRecordGPS" Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
+                    Clicked="btnRecordGPS_Clicked">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entryTagNum2},
+                                       Path=Text.Length}"
+                     Value="0">
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Setter Property="BackgroundColor" Value="Gray"/>
+                        <!-- multiple Setters elements are allowed -->
+                    </DataTrigger>
+                </Button.Triggers>
+
+            </Button>
+
+            <Button x:Name="btnGPSOffset" Text="User GPS Offset"  BackgroundColor="{StaticResource blueColor}"
+                    Clicked="btnGPSOffset_Clicked">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                     Binding="{Binding Source={x:Reference entryTagNum2},
+                                       Path=Text.Length}"
+                     Value="0">
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Setter Property="BackgroundColor" Value="Gray"/>
+                        <!-- multiple Setters elements are allowed -->
+                    </DataTrigger>
+                </Button.Triggers>
+
+            </Button>
+       
+            
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

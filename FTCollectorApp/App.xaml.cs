@@ -12,6 +12,7 @@ namespace FTCollectorApp
     public partial class App : Application
     {
         public static string DatabaseLocation = string.Empty;
+        public static string SignatureFileLocation = string.Empty;
         public App()
         {
             InitializeComponent();
@@ -27,6 +28,18 @@ namespace FTCollectorApp
             DatabaseLocation = databaseLoc;
 
             
+
+        }
+
+        public App(string databaseLoc, string signatureLoc)
+        {
+            InitializeComponent();
+
+            MainPage = new NavigationPage(new MainPage());
+            DatabaseLocation = databaseLoc;
+            SignatureFileLocation = signatureLoc;
+
+
 
         }
 

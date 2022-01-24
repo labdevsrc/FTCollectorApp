@@ -32,9 +32,14 @@ namespace FTCollectorApp.iOS
             string dbName = "myfibertrak_db.sqlite";
             string folderPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
             string fullPath = Path.Combine(folderPath, dbName);
+
+            string signature = "signature.png";
+            string folderPath_ = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
+            string signaturefullPath = Path.Combine(folderPath_, signature);
+
             Rg.Plugins.Popup.Popup.Init();
 
-            LoadApplication(new App(fullPath));
+            LoadApplication(new App(fullPath, signaturefullPath));
 
             return base.FinishedLaunching(app, options);
         }

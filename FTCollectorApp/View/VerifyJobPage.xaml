@@ -60,6 +60,8 @@
                     </DataTrigger>
                 </Button.Triggers>
             </Button>
+            <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>

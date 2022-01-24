@@ -53,6 +53,7 @@
             </Button.Triggers>       
             
         </Button>
+        <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
 
 
     </StackLayout>

@@ -36,6 +36,9 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<Job>> GetJobFromAWSMySQLTable() =>
             GetAsync<IEnumerable<Job>>(Constants.GetJobTableUrl);
 
+        public static Task<IEnumerable<Site>> GetSiteFromAWSMySQLTable() =>
+            GetAsync<IEnumerable<Site>>(Constants.GetSiteTableUrl);
+
         async static Task<T> GetAsync<T>(String Url)
         {
             var json = string.Empty;
@@ -104,6 +107,56 @@ namespace FTCollectorApp.Service
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 response = await client.PostAsync(Constants.InsertJobEvents, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var isi = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[CloudService] Response from {Constants.InsertJobEvents} OK = 200 , content :" + isi);
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+            }
+        }
+
+
+        public static async Task PostSiteAsync(string param1)
+        {
+            string hour = "0";
+            string minutes = "0";
+
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+
+                new KeyValuePair<string, string>("min", minutes),
+                new KeyValuePair<string, string>("hr", hour),
+
+
+                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
+                
+                new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
+                new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
+
+
+                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
+                new KeyValuePair<string, string>("longitude2", Session.longitude2),
+
+                new KeyValuePair<string, string>("evtype", Session.event_type),
+
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+
+                new KeyValuePair<string, string>("ajaxname", Constants.InsertSiteTableUrl)
+            };
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                response = await client.PostAsync(Constants.InsertSiteTableUrl, content);
                 if (response.IsSuccessStatusCode)
                 {
                     var isi = await response.Content.ReadAsStringAsync();

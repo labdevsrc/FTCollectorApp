@@ -14,9 +14,23 @@ using Xamarin.Forms.Xaml;
 namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GpsDevicePopUpView
+    public partial class GpsDevicePopUpView 
     {
         Location _location;
+        private bool _isBusy;
+
+        // Turn IsBusy to bind with XAML component Activity
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                if (_isBusy == value)
+                    return;
+                _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
 
         public GpsDevicePopUpView()
         {
@@ -25,11 +39,13 @@ namespace FTCollectorApp.View
             Session.manual_longi = "0";
             Session.lattitude2 = "0";
             Session.longitude2 = "0";
+            BindingContext = this;
+            this.CloseWhenBackgroundIsClicked = false;
         }
 
         protected override async void OnAppearing()
         {
-
+            IsBusy = true;
 
             await LocationService.GetLocation();
             if (LocationService.Coords != null)
@@ -42,11 +58,14 @@ namespace FTCollectorApp.View
             }
             else
             {
+                txtAccuracy.Text = "Location Service disabled";
                 Session.gps_sts = "0";
 
             }
 
             Console.WriteLine($"GpsPopupView [OnAppearing]");
+
+            IsBusy = false;
             base.OnAppearing();
         }
 
@@ -76,6 +95,10 @@ namespace FTCollectorApp.View
                 Session.lattitude2 = lattitude;
                 Session.longitude2 = longitude;
                 Console.WriteLine($"[DeviceChecked] Coords {lattitude}, {longitude}");
+            }
+            else
+            {
+                txtAccuracy.Text = "Location Service disabled";
             }
 
 
