@@ -18,7 +18,7 @@ Extras :
 ## Login 
 >MainPage.xaml.cs
 
-![Login Page](assets/login_page.png)
+![Login Page](assets/login_page.jpg)
 
 ## 1. Create Local SQLite
 ### Download sqlite-net-pcl from NuGET's Visual Studio
