@@ -39,6 +39,9 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<Site>> GetSiteFromAWSMySQLTable() =>
             GetAsync<IEnumerable<Site>>(Constants.GetSiteTableUrl);
 
+        public static Task<IEnumerable<Crewdefault>> GetCrewDefaultFromAWSMySQLTable() =>
+            GetAsync<IEnumerable<Crewdefault>>(Constants.GetCrewdefaultTableUrl);
+
         async static Task<T> GetAsync<T>(String Url)
         {
             var json = string.Empty;

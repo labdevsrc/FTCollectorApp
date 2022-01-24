@@ -178,8 +178,8 @@ namespace FTCollectorApp.View
             //Content = speak;
 
             //await Navigation.PushAsync(new SitePage());
-            await Navigation.PushAsync(new EquipmenReturnPage());
-            //await Navigation.PushAsync(new BeginWorkPage());
+            //await Navigation.PushAsync(new EquipmenReturnPage());
+            await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async Task OnSubmit()

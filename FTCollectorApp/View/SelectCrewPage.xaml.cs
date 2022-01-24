@@ -20,8 +20,9 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SelectCrewPage : ContentPage
     {
-
+        List<int> crewlist = new List<int>();
         private ObservableCollection<User> Users = new ObservableCollection<User>();
+        private ObservableCollection<Crewdefault> Crewtable = new ObservableCollection<Crewdefault>();
         public SelectCrewPage()
         {
             InitializeComponent();
@@ -29,9 +30,101 @@ namespace FTCollectorApp.View
 
         private async void btnFinish_Clicked(object sender, EventArgs e)
         {
-            Session.event_type = Session.CrewAssembled;
-            await CloudDBService.PostJobEvent();
-            await Navigation.PushAsync(new StartTimePage());
+            //Session.event_type = Session.CrewAssembled;
+            //await CloudDBService.PostJobEvent();             // need to update event_type 
+            //await Navigation.PushAsync(new StartTimePage()); // simple page change - vicky
+            
+            ///////////// add Rajib's code - start //////////////////////
+            
+            String timenow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            int x = 0;
+            try
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    var q = string.Format("delete from Crewdefault where crew_leader = " + Session.uid + ";");
+                    conn.Execute(q);
+                    if (employeePicker1.SelectedIndex != -1)
+                    {
+                        Crewdefault crew = new Crewdefault();
+                        crew.crew_leader = Session.uid;
+                        var ind = employeePicker1.SelectedIndex;
+                        crew.team_member = crewlist[ind].ToString();
+                        crew.created_on = timenow;
+                        x = conn.Insert(crew);
+                    }
+                    if (employeePicker2.SelectedIndex != -1)
+                    {
+                        Crewdefault crew = new Crewdefault();
+                        crew.crew_leader = Session.uid;
+                        var ind = employeePicker2.SelectedIndex;
+                        crew.team_member = crewlist[ind].ToString();
+                        crew.created_on = timenow;
+                        x = conn.Insert(crew);
+                    }
+                    if (employeePicker3.SelectedIndex != -1)
+                    {
+                        Crewdefault crew = new Crewdefault();
+                        crew.crew_leader = Session.uid;
+                        var ind = employeePicker3.SelectedIndex;
+                        crew.team_member = crewlist[ind].ToString();
+                        crew.created_on = timenow;
+                        x = conn.Insert(crew);
+                    }
+                    if (employeePicker4.SelectedIndex != -1)
+                    {
+                        Crewdefault crew = new Crewdefault();
+                        crew.crew_leader = Session.uid;
+                        var ind = employeePicker4.SelectedIndex;
+                        crew.team_member = crewlist[ind].ToString();
+                        crew.created_on = timenow;
+                        x = conn.Insert(crew);
+                    }
+                    if (employeePicker5.SelectedIndex != -1)
+                    {
+                        Crewdefault crew = new Crewdefault();
+                        crew.crew_leader = Session.uid;
+                        var ind = employeePicker5.SelectedIndex;
+                        crew.team_member = crewlist[ind].ToString();
+                        crew.created_on = timenow;
+                        x = conn.Insert(crew);
+                    }
+                    if (employeePicker6.SelectedIndex != -1)
+                    {
+                        Crewdefault crew = new Crewdefault();
+                        crew.crew_leader = Session.uid;
+                        var ind = employeePicker6.SelectedIndex;
+                        crew.team_member = crewlist[ind].ToString();
+                        crew.created_on = timenow;
+                        x = conn.Insert(crew);
+                    }
+                    conn.CreateTable<Crewdefault>();
+                    Console.WriteLine("CreateTable<Crewdefault> ");
+                    var crewdetails = conn.Table<Crewdefault>().ToList();
+                    Crewtable = new ObservableCollection<Crewdefault>(crewdetails);
+                    foreach (var s in Crewtable)
+                    {
+                        Console.WriteLine(s.Id + "- " + s.crew_leader + " " + s.team_member + " " + s.created_on);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            if (x == 1)
+            {
+                //  DisplayAlert("Success!!!", "Crew members save successfully.", "Ok");
+                //Navigation.PopAsync();
+                // await Navigation.PushAsync(new BeginWorkPage());
+                await Navigation.PushAsync(new StartTimePage());
+            }
+            else
+            {
+                // DisplayAlert("Something went wrong!!!", "Please try again", "ERROR");
+            }
         }
 
         private void btnLogOut_Clicked(object sender, EventArgs e)
@@ -50,21 +143,8 @@ namespace FTCollectorApp.View
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                // grab Job tables from Url https://collector.fibertrak.com/phonev4/xamarinJob.php
-                Users.Clear();
-
-                var users = await CloudDBService.GetEndUserFromAWSMySQLTable();
-
-                Users = new ObservableCollection<User>(users);
-                Console.WriteLine(users);
-
-                // push Job Tables to local SQLite. Model is in Model.Job
-                // with using(SQLiteConnection) we didn't have to do conn.close()
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<User>();
-                    conn.InsertAll(users);
-                }
+                await GetEndUserFromAWSMySQLTable();
+                await GetcrewDefaultFromAWSMySQLTable();
             }
             else
             {
@@ -76,7 +156,11 @@ namespace FTCollectorApp.View
                     conn.CreateTable<User>();
                     var users = conn.Table<User>().ToList();
                     Users = new ObservableCollection<User>(users);
-                    //listviewPost.ItemsSource = listPost; //= new ObservableCollection<Post>(posts);
+
+                    conn.CreateTable<Crewdefault>();
+                    Console.WriteLine("CreateTable<Crewdefault> ");
+                    var crewdetails = conn.Table<Crewdefault>().ToList();
+                    Crewtable = new ObservableCollection<Crewdefault>(crewdetails);
 
                 }
             }
@@ -114,24 +198,28 @@ namespace FTCollectorApp.View
             }
         }
 
+        private async Task GetcrewDefaultFromAWSMySQLTable()
+        {
+            Crewtable.Clear();
+
+            // grab Cre Table tables from Url https://collector.fibertrak.com/phonev4/getcrewtable.php
+            var crewdefaults = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
+            Crewtable = new ObservableCollection<Crewdefault>(crewdefaults);
+            Console.WriteLine(crewdefaults);
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Crewdefault>();
+                conn.InsertAll(crewdefaults);
+            }
+        }
+
         private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                Users.Clear();
-
-                var users = await CloudDBService.GetEndUserFromAWSMySQLTable();
-
-                Users = new ObservableCollection<User>(users);
-                Console.WriteLine(users);
-
-                // push Job Tables to local SQLite. Model is in Model.Job
-                // with using(SQLiteConnection) we didn't have to do conn.close()
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<User>();
-                    conn.InsertAll(users);
-                }
+                await GetEndUserFromAWSMySQLTable();
+                await GetcrewDefaultFromAWSMySQLTable();
             }
         }
     }

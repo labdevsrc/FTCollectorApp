@@ -20,7 +20,7 @@ namespace FTCollectorApp.View
         private bool _isBusy;
 
         // Turn IsBusy to bind with XAML component Activity
-        public bool IsBusy
+        public bool isBusy
         {
             get { return _isBusy; }
             set
@@ -45,7 +45,7 @@ namespace FTCollectorApp.View
 
         protected override async void OnAppearing()
         {
-            IsBusy = true;
+            isBusy = true;
 
             await LocationService.GetLocation();
             if (LocationService.Coords != null)
@@ -65,7 +65,7 @@ namespace FTCollectorApp.View
 
             Console.WriteLine($"GpsPopupView [OnAppearing]");
 
-            IsBusy = false;
+            isBusy = false;
             base.OnAppearing();
         }
 

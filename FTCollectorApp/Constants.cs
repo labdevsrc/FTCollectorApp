@@ -7,13 +7,14 @@ namespace FTCollectorApp
 
     public class Constants
     {
-        public const string BaseUrl = "https://collector.fibertrak.com/phonev4/";
+        public const string BaseUrl = "https://collector.fibertrak.com/FTService/";
         public const string InsertTimeSheetUrl = "xPostTimesCheck.php";
         public const string GetJobTableUrl = "xamarinJob.php";
         public const string GetEndUserTableUrl = "xamarinLogin.php";
         public const string InsertJobEvents = "xSaveJobEvents.php";
         public const string GetSiteTableUrl= "xGetSite.php";
         public const string InsertSiteTableUrl = "xInsertSite.php";
+        public const string GetCrewdefaultTableUrl = "getCrewdefault.php";
 
         //////////////////// AWS S3 params ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";
