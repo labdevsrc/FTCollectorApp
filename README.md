@@ -1,7 +1,12 @@
 # Fibertrak CollectorApp
 > This repo recap Xamarin cross platform implementation from collector.fibertrak.com/phonev4 Web-App.
 
-Almost all page in colector apps has similar process :
+Recently added Feature :
+* [Dictation / TTS ](https://github.com/labdevsrc/FTCollectorApp#popup-view)
+* [Popup View](https://github.com/labdevsrc/FTCollectorApp#popup-view)
+* [Signature Pad](https://github.com/labdevsrc/FTCollectorApp#signature-pad)
+
+Common Implementation in each Page :
 * [Create Local SQLite](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#1-create-local-sqlite)
 * [Ajax /API Request via HttpClient](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#2-ajax-request--api-access-to-backup_of_myfibertrakend_user)
 * [Populate local SQLite and List var with table from MySQL](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#3-populate-local-sqlite-and-xamarin-linq)
@@ -10,9 +15,31 @@ Almost all page in colector apps has similar process :
 > Note 
 > Now : Do HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
 > v2 :  GET whole tables at first time Collector installation later
-Extras :
-* [Popup View](https://github.com/labdevsrc/FTCollectorApp#popup-view)
-* [Signature Pad](https://github.com/labdevsrc/FTCollectorApp#signature-pad)
+
+
+	
+## Popup View
+> Example [GPS popup]()
+
+![GPS Popup](assets/gps_popup.jpg)
+![Login Page](assets/starttime_popup.jpg)
+	
+	
+## 1. Create Popup View
+* [Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
+* Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
+AppDelegate.cs
+`Rg.Plugins.Popup.Popup.Init();`
+
+	
+## Signature Pad
+> Example [Signature Pad](assets/)
+[Source link :](https://www.c-sharpcorner.com/article/how-to-create-a-signaturepad-using-xamarin-forms/)
+
+## 1. Create Signature pad
+![Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
+
+
 
 
 ## Login 
@@ -222,25 +249,5 @@ namespace FTCollectorApp.Model
     }
 }
 ```
-	
-## Popup View
-> Example [GPS popup]()
 
-![Login Page](assets/gps_popup.jpg)
-![Login Page](assets/starttime_popup.jpg)
-	
-	
-## 1. Create Popup View
-* [Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
-* Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
-AppDelegate.cs
-`Rg.Plugins.Popup.Popup.Init();`
-
-	
-## Signature Pad
-> Example [Signature Pad](assets/)
-[Source link :](https://www.c-sharpcorner.com/article/how-to-create-a-signaturepad-using-xamarin-forms/)
-
-## 1. Create Signature pad
-![Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
 	
