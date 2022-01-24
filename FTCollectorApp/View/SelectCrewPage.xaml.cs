@@ -170,6 +170,7 @@ namespace FTCollectorApp.View
             // populate to employees
             foreach (var empName in empNames)
             {
+                crewlist.Add(empName.UserKey);
                 employeePicker1.Items.Add(empName.first_name + " " + empName.last_name);
                 employeePicker2.Items.Add(empName.first_name + " " + empName.last_name);
                 employeePicker3.Items.Add(empName.first_name + " " + empName.last_name);
