@@ -18,10 +18,12 @@ Common Implementation in each Page :
 
 ## Dictation
 Add import and  2 lines code below :
-```using FTCollectorApp.Utils;
- ... 
-var speaker = DependencyService.Get<ITextToSpeech>();
-speaker?.Speak("Job verified!");```
+```
+using FTCollectorApp.Utils;
+
+	var speaker = DependencyService.Get<ITextToSpeech>();
+	speaker?.Speak("Job verified!");
+```
 	
 ## Popup View
 Example [GpsDevicePopUpView.xaml.cs](https://github.com/labdevsrc/FTCollectorApp/blob/d6832f0d36fbce3a9a36484c91a0c41cfba4eaa9/FTCollectorApp/View/GpsDevicePopUpView.xaml.cs#L1)
