@@ -104,7 +104,6 @@ namespace FTCollectorApp.View
                 }
             }
             base.OnAppearing();
-            entryTime.Text = DateTime.Now.ToString("HH:mm");
             //await LocationService.GetLocation();
 
         }
