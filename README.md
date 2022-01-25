@@ -19,7 +19,7 @@ Common Implementation in each Page :
 
 	
 ## Popup View
-> Example [GPS popup]()
+Example [GpsDevicePopUpView.xaml.cs](https://github.com/labdevsrc/FTCollectorApp/blob/d6832f0d36fbce3a9a36484c91a0c41cfba4eaa9/FTCollectorApp/View/GpsDevicePopUpView.xaml.cs#L1)
 
 ![GPS Popup](assets/gps_popup.jpg)
 ![Login Page](assets/starttime_popup.jpg)
