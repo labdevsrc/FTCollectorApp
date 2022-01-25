@@ -17,7 +17,7 @@ Common Implementation in each Page :
 > Now : Do HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
 > v2 :  GET whole tables at first time Collector installation later
 
-## Dictation
+## Dictation / Text-to-Speech
 Add import and  2 lines code below :
 ```
 using FTCollectorApp.Utils;
@@ -45,14 +45,14 @@ Android : MainActivity.cs
 > Example [Signature Pad](assets/)
 [Source link :](https://www.c-sharpcorner.com/article/how-to-create-a-signaturepad-using-xamarin-forms/)
 
-Dictation Words :  -
+
 
 ### 1. Create Signature pad
 ![Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
 
 
 ## AWS Core, AWS-S3
-![Need to install this NuGet ](nuget_AWSDKCore.png)
+![Need to install this NuGet ](assets/nuget_AWSDKCore.png)
 
 ## Login 
 >MainPage.xaml.cs
