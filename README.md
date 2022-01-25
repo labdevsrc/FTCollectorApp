@@ -5,6 +5,7 @@ Recently added Feature :
 * [Dictation / TTS ](https://github.com/labdevsrc/FTCollectorApp#popup-view)
 * [Popup View](https://github.com/labdevsrc/FTCollectorApp#popup-view)
 * [Signature Pad](https://github.com/labdevsrc/FTCollectorApp#signature-pad)
+* AWS Core, AWS S3 SDK Package
 
 Common Implementation in each Page :
 * [Create Local SQLite](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#1-create-local-sqlite)
@@ -16,31 +17,42 @@ Common Implementation in each Page :
 > Now : Do HttpRequest to AWS MySQL table each time Page event OnAppearing() fires
 > v2 :  GET whole tables at first time Collector installation later
 
+## Dictation / Text-to-Speech
+Add import and  2 lines code below :
+```
+using FTCollectorApp.Utils;
 
+	var speaker = DependencyService.Get<ITextToSpeech>();
+	speaker?.Speak("Job verified!");
+```
 	
 ## Popup View
-> Example [GPS popup]()
+Example [GpsDevicePopUpView.xaml.cs](https://github.com/labdevsrc/FTCollectorApp/blob/d6832f0d36fbce3a9a36484c91a0c41cfba4eaa9/FTCollectorApp/View/GpsDevicePopUpView.xaml.cs#L1)
 
 ![GPS Popup](assets/gps_popup.jpg)
 ![Login Page](assets/starttime_popup.jpg)
 	
 	
-## 1. Create Popup View
-* [Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
+### 1. Install NU-Get Popup Package
+![Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
 * Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
-AppDelegate.cs
+iOS : AppDelegate.cs
 `Rg.Plugins.Popup.Popup.Init();`
-
+Android : MainActivity.cs
+`Rg.Plugins.Popup.Popup.Init(this);`
 	
-## Signature Pad
+### Install NU-Get Popup Package
 > Example [Signature Pad](assets/)
 [Source link :](https://www.c-sharpcorner.com/article/how-to-create-a-signaturepad-using-xamarin-forms/)
 
-## 1. Create Signature pad
+
+
+### 1. Create Signature pad
 ![Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
 
 
-
+## AWS Core, AWS-S3
+![Need to install this NuGet ](assets/nuget_AWSDKCore.png)
 
 ## Login 
 >MainPage.xaml.cs
