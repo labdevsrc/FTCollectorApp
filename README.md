@@ -25,18 +25,18 @@ Common Implementation in each Page :
 ![Login Page](assets/starttime_popup.jpg)
 	
 	
-## 1. Create Popup View
+### 1. Install NU-Get Popup Package
 ![Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
 * Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
 AppDelegate.cs
 `Rg.Plugins.Popup.Popup.Init();`
 
 	
-## Signature Pad
+### Install NU-Get Popup Package
 > Example [Signature Pad](assets/)
 [Source link :](https://www.c-sharpcorner.com/article/how-to-create-a-signaturepad-using-xamarin-forms/)
 
-## 1. Create Signature pad
+### 1. Create Signature pad
 ![Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
 
 
