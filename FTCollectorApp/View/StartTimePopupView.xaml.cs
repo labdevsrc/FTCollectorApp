@@ -41,8 +41,8 @@ namespace FTCollectorApp.View
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            HourMins = DateTime.Now.ToString("HH:mm");
-            
+            //HourMins = DateTime.Now.ToString("HH:mm");
+            entryStartTime.Text = DateTime.Now.ToString("H:m");
             btnClose.Clicked += (s,e) => PopupNavigation.Instance.PopAsync(true);
             
         }
@@ -51,24 +51,30 @@ namespace FTCollectorApp.View
         {
             Session.event_type = Session.LunchOut;
             await OnJobSaveEvent();
-            await PopupNavigation.Instance.PopAsync(true);
+
         }
 
         async Task OnJobSaveEvent()
         {
 
-            if (Session.gps_sts == "1")
+            Session.event_type = Session.ClockIn;
+
+            try
             {
-                Session.manual_latti = string.Empty;
-                Session.manual_longi = string.Empty;
+                DateTime dt = DateTime.Parse(entryStartTime.Text.Trim());
+                int user_hours = int.Parse(dt.ToString("HH"));
+                int user_minutes = int.Parse(dt.ToString("mm"));
+
+                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString()); 
+                await PopupNavigation.Instance.PopAsync(true);
             }
-            DateTime dt = DateTime.Parse(entryStartTime.Text);
-            var user_hours = dt.ToString("h");
-            var user_minutes = dt.ToString("m");
+            catch {
+                
+                DisplayAlert("Warning", "Time format must be HH:MM", "OK");
+            }
 
-            //await CloudDBService.PostJobEvent(); still working on it
 
-            var keyValues = new List<KeyValuePair<string, string>>{
+            /*var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
@@ -113,7 +119,7 @@ namespace FTCollectorApp.View
             {
                 // Put to Pending Sync
 
-            }
+            }*/
         }
 
         private void entryStartTime_TextChanged(object sender, TextChangedEventArgs e)

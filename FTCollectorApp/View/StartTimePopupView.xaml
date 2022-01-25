@@ -13,7 +13,6 @@
             >
             <Label Text="Time:"/>
             <Entry x:Name="entryStartTime" 
-                   Text="{Binding HourMins, Mode=TwoWay}"
                    Placeholder="StartTime" TextChanged="entryStartTime_TextChanged"/>
             <Label Text="Per Diem:"/>
             <Picker x:Name="pickPerDiem" >

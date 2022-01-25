@@ -104,7 +104,7 @@ namespace FTCollectorApp.View
                 }
             }
             base.OnAppearing();
-
+            entryTime.Text = DateTime.Now.ToString("HH:mm");
             //await LocationService.GetLocation();
 
         }
@@ -137,11 +137,8 @@ namespace FTCollectorApp.View
         private async void btnLogin_Clicked(object sender, EventArgs e)
         {
             Session.uid = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
-           //location = LocateService.Coords;
-
+                                                                                                                                             //location = LocateService.Coords;
             await Navigation.PushAsync(new VerifyJobPage()); // VerifyJobPage
-            //await Navigation.PushModalAsync(new VerifyJobPage());  // this cause crash
-
 
         }
 

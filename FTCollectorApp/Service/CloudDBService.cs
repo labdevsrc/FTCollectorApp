@@ -63,33 +63,24 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json); 
         }
-        public static  Task PostJobEvent() => PostJobEvent("0:0");
-        public static async Task PostJobEvent(string param1)
+        public static  Task PostJobEvent() => PostJobEvent(null,null);
+        public static async Task PostJobEvent(string param1, string param2)
         {
-            string hour = "0";
-            string minutes = "0";
-            if (Session.event_type == Session.ClockIn)
-            {
-                DateTime dt = DateTime.Parse(param1);
-                hour = dt.ToString("h");
-                minutes = dt.ToString("m");
-            }
-
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("jobnum",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
 
-                new KeyValuePair<string, string>("min", minutes),
-                new KeyValuePair<string, string>("hr", hour),
+                new KeyValuePair<string, string>("min", Session.event_type == Session.ClockIn ? param1 : "0"),
+                new KeyValuePair<string, string>("hr", Session.event_type == Session.ClockIn ? param2 : "0"),
 
 
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
                 
                 // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
-                new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
+                new KeyValuePair<string, string>("manual_latti", Session.gps_sts == "1" ? "0":Session.manual_latti),
+                new KeyValuePair<string, string>("manual_longi", Session.gps_sts == "1" ? "0":Session.manual_longi),
 
                 // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
