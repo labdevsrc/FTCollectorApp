@@ -5,6 +5,7 @@ Recently added Feature :
 * [Dictation / TTS ](https://github.com/labdevsrc/FTCollectorApp#popup-view)
 * [Popup View](https://github.com/labdevsrc/FTCollectorApp#popup-view)
 * [Signature Pad](https://github.com/labdevsrc/FTCollectorApp#signature-pad)
+* AWS Core, AWS S3 SDK Package
 
 Common Implementation in each Page :
 * [Create Local SQLite](https://github.com/labdevsrc/FTCollectorApp/blob/master/README.md#1-create-local-sqlite)
@@ -50,7 +51,8 @@ Dictation Words :  -
 ![Download Signature Pad Forms from NuGet](assets/nuget_signaturePad.png)
 
 
-
+## AWS Core, AWS-S3
+![Need to install this NuGet ](nuget_AWSDKCore.png)
 
 ## Login 
 >MainPage.xaml.cs
