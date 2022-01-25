@@ -26,7 +26,7 @@ Common Implementation in each Page :
 	
 	
 ## 1. Create Popup View
-* [Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
+![Download Rg.plugins.popup from NuGet](assets/nuget_RGplugins.png)
 * Add initiliazation on Android solution's MainActivity.cs and iOS solution's AppDelegate.cs
 AppDelegate.cs
 `Rg.Plugins.Popup.Popup.Init();`
