@@ -29,7 +29,6 @@
             <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
             <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" 
                     SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" 
-                    SelectedIndex="{Binding Owner, Mode=TwoWay}"
                     >
             </Picker>
 

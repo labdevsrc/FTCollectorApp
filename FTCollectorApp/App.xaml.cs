@@ -43,6 +43,12 @@ namespace FTCollectorApp
 
         }
 
+
+
+        /*protected override void OnStartup()
+        {
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "YOUR_API_KEY";
+        }*/
         protected override void OnStart()
         {
         }

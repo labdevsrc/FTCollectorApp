@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Plugin.Connectivity;
 using SQLite;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,9 +24,26 @@ namespace FTCollectorApp.View
         List<int> crewlist = new List<int>();
         private ObservableCollection<User> Users = new ObservableCollection<User>();
         private ObservableCollection<Crewdefault> Crewtable = new ObservableCollection<Crewdefault>();
+        ArrayList crewnamelist = new ArrayList();
+
+        string _crewleader;
+
+        public string CrewLeader
+        {
+            get => _crewleader;
+            set {
+                if (_crewleader == value)
+                    return;
+                _crewleader = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public SelectCrewPage()
         {
             InitializeComponent();
+            BindingContext = this;
         }
 
         private async void btnFinish_Clicked(object sender, EventArgs e)
@@ -36,10 +54,75 @@ namespace FTCollectorApp.View
             
             ///////////// add Rajib's code - start //////////////////////
             
-            String timenow = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            String timenow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             int x = 0;
             try
             {
+
+                String OWNER_CD = "PCS005";
+
+                String name1 = "";
+                String name2 = "";
+                String name3 = "";
+                String name4 = "";
+                String name5 = "";
+                String name6 = "";
+                //
+                if (employeePicker1.SelectedIndex != -1)
+                {
+                    var ind = employeePicker1.SelectedIndex;
+                    name1 = crewlist[ind].ToString();
+                    crewnamelist.Add(employeePicker1.Items[employeePicker1.SelectedIndex]);
+                }
+                if (employeePicker2.SelectedIndex != -1)
+                {
+                    var ind = employeePicker2.SelectedIndex;
+                    name2 = crewlist[ind].ToString();
+                    crewnamelist.Add(employeePicker2.Items[employeePicker2.SelectedIndex]);
+                }
+                if (employeePicker3.SelectedIndex != -1)
+                {
+                    var ind = employeePicker3.SelectedIndex;
+                    name3 = crewlist[ind].ToString();
+                    crewnamelist.Add(employeePicker3.Items[employeePicker3.SelectedIndex]);
+                }
+                if (employeePicker4.SelectedIndex != -1)
+                {
+                    var ind = employeePicker4.SelectedIndex;
+                    name4 = crewlist[ind].ToString();
+                    crewnamelist.Add(employeePicker4.Items[employeePicker4.SelectedIndex]);
+                }
+                if (employeePicker5.SelectedIndex != -1)
+                {
+                    var ind = employeePicker5.SelectedIndex;
+                    name5 = crewlist[ind].ToString();
+                    crewnamelist.Add(employeePicker5.Items[employeePicker5.SelectedIndex]);
+                }
+                if (employeePicker6.SelectedIndex != -1)
+                {
+                    var ind = employeePicker6.SelectedIndex;
+                    name6 = crewlist[ind].ToString();
+                    crewnamelist.Add(employeePicker6.Items[employeePicker6.SelectedIndex]);
+                }
+                Session.sessioncrew = crewnamelist;
+
+                //                
+                String diem1 = "";
+                String diem2 = "";
+                String diem3 = "";
+                String diem4 = "";
+                String diem5 = "";
+                String diem6 = "";
+                String driver11 = "";
+                String driver12 = "";
+                String driver13 = "";
+                String driver14 = "";
+                String driver15 = "";
+                String driver16 = "";
+
+                IsBusy = true;
+                await CloudDBService.SaveCrewdata( OWNER_CD, name1, name2, name3, name4, name5, name6, diem1, diem2, diem3, diem4, diem5, diem6, driver11, driver12, driver13, driver14, driver15, driver16);
+                IsBusy = false;
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     var q = string.Format("delete from Crewdefault where crew_leader = " + Session.uid + ";");
@@ -136,6 +219,8 @@ namespace FTCollectorApp.View
         protected override async void OnAppearing()
         {
             Console.WriteLine("[SelectCrewPage] Connectivity : " + Connectivity.NetworkAccess);
+
+            txtCrewLeader.Text = Session.crew_leader;
 
             // https://stackoverflow.com/questions/40458842/internet-connectivity-listener-in-xamarin-forms
             // https://www.youtube.com/watch?v=aA-sA0ACum0

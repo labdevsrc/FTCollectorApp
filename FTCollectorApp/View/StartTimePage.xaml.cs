@@ -1,5 +1,7 @@
-﻿using Rg.Plugins.Popup.Services;
+﻿using FTCollectorApp.Model;
+using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,17 +18,16 @@ namespace FTCollectorApp.View
         public StartTimePage()
         {
             InitializeComponent();
-            Button btnCrew1 = new Button { Text = "Start Time for Crew1" };
-            Button btnCrew2 = new Button { Text = "Start Time for Crew2" };
-            Button btnCrew3 = new Button { Text = "Start Time for Crew3" };
+            ArrayList crewnames = new ArrayList();
+            crewnames = (ArrayList)Session.sessioncrew;
 
-            stackLayout.Children.Add(btnCrew1);
-            stackLayout.Children.Add(btnCrew2);
-            stackLayout.Children.Add(btnCrew3);
-
-            btnCrew1.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView());
-            btnCrew2.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView());
-            btnCrew3.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView());
+            foreach (var cname in crewnames)
+            {
+                
+                Button btnCrew1 = new Button { Text = "Start Time for " + cname };
+                stackLayout.Children.Add(btnCrew1);
+                btnCrew1.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView());
+            }
 
         }
 

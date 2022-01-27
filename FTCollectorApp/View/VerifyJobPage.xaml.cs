@@ -41,11 +41,24 @@ namespace FTCollectorApp.View
             }
         }
 
+        string selectedowner;
+        public string SelectedOwner
+        {
+            get { return selectedowner; }
+            set
+            {
+                if (selectedowner == value)
+                    return;
+                selectedowner = value;
+                OnPropertyChanged();
+            }
+        }
+
         public VerifyJobPage()
         {
             InitializeComponent();
 
-            BindingContext = _jobdetails;
+            BindingContext = this;
         }
 
 
@@ -86,20 +99,25 @@ namespace FTCollectorApp.View
                     conn.CreateTable<Job>();
                     var jobdetails = conn.Table<Job>().ToList();
                     _jobdetails = new ObservableCollection<Job>(jobdetails);
-                    //listviewPost.ItemsSource = listPost; //= new ObservableCollection<Post>(posts);
+
 
                 }
             }
 
+            // Data Binding Trial
+            //var _ownerNames = _jobdetails.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
+            //var ownerNames = new ObservableCollection<string>();
+            //foreach (var _ownerName in _ownerNames)
+            //    ownerNames.Add(_ownerName.OwnerName);
+            //jobOwnersPicker.ItemsSource = ownerNames;
 
 
             // select OwnerName from Job (LINQ command)
             var ownerNames = _jobdetails.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
             // populate to JobOwnerPicker
             foreach (var ownerName in ownerNames)
-                jobOwnersPicker.Items.Add(ownerName.OwnerName);
+                  jobOwnersPicker.Items.Add(ownerName.OwnerName);
 
-            //await LocateService.GetLocation(); // get current location
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
             isBusy = false;
@@ -131,7 +149,12 @@ namespace FTCollectorApp.View
 
             // get selected owner Name
             var owner = jobOwnersPicker.Items[jobOwnersPicker.SelectedIndex];
-
+            
+            // Data Binding Trial
+            //var owner = SelectedOwner as string;
+            //Console.WriteLine($"SelectedOwner {SelectedOwner}");
+            
+            
             // SELECT JobNumber from Job where OwnerName = (selected) owner (LINQ command)
             var _jobNumbergrouped = _jobdetails.Where(a => a.OwnerName == owner).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
             foreach (var jobNumbergrouped in _jobNumbergrouped)
@@ -152,6 +175,9 @@ namespace FTCollectorApp.View
             var jobNumber = jobNumbersPicker.Items[jobNumbersPicker.SelectedIndex];
             var owner = jobOwnersPicker.Items[jobOwnersPicker.SelectedIndex];
 
+            // Data Binding Trial
+            // var owner = SelectedOwner;
+
             // SELECT JobLocation, ContactName, CustomerName, CustPhoneNum from Job where OwnerName = (selected) owner
             // and JobNumber = (selected) jobNumber (LINQ command)
             var job_Location  = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.JobLocation).First();
@@ -160,7 +186,7 @@ namespace FTCollectorApp.View
             contactName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.ContactName).First();
             custName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerName).First();
             custPhoneNum.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerPhone).First();
-
+            Session.stage =  _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.stage).First();
             Session.jobnum = jobNumber;
         }
 
@@ -172,12 +198,8 @@ namespace FTCollectorApp.View
             var speaker = DependencyService.Get<ITextToSpeech>();
             speaker?.Speak("Job verified!");
 
-            //speak.Clicked += (sender, e) => {
-            //    DependencyService.Get<ITextToSpeech>().Speak("Hello from Xamarin Forms");
-            //};
-            //Content = speak;
 
-            //await Navigation.PushAsync(new SitePage());
+            //await Navigation.PushAsync(new SiteInputPage());
             //await Navigation.PushAsync(new EquipmenReturnPage());
             await Navigation.PushAsync(new BeginWorkPage());
         }
@@ -185,69 +207,11 @@ namespace FTCollectorApp.View
         async Task OnSubmit()
         {
 
-            if(Session.gps_sts == "1")
-            {
-                Session.manual_latti = "0";
-                Session.manual_longi = "0";
-            }
-            Session.event_type = Session.JobVerified;
-            
-            IsBusy = true;
-            await CloudDBService.PostJobEvent(); 
-            IsBusy = false;
-            /*    var keyValues = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>("jobnum",Session.jobnum),
-                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+            Session.event_type = Session.JOB_VERIFIED;
+            isBusy = true;
+            await CloudDBService.PostJobEvent();
+            isBusy = false;
 
-                new KeyValuePair<string, string>("min", "0"),
-                new KeyValuePair<string, string>("hr", "0"),
-
-
-                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
-                
-                // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
-                // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
-                new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
-
-                // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
-                // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
-                new KeyValuePair<string, string>("longitude2", Session.longitude2),
-
-                new KeyValuePair<string, string>("evtype", Session.JobVerified), // event_type 2 : verified job
-
-                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-
-                new KeyValuePair<string, string>("ajaxname", Constants.InsertJobEvents)
-            };
-            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
-            HttpContent content = new FormUrlEncodedContent(keyValues);
-
-            HttpResponseMessage response = null;
-
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-            {
-                try
-                {
-                    response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var isi = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("OK 200 " + isi);
-
-                    }
-                }
-                catch (Exception err)
-                {
-                    Console.WriteLine("Exception " +err.ToString());
-                }
-            }
-            else
-            {
-                // Put to Pending Sync
-
-            }*/
         }
     }
 }

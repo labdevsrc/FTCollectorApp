@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,10 +19,15 @@ namespace FTCollectorApp.Model
         public static string longitude2 { get; set; }
         public static  string lunchinsts { get; set; }
 
+        public static string crew_leader { get; set; }
+
         public static string event_type { get; set; }
 
+        public static string stage { get; set; }
+        public static ArrayList sessioncrew { get; set; }
+
         public const string EventLogin = "1";
-        public const string JobVerified = "2";
+        public const string JOB_VERIFIED = "2";
         public const string CrewAssembled = "3";
         public const string LunchOut = "13";
         public const string LunchIn = "14";

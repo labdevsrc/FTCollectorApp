@@ -11,6 +11,7 @@ namespace FTCollectorApp.Model
         public int Id { get; set; }
         public int OwnerKey { get; set; }
         public string OWNER_CD { get; set; }
+        public string stage { get; set; }
         public string OwnerName { get; set; }
         public string JobNumber { get; set; }
         public string JobLocation { get; set; }

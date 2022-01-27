@@ -6,11 +6,25 @@ namespace FTCollectorApp.Model
 {
     public class Site
     {
+        // A Site is pretty much anything that gets a tag number, 
         public int id { get; set; }
 
-        public string MajorSites { get; set; }
-        public string MinorSites { get; set; }
-        public string  tag_number { get; set; }
-        public string stage { get; set; }
+        public string SiteKey { get; set; }
+        public string JobKey { get; set; }
+        public string OwnerKey { get; set; }
+        public string OWNER_CD { get; set; }
+        public string TagNumber { get; set; }
+        public string SiteId { get; set; }
+
+        public string Stage { get; set; }
+
+        public string SiteTypeKey { get; set; } // points into code_site_type
+        public string CabinetTypeKey { get; set; } // points into code_cabinet_type table
+        public string BuildingTypeKey { get; set; }  // points into code_building_type
+        public string LONGITUDE { get; set; }
+
+        public string LATITUDE { get; set; }
+
+        public string GpsTime { get; set; }
     }
 }

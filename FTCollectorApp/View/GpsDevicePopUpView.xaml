@@ -4,9 +4,10 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              x:Class="FTCollectorApp.View.GpsDevicePopUpView">
 
-    <StackLayout BindingContext="{x:Reference Name=btnNoGPS}"
-        Margin="12"
-        Padding="24"
+    <!--<StackLayout BindingContext="{x:Reference Name=btnNoGPS}"-->
+    <StackLayout
+        Margin="20"
+        Padding="30"
         BackgroundColor="White"
         HorizontalOptions="Center"
         VerticalOptions="Center"
@@ -15,16 +16,16 @@
         <Label x:Name="txtCoords" FontSize="Medium"/>        
 
         <RadioButton x:Name="deviceChecked" IsChecked="True" Content="Phone's GPS" CheckedChanged="DeviceChecked"/>
-        <RadioButton x:Name="externalChecked"  IsChecked="False" Content="Trimble" CheckedChanged="ExternalChecked"/>
-        <RadioButton x:Name ="btnNoGPS" IsChecked="False" Content="Manual input" CheckedChanged="NoGPSChecked"/>
-        <Label IsVisible="{Binding Path=IsChecked }" FontSize="Medium"
-                Text="Input Coords Manually below"/>            
-        <Entry x:Name="entryLat" Keyboard="Numeric" IsVisible="{Binding Path=IsChecked }" Placeholder="Lattitude" Text=""/>
-        <Entry x:Name="entryLon" Keyboard="Numeric" IsVisible="{Binding Path=IsChecked }" Placeholder="Longitude" Text=""/>
+        <RadioButton x:Name="externalChecked"  Content="Trimble" CheckedChanged="ExternalChecked"/>
+        <RadioButton x:Name ="btnNoGPS" Content="Manual input" CheckedChanged="NoGPSChecked"/>
+        <Label IsVisible="{Binding Source={x:Reference Name=btnNoGPS},Path=IsChecked }" FontSize="Medium"
+                Text="Input Coords Manually below"/>
+        <Entry x:Name="entryLat" Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Lattitude" Text=""/>
+        <Entry x:Name="entryLon" Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Longitude" Text=""/>
         <Button x:Name="btnSave" Text="Save" BackgroundColor="{StaticResource blueColor}" 
                 Clicked="btnSave_Clicked">
-            <Button.Triggers>
-               <MultiTrigger TargetType="Button">
+           <Button.Triggers>
+                <!--<MultiTrigger TargetType="Button">
                     <MultiTrigger.Conditions>
                         <BindingCondition Binding="{Binding Source={x:Reference entryLat},
                                    Path=Text.Length}"
@@ -41,7 +42,7 @@
                     </MultiTrigger.Conditions>
                     <Setter Property="IsEnabled" Value="False" />
                     <Setter Property="BackgroundColor" Value="Gray"/>
-                </MultiTrigger>
+                </MultiTrigger>-->
                 
                 <!--<DataTrigger TargetType="Button"
                     Binding="{Binding Source={x:Reference entryLat},
@@ -53,7 +54,7 @@
             </Button.Triggers>       
             
         </Button>
-        <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+        <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
 
 
     </StackLayout>

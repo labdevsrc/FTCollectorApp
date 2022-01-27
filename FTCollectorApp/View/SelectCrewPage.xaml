@@ -18,8 +18,8 @@
         <Grid Padding="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -37,12 +37,17 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Select Crew" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
 
-            <Label Grid.Row="1" Grid.Column="0" FontSize="20" Grid.ColumnSpan="2" Text="Employee"/>
-            <Label Grid.Row="1"  Grid.Column="1" FontSize="20" Text="Labor Class"/>
-            <Label Grid.Row="1"  Grid.Column="2" FontSize="20" Text="Driver"/>
 
-            <Picker Grid.Row="2" Grid.Column="0" x:Name="employeePicker1" Title="Select emp" ></Picker>
-            <Picker Grid.Row="2" Grid.Column="1" x:Name="laborPicke1r" Title="Select labor" >
+            <Label Grid.Row="2" Grid.ColumnSpan="3" FontSize="Medium" 
+                   x:Name="txtCrewLeader" 
+                   VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
+
+            <Label Grid.Row="3" Grid.Column="0" FontSize="20" Grid.ColumnSpan="2" Text="Employee"/>
+            <Label Grid.Row="3"  Grid.Column="1" FontSize="20" Text="Labor Class"/>
+            <Label Grid.Row="3"  Grid.Column="2" FontSize="20" Text="Driver"/>
+
+            <Picker Grid.Row="4" Grid.Column="0" x:Name="employeePicker1" Title="Select emp" ></Picker>
+            <Picker Grid.Row="4" Grid.Column="1" x:Name="laborPicke1r" Title="Select labor" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -51,15 +56,15 @@
                     <x:String>Designer</x:String>
                 </Picker.Items>
             </Picker>
-            <Picker Grid.Row="2" Grid.Column="2"  x:Name="driverPicker1" Title="Select driver"  >
+            <Picker Grid.Row="4" Grid.Column="2"  x:Name="driverPicker1" Title="Select driver"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
             </Picker>
 
-            <Picker Grid.Row="3" Grid.Column="0" x:Name="employeePicker2" Title="Select emp" ></Picker>
-            <Picker Grid.Row="3" Grid.Column="1" x:Name="laborPicker2" Title="Select labor" >
+            <Picker Grid.Row="5" Grid.Column="0" x:Name="employeePicker2" Title="Select emp" ></Picker>
+            <Picker Grid.Row="5" Grid.Column="1" x:Name="laborPicker2" Title="Select labor" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -68,15 +73,15 @@
                     <x:String>Designer</x:String>
                 </Picker.Items>
             </Picker>
-            <Picker Grid.Row="3" Grid.Column="2"  x:Name="driverPicker2" Title="Select driver"  >
+            <Picker Grid.Row="5" Grid.Column="2"  x:Name="driverPicker2" Title="Select driver"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
             </Picker>
 
-            <Picker Grid.Row="4" Grid.Column="0" x:Name="employeePicker3" Title="Select emp" ></Picker>
-            <Picker Grid.Row="4" Grid.Column="1" x:Name="laborPicker3" Title="Select labor" >
+            <Picker Grid.Row="6" Grid.Column="0" x:Name="employeePicker3" Title="Select emp" ></Picker>
+            <Picker Grid.Row="6" Grid.Column="1" x:Name="laborPicker3" Title="Select labor" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -85,15 +90,15 @@
                     <x:String>Designer</x:String>
                 </Picker.Items>
             </Picker>
-            <Picker Grid.Row="4" Grid.Column="2"  x:Name="driverPicker3" Title="Select driver"  >
+            <Picker Grid.Row="6" Grid.Column="2"  x:Name="driverPicker3" Title="Select driver"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
             </Picker>
 
-            <Picker Grid.Row="5" Grid.Column="0" x:Name="employeePicker4" Title="Select emp" ></Picker>
-            <Picker Grid.Row="5" Grid.Column="1" x:Name="laborPicker4" Title="Select labor" >
+            <Picker Grid.Row="7" Grid.Column="0" x:Name="employeePicker4" Title="Select emp" ></Picker>
+            <Picker Grid.Row="7" Grid.Column="1" x:Name="laborPicker4" Title="Select labor" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -102,15 +107,15 @@
                     <x:String>Designer</x:String>
                 </Picker.Items>
             </Picker>
-            <Picker Grid.Row="5" Grid.Column="2"  x:Name="driverPicker4" Title="Select driver"  >
+            <Picker Grid.Row="7" Grid.Column="2"  x:Name="driverPicker4" Title="Select driver"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
             </Picker>
 
-            <Picker Grid.Row="6" Grid.Column="0" x:Name="employeePicker5" Title="Select emp" ></Picker>
-            <Picker Grid.Row="6" Grid.Column="1" x:Name="laborPicker5" Title="Select labor" >
+            <Picker Grid.Row="8" Grid.Column="0" x:Name="employeePicker5" Title="Select emp" ></Picker>
+            <Picker Grid.Row="8" Grid.Column="1" x:Name="laborPicker5" Title="Select labor" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -119,15 +124,15 @@
                     <x:String>Designer</x:String>
                 </Picker.Items>
             </Picker>
-            <Picker Grid.Row="6" Grid.Column="2"  x:Name="driverPicker5" Title="Select driver"  >
+            <Picker Grid.Row="8" Grid.Column="2"  x:Name="driverPicker5" Title="Select driver"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
             </Picker>
 
-            <Picker Grid.Row="7" Grid.Column="0" x:Name="employeePicker6" Title="Select emp" ></Picker>
-            <Picker Grid.Row="7" Grid.Column="1" x:Name="laborPicker6" Title="Select labor" >
+            <Picker Grid.Row="9" Grid.Column="0" x:Name="employeePicker6" Title="Select emp" ></Picker>
+            <Picker Grid.Row="9" Grid.Column="1" x:Name="laborPicker6" Title="Select labor" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -136,7 +141,7 @@
                     <x:String>Designer</x:String>
                 </Picker.Items>
             </Picker>
-            <Picker Grid.Row="7" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" >
+            <Picker Grid.Row="9" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
@@ -159,5 +164,7 @@
             </Button.Triggers>
         </Button>
         <Button x:Name="btnLogOut" Text="LogOut" Clicked="btnLogOut_Clicked"/>
+        <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+        
     </StackLayout>
 </ContentPage>

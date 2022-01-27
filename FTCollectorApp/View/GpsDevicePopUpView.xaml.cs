@@ -54,7 +54,8 @@ namespace FTCollectorApp.View
                 txtAccuracy.Text = $"Accuracy is {String.Format("{0:0.###} m", _location.Accuracy.ToString())}";
                 txtCoords.Text = $"Current Point is {String.Format("{0:0.#######}", _location.Latitude.ToString())} ,{String.Format("{0:0.#######}", _location.Longitude.ToString())} ";
                 Session.gps_sts = "1";
-
+                Session.lattitude2 = _location.Latitude.ToString();
+                Session.longitude2 = _location.Longitude.ToString();
             }
             else
             {
@@ -137,8 +138,8 @@ namespace FTCollectorApp.View
         {
 
             Session.gps_sts = "0";
-            if (string.IsNullOrEmpty(entryLat.Text) || string.IsNullOrEmpty(entryLon.Text))
-                return;
+            //if (string.IsNullOrEmpty(entryLat.Text) || string.IsNullOrEmpty(entryLon.Text))
+            //    return;
 
             Session.manual_latti = String.Format("{0:0.#######}", entryLat.Text);
             Session.manual_longi = String.Format("{0:0.#######}", entryLon.Text);

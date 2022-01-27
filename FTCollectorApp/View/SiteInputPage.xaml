@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage Title="Site" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FTCollectorApp.View.SitePage">
+             x:Class="FTCollectorApp.View.SiteInputPage">
     <ContentPage.Content>
         <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
             <Label Text="Site" FontSize="Large" HorizontalOptions="Center"/>
             <Label Text="Major Site Type*" HorizontalOptions="Start"/>
-            <Picker ItemsSource="{Binding MajorSites}" x:Name="majorSitePicker" />
+            <Picker  x:Name="majorTypePicker" SelectedIndexChanged="majorTypeP_SelectedIdxChanged" />
             <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
-            <Picker ItemsSource="{Binding MinorSites}" x:Name="minorSitePicker"/>
+            <Picker  x:Name="minorTypePicker" SelectedIndexChanged="minorTypeP_SelectedIdxChanged"/>
             <Label Text="Enter PC tag" HorizontalOptions="Start"/>
-            <Entry Placeholder="tag number" x:Name="entryTagNum" />
+            <Entry Placeholder="tag number" x:Name="entryTagNum" TextChanged="entryTagNum_TextChanged"/>
             <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
-            <Entry Placeholder="tag number" x:Name="entryTagNum2" />
+            <Entry Placeholder="tag number" Text="" x:Name="entryTagNum2" />
             <Label Text="Stage" HorizontalOptions="Start"/>
             <Picker ItemsSource="{Binding stage}" x:Name="stagePicker" IsEnabled="false" />
             <Button x:Name="btnRecordGPS" Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
@@ -44,9 +44,11 @@
                 </Button.Triggers>
 
             </Button>
-       
-            
 
+
+            <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
         </StackLayout>
+
+
     </ContentPage.Content>
 </ContentPage>

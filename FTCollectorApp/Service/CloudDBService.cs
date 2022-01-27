@@ -42,6 +42,10 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<Crewdefault>> GetCrewDefaultFromAWSMySQLTable() =>
             GetAsync<IEnumerable<Crewdefault>>(Constants.GetCrewdefaultTableUrl);
 
+        public static Task<IEnumerable<CodeSiteType>> GetCodeSiteTypeFromAWSMySQLTable() =>
+            GetAsync<IEnumerable<CodeSiteType>>(Constants.GetCodeSiteTypeTableUrl);
+
+
         async static Task<T> GetAsync<T>(String Url)
         {
             var json = string.Empty;
@@ -63,7 +67,7 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json); 
         }
-        public static  Task PostJobEvent() => PostJobEvent(null,null);
+        public static async Task PostJobEvent() => await PostJobEvent(null,null);
         public static async Task PostJobEvent(string param1, string param2)
         {
 
@@ -154,7 +158,57 @@ namespace FTCollectorApp.Service
                 if (response.IsSuccessStatusCode)
                 {
                     var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"[CloudService] Response from {Constants.InsertJobEvents} OK = 200 , content :" + isi);
+                    Console.WriteLine($"[CloudService.PostSiteAsync] Response from  OK = 200 , content :" + isi);
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+            }
+        }
+
+        public static async Task SaveCrewdata(string OWNER_CD, string name1, string name2, string name3, string name4, string name5, string name6, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)
+        {
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("evtype",Session.CrewAssembled),
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("jobnum", Session.jobnum),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("OWNER_CD", OWNER_CD),
+                new KeyValuePair<string, string>("name1", name1),
+                new KeyValuePair<string, string>("name2", name2),
+                new KeyValuePair<string, string>("name3", name3),
+                new KeyValuePair<string, string>("name4", name4),
+                new KeyValuePair<string, string>("name5", name5),
+                new KeyValuePair<string, string>("name6", name6),
+                new KeyValuePair<string, string>("diem1", diem1),
+                new KeyValuePair<string, string>("diem2", diem2),
+                new KeyValuePair<string, string>("diem3", diem3),
+                new KeyValuePair<string, string>("diem4", diem4),
+                new KeyValuePair<string, string>("diem5", diem5),
+                new KeyValuePair<string, string>("diem6", diem6),
+                new KeyValuePair<string, string>("driver11", driver11),
+                new KeyValuePair<string, string>("driver12", driver12),
+                new KeyValuePair<string, string>("driver13", driver13),
+                new KeyValuePair<string, string>("driver14", driver14),
+                new KeyValuePair<string, string>("driver15", driver15),
+                new KeyValuePair<string, string>("driver16", driver16),
+                new KeyValuePair<string, string>("lattitude", Session.lattitude2),
+                new KeyValuePair<string, string>("longitude", Session.longitude2)
+            };
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                response = await client.PostAsync(Constants.SaveCrewUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var isi = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[CloudService.SaveCrewdata] Response OK = 200 , content :" + isi);
                 }
             }
             else
