@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.SplashDownloadPage">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="CenterAndExpand" Margin="10">
+            <Image Source="logo.png" HorizontalOptions="Center"/>
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding isBusy}" Color ="{StaticResource blueColor}"/>
+
+
+                <Label x:Name ="txtLoading" Text="Downloading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>
+            <Button Text="Login" HorizontalOptions="Center" Clicked="LoginClicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

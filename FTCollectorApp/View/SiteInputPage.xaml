@@ -12,9 +12,10 @@
             <Label Text="Enter PC tag" HorizontalOptions="Start"/>
             <Entry Placeholder="tag number" x:Name="entryTagNum" TextChanged="entryTagNum_TextChanged"/>
             <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
-            <Entry Placeholder="tag number" Text="" x:Name="entryTagNum2" />
+            <Entry Placeholder="tag number" Text="" x:Name="entryTagNum2" TextChanged="entryTagNum2_TextChanged" />
+            <Label x:Name="stsReEnter"  Text="" HorizontalOptions="Start"/>            
             <Label Text="Stage" HorizontalOptions="Start"/>
-            <Picker ItemsSource="{Binding stage}" x:Name="stagePicker" IsEnabled="false" />
+            <Picker x:Name="stagePicker" IsEnabled="false" />
             <Button x:Name="btnRecordGPS" Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
                     Clicked="btnRecordGPS_Clicked">
                 <Button.Triggers>

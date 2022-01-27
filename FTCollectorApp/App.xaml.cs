@@ -17,14 +17,16 @@ namespace FTCollectorApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage()); // root page  is MainPage()
+            //MainPage = new NavigationPage(new MainPage()); // root page  is MainPage()
+            MainPage = new NavigationPage(new SplashDownloadPage());
         }
 
         public App(string databaseLoc)
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            //MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new SplashDownloadPage());
             DatabaseLocation = databaseLoc;
 
             
@@ -35,7 +37,8 @@ namespace FTCollectorApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            //MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new SplashDownloadPage());
             DatabaseLocation = databaseLoc;
             SignatureFileLocation = signatureLoc;
 

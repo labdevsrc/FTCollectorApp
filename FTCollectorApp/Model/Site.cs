@@ -16,6 +16,7 @@ namespace FTCollectorApp.Model
         public string TagNumber { get; set; }
         public string SiteId { get; set; }
 
+        public string SiteName { get; set; }
         public string Stage { get; set; }
 
         public string SiteTypeKey { get; set; } // points into code_site_type

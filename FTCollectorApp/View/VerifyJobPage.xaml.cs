@@ -209,7 +209,14 @@ namespace FTCollectorApp.View
 
             Session.event_type = Session.JOB_VERIFIED;
             isBusy = true;
-            await CloudDBService.PostJobEvent();
+            try
+            {
+                await CloudDBService.PostJobEvent();
+            }
+            catch
+            {
+                await DisplayAlert("Error", "Update JobEvent table failed", "OK");
+            }
             isBusy = false;
 
         }

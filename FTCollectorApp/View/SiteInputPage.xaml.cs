@@ -111,12 +111,16 @@ namespace FTCollectorApp.View
 
             List<string> tagnumbers = new List<string>();
             var tagNumbers = Sites.GroupBy(b => b.TagNumber).Select(g => g.First()).ToList();
-            foreach (var tagNumber in tagNumbers)
+            foreach (var tagNumber in tagNumbers) {
                 tagnumbers.Add(tagNumber.TagNumber);
+                Console.WriteLine($"tagnumber : {tagNumber.TagNumber}");
+            }
             TagNumbers = new ObservableCollection<string>(tagnumbers);
 
             //await LocateService.GetLocation(); // get current location
             //await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+            
+            stagePicker.Items.Add(Session.stage);
 
             IsBusy = false;
         }
@@ -185,6 +189,22 @@ namespace FTCollectorApp.View
             {
                 await DisplayAlert("Waring", $"Tag {e.NewTextValue} already taken", "OK");
                 entryTagNum.Text = "";
+            }
+        }
+
+        private void entryTagNum2_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(entryTagNum.Equals(entryTagNum2))
+            {
+                stsReEnter.Text = "Match!";
+                btnRecordGPS.IsEnabled = true;
+                btnGPSOffset.IsEnabled = true;
+            }
+            else
+            {
+                stsReEnter.Text = "Check Again Tag";
+                btnRecordGPS.IsEnabled = false;
+                btnGPSOffset.IsEnabled = false;
             }
         }
     }
