@@ -220,5 +220,10 @@ namespace FTCollectorApp.View
             isBusy = false;
 
         }
+
+        private async void btnGPSSetting_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+        }
     }
 }

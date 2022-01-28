@@ -30,6 +30,7 @@ namespace FTCollectorApp.Droid.UI.Renderers
             if (Control != null)
             {
                 Control.Background = null;
+               
             }
 
             // Configure Entry properties

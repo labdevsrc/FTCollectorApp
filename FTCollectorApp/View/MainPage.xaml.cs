@@ -175,5 +175,10 @@ namespace FTCollectorApp.View
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            return false;
         }
+
+    }
 }

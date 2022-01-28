@@ -72,6 +72,10 @@ namespace FTCollectorApp.View
 
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
+
+
+
+
             await PopupNavigation.Instance.PopAsync(true);
         }
 

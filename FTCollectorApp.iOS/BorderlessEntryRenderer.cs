@@ -19,11 +19,12 @@ namespace FTCollectorApp.iOS.UI.Renderers
             base.OnElementChanged(e);
 
             //Configure Native control (UITextField)
-            if (Control != null)
-            {
-                Control.Layer.BorderWidth = 0;
-                Control.BorderStyle = UIKit.UITextBorderStyle.None;
-            }
+            // Borderless Style
+            //if (Control != null)
+            //{
+            //    Control.Layer.BorderWidth = 0;
+            //    Control.BorderStyle = UIKit.UITextBorderStyle.None;
+            //}
         }
     }
 }

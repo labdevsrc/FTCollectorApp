@@ -1,5 +1,6 @@
 ﻿using FTCollectorApp.Model;
 using FTCollectorApp.Service;
+using FTCollectorApp.Utils;
 using Plugin.Connectivity;
 using SQLite;
 using System;
@@ -86,6 +87,12 @@ namespace FTCollectorApp.View
         private void LoginClicked(object sender, EventArgs e)
         {
             Navigation.PushAsync(new MainPage());
+        }
+
+        private void ExitClicked(object sender, EventArgs e)
+        {
+            var closer = DependencyService.Get<ICloseApps>();
+            closer?.closeApplication();
         }
     }
 }

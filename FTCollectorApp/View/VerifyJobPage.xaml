@@ -4,14 +4,36 @@
              xmlns:local="clr-namespace:FTCollectorApp.View"
              xmlns:fa="clr-namespace:FontAwesome"
              x:Class="FTCollectorApp.View.VerifyJobPage">
+    <!--<NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Button x:Name="btnGPSSetting"  Clicked="btnGPSSetting_Clicked"  Text="GPS"
+                    HorizontalOptions="EndAndExpand"  >
+            </Button>
+        </StackLayout>
+    </NavigationPage.TitleView>-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnGPSSetting_Clicked"  Text="GPS"
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <AbsoluteLayout >
+            <!--<StackLayout >
+                <Label Text="Verify Job" FontSize="40" HorizontalOptions="Center" />
+                <Grid RowDefinitions="Auto,Auto"
+                      ColumnDefinitions="Auto,Auto,Auto" Padding="5">
+                    <Label Grid.Row="1" Grid.Column="1" Text="Owners" />
+                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="JobNumber" />
+                </Grid>
+
+
+            </StackLayout>-->
             <Grid Padding="20">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -23,9 +45,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>                
+                </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Verify Job" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
             <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
@@ -34,8 +57,6 @@
                     >
             </Picker>
 
-            <!--<Frame Grid.Row="2" Grid.Column="0" Padding="0" CornerRadius="10" IsClippedToBounds="True" BackgroundColor="LightGray">
-            </Frame>-->
             <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged="jobNumbersPicker_SelectedIndexChanged"  >
                 <Picker.SelectedIndex>0</Picker.SelectedIndex>
             </Picker>
@@ -48,21 +69,20 @@
             <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
             <Entry Text=""  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
             <Button x:Name="submit"  Grid.Row="11" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
-                    Clicked="submit_Clicked"
-                    >
+                Clicked="submit_Clicked"
+                >
                 <Button.Triggers>
                     <DataTrigger TargetType="Button"
-                     Binding="{Binding Source={x:Reference jobLocation},
-                                       Path=Text.Length}"
-                     Value="0">
+                    Binding="{Binding Source={x:Reference jobLocation},
+                                    Path=Text.Length}"
+                    Value="0">
                         <Setter Property="IsEnabled" Value="False" />
                         <Setter Property="BackgroundColor" Value="Gray"/>
-                        <!-- multiple Setters elements are allowed -->
+
                     </DataTrigger>
                 </Button.Triggers>
             </Button>
-            <!--<ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>-->
-
+                <!--<ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>-->
         </Grid>
 
 

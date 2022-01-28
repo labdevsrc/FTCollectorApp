@@ -187,7 +187,7 @@ namespace FTCollectorApp.View
         {
             if (TagNumbers.Contains(e.NewTextValue))
             {
-                await DisplayAlert("Waring", $"Tag {e.NewTextValue} already taken", "OK");
+                await DisplayAlert("Warning", $"Tag {e.NewTextValue} already taken", "OK");
                 entryTagNum.Text = "";
             }
         }
