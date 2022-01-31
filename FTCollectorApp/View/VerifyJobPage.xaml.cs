@@ -190,6 +190,7 @@ namespace FTCollectorApp.View
             Session.ownerkey = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.OwnerKey).First();
             Session.jobkey = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.JobKey).First();
             var ownerCD = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.OWNER_CD).First();
+            Session.countycode = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CountyCode).First();
             Session.jobnum = jobNumber;
             
             Session.ownerCD = ownerCD.ToString();

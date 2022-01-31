@@ -128,18 +128,17 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("tag",tagnum),
                 new KeyValuePair<string, string>("typecode",typecode),
-                new KeyValuePair<string, string>("plansheet","psi"),
-                new KeyValuePair<string, string>("psitem","p-sit"),
+                new KeyValuePair<string, string>("plansheet","0"),
+                new KeyValuePair<string, string>("psitem","0"),
 
 
-                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
-                
+                //new KeyValuePair<string, string>("gps_sts", Session.gps_sts),                
                 //new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
                 //new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
 
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
-                new KeyValuePair<string, string>("altitude", "999"),
+                new KeyValuePair<string, string>("altitude", Session.altitude),
                 new KeyValuePair<string, string>("accuracy", Session.accuracy),
 
                 //new KeyValuePair<string, string>("evtype", Session.event_type),
@@ -148,11 +147,12 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("owner", Session.ownerkey), //
                 new KeyValuePair<string, string>("user", Session.uid.ToString()),
                 new KeyValuePair<string, string>("stage", Session.stage),
-                new KeyValuePair<string, string>("gps_time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("gpstime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new KeyValuePair<string, string>("ownerCD", Session.ownerCD),
                 new KeyValuePair<string, string>("ownerkey", Session.ownerkey),
                 new KeyValuePair<string, string>("jobkey", Session.jobkey),
-
+                new KeyValuePair<string, string>("createdfrm", "field collection"),
+                new KeyValuePair<string, string>("usercounty", Session.countycode),
                 new KeyValuePair<string, string>("ajaxname", Constants.CreateSiteTableUrl),
 
 

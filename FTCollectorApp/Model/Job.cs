@@ -19,6 +19,7 @@ namespace FTCollectorApp.Model
         public string ContactName { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
+        public string CountyCode { get; set; }
         public string table_name { get; set; }
 
         public int UserId { get; set; } //FK

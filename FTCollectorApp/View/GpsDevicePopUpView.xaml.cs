@@ -56,6 +56,7 @@ namespace FTCollectorApp.View
                 Session.gps_sts = "1";
                 Session.lattitude2 = _location.Latitude.ToString();
                 Session.longitude2 = _location.Longitude.ToString();
+                Session.altitude = _location.Altitude.ToString();
                 Session.accuracy = _location.Accuracy.ToString();
             }
             else
@@ -92,11 +93,13 @@ namespace FTCollectorApp.View
                 var accuracy = String.Format("{0:0.###} m", _location.Accuracy.ToString());
                 var lattitude = String.Format("{0:0.#######}", _location.Latitude.ToString());
                 var longitude = String.Format("{0:0.#######}", _location.Longitude.ToString());
+                var altitude = String.Format("{0:0.#}", _location.Altitude.ToString());
                 txtAccuracy.Text = $"Accuracy is {accuracy}";
                 txtCoords.Text = $"Current Point is {lattitude} ,{longitude} ";
                 Session.gps_sts = "1";
                 Session.lattitude2 = lattitude;
                 Session.longitude2 = longitude;
+                Session.altitude = altitude;
                 Session.accuracy = accuracy;
                 Console.WriteLine($"[DeviceChecked] Coords {lattitude}, {longitude}");
             }
@@ -123,11 +126,13 @@ namespace FTCollectorApp.View
                     var accuracy = String.Format("{0:0.###} m", _location.Accuracy.ToString());
                     var lattitude = String.Format("{0:0.#######}", _location.Latitude.ToString());
                     var longitude = String.Format("{0:0.#######}", _location.Longitude.ToString());
+                    var altitude = String.Format("{0:0.#}", _location.Altitude.ToString());
                     txtAccuracy.Text = $"Accuracy is {accuracy}";
                     txtCoords.Text = $"Current Point is {lattitude} ,{longitude} ";
                     Session.gps_sts = "1";
                     Session.lattitude2 = lattitude;
                     Session.longitude2 = longitude;
+                    Session.altitude = altitude;
                     Session.accuracy = accuracy;
                     Console.WriteLine($"[ExternalChecked] Coords {lattitude}, {longitude}");
                 }

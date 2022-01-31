@@ -17,6 +17,7 @@ namespace FTCollectorApp.Model
         public static string manual_longi { get; set; }
         public static string lattitude2 { get; set; }
         public static string longitude2 { get; set; }
+        public static string altitude { get; set; }
         public static string accuracy { get; set; }
         public static  string lunchinsts { get; set; }
 
@@ -26,6 +27,7 @@ namespace FTCollectorApp.Model
 
         public static string stage { get; set; }
         public static ArrayList sessioncrew { get; set; }
+        public static string countycode { get; set; }
         public static string ownerkey { get; set; }
         public static string ownerCD { get; set; }
         public static int crewCnt { get; set; }
