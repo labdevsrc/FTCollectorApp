@@ -9,11 +9,12 @@ namespace FTCollectorApp.Model
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public int OwnerKey { get; set; }
+        public string OwnerKey { get; set; }
         public string OWNER_CD { get; set; }
         public string stage { get; set; }
         public string OwnerName { get; set; }
         public string JobNumber { get; set; }
+        public string JobKey { get; set; }
         public string JobLocation { get; set; }
         public string ContactName { get; set; }
         public string CustomerName { get; set; }
@@ -22,7 +23,6 @@ namespace FTCollectorApp.Model
 
         public int UserId { get; set; } //FK
 
-        public int JobKey { get; set; }
         public string TimesheetStatus { get; set; }
     }
 }

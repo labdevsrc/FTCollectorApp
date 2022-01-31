@@ -187,7 +187,12 @@ namespace FTCollectorApp.View
             custName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerName).First();
             custPhoneNum.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerPhone).First();
             Session.stage =  _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.stage).First();
+            Session.ownerkey = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.OwnerKey).First();
+            Session.jobkey = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.JobKey).First();
+            var ownerCD = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.OWNER_CD).First();
             Session.jobnum = jobNumber;
+            
+            Session.ownerCD = ownerCD.ToString();
         }
 
         private async void submit_Clicked(object sender, EventArgs e)
@@ -199,9 +204,9 @@ namespace FTCollectorApp.View
             speaker?.Speak("Job verified!");
 
 
-            //await Navigation.PushAsync(new SiteInputPage());
+            await Navigation.PushAsync(new SiteInputPage());
             //await Navigation.PushAsync(new EquipmenReturnPage());
-            await Navigation.PushAsync(new BeginWorkPage());
+            //await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async Task OnSubmit()

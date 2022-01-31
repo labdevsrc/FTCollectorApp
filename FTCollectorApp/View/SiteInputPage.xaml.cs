@@ -1,6 +1,7 @@
 ﻿using FTCollectorApp.Model;
 using FTCollectorApp.Service;
 using Plugin.Connectivity;
+using Rg.Plugins.Popup.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace FTCollectorApp.View
         private ObservableCollection<CodeSiteType> CodeSiteTypes = new ObservableCollection<CodeSiteType>();
         private ObservableCollection<Site> Sites = new ObservableCollection<Site>();
         private ObservableCollection<string> TagNumbers;
-
+        string codekey;
         private bool _isBusy;
 
         public bool isBusy
@@ -36,7 +37,8 @@ namespace FTCollectorApp.View
             }
         }
 
-        private bool _stage;
+        private bool TagNumberMatch = false;
+
 
 
         public SiteInputPage()
@@ -156,9 +158,12 @@ namespace FTCollectorApp.View
             }
         }
 
-        private void btnRecordGPS_Clicked(object sender, EventArgs e)
+        private async void btnRecordGPS_Clicked(object sender, EventArgs e)
         {
-
+            if (TagNumberMatch)
+                await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+            else
+                DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
         }
 
         private void btnGPSOffset_Clicked(object sender, EventArgs e)
@@ -175,11 +180,23 @@ namespace FTCollectorApp.View
                 minorTypePicker.Items.Add(minorType.MinorType);
         }
 
-        private void minorTypeP_SelectedIdxChanged(object sender, EventArgs e)
+        private async void minorTypeP_SelectedIdxChanged(object sender, EventArgs e)
         {
+            var selectedMajorTypeIdx =majorTypePicker.SelectedIndex;
+            if(selectedMajorTypeIdx == -1)
+            {
+                await DisplayAlert("Warning", "Please select Major Type first", "OK");
+            }
+
+            
 
             var selectedMinorType = minorTypePicker.Items[minorTypePicker.SelectedIndex];
             var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
+
+
+            codekey = CodeSiteTypes.Where(a => (a.MajorType == selectedMajorType) && (a.MinorType == selectedMinorType)).Select(a => a.CodeKey).First();
+            
+            Console.WriteLine($"key {codekey}, MajorType {selectedMajorType.ToString()}, MinorType {selectedMinorType.ToString()}");
 
         }
 
@@ -194,18 +211,27 @@ namespace FTCollectorApp.View
 
         private void entryTagNum2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(entryTagNum.Equals(entryTagNum2))
+            if(entryTagNum.Text.Equals(entryTagNum2.Text))
             {
                 stsReEnter.Text = "Match!";
+                stsReEnter.TextColor = Color.Blue;
                 btnRecordGPS.IsEnabled = true;
                 btnGPSOffset.IsEnabled = true;
+                TagNumberMatch = true;
             }
             else
             {
                 stsReEnter.Text = "Check Again Tag";
+                stsReEnter.TextColor = Color.Red;
                 btnRecordGPS.IsEnabled = false;
                 btnGPSOffset.IsEnabled = false;
             }
+        }
+
+
+        private async void btnGPSSetting_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
         }
     }
 }

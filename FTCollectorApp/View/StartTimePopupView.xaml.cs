@@ -18,23 +18,13 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StartTimePopupView
     {
-        private HttpClient httpClient;
+
         public string HourMins;
-        public StartTimePopupView()
+        int _countCrew;
+        public StartTimePopupView(int countCrew)
         {
             InitializeComponent();
-
-            try
-            {
-                httpClient = new HttpClient()
-                {
-                    BaseAddress = new Uri(Constants.BaseUrl)
-                };
-            }
-            catch
-            {
-
-            }
+            _countCrew = countCrew;
         }
 
 
@@ -52,12 +42,14 @@ namespace FTCollectorApp.View
             Session.event_type = Session.LunchOut;
             await OnJobSaveEvent();
 
+
         }
 
         async Task OnJobSaveEvent()
         {
 
             Session.event_type = Session.ClockIn;
+            var perDiemChoice = pickPerDiem.Items[pickPerDiem.SelectedIndex];
 
             try
             {
@@ -65,61 +57,21 @@ namespace FTCollectorApp.View
                 int user_hours = int.Parse(dt.ToString("HH"));
                 int user_minutes = int.Parse(dt.ToString("mm"));
 
-                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString()); 
-                await PopupNavigation.Instance.PopAsync(true);
+                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
+                if (Session.crewCnt == _countCrew)
+                {
+                    await PopupNavigation.Instance.PopAsync(true);
+                    await Navigation.PushAsync(new SiteInputPage());
+                }
+                else
+                    await PopupNavigation.Instance.PopAsync(true);
+
             }
             catch {
                 
                 DisplayAlert("Warning", "Time format must be HH:MM", "OK");
             }
 
-
-            /*var keyValues = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>("jobnum",Session.jobnum),
-                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
-
-                new KeyValuePair<string, string>("min", user_hours),
-                new KeyValuePair<string, string>("hr", user_minutes),
-
-
-                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
-                
-                // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
-                // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
-                new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
-
-                // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
-                // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
-                new KeyValuePair<string, string>("longitude2", Session.longitude2),
-
-                new KeyValuePair<string, string>("evtype", Session.LunchOut), 
-
-                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-
-                new KeyValuePair<string, string>("ajaxname", Constants.InsertJobEvents)
-            };
-            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
-            HttpContent content = new FormUrlEncodedContent(keyValues);
-
-            HttpResponseMessage response = null;
-
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
-            {
-                response = await httpClient.PostAsync(Constants.InsertJobEvents, content);
-                if (response.IsSuccessStatusCode)
-                {
-                    var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("OK 200 " + isi);
-
-                }
-            }
-            else
-            {
-                // Put to Pending Sync
-
-            }*/
         }
 
         private void entryStartTime_TextChanged(object sender, TextChangedEventArgs e)

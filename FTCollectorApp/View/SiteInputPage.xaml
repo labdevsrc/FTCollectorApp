@@ -2,6 +2,11 @@
 <ContentPage Title="Site" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FTCollectorApp.View.SiteInputPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnGPSSetting_Clicked"  Text="GPS"
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>    
     <ContentPage.Content>
         <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
             <Label Text="Site" FontSize="Large" HorizontalOptions="Center"/>

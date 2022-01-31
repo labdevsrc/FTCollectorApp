@@ -56,11 +56,13 @@ namespace FTCollectorApp.View
                 Session.gps_sts = "1";
                 Session.lattitude2 = _location.Latitude.ToString();
                 Session.longitude2 = _location.Longitude.ToString();
+                Session.accuracy = _location.Accuracy.ToString();
             }
             else
             {
                 txtAccuracy.Text = "Location Service disabled";
                 Session.gps_sts = "0";
+                Session.accuracy = "10000";
 
             }
 
@@ -72,10 +74,6 @@ namespace FTCollectorApp.View
 
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
-
-
-
-
             await PopupNavigation.Instance.PopAsync(true);
         }
 
@@ -99,6 +97,7 @@ namespace FTCollectorApp.View
                 Session.gps_sts = "1";
                 Session.lattitude2 = lattitude;
                 Session.longitude2 = longitude;
+                Session.accuracy = accuracy;
                 Console.WriteLine($"[DeviceChecked] Coords {lattitude}, {longitude}");
             }
             else
@@ -129,6 +128,7 @@ namespace FTCollectorApp.View
                     Session.gps_sts = "1";
                     Session.lattitude2 = lattitude;
                     Session.longitude2 = longitude;
+                    Session.accuracy = accuracy;
                     Console.WriteLine($"[ExternalChecked] Coords {lattitude}, {longitude}");
                 }
             }

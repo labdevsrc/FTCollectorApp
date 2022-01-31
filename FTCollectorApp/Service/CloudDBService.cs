@@ -118,34 +118,44 @@ namespace FTCollectorApp.Service
         }
 
 
-        public static async Task PostSiteAsync(string param1)
+        public static async Task PostCreateSiteAsync(string tagnum, string typecode)
         {
-            string hour = "0";
-            string minutes = "0";
 
 
             var keyValues = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                //new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("jno",Session.jobnum),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
-
-                new KeyValuePair<string, string>("min", minutes),
-                new KeyValuePair<string, string>("hr", hour),
+                new KeyValuePair<string, string>("tag",tagnum),
+                new KeyValuePair<string, string>("typecode",typecode),
+                new KeyValuePair<string, string>("plansheet","psi"),
+                new KeyValuePair<string, string>("psitem","p-sit"),
 
 
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
                 
-                new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
-                new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
-
+                //new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
+                //new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
 
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
+                new KeyValuePair<string, string>("altitude", "999"),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy),
 
-                new KeyValuePair<string, string>("evtype", Session.event_type),
+                //new KeyValuePair<string, string>("evtype", Session.event_type),
+                
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // created_on
+                new KeyValuePair<string, string>("owner", Session.ownerkey), //
+                new KeyValuePair<string, string>("user", Session.uid.ToString()),
+                new KeyValuePair<string, string>("stage", Session.stage),
+                new KeyValuePair<string, string>("gps_time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("ownerCD", Session.ownerCD),
+                new KeyValuePair<string, string>("ownerkey", Session.ownerkey),
+                new KeyValuePair<string, string>("jobkey", Session.jobkey),
 
-                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("ajaxname", Constants.CreateSiteTableUrl),
 
-                new KeyValuePair<string, string>("ajaxname", Constants.InsertSiteTableUrl)
+
             };
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
             HttpContent content = new FormUrlEncodedContent(keyValues);
@@ -154,7 +164,7 @@ namespace FTCollectorApp.Service
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                response = await client.PostAsync(Constants.InsertSiteTableUrl, content);
+                response = await client.PostAsync(Constants.CreateSiteTableUrl, content);
                 if (response.IsSuccessStatusCode)
                 {
                     var isi = await response.Content.ReadAsStringAsync();

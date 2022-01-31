@@ -93,6 +93,8 @@ namespace FTCollectorApp.View
         {
             var closer = DependencyService.Get<ICloseApps>();
             closer?.closeApplication();
+
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
     }
 }

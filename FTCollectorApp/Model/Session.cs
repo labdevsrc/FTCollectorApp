@@ -9,7 +9,7 @@ namespace FTCollectorApp.Model
     {
         public static int uid { get; set; }
         public static string jobnum { get; set; }
-
+        public static string jobkey { get; set; }
         //gps_sts = 1 when gpscheckedval = DeviceGPS, gpscheckedval=ExternalGPS
         //otherwise  gps_sts = 0 
         public static string gps_sts { get; set; }
@@ -17,6 +17,7 @@ namespace FTCollectorApp.Model
         public static string manual_longi { get; set; }
         public static string lattitude2 { get; set; }
         public static string longitude2 { get; set; }
+        public static string accuracy { get; set; }
         public static  string lunchinsts { get; set; }
 
         public static string crew_leader { get; set; }
@@ -25,6 +26,9 @@ namespace FTCollectorApp.Model
 
         public static string stage { get; set; }
         public static ArrayList sessioncrew { get; set; }
+        public static string ownerkey { get; set; }
+        public static string ownerCD { get; set; }
+        public static int crewCnt { get; set; }
 
         public const string EventLogin = "1";
         public const string JOB_VERIFIED = "2";

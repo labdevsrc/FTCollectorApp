@@ -21,14 +21,17 @@ namespace FTCollectorApp.View
             ArrayList crewnames = new ArrayList();
             crewnames = (ArrayList)Session.sessioncrew;
 
+            int cntCrew = 0;
+            
             foreach (var cname in crewnames)
             {
-                
+                cntCrew++;
+
                 Button btnCrew1 = new Button { Text = "Start Time for " + cname };
                 stackLayout.Children.Add(btnCrew1);
-                btnCrew1.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView());
+                btnCrew1.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView(cntCrew));
             }
-
+            Session.crewCnt = cntCrew;
         }
 
     }
