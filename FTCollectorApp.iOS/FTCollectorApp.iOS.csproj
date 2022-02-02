@@ -63,8 +63,12 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BorderlessEntryRenderer.cs" />
+    <Compile Include="CloseApplication.cs" />
+    <Compile Include="DropdownRenderer.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="TextToSpeechImplementation.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,6 +122,9 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FPT.Framework.iOS.UI.Dropdown">
+      <HintPath>Lib\DLLs\FPT.Framework.iOS.UI.Dropdown.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
