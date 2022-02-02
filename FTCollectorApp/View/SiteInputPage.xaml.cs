@@ -23,19 +23,7 @@ namespace FTCollectorApp.View
         private ObservableCollection<Site> Sites = new ObservableCollection<Site>();
         private ObservableCollection<string> TagNumbers;
         string codekey;
-        private bool _isBusy;
 
-        public bool isBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                if (_isBusy == value)
-                    return;
-                _isBusy = value;
-                OnPropertyChanged();
-            }
-        }
 
         private bool TagNumberMatch = false;
 
@@ -202,11 +190,7 @@ namespace FTCollectorApp.View
 
         private async void entryTagNum_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TagNumbers.Contains(e.NewTextValue))
-            {
-                await DisplayAlert("Warning", $"Tag {e.NewTextValue} already taken", "OK");
-                entryTagNum.Text = "";
-            }
+
         }
 
         private void entryTagNum2_TextChanged(object sender, TextChangedEventArgs e)
@@ -232,6 +216,15 @@ namespace FTCollectorApp.View
         private async void btnGPSSetting_Clicked(object sender, EventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+        }
+
+        private async void entryTagNum_Completed(object sender, EventArgs e)
+        {
+            if (TagNumbers.Contains(entryTagNum.Text))
+            {
+                await DisplayAlert("Warning", $"Tag {entryTagNum.Text} already taken", "OK");
+                entryTagNum.Text = "";
+            }
         }
     }
 }

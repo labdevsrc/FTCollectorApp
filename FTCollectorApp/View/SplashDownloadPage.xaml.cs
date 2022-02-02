@@ -89,12 +89,13 @@ namespace FTCollectorApp.View
             Navigation.PushAsync(new MainPage());
         }
 
-        private void ExitClicked(object sender, EventArgs e)
+        private void PendingUploadClicked(object sender, EventArgs e)
         {
-            var closer = DependencyService.Get<ICloseApps>();
-            closer?.closeApplication();
-
-            System.Diagnostics.Process.GetCurrentProcess().Kill();
+            // close, exit apps
+            // var closer = DependencyService.Get<ICloseApps>();
+            // closer?.closeApplication();
+            Navigation.PushAsync(new PendingSendPage());
+            
         }
     }
 }

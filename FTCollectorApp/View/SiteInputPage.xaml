@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage Title="Site" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
              x:Class="FTCollectorApp.View.SiteInputPage">
     <ContentPage.ToolbarItems>
         <ToolbarItem  Clicked="btnGPSSetting_Clicked"  Text="GPS"
@@ -15,9 +16,9 @@
             <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
             <Picker  x:Name="minorTypePicker" SelectedIndexChanged="minorTypeP_SelectedIdxChanged"/>
             <Label Text="Enter PC tag" HorizontalOptions="Start"/>
-            <Entry Placeholder="tag number" x:Name="entryTagNum" TextChanged="entryTagNum_TextChanged"/>
+            <local:BorderEntry Placeholder="tag number" x:Name="entryTagNum" Completed="entryTagNum_Completed" />
             <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
-            <Entry Placeholder="tag number" Text="" x:Name="entryTagNum2" TextChanged="entryTagNum2_TextChanged" />
+            <local:BorderEntry Placeholder="tag number" Text="" x:Name="entryTagNum2" TextChanged="entryTagNum2_TextChanged" />
             <Label x:Name="stsReEnter"  Text="" HorizontalOptions="Start"/>            
             <Label Text="Stage" HorizontalOptions="Start"/>
             <Picker x:Name="stagePicker" IsEnabled="false" />
@@ -52,7 +53,7 @@
             </Button>
 
 
-            <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+            <ActivityIndicator VerticalOptions="Center" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
         </StackLayout>
 
 

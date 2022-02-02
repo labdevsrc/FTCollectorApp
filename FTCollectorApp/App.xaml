@@ -3,7 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FTCollectorApp.App">
     <Application.Resources>
+        
         <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="BackgroundColor" Value="#1976D2" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="CornerRadius" Value="5" />
+            </Style>
+
+            <Style TargetType="Entry">
+                
+            </Style>
+
             <Color x:Key="blueColor">#1E90FF</Color>
             <Color x:Key="amberNice">#FFBF00</Color>
             <OnPlatform x:TypeArguments="x:String" 

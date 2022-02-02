@@ -2,6 +2,7 @@
 <pages:PopupPage Title="GPS Source" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils;assembly=FTCollectorApp"
              x:Class="FTCollectorApp.View.GpsDevicePopUpView">
 
     <!--<StackLayout BindingContext="{x:Reference Name=btnNoGPS}"-->
@@ -20,8 +21,8 @@
         <RadioButton x:Name ="btnNoGPS" Content="Manual input" CheckedChanged="NoGPSChecked"/>
         <Label IsVisible="{Binding Source={x:Reference Name=btnNoGPS},Path=IsChecked }" FontSize="Medium"
                 Text="Input Coords Manually below"/>
-        <Entry x:Name="entryLat" Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Lattitude" Text=""/>
-        <Entry x:Name="entryLon" Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Longitude" Text=""/>
+        <local:BorderEntry x:Name="entryLat" Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Lattitude" Text=""/>
+        <local:BorderEntry x:Name="entryLon" Keyboard="Numeric" IsVisible="{Binding Source={x:Reference Name=btnNoGPS}, Path=IsChecked }" Placeholder="Longitude" Text=""/>
         <Button x:Name="btnSave" Text="Save" BackgroundColor="{StaticResource blueColor}" 
                 Clicked="btnSave_Clicked">
            <Button.Triggers>

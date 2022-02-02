@@ -8,12 +8,20 @@ using Newtonsoft.Json;
 using Plugin.Connectivity;
 using FTCollectorApp.Model;
 using Xamarin.Essentials;
+using Xamarin.Forms;
+using System.Collections;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace FTCollectorApp.Service
 {
     public static class CloudDBService
     {
         static HttpClient client;
+        public static List<string> listPendingTask;
+
+
 
         static CloudDBService()
         {
@@ -28,7 +36,79 @@ namespace FTCollectorApp.Service
             {
 
             }
+
+
         }
+
+        /*[STAThread]
+        static void Main()
+        {
+            Serialize();
+            Deserialize();
+        }
+
+        static void Serialize(string id, Dictionary dicts)
+        {
+            // Create a hashtable of values that will eventually be serialized.
+            Hashtable pendingTask = new Hashtable();
+            pendingTask.Add("Jeff", "123 Main Street, Redmond, WA 98052");
+            pendingTask.Add("Fred", "987 Pine Road, Phila., PA 19116");
+            pendingTask.Add("Mary", "PO Box 112233, Palo Alto, CA 94301");
+
+            // To serialize the hashtable and its key/value pairs,
+            // you must first open a stream for writing.
+            // In this case, use a file stream.
+            FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Create);
+
+            // Construct a BinaryFormatter and use it to serialize the data to the stream.
+            BinaryFormatter formatter = new BinaryFormatter();
+            try
+            {
+                formatter.Serialize(fs, pendingTask);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+        static void Deserialize()
+        {
+            // Declare the hashtable reference.
+            Hashtable addresses = null;
+
+            // Open the file containing the data that you want to deserialize.
+            FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Open);
+            try
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                // Deserialize the hashtable from the file and
+                // assign the reference to the local variable.
+                addresses = (Hashtable)formatter.Deserialize(fs);
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+
+            // To prove that the table deserialized correctly,
+            // display the key/value pairs.
+            foreach (DictionaryEntry de in addresses)
+            {
+                Console.WriteLine("{0} lives at {1}.", de.Key, de.Value);
+            }
+        }*/
 
         // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
         public static Task<IEnumerable<User>> GetEndUserFromAWSMySQLTable() =>
@@ -49,7 +129,7 @@ namespace FTCollectorApp.Service
         async static Task<T> GetAsync<T>(String Url)
         {
             var json = string.Empty;
-            
+
             try
             {
                 json = await client.GetStringAsync(Url);
@@ -57,17 +137,17 @@ namespace FTCollectorApp.Service
                 var content = JsonConvert.DeserializeObject<T>(json);
                 //var sqliteContent = JsonConvert.DeserializeObject<List<User>>(response);
 
-                Console.WriteLine($"[CloudDBService] content : {content.ToString()}");             
+                Console.WriteLine($"[CloudDBService] content : {content.ToString()}");
                 return content;
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 Console.WriteLine("Exception {0}", exp.ToString());
             }
 
-            return JsonConvert.DeserializeObject<T>(json); 
+            return JsonConvert.DeserializeObject<T>(json);
         }
-        public static async Task PostJobEvent() => await PostJobEvent(null,null);
+        public static async Task PostJobEvent() => await PostJobEvent(null, null);
         public static async Task PostJobEvent(string param1, string param2)
         {
 
@@ -91,7 +171,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
 
-                new KeyValuePair<string, string>("evtype", Session.event_type), 
+                new KeyValuePair<string, string>("evtype", Session.event_type),
 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
 
@@ -114,9 +194,104 @@ namespace FTCollectorApp.Service
             else
             {
                 // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+
+                listPendingTask.Clear();
+
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+                // put keyvaluepair to App properties as Hash<taskid, string keyvaluepair> with json 
+                // store 
+                // app.Properties[$"Task-{app.TaskCount}"] = JsonConvert.SerializeObject(keyValues);
+                // var storedPendingTaskName = app.PendingTask;
+                // List<string> tasklist = JsonConvert.DeserializeObject(storedPendingTaskName);
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+                foreach (var de in test)
+                {
+                    listPendingTask.Add(de.Key);
+                }
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append);
+
+                // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    formatter.Serialize(fs, test);
+                }
+                catch (SerializationException e)
+                {
+                    Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                    throw;
+                }
+                finally
+                {
+                    fs.Close();
+                }
+
             }
         }
 
+        public static async Task PostPendingTask(string pendingTaskKey)
+        {
+            //Deserialize
+            var DkeyValues = new Dictionary<string, List<KeyValuePair<string, string>>>();
+
+            // Open the file containing the data that you want to deserialize.
+            FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Open);
+            try
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                // Deserialize the hashtable from the file and
+                // assign the reference to the local variable.
+                DkeyValues = (Dictionary<string, List<KeyValuePair<string, string>>>)formatter.Deserialize(fs);
+
+            }
+            catch (SerializationException e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                throw;
+            }
+            finally
+            {
+                fs.Close();
+            }
+
+            // To prove that the table deserialized correctly,
+            // display the key/value pairs.
+            try
+            {
+                HttpContent content = new FormUrlEncodedContent(DkeyValues[pendingTaskKey]);
+
+                HttpResponseMessage response = null;
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    response = await client.PostAsync(Constants.CreateSiteTableUrl, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[CloudService.PostSiteAsync] Response from  OK = 200 , content :" + isi);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+            }
+
+        }
 
         public static async Task PostCreateSiteAsync(string tagnum, string typecode)
         {
@@ -174,6 +349,51 @@ namespace FTCollectorApp.Service
             else
             {
                 // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+
+                listPendingTask.Clear();
+
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+                // put keyvaluepair to App properties as Hash<taskid, string keyvaluepair> with json 
+                // store 
+                // app.Properties[$"Task-{app.TaskCount}"] = JsonConvert.SerializeObject(keyValues);
+                // var storedPendingTaskName = app.PendingTask;
+                // List<string> tasklist = JsonConvert.DeserializeObject(storedPendingTaskName);
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+                foreach (var de in test)
+                {
+                    listPendingTask.Add(de.Key);
+                }
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append);
+
+                // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    formatter.Serialize(fs, test);
+                }
+                catch (SerializationException e)
+                {
+                    Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                    throw;
+                }
+                finally
+                {
+                    fs.Close();
+                }
+
             }
         }
 
@@ -224,7 +444,57 @@ namespace FTCollectorApp.Service
             else
             {
                 // Put to Pending Sync
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+
+                listPendingTask.Clear();
+
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+                // put keyvaluepair to App properties as Hash<taskid, string keyvaluepair> with json 
+                // store 
+                // app.Properties[$"Task-{app.TaskCount}"] = JsonConvert.SerializeObject(keyValues);
+                // var storedPendingTaskName = app.PendingTask;
+                // List<string> tasklist = JsonConvert.DeserializeObject(storedPendingTaskName);
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+                foreach (var de in test)
+                {
+                    listPendingTask.Add(de.Key);
+                }
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append);
+
+                // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    formatter.Serialize(fs, test);
+                }
+                catch (SerializationException e)
+                {
+                    Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                    throw;
+                }
+                finally
+                {
+                    fs.Close();
+                }
             }
         }
+
     }
+
 }
+
+
+

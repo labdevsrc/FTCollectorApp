@@ -18,7 +18,7 @@
 
             </StackLayout>
             <Button Text="Login" HorizontalOptions="Center" Clicked="LoginClicked" />
-            <Button Text="Exit" HorizontalOptions="Center" Clicked="ExitClicked" />            
+            <Button Text="Pending Upload" HorizontalOptions="Center" Clicked="PendingUploadClicked" />            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -2,6 +2,9 @@
 using FTCollectorApp.Service;
 using FTCollectorApp.View;
 using System;
+using System.Collections;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -13,6 +16,8 @@ namespace FTCollectorApp
     {
         public static string DatabaseLocation = string.Empty;
         public static string SignatureFileLocation = string.Empty;
+        private const string TaskCountKey = "TaskCount";
+        private const string PendingTaskKey = "PendingTask";
         public App()
         {
             InitializeComponent();
@@ -41,12 +46,7 @@ namespace FTCollectorApp
             MainPage = new NavigationPage(new SplashDownloadPage());
             DatabaseLocation = databaseLoc;
             SignatureFileLocation = signatureLoc;
-
-
-
         }
-
-
 
         /*protected override void OnStartup()
         {
@@ -63,6 +63,42 @@ namespace FTCollectorApp
         protected override void OnResume()
         {
         }
+
+
+        public string PendingTask
+        {
+            get
+            {
+                if (Properties.ContainsKey(PendingTaskKey))
+                    return Properties[PendingTaskKey].ToString();
+                return "";
+            }
+            set
+            {
+                Properties[PendingTaskKey] = value;
+            }
+
+        }
+
+
+
+
+        public int TaskCount
+        {
+            get
+            {
+                if (Properties.ContainsKey(TaskCountKey))
+                    return int.Parse(Properties[TaskCountKey].ToString());
+
+                
+                return 0;
+            }
+            set
+            {
+                Properties[TaskCountKey] = value;
+            }
+        }
+
 
 
 

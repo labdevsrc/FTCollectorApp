@@ -19,6 +19,7 @@ namespace FTCollectorApp.Droid
         {
             var activity = (Activity) Forms.Context;
             activity.FinishAffinity();
+            //CrossCurrentActivity.Current.Activity.FinishAndRemoveTask();
         }
     }
 }
