@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FTCollectorApp.Utils"
-             x:Class="FTCollectorApp.View.SitesPage.BuildingSitePage">
+             x:Class="FTCollectorApp.View.SitesPage.CabinetSitePage">
     <ContentPage.ToolbarItems>
         <ToolbarItem  Clicked="btnCamera" IconImageSource="icon_camera.png" 
                  Order="Primary"
@@ -13,7 +13,7 @@
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <ScrollView>
                     <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
-                        <Label Text="Building" FontSize="Large" HorizontalOptions="Center"/>
+                        <Label Text="Cabinet" FontSize="Large" HorizontalOptions="Center"/>
                         <Label Text="Site Type*" HorizontalOptions="Start"/>
                         <local:BorderColorEntry IsReadOnly="True" x:Name="entrySiteType" IsEnabled="False" HorizontalOptions="Start"/>
                         <Label Text="Enter PCS tag number*" HorizontalOptions="Start"/>
@@ -30,7 +30,7 @@
                         <local:BorderEntry x:Name="entryStreetAddr"  HorizontalOptions="Start"/>
                         <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
                         <local:BorderEntry x:Name="entryPostalCode"  HorizontalOptions="Start"/>
-                        
+
                         <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
                             <Label Grid.Row="0" Grid.Column="0" Text="Lane closure required"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
@@ -41,11 +41,11 @@
                             <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>
                             <Label Grid.Row="2" Grid.Column="1" Text="3rd party comms"/>
                             <Label Grid.Row="2" Grid.Column="2" Text="Enter Comms provider"/>
-                            <local:Dropdown Grid.Row="3" Grid.Column="0" x:Name="pickerElectSiteKey"/>
-                            <local:Dropdown Grid.Row="3" Grid.Column="1" x:Name="picker3rdpComms"/>
+                            <local:BorderEntry Grid.Row="3" Grid.Column="0" x:Name="pickerElectSiteKey"/>
+                            <local:BorderEntry Grid.Row="3" Grid.Column="1" x:Name="picker3rdpComms"/>
                             <Entry Grid.Row="3"  Grid.Column="2" x:Name="commsProvide"/>
                         </Grid>
-                        
+
                         <Label Text="Enter UDS owner"/>
                         <local:BorderEntry x:Name="UDSOwner"/>
                         <Label Text="Building Classification"/>
@@ -74,7 +74,7 @@
 
                 <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
 
-            </StackLayout>            
+            </StackLayout>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

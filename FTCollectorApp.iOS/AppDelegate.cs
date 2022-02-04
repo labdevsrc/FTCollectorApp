@@ -43,7 +43,7 @@ namespace FTCollectorApp.iOS
 
             Rg.Plugins.Popup.Popup.Init();
 
-            LoadApplication(new App(fullPath, signaturefullPath));
+            LoadApplication(new App(fullPath, signaturefullPath, pendingTaskFileNamefullPath));
 
             return base.FinishedLaunching(app, options);
         }

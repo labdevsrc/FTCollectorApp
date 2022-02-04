@@ -1,5 +1,6 @@
 ﻿using FTCollectorApp.Model;
 using FTCollectorApp.Service;
+using FTCollectorApp.View.Utils;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
 using SQLite;
@@ -22,6 +23,8 @@ namespace FTCollectorApp.View.SitesPage
         private ObservableCollection<CodeSiteType> CodeSiteTypes = new ObservableCollection<CodeSiteType>();
         private ObservableCollection<Site> Sites = new ObservableCollection<Site>();
         private ObservableCollection<string> TagNumbers;
+        string selectedMinorType;
+        string selectedMajorType;
         string codekey;
 
 
@@ -149,7 +152,25 @@ namespace FTCollectorApp.View.SitesPage
         private async void btnRecordGPS_Clicked(object sender, EventArgs e)
         {
             if (TagNumberMatch)
-                await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+            {
+                if (selectedMajorType.Equals("Building"))
+                {
+                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                    Navigation.PushAsync(new BuildingSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                }
+                else if (selectedMajorType.Equals("Cabinet"))
+                {
+                    Navigation.PushAsync(new CabinetSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                }
+                else if (selectedMajorType.Equals("Pull Box"))
+                {
+                    Navigation.PushAsync(new PullBoxSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                }
+                else if (selectedMajorType.Equals("Structure"))
+                {
+                    Navigation.PushAsync(new StructureSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                }
+            }
             else
                 DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
         }
@@ -184,8 +205,8 @@ namespace FTCollectorApp.View.SitesPage
             }
 
 
-            var selectedMinorType = minorTypePicker.Items[minorTypePicker.SelectedIndex];
-            var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
+            selectedMinorType = minorTypePicker.Items[minorTypePicker.SelectedIndex];
+            selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
 
 
             codekey = CodeSiteTypes.Where(a => (a.MajorType == selectedMajorType) && (a.MinorType == selectedMinorType)).Select(a => a.CodeKey).First();

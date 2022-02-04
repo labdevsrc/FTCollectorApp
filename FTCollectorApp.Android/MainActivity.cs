@@ -38,7 +38,7 @@ namespace FTCollectorApp.Droid
 
             Rg.Plugins.Popup.Popup.Init(this);
 
-            LoadApplication(new App(fullPath, signaturefullPath));
+            LoadApplication(new App(fullPath, signaturefullPath, pendingTaskFileNamefullPath));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
