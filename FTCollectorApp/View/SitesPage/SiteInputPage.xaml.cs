@@ -13,7 +13,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FTCollectorApp.View
+namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SiteInputPage : ContentPage
@@ -109,8 +109,8 @@ namespace FTCollectorApp.View
 
             //await LocateService.GetLocation(); // get current location
             //await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
-            
-            stagePicker.Items.Add(Session.stage);
+            stagePicker.Text = Session.stage;
+            //stagePicker.Items.Add(Session.stage);
 
             IsBusy = false;
         }
@@ -164,6 +164,7 @@ namespace FTCollectorApp.View
             var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
 
             var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
+            minorTypePicker.Items.Clear();
             foreach (var minorType in minorTypes)
                 minorTypePicker.Items.Add(minorType.MinorType);
         }
@@ -175,8 +176,13 @@ namespace FTCollectorApp.View
             {
                 await DisplayAlert("Warning", "Please select Major Type first", "OK");
             }
+            var selectedMinorTypeIdx = minorTypePicker.SelectedIndex;
+            if (selectedMinorTypeIdx == -1)
+            {
+                Console.WriteLine("minorTypePicker.SelectedIndex : -1");
+                return;
+            }
 
-            
 
             var selectedMinorType = minorTypePicker.Items[minorTypePicker.SelectedIndex];
             var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
@@ -188,14 +194,24 @@ namespace FTCollectorApp.View
 
         }
 
-        private async void entryTagNum_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
+        private async void btnGPSSetting_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
         }
 
-        private void entryTagNum2_TextChanged(object sender, TextChangedEventArgs e)
+        private async void entryTagNum_TextChanged(object sender, EventArgs e)
         {
-            if(entryTagNum.Text.Equals(entryTagNum2.Text))
+            if (TagNumbers.Contains(entryTagNum.Text))
+            {
+                await DisplayAlert("Warning", $"Tag {entryTagNum.Text} already taken", "OK");
+                entryTagNum.Text = "";
+            }
+        }
+
+        private void entryTagNum2_TextChanged(object sender, EventArgs e)
+        {
+            if (entryTagNum.Text.Equals(entryTagNum2.Text))
             {
                 stsReEnter.Text = "Match!";
                 stsReEnter.TextColor = Color.Blue;
@@ -209,21 +225,6 @@ namespace FTCollectorApp.View
                 stsReEnter.TextColor = Color.Red;
                 btnRecordGPS.IsEnabled = false;
                 btnGPSOffset.IsEnabled = false;
-            }
-        }
-
-
-        private async void btnGPSSetting_Clicked(object sender, EventArgs e)
-        {
-            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
-        }
-
-        private async void entryTagNum_Completed(object sender, EventArgs e)
-        {
-            if (TagNumbers.Contains(entryTagNum.Text))
-            {
-                await DisplayAlert("Warning", $"Tag {entryTagNum.Text} already taken", "OK");
-                entryTagNum.Text = "";
             }
         }
     }

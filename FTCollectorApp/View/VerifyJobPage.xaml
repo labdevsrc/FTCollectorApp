@@ -17,21 +17,12 @@
                  Priority="0" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <AbsoluteLayout >
-            <!--<StackLayout >
-                <Label Text="Verify Job" FontSize="40" HorizontalOptions="Center" />
-                <Grid RowDefinitions="Auto,Auto"
-                      ColumnDefinitions="Auto,Auto,Auto" Padding="5">
-                    <Label Grid.Row="1" Grid.Column="1" Text="Owners" />
-                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="JobNumber" />
-                </Grid>
-
-
-            </StackLayout>-->
-            <Grid Padding="20">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
+    <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <Grid Padding="20" RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,*"
+                     ColumnDefinitions="*,*,*" 
+                      >
+            <!--<Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -43,22 +34,23 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>-->
+            <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>                
-                </Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>-->
             <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Verify Job" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
             <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
-            <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" 
-                    SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" 
-                    >
+            <!--<local:Dropdown Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" ItemSelected="jobOwnersPicker_ItemSelected"/>-->
+            <!--<local:Dropdown Grid.Row="2" Grid.Column="2" x:Name="jobNumbersPicker" ItemSelected="jobNumbersPicker_ItemSelected"/>-->
+            <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" >
             </Picker>
 
-            <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged="jobNumbersPicker_SelectedIndexChanged"  >
-                <Picker.SelectedIndex>0</Picker.SelectedIndex>
+            <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged ="jobNumbersPicker_SelectedIndexChanged"  >
+                    <Picker.SelectedIndex>0</Picker.SelectedIndex>
             </Picker>
             <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Job Location *"/>
             <local:BorderColorEntry Text="" x:Name="jobLocation"    Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>
@@ -68,7 +60,7 @@
                 <local:BorderColorEntry x:Name="custName" Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="False"/>
             <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
                 <local:BorderColorEntry Text=""  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
-            <Button x:Name="submit"  Grid.Row="11" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
+            <Button x:Name="submit"  Grid.Row="12" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
                 Clicked="submit_Clicked"
                 >
                 <Button.Triggers>
@@ -84,13 +76,13 @@
             </Button>
                 <!--<ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>-->
         </Grid>
+            </StackLayout>
 
-
-        <StackLayout IsVisible="{Binding isBusy}" Padding="12"
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                  AbsoluteLayout.LayoutFlags="PositionProportional"
                  AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
 
-            <ActivityIndicator IsRunning="{Binding isBusy}" Color ="{StaticResource blueColor}"/>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
 
             <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
 

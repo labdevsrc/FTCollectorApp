@@ -15,6 +15,8 @@ using Xamarin.Essentials;
 using System.Net.Http.Headers;
 using Plugin.Connectivity;
 using FTCollectorApp.View;
+using FTCollectorApp.View.SitesPage;
+
 using FTCollectorApp.Service;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.Utils;
@@ -28,31 +30,6 @@ namespace FTCollectorApp.View
         public List<string> OwnerName;
 
         private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
-        private bool _isBusy;
-        public bool isBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                if (_isBusy == value)
-                    return;
-                _isBusy = value;
-                OnPropertyChanged();
-            }
-        }
-
-        string selectedowner;
-        public string SelectedOwner
-        {
-            get { return selectedowner; }
-            set
-            {
-                if (selectedowner == value)
-                    return;
-                selectedowner = value;
-                OnPropertyChanged();
-            }
-        }
 
         public VerifyJobPage()
         {
@@ -66,7 +43,7 @@ namespace FTCollectorApp.View
         {
             base.OnAppearing();
 
-            isBusy = true;
+            IsBusy = true;
             Console.WriteLine("Connection : " + Connectivity.NetworkAccess.ToString());
 
             CrossConnectivity.Current.ConnectivityChanged += OnConnectivityHandler;
@@ -104,23 +81,17 @@ namespace FTCollectorApp.View
                 }
             }
 
-            // Data Binding Trial
-            //var _ownerNames = _jobdetails.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
-            //var ownerNames = new ObservableCollection<string>();
-            //foreach (var _ownerName in _ownerNames)
-            //    ownerNames.Add(_ownerName.OwnerName);
-            //jobOwnersPicker.ItemsSource = ownerNames;
-
-
             // select OwnerName from Job (LINQ command)
             var ownerNames = _jobdetails.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
             // populate to JobOwnerPicker
+            jobOwnersPicker.Items.Clear();
             foreach (var ownerName in ownerNames)
-                  jobOwnersPicker.Items.Add(ownerName.OwnerName);
+                jobOwnersPicker.Items.Add(ownerName.OwnerName);
+
 
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
-            isBusy = false;
+            IsBusy = false;
         }
 
         private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
@@ -149,58 +120,58 @@ namespace FTCollectorApp.View
 
             // get selected owner Name
             var owner = jobOwnersPicker.Items[jobOwnersPicker.SelectedIndex];
-            
-            // Data Binding Trial
-            //var owner = SelectedOwner as string;
-            //Console.WriteLine($"SelectedOwner {SelectedOwner}");
-            
-            
+
             // SELECT JobNumber from Job where OwnerName = (selected) owner (LINQ command)
             var _jobNumbergrouped = _jobdetails.Where(a => a.OwnerName == owner).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
+            jobNumbersPicker.Items.Clear();
             foreach (var jobNumbergrouped in _jobNumbergrouped)
                 jobNumbersPicker.Items.Add(jobNumbergrouped.JobNumber);
-
         }
 
         private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             var selectedOwner = jobOwnersPicker.SelectedIndex;
             if (selectedOwner == -1)
             {
                 DisplayAlert("Warning", "Select Owner First", "OK");
+                Console.WriteLine("jobOwnersPicker.SelectedIndex -1 ");
+            }
 
+            var selectedJobNumber = jobNumbersPicker.SelectedIndex;
+            if (selectedJobNumber == -1)
+            {
+                //DisplayAlert("Warning", "Select Owner First", "OK");
+                Console.WriteLine("jobNumbersPicker.SelectedIndex -1 ");
+                return;
             }
 
             var jobNumber = jobNumbersPicker.Items[jobNumbersPicker.SelectedIndex];
             var owner = jobOwnersPicker.Items[jobOwnersPicker.SelectedIndex];
 
+            Console.WriteLine($"jobNumber selected : {jobNumber}, owner selected : {owner} ");
             // Data Binding Trial
             // var owner = SelectedOwner;
 
             // SELECT JobLocation, ContactName, CustomerName, CustPhoneNum from Job where OwnerName = (selected) owner
             // and JobNumber = (selected) jobNumber (LINQ command)
-            var job_Location  = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.JobLocation).First();
-            jobLocation.Text = job_Location.ToString();
-
-            contactName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.ContactName).First();
-            custName.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerName).First();
-            custPhoneNum.Text = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CustomerPhone).First();
-            Session.stage =  _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.stage).First();
-            Session.ownerkey = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.OwnerKey).First();
-            Session.jobkey = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.JobKey).First();
-            var ownerCD = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.OWNER_CD).First();
-            Session.countycode = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber)).Select(a => a.CountyCode).First();
-            Session.jobnum = jobNumber;
-            
-            Session.ownerCD = ownerCD.ToString();
+            var QueryOwnerJobNumber = _jobdetails.Where(a => (a.OwnerName == owner) && (a.JobNumber == jobNumber));
+            jobLocation.Text = QueryOwnerJobNumber.Select(a => a.JobLocation).First();
+            contactName.Text = QueryOwnerJobNumber.Select(a => a.ContactName).First();
+            custName.Text = QueryOwnerJobNumber.Select(a => a.CustomerName).First();
+            custPhoneNum.Text = QueryOwnerJobNumber.Select(a => a.CustomerPhone).First();
+            Session.stage = QueryOwnerJobNumber.Select(a => a.stage).First();
+            Session.ownerkey = QueryOwnerJobNumber.Select(a => a.OwnerKey).First();
+            Session.jobkey = QueryOwnerJobNumber.Select(a => a.JobKey).First();
+            Session.ownerCD = QueryOwnerJobNumber.Select(a => a.OWNER_CD).First();
+            Session.countycode = QueryOwnerJobNumber.Select(a => a.CountyCode).First();
+            Session.jobnum = jobNumber.ToString();
         }
 
         private async void submit_Clicked(object sender, EventArgs e)
         {
 
             await OnSubmit();
-            
+
             var speaker = DependencyService.Get<ITextToSpeech>();
             speaker?.Speak("Job verified!");
 
@@ -214,7 +185,7 @@ namespace FTCollectorApp.View
         {
 
             Session.event_type = Session.JOB_VERIFIED;
-            isBusy = true;
+            IsBusy = true;
             try
             {
                 await CloudDBService.PostJobEvent();
@@ -223,7 +194,7 @@ namespace FTCollectorApp.View
             {
                 await DisplayAlert("Error", "Update JobEvent table failed", "OK");
             }
-            isBusy = false;
+            IsBusy = false;
 
         }
 

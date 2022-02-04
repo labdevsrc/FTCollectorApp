@@ -15,10 +15,10 @@ using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(Dropdown), typeof(DropdownRenderer))]  
+[assembly: ExportRenderer(typeof(Dropdown), typeof(DropdownRenderer))]
 namespace FTCollectorApp.Droid
 {
-    public class DropdownRenderer : ViewRenderer<Dropdown, Spinner>
+    public class DropdownRenderer : ViewRenderer<Dropdown, AppCompatSpinner>
     {
         AppCompatSpinner spinner;
         public DropdownRenderer(Context context) : base(context)
@@ -59,6 +59,7 @@ namespace FTCollectorApp.Droid
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var view = Element;
+            Control.DropDownVerticalOffset = 55;
             if (e.PropertyName == Dropdown.ItemsSourceProperty.PropertyName)
             {
                 ArrayAdapter adapter = new ArrayAdapter(Context, Android.Resource.Layout.SimpleListItem1, view.ItemsSource);

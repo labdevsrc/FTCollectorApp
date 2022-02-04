@@ -12,6 +12,7 @@ using FTCollectorApp.Service;
 using FTCollectorApp.Model;
 using System.Net.Http;
 using Xamarin.Essentials;
+using FTCollectorApp.View.SitesPage;
 
 namespace FTCollectorApp.View
 {

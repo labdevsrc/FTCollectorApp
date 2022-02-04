@@ -31,6 +31,11 @@ namespace FTCollectorApp.Droid
             string folderPath_ = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string signaturefullPath= Path.Combine(folderPath_, signature);
 
+            // signature temp file
+            string pendingTaskFileName = "pendingFileTask.txt";
+            string folderPath__ = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string pendingTaskFileNamefullPath = Path.Combine(folderPath__, pendingTaskFileName);
+
             Rg.Plugins.Popup.Popup.Init(this);
 
             LoadApplication(new App(fullPath, signaturefullPath));

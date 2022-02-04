@@ -22,6 +22,7 @@ namespace FTCollectorApp
         {
             InitializeComponent();
 
+            Properties[TaskCountKey] = 0;
             //MainPage = new NavigationPage(new MainPage()); // root page  is MainPage()
             MainPage = new NavigationPage(new SplashDownloadPage());
         }
@@ -33,9 +34,6 @@ namespace FTCollectorApp
             //MainPage = new NavigationPage(new MainPage());
             MainPage = new NavigationPage(new SplashDownloadPage());
             DatabaseLocation = databaseLoc;
-
-            
-
         }
 
         public App(string databaseLoc, string signatureLoc)

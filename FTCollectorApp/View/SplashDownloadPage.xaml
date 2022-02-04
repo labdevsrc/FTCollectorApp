@@ -17,8 +17,24 @@
                 <Label x:Name ="txtLoading" Text="Downloading..." HorizontalOptions="Center" TextColor="White"/>
 
             </StackLayout>
-            <Button Text="Login" HorizontalOptions="Center" Clicked="LoginClicked" />
-            <Button Text="Pending Upload" HorizontalOptions="Center" Clicked="PendingUploadClicked" />            
+            <Button Text="Login" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" Clicked="LoginClicked">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                    Binding="{Binding IsBusy}"
+                    Value="True">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button Text="Pending Upload" HorizontalOptions="Center" Clicked="PendingUploadClicked">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                    Binding="{Binding IsBusy}"
+                    Value="True">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>           
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -19,7 +19,7 @@ namespace FTCollectorApp.Service
     public static class CloudDBService
     {
         static HttpClient client;
-        public static List<string> listPendingTask;
+        public static List<string> listPendingTask = new List<string>();
 
 
 
@@ -376,7 +376,7 @@ namespace FTCollectorApp.Service
                 // To serialize the hashtable and its key/value pairs,
                 // you must first open a stream for writing.
                 // In this case, use a file stream.
-                FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append);
+                FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Append, FileAccess.Write);
 
                 // Construct a BinaryFormatter and use it to serialize the data to the stream.
                 BinaryFormatter formatter = new BinaryFormatter();

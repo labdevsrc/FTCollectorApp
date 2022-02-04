@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.BuildingSitePage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="icon_camera.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                        <Label Text="Building" FontSize="Large" HorizontalOptions="Center"/>
+                        <Label Text="Site Type*" HorizontalOptions="Start"/>
+                        <local:BorderColorEntry  x:Name="entrySiteType" IsEnabled="False" HorizontalOptions="Start"/>
+                        <Label Text="Enter PCS tag number*" HorizontalOptions="Start"/>
+                        <local:BorderColorEntry  x:Name="entryTagNum" IsEnabled="False" HorizontalOptions="Start"/>
+                        <Label Text="Owner or Customer" HorizontalOptions="Start"/>
+                        <local:BorderColorEntry x:Name="ownerName"  HorizontalOptions="Start"/>
+                        <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="ownerTagNumber"  HorizontalOptions="Start"/>
+                        <Label Text="Enter Property Id" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entryPropertyId"  HorizontalOptions="Start"/>
+                        <Label Text="Enter site name" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entrySiteName"  HorizontalOptions="Start"/>
+                        <Label Text="Enter Street Address" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entryStreetAddr"  HorizontalOptions="Start"/>
+                        <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entryPostalCode"  HorizontalOptions="Start"/>
+                        <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
+                            <!--<Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>                
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>-->
+                            <Label Grid.Row="0" Grid.Column="0" Text="Lane closure required"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
+                            <Label Grid.Row="0" Grid.Column="2" Text="Has Power disconnect"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pickerLaneClosure"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pickerDotDisctrict"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pickerHasPowerDisconnect"/>
+                            <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="3rd party comms"/>
+                            <Label Grid.Row="2" Grid.Column="2" Text="Enter Comms provider"/>
+                            <local:BorderEntry Grid.Row="3" Grid.Column="0" x:Name="pickerElectSiteKey"/>
+                            <local:BorderEntry Grid.Row="3" Grid.Column="1" x:Name="picker3rdpComms"/>
+                            <Entry Grid.Row="3"  Grid.Column="2" x:Name="commsProvide"/>
+
+
+                        </Grid>
+                        <Label Text="Enter UDS owner"/>
+                        <local:BorderEntry x:Name="UDSOwner"/>
+                        <Label Text="Building Classification"/>
+                        <Picker x:Name="buildingClass">
+                            <Picker.Items>
+                                <x:String>City Facility</x:String>
+                                <x:String>County Facility</x:String>
+                                <x:String>Other Agency Facility</x:String>
+                                <x:String>Private Partner Facility</x:String>
+                                <x:String>Shelter – Aboveground</x:String>
+                                <x:String>Shelter – Underground</x:String>
+                                <x:String>Utility Company Facility</x:String>
+                            </Picker.Items>
+                        </Picker>
+                        <Label Text="Choose a roadway"/>
+                        <Picker x:Name="pRoadway"/>
+                    </StackLayout>
+
+                </ScrollView>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>            
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

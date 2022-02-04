@@ -37,6 +37,10 @@ namespace FTCollectorApp.iOS
             string folderPath_ = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
             string signaturefullPath = Path.Combine(folderPath_, signature);
 
+            string pendingTaskFileName = "pendingFileTask.txt";
+            string folderPath__ = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
+            string pendingTaskFileNamefullPath = Path.Combine(folderPath__, pendingTaskFileName);
+
             Rg.Plugins.Popup.Popup.Init();
 
             LoadApplication(new App(fullPath, signaturefullPath));
