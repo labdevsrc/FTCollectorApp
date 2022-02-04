@@ -16,13 +16,24 @@ namespace FTCollectorApp
     {
         public static string DatabaseLocation = string.Empty;
         public static string SignatureFileLocation = string.Empty;
+        public static string InternalStorageLocation = string.Empty;
         private const string TaskCountKey = "TaskCount";
         private const string PendingTaskKey = "PendingTask";
         public App()
         {
             InitializeComponent();
 
-            Properties[TaskCountKey] = 0;
+
+            try
+            {
+                var test = TaskCount;
+            }
+            catch
+            {
+                TaskCount = 0;
+            }
+            
+                
             //MainPage = new NavigationPage(new MainPage()); // root page  is MainPage()
             MainPage = new NavigationPage(new SplashDownloadPage());
         }
@@ -36,7 +47,7 @@ namespace FTCollectorApp
             DatabaseLocation = databaseLoc;
         }
 
-        public App(string databaseLoc, string signatureLoc)
+        public App(string databaseLoc, string signatureLoc, string storeLoc)
         {
             InitializeComponent();
 
@@ -44,6 +55,7 @@ namespace FTCollectorApp
             MainPage = new NavigationPage(new SplashDownloadPage());
             DatabaseLocation = databaseLoc;
             SignatureFileLocation = signatureLoc;
+            InternalStorageLocation = storeLoc;
         }
 
         /*protected override void OnStartup()
@@ -77,9 +89,6 @@ namespace FTCollectorApp
             }
 
         }
-
-
-
 
         public int TaskCount
         {
