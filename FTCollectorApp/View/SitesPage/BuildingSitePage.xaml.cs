@@ -1,7 +1,10 @@
 ﻿using FTCollectorApp.Model;
+using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.Utils;
+using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +21,9 @@ namespace FTCollectorApp.View.SitesPage
         string TagNumber;
         List<string> DotDistrict = new List<string>();
         List<string> YesNo = new List<string>();
+
+        List<string>MountingTypes = new List<string>();
+
         public BuildingSitePage(string majorType, string minorType, string tagNumber)
         {
             InitializeComponent();
@@ -45,7 +51,7 @@ namespace FTCollectorApp.View.SitesPage
 
 
             pMaterial.ItemsSource = Material();
-            pMounting.ItemsSource = Mounting();
+
             pFilterType.ItemsSource = FilterType();
             pFilterSize.ItemsSource = FilterSize();
 
@@ -58,7 +64,7 @@ namespace FTCollectorApp.View.SitesPage
             pIsSiteClearZone.ItemsSource = YesNo;
             pBucketTruck.ItemsSource = YesNo;
 
-
+            pMounting.ItemsSource = Mounting();
 
         }
 
@@ -68,6 +74,8 @@ namespace FTCollectorApp.View.SitesPage
             entrySiteType.Text = MajorMinorType;
             entryTagNum.Text = TagNumber;
             ownerName.Text = Session.OwnerName;
+
+
         }
 
         private void btnCamera(object sender, EventArgs e)
@@ -145,7 +153,20 @@ namespace FTCollectorApp.View.SitesPage
 
         List<string> Mounting()
         {
-            List<string> mounting = new List<string>();
+            
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Mounting>();
+                var mountingTable = conn.Table<Mounting>().ToList();
+                foreach (var col in mountingTable)
+                {
+                    MountingTypes.Add(col.MountingType);
+                }
+                //Mountings = new ObservableCollection<Mounting>(mountingTable);
+                return MountingTypes;
+            }
+
+            /*List<string> mounting = new List<string>();
             mounting.Add("Butterfly");
             mounting.Add("In Pavement");
             mounting.Add("Under Pavement");
@@ -167,7 +188,7 @@ namespace FTCollectorApp.View.SitesPage
             mounting.Add("Street Light");
             mounting.Add("In Ground");
 
-            return mounting;
+            return mounting;*/
         }
 
         List<string> FilterType()

@@ -33,6 +33,8 @@ namespace FTCollectorApp.Model
         public static string ownerCD { get; set; }
         public static int crewCnt { get; set; }
 
+        public static string JobShowAll { get; set; }
+
         public const string EventLogin = "1";
         public const string JOB_VERIFIED = "2";
         public const string CrewAssembled = "3";

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using SQLite;
 namespace FTCollectorApp.Model
 {
     public class Site
     {
-        // A Site is pretty much anything that gets a tag number, 
+        [PrimaryKey, AutoIncrement]
         public int id { get; set; }
+        // A Site is pretty much anything that gets a tag number, 
 
         public string SiteKey { get; set; }
         public string JobKey { get; set; }

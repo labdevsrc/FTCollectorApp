@@ -26,7 +26,16 @@
                     </DataTrigger>
                 </Button.Triggers>
             </Button>
-            <Button Text="Pending Upload" HorizontalOptions="Center" Clicked="PendingUploadClicked">
+            <Button Text="Retry Download" HorizontalOptions="Center" BackgroundColor="Green" Clicked="RetryClicked">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                    Binding="{Binding IsBusy}"
+                    Value="True">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button Text="Pending Upload Page" HorizontalOptions="Center" Clicked="PendingUploadClicked">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button"
                     Binding="{Binding IsBusy}"

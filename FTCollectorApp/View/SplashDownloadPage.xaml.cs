@@ -1,4 +1,5 @@
 ﻿using FTCollectorApp.Model;
+using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
 using Plugin.Connectivity;
@@ -54,31 +55,135 @@ namespace FTCollectorApp.View
         {
             IsBusy = true;
             txtLoading.Text = "Downloading...";
-            var contentUser = await CloudDBService.GetEndUserFromAWSMySQLTable();
-            var contentJob = await CloudDBService.GetJobFromAWSMySQLTable();
-            var contentCodeSiteType = await CloudDBService.GetEndUserFromAWSMySQLTable();
-            var contentSite = await CloudDBService.GetJobFromAWSMySQLTable();
-            var contentCrewDefault = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
-
-            txtLoading.Text = "SQLite Dumping...";
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            try
             {
-                conn.CreateTable<User>();
-                conn.InsertAll(contentUser);
+                var contentUser = await CloudDBService.GetEndUserFromAWSMySQLTable();
+                var contentJob = await CloudDBService.GetJobFromAWSMySQLTable();
+                var contentCodeSiteType = await CloudDBService.GetEndUserFromAWSMySQLTable();
+                var contentSite = await CloudDBService.GetJobFromAWSMySQLTable();
+                var contentCrewDefault = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
+                var contentManuf = await CloudDBService.GetManufacturerTable();
+                var contentJobSumittal = await CloudDBService.GetJobSubmittalTable();
+                var contentKeyType = await CloudDBService.GetKeyTypeTable();
+                var contentMaterialCode = await CloudDBService.GetMaterialCodeTable();
+                var contentMounting = await CloudDBService.GetMountingTable();
 
-                conn.CreateTable<Job>();
-                conn.InsertAll(contentJob);
 
-                conn.CreateTable<CodeSiteType>();
-                conn.InsertAll(contentCodeSiteType);
+                var contentRoadway = await CloudDBService.GetRoadway();
+                var contentOwnRoadway = await CloudDBService.GetOwnerRoadway();
+                var contentElectCircuit = await CloudDBService.GetElectricCircuit();
+                var contentIntersection = await CloudDBService.GetIntersection();
+                var contentDirection = await CloudDBService.GetDirection();
+                var contentDuctSize = await CloudDBService.GetDuctSize();
+                var contentDuctType = await CloudDBService.GetDuctType();
+                var contentGroupType = await CloudDBService.GetGroupType();
+                var contentDevType = await CloudDBService.GetDevType();
+                var contentRackNumber = await CloudDBService.GetRackNumber();
+                var contentRackType = await CloudDBService.GetRackType();
 
-                conn.CreateTable<Site>();
-                conn.InsertAll(contentSite);
+                var contentFilterSize = await CloudDBService.GetFilterSize();
+                var contentSpliceType = await CloudDBService.GetSpliceType();
+                var contentLaborClass  = await CloudDBService.GetLaborClass();
+                var contentTravellen = await CloudDBService.GetCompassDir();
+                var contentBuildingType = await CloudDBService.GetBuildingType();
 
-                conn.CreateTable<Crewdefault>();
-                conn.InsertAll(contentCrewDefault);
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<User>();
+                    conn.InsertAll(contentUser);
+
+                    conn.CreateTable<Job>();
+                    conn.InsertAll(contentJob);
+
+                    conn.CreateTable<CodeSiteType>();
+                    conn.InsertAll(contentCodeSiteType);
+
+                    conn.CreateTable<Site>();
+                    conn.InsertAll(contentSite);
+
+                    conn.CreateTable<Crewdefault>();
+                    conn.InsertAll(contentCrewDefault);
+
+                    conn.CreateTable<Manufacturer>();
+                    conn.InsertAll(contentManuf);
+
+                    conn.CreateTable<JobSubmittal>();
+                    conn.InsertAll(contentJobSumittal);
+
+                    conn.CreateTable<KeyType>();
+                    conn.InsertAll(contentKeyType);
+
+                    conn.CreateTable<MaterialCode>();
+                    conn.InsertAll(contentMaterialCode);
+
+                    conn.CreateTable<Mounting>();
+                    conn.InsertAll(contentMounting);
+
+                    conn.CreateTable<Roadway>();
+                    conn.InsertAll(contentRoadway);
+
+                    conn.CreateTable<OwnerRoadway>();
+                    conn.InsertAll(contentOwnRoadway);
+
+
+
+                    conn.CreateTable<InterSectionRoad>();
+                    conn.InsertAll(contentIntersection);
+
+
+                    conn.CreateTable<ElectricCircuit>();
+                    conn.InsertAll(contentElectCircuit);
+
+                    conn.CreateTable<Direction>();
+                    conn.InsertAll(contentDirection);
+
+                    conn.CreateTable<DuctSize>();
+                    conn.InsertAll(contentDuctSize);
+
+                    conn.CreateTable<DuctType>();
+                    conn.InsertAll(contentDuctType);
+
+                    conn.CreateTable<GroupType>();
+                    conn.InsertAll(contentGroupType);
+
+
+                    conn.CreateTable<DevType>();
+                    conn.InsertAll(contentDevType);
+
+                    conn.CreateTable<RackNumber>();
+                    conn.InsertAll(contentRackNumber);
+
+                    conn.CreateTable<RackType>();
+                    conn.InsertAll(contentRackType);
+
+                    conn.CreateTable<FilterSize>();
+                    conn.InsertAll(contentFilterSize);
+
+                    conn.CreateTable<SpliceType>();
+                    conn.InsertAll(contentSpliceType);
+
+                    conn.CreateTable<LaborClass>();
+                    conn.InsertAll(contentLaborClass);
+
+                    conn.CreateTable<CompassDirection>();
+                    conn.InsertAll(contentTravellen);
+
+                    conn.CreateTable<BuildingType>();
+                    conn.InsertAll(contentBuildingType);
+                }
+            }
+            catch(Exception e)
+            {
+                DisplayAlert("Warning", "Error during download database","RETRY");
+                Console.WriteLine(e.ToString());
 
             }
+
+
+
+            txtLoading.Text = "SQLite Dumping...";
+
 
             IsBusy = false;
         }
@@ -89,6 +194,11 @@ namespace FTCollectorApp.View
             Navigation.PushAsync(new MainPage());
         }
 
+        private void RetryClicked(object sender, EventArgs e)
+        {
+            DownloadTables();
+        }
+
         private void PendingUploadClicked(object sender, EventArgs e)
         {
             // close, exit apps
@@ -96,6 +206,16 @@ namespace FTCollectorApp.View
             // closer?.closeApplication();
             Navigation.PushAsync(new PendingSendPage());
             
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button_Clicked_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

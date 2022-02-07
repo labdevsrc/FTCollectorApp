@@ -28,6 +28,8 @@
                 <Label x:Name="stsReEnter"  Text="" HorizontalOptions="Start"/>
                 <Label Text="Stage" HorizontalOptions="Start"/>
                 <local:BorderColorEntry x:Name="stagePicker" IsReadOnly="True"/>
+                <Label Text="Accuracy" HorizontalOptions="Start"/>
+                <local:BorderColorEntry x:Name="entryAccuracy" IsReadOnly="True"/>
                 <Button x:Name="btnRecordGPS" Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
                     Clicked="btnRecordGPS_Clicked">
                     <Button.Triggers>

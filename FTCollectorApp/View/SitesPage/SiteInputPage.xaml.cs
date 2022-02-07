@@ -54,14 +54,13 @@ namespace FTCollectorApp.View.SitesPage
                 CodeSiteTypes.Clear();
                 Sites.Clear();
 
+                // Get code_site_type table from AWS
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
-
                 CodeSiteTypes = new ObservableCollection<CodeSiteType>(contentCodeSiteType);
                 Console.WriteLine(contentCodeSiteType);
 
-
+                // Get Site table from AWS
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
-
                 Sites = new ObservableCollection<Site>(contentSite);
                 Console.WriteLine(contentSite);
 
@@ -86,17 +85,16 @@ namespace FTCollectorApp.View.SitesPage
                     conn.CreateTable<CodeSiteType>();
                     var codesiteypes = conn.Table<CodeSiteType>().ToList();
                     CodeSiteTypes = new ObservableCollection<CodeSiteType>(codesiteypes);
+
+                    conn.CreateTable<Site>();
+                    var sites = conn.Table<Site>().ToList();
+                    Sites = new ObservableCollection<Site>(sites);
                     //listviewPost.ItemsSource = listPost; //= new ObservableCollection<Post>(posts);
 
                 }
             }
 
 
-
-            // select MajorSite type from Sites (LINQ command)
-            //var majorSites = CodeSiteTypes.GroupBy(b => b.MajorSites).Select(g => g.First()).ToList();
-            //foreach (var majorSite in majorSites)
-            //    majorSitePicker.Items.Add(majorSite.MajorSites);
             var majorTypes = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
             foreach (var majorType in majorTypes)
                 majorTypePicker.Items.Add(majorType.MajorType);
@@ -115,7 +113,25 @@ namespace FTCollectorApp.View.SitesPage
             stagePicker.Text = Session.stage;
             //stagePicker.Items.Add(Session.stage);
 
+            Device.StartTimer(TimeSpan.FromSeconds(5), () => OnTimerTick());
+
             IsBusy = false;
+        }
+        bool OnTimerTick()
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    await LocationService.GetLocation();
+                    entryAccuracy.Text = $"{LocationService.Coords.Accuracy}";
+                }
+                catch
+                {
+                    entryAccuracy.Text = "No GPS";
+                }
+            });
+            return true;
         }
 
         private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)

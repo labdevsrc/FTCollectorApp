@@ -164,6 +164,7 @@ namespace FTCollectorApp.View
             Session.jobkey = QueryOwnerJobNumber.Select(a => a.JobKey).First();
             Session.ownerCD = QueryOwnerJobNumber.Select(a => a.OWNER_CD).First();
             Session.countycode = QueryOwnerJobNumber.Select(a => a.CountyCode).First();
+            Session.JobShowAll = QueryOwnerJobNumber.Select(a => a.ShowAll).First();
             Session.jobnum = jobNumber.ToString();
             Session.OwnerName = owner.ToString();
         }

@@ -13,6 +13,7 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using FTCollectorApp.Model.Reference;
 
 namespace FTCollectorApp.Service
 {
@@ -36,75 +37,6 @@ namespace FTCollectorApp.Service
 
         }
 
-        /*[STAThread]
-        static void Main()
-        {
-            Serialize();
-            Deserialize();
-        }
-
-        static void Serialize(string id, Dictionary dicts)
-        {
-            // Create a hashtable of values that will eventually be serialized.
-            Hashtable pendingTask = new Hashtable();
-            pendingTask.Add("Jeff", "123 Main Street, Redmond, WA 98052");
-            pendingTask.Add("Fred", "987 Pine Road, Phila., PA 19116");
-            pendingTask.Add("Mary", "PO Box 112233, Palo Alto, CA 94301");
-
-            // To serialize the hashtable and its key/value pairs,
-            // you must first open a stream for writing.
-            // In this case, use a file stream.
-            FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Create);
-
-            // Construct a BinaryFormatter and use it to serialize the data to the stream.
-            BinaryFormatter formatter = new BinaryFormatter();
-            try
-            {
-                formatter.Serialize(fs, pendingTask);
-            }
-            catch (SerializationException e)
-            {
-                Console.WriteLine("Failed to serialize. Reason: " + e.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
-            }
-        }
-
-        static void Deserialize()
-        {
-            // Declare the hashtable reference.
-            Hashtable addresses = null;
-
-            // Open the file containing the data that you want to deserialize.
-            FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Open);
-            try
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-
-                // Deserialize the hashtable from the file and
-                // assign the reference to the local variable.
-                addresses = (Hashtable)formatter.Deserialize(fs);
-            }
-            catch (SerializationException e)
-            {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
-                throw;
-            }
-            finally
-            {
-                fs.Close();
-            }
-
-            // To prove that the table deserialized correctly,
-            // display the key/value pairs.
-            foreach (DictionaryEntry de in addresses)
-            {
-                Console.WriteLine("{0} lives at {1}.", de.Key, de.Value);
-            }
-        }*/
 
         // grab End User tables from Url https://collector.fibertrak.com/phonev4/xamarinLogin.php
         public static Task<IEnumerable<User>> GetEndUserFromAWSMySQLTable() =>
@@ -280,6 +212,48 @@ namespace FTCollectorApp.Service
 
         }
 
+
+        public static List<KeyValuePair<string, string>> PrepareContentData(string tagnum, string typecode)
+        {
+            var keyValues = new List<KeyValuePair<string, string>>{
+                //new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("jno",Session.jobnum),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("tag",tagnum),
+                new KeyValuePair<string, string>("typecode",typecode),
+                new KeyValuePair<string, string>("plansheet","0"),
+                new KeyValuePair<string, string>("psitem","0"),
+
+
+                //new KeyValuePair<string, string>("gps_sts", Session.gps_sts),                
+                //new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
+                //new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
+
+                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
+                new KeyValuePair<string, string>("longitude2", Session.longitude2),
+                new KeyValuePair<string, string>("altitude", Session.altitude),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy),
+
+                //new KeyValuePair<string, string>("evtype", Session.event_type),
+                
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // created_on
+                new KeyValuePair<string, string>("owner", Session.ownerkey), //
+                new KeyValuePair<string, string>("user", Session.uid.ToString()),
+                new KeyValuePair<string, string>("stage", Session.stage),
+                new KeyValuePair<string, string>("gpstime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("ownerCD", Session.ownerCD),
+                new KeyValuePair<string, string>("ownerkey", Session.ownerkey),
+                new KeyValuePair<string, string>("jobkey", Session.jobkey),
+                new KeyValuePair<string, string>("createdfrm", "field collection"),
+                new KeyValuePair<string, string>("usercounty", Session.countycode),
+                new KeyValuePair<string, string>("ajaxname", Constants.CreateSiteTableUrl),
+
+
+            };
+            return keyValues;
+        }
+
+
         public static async Task PostCreateSiteAsync(string tagnum, string typecode)
         {
 
@@ -368,6 +342,9 @@ namespace FTCollectorApp.Service
             }
         }
 
+
+
+
         public static async Task SaveCrewdata(string OWNER_CD, string name1, string name2, string name3, string name4, string name5, string name6, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)
         {
 
@@ -442,6 +419,103 @@ namespace FTCollectorApp.Service
                     }
                 }
             }
+        }
+
+
+        public static Task<IEnumerable<Manufacturer>> GetManufacturerTable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Manufacturer>>("manufacturer_list");
+        public static Task<IEnumerable<JobSubmittal>> GetJobSubmittalTable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<JobSubmittal>>("job_submittal");
+
+        public static Task<IEnumerable<KeyType>> GetKeyTypeTable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<KeyType>>("keytype");
+        public static Task<IEnumerable<JobSubmittal>> GetMaterialCodeTable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<JobSubmittal>>("materialcode");
+
+        public static Task<IEnumerable<Mounting>> GetMountingTable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Mounting>>("mounting");
+
+        public static Task<IEnumerable<FilterType>> GetFilterType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<FilterType>>("filter_type");
+
+        public static Task<IEnumerable<Roadway>> GetRoadway() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Roadway>>("roadway");
+
+        public static Task<IEnumerable<OwnerRoadway>> GetOwnerRoadway() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<OwnerRoadway>>("owner_roadway");
+
+        public static Task<IEnumerable<InterSectionRoad>> GetIntersection() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<InterSectionRoad>>("intersection");
+
+        public static Task<IEnumerable<ElectricCircuit>> GetElectricCircuit() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<ElectricCircuit>>("electric");
+
+        public static Task<IEnumerable<Direction>> GetDirection() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Direction>>("direction");
+        public static Task<IEnumerable<DuctSize>> GetDuctSize() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<DuctSize>>("dsize");
+        public static Task<IEnumerable<DuctType>> GetDuctType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<DuctType>>("ducttype");
+        public static Task<IEnumerable<GroupType>> GetGroupType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<GroupType>>("grouptype");
+
+
+        public static Task<IEnumerable<DevType>> GetDevType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<DevType>>("devtype");
+
+        public static Task<IEnumerable<RackNumber>> GetRackNumber() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<RackNumber>>("racknumber");
+
+        public static Task<IEnumerable<RackType>> GetRackType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<RackType>>("racktype");
+
+        public static Task<IEnumerable<FilterSize>> GetFilterSize() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<FilterSize>>("fltrsizes");
+
+        public static Task<IEnumerable<SpliceType>> GetSpliceType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
+
+        public static Task<IEnumerable<LaborClass>> GetLaborClass() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<LaborClass>>("laborclass");
+
+
+        public static Task<IEnumerable<CompassDirection>> GetCompassDir() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<CompassDirection>>("travellen");
+
+        public static Task<IEnumerable<BuildingType>> GetBuildingType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<BuildingType>>("bClassification");
+        async static Task<T> GetBuildingDropDownParamsAsync<T>(string type)
+        {
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("type",type),
+            };
+
+            var json = String.Empty;
+            try
+            {
+                HttpContent content = new FormUrlEncodedContent(keyValues);
+
+                HttpResponseMessage response = null;
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    response = await client.PostAsync(Constants.GetBuildingsParamUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        json = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[CloudService.{type}] Response from  OK = 200 , content :" + json);
+                        var data = JsonConvert.DeserializeObject<T>(json);
+                        return data;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+            }
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
     }

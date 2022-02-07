@@ -20,6 +20,8 @@ namespace FTCollectorApp.Model
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public string CountyCode { get; set; }
+
+        public string ShowAll { get; set; }
         public string table_name { get; set; }
 
         public int UserId { get; set; } //FK

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace FTCollectorApp.Model
 {
     public class CodeSiteType
     {
+        [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public string CodeKey { get; set; }
 
