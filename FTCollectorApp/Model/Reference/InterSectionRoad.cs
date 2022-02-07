@@ -12,5 +12,6 @@ namespace FTCollectorApp.Model.Reference
         public string IntersectionKey { get; set; }
         public string major_roadway { get; set; }
         public string minor_roadway { get; set; }
+        public string OWNER_CD { get; set; }
     }
 }

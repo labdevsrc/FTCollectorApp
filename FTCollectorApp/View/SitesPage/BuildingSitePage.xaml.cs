@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Web;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,6 +23,14 @@ namespace FTCollectorApp.View.SitesPage
         List<string> YesNo = new List<string>();
 
         List<string>MountingTypes = new List<string>();
+
+
+
+        // key list 
+        List<string> roadWayKeyList = new List<string>();
+        List<string> mountingKeyList = new List<string>();
+        List<string> dirTravelKeyList = new List<string>();
+        List<string> buildingClassiKeyList = new List<string>();
 
         public BuildingSitePage(string majorType, string minorType, string tagNumber)
         {
@@ -42,18 +50,18 @@ namespace FTCollectorApp.View.SitesPage
             pickerHasPowerDisconnect.ItemsSource = YesNo;
             picker3rdpComms.ItemsSource = YesNo;
             pickerLaneClosure.ItemsSource = YesNo;
-            buildingClass.ItemsSource = BuildingClassification();
-            pIntersection.ItemsSource = Roadway();
-            pRoadway.ItemsSource = Roadway();
+            buildingClass.ItemsSource = getBuildingClassiList();
+            pIntersection.ItemsSource = getIntersectionList();
+            pRoadway.ItemsSource = getRoadwayList();
 
-            pDirTravel.ItemsSource = DirectionTravel();
-            pOrientation.ItemsSource = DirectionTravel();
+            pDirTravel.ItemsSource = getDirection();
+            pOrientation.ItemsSource = getDirection();
 
 
-            pMaterial.ItemsSource = Material();
+            pMaterial.ItemsSource = getMaterialCodeList();
 
-            pFilterType.ItemsSource = FilterType();
-            pFilterSize.ItemsSource = FilterSize();
+            pFilterType.ItemsSource = getFilterType();
+            pFilterSize.ItemsSource = getFilterSize();
 
 
             pHaveSunShield.ItemsSource = YesNo;
@@ -64,16 +72,20 @@ namespace FTCollectorApp.View.SitesPage
             pIsSiteClearZone.ItemsSource = YesNo;
             pBucketTruck.ItemsSource = YesNo;
 
-            pMounting.ItemsSource = Mounting();
+            pMounting.ItemsSource = getMountingTypeList();
 
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            IsBusy = true;
             entrySiteType.Text = MajorMinorType;
             entryTagNum.Text = TagNumber;
             ownerName.Text = Session.OwnerName;
+
+            IsBusy = false;
 
 
         }
@@ -85,10 +97,21 @@ namespace FTCollectorApp.View.SitesPage
 
 
 
-        List<string> BuildingClassification()
+        List<string> getBuildingClassiList()
         {
-            List<string> buildingClassification = new List<string>();
-            buildingClassification.Add("City Facility");
+            List<string> buildingClassiList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<BuildingType>();
+                var bdClassiTable = conn.Table<BuildingType>().ToList();
+                foreach (var col in bdClassiTable)
+                {
+                    buildingClassiList.Add(col.TYPE_DESC);
+                    buildingClassiKeyList.Add(col.BuildingTypeKey);
+                }
+                return buildingClassiList;
+            }
+            /*buildingClassification.Add("City Facility");
             buildingClassification.Add("County Facility");
             buildingClassification.Add("Other Agency Facility");
             buildingClassification.Add("Private Partner Facility");
@@ -96,13 +119,31 @@ namespace FTCollectorApp.View.SitesPage
             buildingClassification.Add("Shelter – Underground");
             buildingClassification.Add("Utility Company Facility");
 
-            return buildingClassification;
+            return buildingClassification;*/
         }
 
-        List<string> Roadway()
+        List<string> getRoadwayList()
         {
-            List<string> roadWay = new List<string>();
-            roadWay.Add("Crosstown Parkway");
+            List<string> roadWayList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Roadway>();
+                var roadwayTable= conn.Table<Roadway>().ToList();
+
+                conn.CreateTable<OwnerRoadway>();
+                var ownerRoadwayTable = conn.Table<Roadway>().ToList();
+
+                ownerRoadwayList = ownerRoadwayTable.Where(a => a.ow)
+
+                roadWayList.Add("----Select-----");
+                foreach (var col in roadwayTable)
+                {
+                    roadWayList.Add(col.RoadwayName);
+                    roadWayKeyList.Add(col.RoadwayKey);
+                }
+                return roadWayList;
+            }
+            /*roadWay.Add("Crosstown Parkway");
             roadWay.Add("US 1");
             roadWay.Add("SE Floesta Drive");
             roadWay.Add("SE Sandia Drive");
@@ -112,13 +153,52 @@ namespace FTCollectorApp.View.SitesPage
             roadWay.Add("SW Gatlin  Blvd");
             roadWay.Add("SW Savona  Blvd");
             roadWay.Add("SW Tradition Pkwy");
-            return roadWay;
+            return roadWay;*/
         }
 
-        List<string> DirectionTravel()
+
+        List<string> getIntersectionList()
         {
-            List<string> dirTravel = new List<string>();
-            dirTravel.Add("North");
+            List<string> intersectionList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<InterSectionRoad>();
+                var intersectionTable = conn.Table<InterSectionRoad>().ToList();
+
+                var data = intersectionTable.Where(a => a.OWNER_CD == Session.ownerCD).Select(a => a.IntersectionName).ToList();
+
+                return data;
+            }
+            /*roadWay.Add("Crosstown Parkway");
+            roadWay.Add("US 1");
+            roadWay.Add("SE Floesta Drive");
+            roadWay.Add("SE Sandia Drive");
+            roadWay.Add("SE Manth Lane");
+            roadWay.Add("I95");
+            roadWay.Add("SW Rosser Blvd");
+            roadWay.Add("SW Gatlin  Blvd");
+            roadWay.Add("SW Savona  Blvd");
+            roadWay.Add("SW Tradition Pkwy");
+            return roadWay;*/
+        }
+
+
+        List<string> getDirection()
+        {
+            List<string> dirTravelList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Direction>();
+                var directionTable = conn.Table<Direction>().ToList();
+                dirTravelList.Add("----Select----");
+                foreach (var col in directionTable)
+                {
+                    dirTravelList.Add(col.DirDesc);
+                    dirTravelKeyList.Add(col.DirKey);
+                }
+                return dirTravelList;
+            }
+            /*dirTravel.Add("North");
             dirTravel.Add("North East");
             dirTravel.Add("East");
             dirTravel.Add("South East");
@@ -130,13 +210,24 @@ namespace FTCollectorApp.View.SitesPage
             dirTravel.Add("On Ramp");
             dirTravel.Add("Unknown");
 
-            return dirTravel;
+            return dirTravel;*/
         }
 
-        List<string> Material()
+        List<string> getMaterialCodeList()
         {
-            List<string> material = new List<string>();
-            material.Add("Composite");
+            List<string> materialCodeList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<MaterialCode>();
+                var matCodeTable= conn.Table<MaterialCode>().ToList();
+                foreach (var col in matCodeTable)
+                {
+                    materialCodeList.Add(col.CodeDescription);
+                }
+                //Mountings = new ObservableCollection<Mounting>(mountingTable);
+                return MountingTypes;
+            }
+            /*material.Add("Composite");
             material.Add("Concrete");
             material.Add("Fiberglass");
             material.Add("Galvanized Steel");
@@ -148,22 +239,22 @@ namespace FTCollectorApp.View.SitesPage
             material.Add("Steel");
             material.Add("Aluminium");
 
-            return material;
+            return material;*/
         }
 
-        List<string> Mounting()
+        List<string> getMountingTypeList()
         {
-            
+            List<string> mountingTypeList = new List<string>();
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<Mounting>();
                 var mountingTable = conn.Table<Mounting>().ToList();
                 foreach (var col in mountingTable)
                 {
-                    MountingTypes.Add(col.MountingType);
+                    mountingTypeList.Add(col.MountingType);
                 }
                 //Mountings = new ObservableCollection<Mounting>(mountingTable);
-                return MountingTypes;
+                return mountingTypeList;
             }
 
             /*List<string> mounting = new List<string>();
@@ -191,10 +282,22 @@ namespace FTCollectorApp.View.SitesPage
             return mounting;*/
         }
 
-        List<string> FilterType()
+        List<string> getFilterType()
         {
-            List<string> filterType = new List<string>();
-            filterType.Add("Fabric");
+            List<string> filterTypeList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<FilterType>();
+                var ftTypeTable = conn.Table<FilterType>().ToList();
+                filterTypeList.Add("----Select----");
+                foreach (var col in ftTypeTable)
+                {
+                    filterTypeList.Add(col.FilterTypeDesc);
+                }
+                //Mountings = new ObservableCollection<Mounting>(mountingTable);
+                return filterTypeList;
+            }
+            /*filterType.Add("Fabric");
             filterType.Add("Metal");
             filterType.Add("Paper");
             filterType.Add("Fiberglass");
@@ -202,19 +305,32 @@ namespace FTCollectorApp.View.SitesPage
             filterType.Add("NONE");
             filterType.Add("Unknown");
 
-            return filterType;
+            return filterType;*/
         }
 
-        List<string> FilterSize()
+        List<string> getFilterSize()
         {
-            List<string> filterSize = new List<string>();
-            filterSize.Add("12\" x 12\" x 1\"");
+            List<string> filterSizeList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<FilterSize>();
+                var ftTypeTable = conn.Table<FilterSize>().ToList();
+                filterSizeList.Add("---Select---");
+                foreach (var col in ftTypeTable)
+                {
+                    var temp = HttpUtility.HtmlDecode(col.data);
+                    filterSizeList.Add(temp);
+                }
+                //Mountings = new ObservableCollection<Mounting>(mountingTable);
+                return filterSizeList;
+            }
+            /*filterSize.Add("12\" x 12\" x 1\"");
             filterSize.Add("12\" x 14\" x 1\"");
             filterSize.Add("12\" x 16\" x 1\"");
             filterSize.Add("12\" x 18\" x 1\"");
             filterSize.Add("12\" x 25\" x 1\"");
 
-            return filterSize;
+            return filterSize;*/
         }
     }
 }

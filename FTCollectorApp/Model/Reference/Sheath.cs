@@ -1,14 +1,15 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using SQLite;
+
 namespace FTCollectorApp.Model.Reference
 {
-    public class BuildingType
+    public class Sheath
     {
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }
-        public string BuildingTypeKey { get; set; }
-        public string TYPE_DESC { get; set; }
+        public string SheathKey { get; set; }
+        public string SheathType { get; set; }
     }
 }

@@ -4,11 +4,10 @@ using System.Text;
 using SQLite;
 namespace FTCollectorApp.Model.Reference
 {
-    public class BuildingType
+    public class CableStructure
     {
-        [PrimaryKey, AutoIncrement]
         public int id { get; set; }
-        public string BuildingTypeKey { get; set; }
-        public string TYPE_DESC { get; set; }
+        public string CableKey { get; set; }
+        public string buffer_type { get; set; }
     }
 }

@@ -468,9 +468,22 @@ namespace FTCollectorApp.Service
 
         public static Task<IEnumerable<RackType>> GetRackType() =>
             GetBuildingDropDownParamsAsync<IEnumerable<RackType>>("racktype");
+        //
+        public static Task<IEnumerable<Sheath>> GetSheath() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Sheath>>("sheath");
+        public static Task<IEnumerable<ReelId>> GetReelId() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<ReelId>>("reelid");
 
+        public static Task<IEnumerable<Orientation>> GetOrientation() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Orientation>>("sbto");
+
+        public static Task<IEnumerable<CableStructure>> GetCableStructure() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<CableStructure>>("cable_structure");
+
+        ///
         public static Task<IEnumerable<FilterSize>> GetFilterSize() =>
             GetBuildingDropDownParamsAsync<IEnumerable<FilterSize>>("fltrsizes");
+
 
         public static Task<IEnumerable<SpliceType>> GetSpliceType() =>
             GetBuildingDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
@@ -478,6 +491,8 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<LaborClass>> GetLaborClass() =>
             GetBuildingDropDownParamsAsync<IEnumerable<LaborClass>>("laborclass");
 
+        public static Task<IEnumerable<Dimensions>> GetDimensions() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Dimensions>>("dimensions");
 
         public static Task<IEnumerable<CompassDirection>> GetCompassDir() =>
             GetBuildingDropDownParamsAsync<IEnumerable<CompassDirection>>("travellen");

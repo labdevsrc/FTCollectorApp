@@ -80,10 +80,14 @@ namespace FTCollectorApp.View
                 var contentDevType = await CloudDBService.GetDevType();
                 var contentRackNumber = await CloudDBService.GetRackNumber();
                 var contentRackType = await CloudDBService.GetRackType();
-
+                var contentSheath = await CloudDBService.GetSheath();
+                var contentReelId = await CloudDBService.GetReelId();
+                var contentOrientation = await CloudDBService.GetOrientation();
+                var contentDimension = await CloudDBService.GetDimensions();
                 var contentFilterSize = await CloudDBService.GetFilterSize();
                 var contentSpliceType = await CloudDBService.GetSpliceType();
                 var contentLaborClass  = await CloudDBService.GetLaborClass();
+                var contentCabStructure = await CloudDBService.GetCableStructure();
                 var contentTravellen = await CloudDBService.GetCompassDir();
                 var contentBuildingType = await CloudDBService.GetBuildingType();
 
@@ -156,6 +160,18 @@ namespace FTCollectorApp.View
 
                     conn.CreateTable<RackType>();
                     conn.InsertAll(contentRackType);
+
+                    conn.CreateTable<Sheath>();
+                    conn.InsertAll(contentSheath);
+
+                    conn.CreateTable<ReelId>();
+                    conn.InsertAll(contentReelId);
+
+                    conn.CreateTable<Dimensions>();
+                    conn.InsertAll(contentDimension);
+
+                    conn.CreateTable<Orientation>();
+                    conn.InsertAll(contentOrientation);
 
                     conn.CreateTable<FilterSize>();
                     conn.InsertAll(contentFilterSize);
