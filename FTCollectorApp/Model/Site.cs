@@ -12,6 +12,7 @@ namespace FTCollectorApp.Model
 
         public string SiteKey { get; set; }
         public string JobKey { get; set; }
+        public string JobNumber { get; set; }
         public string OwnerKey { get; set; }
         public string OWNER_CD { get; set; }
         public string TagNumber { get; set; }
@@ -28,5 +29,8 @@ namespace FTCollectorApp.Model
         public string LATITUDE { get; set; }
 
         public string GpsTime { get; set; }
+
+
+        public string CreatedBy { get; set; }
     }
 }

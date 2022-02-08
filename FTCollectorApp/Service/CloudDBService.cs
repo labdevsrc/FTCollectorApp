@@ -477,16 +477,42 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<Orientation>> GetOrientation() =>
             GetBuildingDropDownParamsAsync<IEnumerable<Orientation>>("sbto");
 
+        public static Task<IEnumerable<Chassis>> GetChassis() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
+        public static Task<IEnumerable<AFiberCable>> GetAFCable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<AFiberCable>>("frcable");
+
         public static Task<IEnumerable<CableStructure>> GetCableStructure() =>
             GetBuildingDropDownParamsAsync<IEnumerable<CableStructure>>("cable_structure");
 
         ///
+        //public static Task<IEnumerable<Side>> GetSide() =>
+        //   GetBuildingDropDownParamsAsync<IEnumerable<Side>>("side");
+        public static Task<IEnumerable<Tracewaretag>> GetTraceWareTag() =>
+           GetBuildingDropDownParamsAsync<IEnumerable<Tracewaretag>>("tracewaretag");
+
+        //public static Task<IEnumerable<Cable>> GetCables() =>
+        //   GetBuildingDropDownParamsAsync<IEnumerable<Cable>>("cables");
+        public static Task<IEnumerable<ConduitsGroup>> GetConduits() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<ConduitsGroup>>("conduits");
+        public static Task<IEnumerable<Owner>> GetOwners() =>
+           GetBuildingDropDownParamsAsync<IEnumerable<Owner>>("owners");
+        public static Task<IEnumerable<County>> GetAllCountry() =>
+           GetBuildingDropDownParamsAsync<IEnumerable<County>>("allcountry");
+        public static Task<IEnumerable<InstallType>> GetInstallType() =>
+           GetBuildingDropDownParamsAsync<IEnumerable<InstallType>>("installtype");
+
+        public static Task<IEnumerable<DuctUsed>> GetDuctUsed() =>
+           GetBuildingDropDownParamsAsync<IEnumerable<DuctUsed>>("ductused");
+
+        //////
         public static Task<IEnumerable<FilterSize>> GetFilterSize() =>
             GetBuildingDropDownParamsAsync<IEnumerable<FilterSize>>("fltrsizes");
-
-
         public static Task<IEnumerable<SpliceType>> GetSpliceType() =>
             GetBuildingDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
+
+        public static Task<IEnumerable<Chassis>> GetToEncloser() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
 
         public static Task<IEnumerable<LaborClass>> GetLaborClass() =>
             GetBuildingDropDownParamsAsync<IEnumerable<LaborClass>>("laborclass");

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -92,6 +93,7 @@ namespace FTCollectorApp.View.SitesPage
 
         private void btnCamera(object sender, EventArgs e)
         {
+
             Navigation.PushAsync(new CameraViewPage());
         }
 
@@ -131,15 +133,16 @@ namespace FTCollectorApp.View.SitesPage
                 var roadwayTable= conn.Table<Roadway>().ToList();
 
                 conn.CreateTable<OwnerRoadway>();
-                var ownerRoadwayTable = conn.Table<Roadway>().ToList();
+                var ownerRoadwayTable = conn.Table<OwnerRoadway>().ToList();
 
-                ownerRoadwayList = ownerRoadwayTable.Where(a => a.ow)
-
+                // get roadway with owner = Session.owner
+                var RoadwayList1 = ownerRoadwayTable.Where(a => a.OR_Owner == Session.ownerkey).Select(b => b.OR_Roadway).ToList();
+                
                 roadWayList.Add("----Select-----");
-                foreach (var col in roadwayTable)
+                foreach (string col in RoadwayList1)
                 {
-                    roadWayList.Add(col.RoadwayName);
-                    roadWayKeyList.Add(col.RoadwayKey);
+                    roadWayList.Add(roadwayTable.Where(a => a.RoadwayKey == col.ToString()).Select(b => b.RoadwayName).First());
+                    //roadWayKeyList.Add(col.RoadwayKey);
                 }
                 return roadWayList;
             }
@@ -282,6 +285,60 @@ namespace FTCollectorApp.View.SitesPage
             return mounting;*/
         }
 
+        List<string> getSide()
+        {
+            List<string> sideList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Site>();
+                var Sites = conn.Table<Site>().ToList();
+                var TagNumbers = Sites.Where(a => (a.CreatedBy == Session.uid.ToString()) 
+                && (a.JobNumber == Session.jobnum) 
+                && (a.OWNER_CD == Session.ownerCD)).Select(g => g.TagNumber).ToList();
+
+                return TagNumbers;
+            }
+        }
+
+        List<string> getCables2()
+        {
+            List<string> Cables = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<AFiberCable>();
+                var a_fiber_cables = conn.Table<AFiberCable>().ToList();
+                var CableIdListbyJobNum = a_fiber_cables.Where(a => a.JobNumber == Session.jobnum).Select(g => g.CableIdKey).ToList();
+
+                return CableIdListbyJobNum;
+            }
+        }
+
+        List<string> getCables1()
+        {
+            List<string> Cables = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<AFiberCable>();
+                var a_fiber_cables = conn.Table<AFiberCable>().ToList();
+
+                var CableIdListbyOwnerKey = a_fiber_cables.Where(a => a.OwnerKey == Session.ownerkey).Select(g => g.CableIdKey).ToList();
+                return CableIdListbyOwnerKey;
+            }
+        }
+
+        List<string> getTracewaretag()
+        {
+            List<string> TraceWareTagList = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Tracewaretag>();
+                var Sites = conn.Table<Tracewaretag>().ToList();
+                var TagNumbers = Sites.Where(a => a.SiteOwnerKey == Session.ownerkey).Select(b => b.SiteTagNumber).ToList();
+
+                return TraceWareTagList;
+            }
+        }
+
         List<string> getFilterType()
         {
             List<string> filterTypeList = new List<string>();
@@ -331,6 +388,11 @@ namespace FTCollectorApp.View.SitesPage
             filterSize.Add("12\" x 25\" x 1\"");
 
             return filterSize;*/
+        }
+
+        private void btnCamera2(object sender, EventArgs e)
+        {
+
         }
     }
 }
