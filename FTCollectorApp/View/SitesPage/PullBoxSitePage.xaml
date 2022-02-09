@@ -4,9 +4,9 @@
              xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.PullBoxSitePage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem  Clicked="btnCamera" IconImageSource="icon_camera.png" 
-                Order="Primary"
-                Priority="0" />
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -15,60 +15,106 @@
                     <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
                         <Label Text="Pull Box" FontSize="Large" HorizontalOptions="Center"/>
                         <Label Text="Site Type*" HorizontalOptions="Start"/>
-                        <local:BorderColorEntry IsReadOnly="True" x:Name="entrySiteType" IsEnabled="False" HorizontalOptions="Start"/>
+                        <local:BorderColorEntry IsReadOnly="True" x:Name="entrySiteType" IsEnabled="False" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Enter PCS tag number*" HorizontalOptions="Start"/>
-                        <local:BorderColorEntry IsReadOnly="True" x:Name="entryTagNum" IsEnabled="False" HorizontalOptions="Start"/>
+                        <local:BorderColorEntry IsReadOnly="True" x:Name="entryTagNum" IsEnabled="False" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Owner or Customer" HorizontalOptions="Start"/>
-                        <local:BorderColorEntry IsReadOnly="True" x:Name="ownerName"  HorizontalOptions="Start"/>
-                        <Label Text="Enter owners tag number" HorizontalOptions="Start"/>
-                        <local:BorderEntry x:Name="ownerTagNumber"  HorizontalOptions="Start"/>
-                        <Label Text="Enter Property Id" HorizontalOptions="Start"/>
-                        <local:BorderEntry x:Name="entryPropertyId"  HorizontalOptions="Start"/>
+                        <local:BorderColorEntry IsReadOnly="True" x:Name="ownerName"  HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Enter owner's tag number" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entryOwnerTag"  HorizontalOptions="FillAndExpand"/>                        
+                        <Label Text="Enter location" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entryLocation"  HorizontalOptions="FillAndExpand"/>
                         <Label Text="Enter site name" HorizontalOptions="Start"/>
-                        <local:BorderEntry x:Name="entrySiteName"  HorizontalOptions="Start"/>
-                        <Label Text="Enter Street Address" HorizontalOptions="Start"/>
-                        <local:BorderEntry x:Name="entryStreetAddr"  HorizontalOptions="Start"/>
-                        <Label Text="Enter Postal Code" HorizontalOptions="Start"/>
-                        <local:BorderEntry x:Name="entryPostalCode"  HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entrySiteName"  HorizontalOptions="FillAndExpand"/>
+
+                        <Label Text="Material"/>
+                        <local:Dropdown  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                            x:Name="pMaterial" HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Manufacturer"/>
+                        <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer" HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Model"/>
+                        <local:Dropdown  ItemsSource="{Binding ModelList}" ItemDisplayBinding="{Binding DevTypeDesc}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand"/>
+
+                        <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
+                            <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
+                            <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="entryHeight"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="entryDepth"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth"/>
+                        </Grid>
 
                         <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
-                            <Label Grid.Row="0" Grid.Column="0" Text="Lane closure required"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
+                            <Label Grid.Row="0" Grid.Column="0"  Text="Lane closure required"/>
+
                             <Label Grid.Row="0" Grid.Column="2" Text="Has Power disconnect"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pickerLaneClosure"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pickerDotDisctrict"/>
+
                             <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pickerHasPowerDisconnect"/>
                             <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>
                             <Label Grid.Row="2" Grid.Column="1" Text="3rd party comms"/>
                             <Label Grid.Row="2" Grid.Column="2" Text="Enter Comms provider"/>
-                            <local:BorderEntry Grid.Row="3" Grid.Column="0" x:Name="pickerElectSiteKey"/>
-                            <local:BorderEntry Grid.Row="3" Grid.Column="1" x:Name="picker3rdpComms"/>
-                            <Entry Grid.Row="3"  Grid.Column="2" x:Name="commsProvide"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="0" x:Name="pickerElectSiteKey"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="1" x:Name="picker3rdpComms"/>
+                            <local:BorderEntry Grid.Row="3"  Grid.Column="2" x:Name="commsProvide"/>
                         </Grid>
 
+                        <Label Text="Enter Site Street Address" HorizontalOptions="Start"/>
+                        <local:BorderEntry x:Name="entryStreetAddr"  HorizontalOptions="FillAndExpand"/>
                         <Label Text="Enter UDS owner"/>
-                        <local:BorderEntry x:Name="UDSOwner"/>
-                        <Label Text="Building Classification"/>
-                        <Picker x:Name="buildingClass">
-                            <Picker.Items>
-                                <x:String>City Facility</x:String>
-                                <x:String>County Facility</x:String>
-                                <x:String>Other Agency Facility</x:String>
-                                <x:String>Private Partner Facility</x:String>
-                                <x:String>Shelter – Aboveground</x:String>
-                                <x:String>Shelter – Underground</x:String>
-                                <x:String>Utility Company Facility</x:String>
-                            </Picker.Items>
-                        </Picker>
+                        <local:BorderEntry x:Name="UDSOwner" HorizontalOptions="FillAndExpand"/>
+
+                        <Label Text="Enter notes and comments"/>
+                        <Editor x:Name="editorNotes" Placeholder="Enter notes here" 
+                                HorizontalOptions="FillAndExpand" MaxLength="250"   />
+
+                        <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,*,*">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Is this a splice vault?"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
+                            <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pSpliceVault"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pHasGround"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pHasKey"/>
+                            <Label Grid.Row="2" Grid.Column="0" Text="Enter distance to Tra-lane"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="Enter lid pieces"/>
+                            <Label Grid.Row="2" Grid.Column="2" Text="Has Appron"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="0" x:Name="pDistance"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="0" x:Name="pLidPcs"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column="0" x:Name="pHasApron"/>                            
+                            <Label Grid.Row="4" Grid.Column="0" Text="Gravel Bottom"/>
+                            <Label Grid.Row="4" Grid.Column="1" Text="Is site in a clear Zone?"/>
+                            <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>
+                            <local:Dropdown Grid.Row="5" Grid.Column="0" x:Name="pGravelBottom"/>
+                            <local:Dropdown Grid.Row="5" Grid.Column="1" x:Name="pIsSiteClearZone"/>
+                            <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck"/>
+                        </Grid>
+
+
                         <Label Text="Choose a roadway"/>
-                        <Picker x:Name="pRoadway"/>
+                        <Picker ItemsSource="{Binding RoadwayList}" ItemDisplayBinding="{Binding RoadwayName}"  x:Name="pRoadway" HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Choose an intersection"/>
+                        <Picker ItemsSource="{Binding IntersectionList}" ItemDisplayBinding="{Binding IntersectionName}" x:Name="pIntersection"  HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Direction of Travel"/>
+                        <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CodeDescription}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
+                        <Label Text="Orientation"/>
+                        <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
+                            x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>
+
+                        <Button Text="Record Ducts" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="OnClicked"/>
+                        <Button Text="Fiber" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="OnClicked"/>
+                        <Button Text="Tracer" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="OnClicked"/>
+                        <Button Text="Complete This Trace" HorizontalOptions="FillAndExpand" x:Name="btnCompleteTrace" Clicked="OnClicked"/>
+                        <Button Text="Splice Enclosure" HorizontalOptions="FillAndExpand" x:Name="btnSpliceEnc" Clicked="OnClicked"/>
+                        <Button Text="Record Racks" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="OnClicked"/>
+                        <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="OnClicked"/>
                     </StackLayout>
 
                 </ScrollView>
             </StackLayout>
             <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
-                AbsoluteLayout.LayoutFlags="PositionProportional"
-                AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
 
                 <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
 

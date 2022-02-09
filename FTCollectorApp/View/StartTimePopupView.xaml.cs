@@ -70,7 +70,7 @@ namespace FTCollectorApp.View
             }
             catch {
                 
-                DisplayAlert("Warning", "Time format must be HH:MM", "OK");
+                await DisplayAlert("Warning", "Time format must be HH:MM", "OK");
             }
 
         }

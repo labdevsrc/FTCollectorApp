@@ -33,5 +33,10 @@ namespace FTCollectorApp.View.SitesPage
         {
 
         }
+
+        private void OnClicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }

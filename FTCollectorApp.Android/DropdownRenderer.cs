@@ -19,7 +19,8 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(Dropdown), typeof(DropdownRenderer))]
 namespace FTCollectorApp.Droid
 {
-    public class DropdownRenderer : ViewRenderer<Dropdown, AppCompatSpinner>
+    //public class DropdownRenderer : ViewRenderer<Dropdown, AppCompatSpinner>
+    public class DropdownRenderer : PickerRenderer
     {
         AppCompatSpinner spinner;
         public DropdownRenderer(Context context) : base(context)
@@ -27,11 +28,12 @@ namespace FTCollectorApp.Droid
 
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Dropdown> e)
+        //protected override void OnElementChanged(ElementChangedEventArgs<Dropdown> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Picker> e)
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            /*if (Control == null)
             {
                 spinner = new AppCompatSpinner(Context);
                 SetNativeControl(spinner);
@@ -40,7 +42,7 @@ namespace FTCollectorApp.Droid
             if (e.OldElement != null)
             {
                 Control.ItemSelected -= OnItemSelected;
-            }
+            }*/
 
             if (e.OldElement == null)
             {
@@ -55,7 +57,7 @@ namespace FTCollectorApp.Droid
                     Control.PaddingBottom);
             }
 
-            if (e.NewElement != null)
+            /*if (e.NewElement != null)
             {
                 var view = e.NewElement;
 
@@ -68,13 +70,13 @@ namespace FTCollectorApp.Droid
                 }
 
                 Control.ItemSelected += OnItemSelected;
-            }
+            }*/
         }
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+       /* protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var view = Element;
-            Control.DropDownVerticalOffset = 55;
+            Control.DropDownVerticalOffset = 30;
             if (e.PropertyName == Dropdown.ItemsSourceProperty.PropertyName)
             {
                 ArrayAdapter adapter = new ArrayAdapter(Context, Android.Resource.Layout.SimpleListItem1, view.ItemsSource);
@@ -95,6 +97,6 @@ namespace FTCollectorApp.Droid
                 view.SelectedIndex = e.Position;
                 view.OnItemSelected(e.Position);
             }
-        }
+        }*/
     }
 }  

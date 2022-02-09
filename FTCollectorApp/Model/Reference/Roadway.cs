@@ -12,6 +12,7 @@ namespace FTCollectorApp.Model.Reference
         public string RoadwayKey { get; set; }
         public string RoadwayName { get; set; }
 
+        public string RoadOwnerKey { get; set; }
 
 
     }

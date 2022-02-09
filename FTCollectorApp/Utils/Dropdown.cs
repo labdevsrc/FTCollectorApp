@@ -5,9 +5,10 @@ using Xamarin.Forms;
 
 namespace FTCollectorApp.Utils
 {
-    public class Dropdown : Label
+    //public class Dropdown : Label
+    public class Dropdown : Picker
     {
-        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
+        /*public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
             propertyName: nameof(ItemsSource),
             returnType: typeof(List<string>),
             declaringType: typeof(List<string>),
@@ -36,11 +37,11 @@ namespace FTCollectorApp.Utils
         public void OnItemSelected(int pos)
         {
             ItemSelected?.Invoke(this, new ItemSelectedEventArgs() { SelectedIndex = pos });
-        }
+        }*/
     }
 
-    public class ItemSelectedEventArgs : EventArgs
+    /*public class ItemSelectedEventArgs : EventArgs
     {
         public int SelectedIndex { get; set; }
-    }
+    }*/
 }

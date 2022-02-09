@@ -8,5 +8,6 @@ namespace FTCollectorApp.Model.Reference
         public int id { get; set; }
         public string CompasKey { get; set; }
         public string CompassDirDesc { get; set; }
+        public string ITSFM { get; set; }
     }
 }

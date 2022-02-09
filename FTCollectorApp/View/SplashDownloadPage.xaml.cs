@@ -72,7 +72,7 @@ namespace FTCollectorApp.View
 
 
                 var contentRoadway = await CloudDBService.GetRoadway();  // roadway
-                var contentOwnRoadway = await CloudDBService.GetOwnerRoadway();  // owner_roadway, this will be joined to roadway
+                //var contentOwnRoadway = await CloudDBService.GetOwnerRoadway();  // owner_roadway, this will be joined to roadway
                 var contentElectCircuit = await CloudDBService.GetElectricCircuit(); //intersection
                 var contentIntersection = await CloudDBService.GetIntersection(); //electric
                 var contentDirection = await CloudDBService.GetDirection(); //direction
@@ -153,9 +153,9 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<Roadway>();
                     conn.InsertAll(contentRoadway);
 
-                    conn.CreateTable<OwnerRoadway>();
-                    conn.DeleteAll<OwnerRoadway>();
-                    conn.InsertAll(contentOwnRoadway);
+                    //conn.CreateTable<OwnerRoadway>();
+                    //conn.DeleteAll<OwnerRoadway>();
+                    //conn.InsertAll(contentOwnRoadway);
 
 
 
@@ -220,12 +220,14 @@ namespace FTCollectorApp.View
                     conn.InsertAll(contentFilterSize);
 
                     conn.CreateTable<SpliceType>();
+                    conn.DeleteAll<SpliceType>();
                     conn.InsertAll(contentSpliceType);
 
                     conn.CreateTable<LaborClass>();
                     conn.InsertAll(contentLaborClass);
 
                     conn.CreateTable<CompassDirection>();
+                    conn.DeleteAll<CompassDirection>();
                     conn.InsertAll(contentTravellen);
 
                     conn.CreateTable<BuildingType>();
@@ -235,7 +237,7 @@ namespace FTCollectorApp.View
             }
             catch(Exception e)
             {
-                DisplayAlert("Warning", "Error during download database","RETRY");
+                await DisplayAlert("Warning", "Error during download database","RETRY");
                 Console.WriteLine(e.ToString());
 
             }

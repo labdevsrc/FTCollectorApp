@@ -172,23 +172,23 @@ namespace FTCollectorApp.View.SitesPage
                 if (selectedMajorType.Equals("Building"))
                 {
                     await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
-                    Navigation.PushAsync(new BuildingSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new BuildingSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Cabinet"))
                 {
-                    Navigation.PushAsync(new CabinetSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new CabinetSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Pull Box"))
                 {
-                    Navigation.PushAsync(new PullBoxSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new PullBoxSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Structure"))
                 {
-                    Navigation.PushAsync(new StructureSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new StructureSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
                 }
             }
             else
-                DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
+               await  DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
         }
 
         private void btnGPSOffset_Clicked(object sender, EventArgs e)
