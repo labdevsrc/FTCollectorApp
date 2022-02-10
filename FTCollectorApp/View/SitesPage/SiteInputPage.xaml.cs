@@ -125,6 +125,11 @@ namespace FTCollectorApp.View.SitesPage
                 {
                     await LocationService.GetLocation();
                     entryAccuracy.Text = $"{LocationService.Coords.Accuracy}";
+                    Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+                    Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                    Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                    Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+                    //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
                 }
                 catch
                 {
@@ -172,19 +177,19 @@ namespace FTCollectorApp.View.SitesPage
                 if (selectedMajorType.Equals("Building"))
                 {
                     await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
-                    await Navigation.PushAsync(new BuildingSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new BuildingSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Cabinet"))
                 {
-                    await Navigation.PushAsync(new CabinetSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new CabinetSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Pull Box"))
                 {
-                    await Navigation.PushAsync(new PullBoxSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new PullBoxSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Structure"))
                 {
-                    await Navigation.PushAsync(new StructureSitePage(selectedMajorType, selectedMinorType, entryTagNum.Text));
+                    await Navigation.PushAsync(new StructureSitePage(selectedMinorType, entryTagNum.Text));
                 }
             }
             else

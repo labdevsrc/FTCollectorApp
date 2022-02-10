@@ -429,8 +429,8 @@ namespace FTCollectorApp.Service
 
         public static Task<IEnumerable<KeyType>> GetKeyTypeTable() =>
             GetBuildingDropDownParamsAsync<IEnumerable<KeyType>>("keytype");
-        public static Task<IEnumerable<JobSubmittal>> GetMaterialCodeTable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<JobSubmittal>>("materialcode");
+        public static Task<IEnumerable<MaterialCode>> GetMaterialCodeTable() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<MaterialCode>>("materialcode");
 
         public static Task<IEnumerable<Mounting>> GetMountingTable() =>
             GetBuildingDropDownParamsAsync<IEnumerable<Mounting>>("mounting");
@@ -508,6 +508,7 @@ namespace FTCollectorApp.Service
         //////
         public static Task<IEnumerable<FilterSize>> GetFilterSize() =>
             GetBuildingDropDownParamsAsync<IEnumerable<FilterSize>>("fltrsizes");
+
         public static Task<IEnumerable<SpliceType>> GetSpliceType() =>
             GetBuildingDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
 
@@ -567,16 +568,17 @@ namespace FTCollectorApp.Service
 
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
             HttpContent content = new FormUrlEncodedContent(keyValues);
-
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostSaveBuilding Json : {json}");
             HttpResponseMessage response = null;
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                response = await client.PostAsync(Constants.CreateSiteTableUrl, content);
+                response = await client.PostAsync(Constants.UpdateSiteTableUrl, content);
                 if (response.IsSuccessStatusCode)
                 {
                     var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"[CloudService.PostSiteAsync] Response from  OK = 200 , content :" + isi);
+                    Console.WriteLine($"[PostSaveBuilding] Response from  OK = 200 , content :" + isi);
                 }
             }
             else

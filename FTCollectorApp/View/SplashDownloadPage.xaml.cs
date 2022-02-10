@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+//using Acr.UserDialogs;
 
 namespace FTCollectorApp.View
 {
@@ -38,7 +39,20 @@ namespace FTCollectorApp.View
             }
             else
             {
-                DisplayAlert("Warning", "No Internet Available. Turn it now then retry", "Close");
+                /*UserDialogs.Instance.Confirm(new ConfirmConfig
+                {
+                    Title = "Warning",
+                    Message = "No Internet Available. Turn it ON now then retry",
+                    OkText = "Retry",
+                    CancelText = "Close",
+                    OnAction = async (confirmed) =>
+                    {
+                        if (confirmed)
+                            //UserDialogs.Instance.Alert(Title = "Close");
+                            await DownloadTables();
+                    }
+                });*/
+                DisplayAlert("Warning", "No Internet Available. Turn it ON now then retry", "Close");
             }
 
         }
@@ -99,6 +113,7 @@ namespace FTCollectorApp.View
 
                 var contentDimension = await CloudDBService.GetDimensions();   // dimesnsions
                 var contentFilterSize = await CloudDBService.GetFilterSize(); //fltrsizes
+                var contentFilterType = await CloudDBService.GetFilterType(); //fltrsizes
                 var contentSpliceType = await CloudDBService.GetSpliceType();//splicetype
                 var contentLaborClass  = await CloudDBService.GetLaborClass();// laborclass
 
@@ -181,10 +196,12 @@ namespace FTCollectorApp.View
                     conn.InsertAll(contentDuctType);
 
                     conn.CreateTable<GroupType>();
+                    conn.DeleteAll<GroupType>();
                     conn.InsertAll(contentGroupType);
 
 
                     conn.CreateTable<DevType>();
+                    conn.DeleteAll<DevType>();
                     conn.InsertAll(contentDevType);
 
                     conn.CreateTable<RackNumber>();
@@ -218,6 +235,10 @@ namespace FTCollectorApp.View
                     conn.CreateTable<FilterSize>();
                     conn.DeleteAll<FilterSize>();
                     conn.InsertAll(contentFilterSize);
+
+                    conn.CreateTable<FilterType>();
+                    conn.DeleteAll<FilterType>();
+                    conn.InsertAll(contentFilterType);
 
                     conn.CreateTable<SpliceType>();
                     conn.DeleteAll<SpliceType>();

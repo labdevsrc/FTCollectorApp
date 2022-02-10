@@ -5,6 +5,7 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using System.IO;
+//using Acr.UserDialogs;
 
 namespace FTCollectorApp.Droid
 {
@@ -37,6 +38,7 @@ namespace FTCollectorApp.Droid
             string pendingTaskFileNamefullPath = Path.Combine(folderPath__, pendingTaskFileName);
 
             Rg.Plugins.Popup.Popup.Init(this);
+            //UserDialogs.Init(this);
 
             LoadApplication(new App(fullPath, signaturefullPath, pendingTaskFileNamefullPath));
         }

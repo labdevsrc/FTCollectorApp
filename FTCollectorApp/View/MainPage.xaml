@@ -6,7 +6,7 @@
              NavigationPage.HasNavigationBar="False" 
              >
 
-    <StackLayout VerticalOptions="CenterAndExpand" Margin="10">
+    <StackLayout VerticalOptions="CenterAndExpand" Margin="20" Padding="5,20,5,20">
         <Image Source="logo.png" HorizontalOptions="Center"/>
         <local:BorderEntry x:Name="entryEmail" Placeholder="Username" 
             Keyboard="Email" 

@@ -13,6 +13,19 @@ namespace FTCollectorApp.ViewModel
     public class BdSitePageViewModel
     {
 
+        public ObservableCollection<CodeSiteType> CodeSite
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CodeSiteType>();
+                    var table = conn.Table<CodeSiteType>().ToList();
+                    return new ObservableCollection<CodeSiteType>(table);
+                }
+            }
+        }
+
         public ObservableCollection<BuildingType> BuildingTypeList
         {
             get
@@ -84,6 +97,10 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<MaterialCode>();
                     var table = conn.Table<MaterialCode>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.CodeDescription = HttpUtility.HtmlDecode(col.CodeDescription); // should use for escape char "
+                    }
                     return new ObservableCollection<MaterialCode>(table);
                 }
             }
@@ -98,6 +115,10 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<FilterType>();
                     var table = conn.Table<FilterType>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.FilterTypeDesc = HttpUtility.HtmlDecode(col.FilterTypeDesc); // should use for escape char "
+                    }
                     return new ObservableCollection<FilterType>(table);
                 }
             }
@@ -158,6 +179,10 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<Manufacturer>();
                     var table = conn.Table<Manufacturer>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.ManufName = HttpUtility.HtmlDecode(col.ManufName); // should use for escape char "
+                    }
                     return new ObservableCollection<Manufacturer>(table);
                 }
             }
@@ -171,6 +196,10 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<DevType>();
                     var table = conn.Table<DevType>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.DevTypeDesc = HttpUtility.HtmlDecode(col.DevTypeDesc); // should use for escape char "
+                    }
                     return new ObservableCollection<DevType>(table);
                 }
             }

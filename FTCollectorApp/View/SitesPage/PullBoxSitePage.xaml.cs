@@ -15,10 +15,10 @@ namespace FTCollectorApp.View.SitesPage
     {
         string MajorMinorType;
         string TagNumber;
-        public PullBoxSitePage(string majorType, string minorType, string tagNumber)
+        public PullBoxSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
-            MajorMinorType = $"{majorType} - {minorType}";
+            MajorMinorType = $"Pull Box - {minorType}";
         }
 
         protected override void OnAppearing()

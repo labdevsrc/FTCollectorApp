@@ -17,7 +17,7 @@ namespace FTCollectorApp
         public const string GetCodeSiteTypeTableUrl = "xGetCodeSiteType.php";
         public const string SaveCrewUrl = "saveCrew.php";
         public const string CreateSiteTableUrl = "Createsite.php";
-
+        public const string UpdateSiteTableUrl = "Savebuilding.php";
 
         public const string GetBuildingsParamUrl = "getBuildingEntries.php";
         //////////////////// AWS S3 params ////////////////////////////////

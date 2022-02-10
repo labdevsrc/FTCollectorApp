@@ -26,13 +26,13 @@ namespace FTCollectorApp.View.SitesPage
         string Notes;
         string InstalledAt, Manufactured;
 
-        public CabinetSitePage(string majorType, string minorType, string tagNumber)
+        public CabinetSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
             BindingContext = new BdSitePageViewModel();
 
 
-            MajorMinorType = $"{majorType} - {minorType}";
+            MajorMinorType = $"Cabinet - {minorType}";
 
             for (int i = 0; i < 100; i++)
             {
@@ -207,7 +207,7 @@ namespace FTCollectorApp.View.SitesPage
 
 
             var keyValues = new List<KeyValuePair<string, string>>{
-                //new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("type1","1"),  // 1: Building 
                 new KeyValuePair<string, string>("jno",Session.jobnum), //  7 
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()), //1
                 new KeyValuePair<string, string>("tag",TagNumber), //8

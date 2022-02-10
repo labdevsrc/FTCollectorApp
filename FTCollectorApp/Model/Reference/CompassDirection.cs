@@ -5,6 +5,7 @@ namespace FTCollectorApp.Model.Reference
 {
     public class CompassDirection
     {
+        [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public string CompasKey { get; set; }
         public string CompassDirDesc { get; set; }

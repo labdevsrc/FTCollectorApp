@@ -154,7 +154,7 @@
                 <Label Text="Front camera" />
             </StackLayout>
             
-            <ImageButton Source="icon_camera.png" 
+            <ImageButton Source="cam_white.png" 
                          x:Name="doCameraThings"
                 BackgroundColor="Transparent"
                 AbsoluteLayout.LayoutFlags="PositionProportional"  

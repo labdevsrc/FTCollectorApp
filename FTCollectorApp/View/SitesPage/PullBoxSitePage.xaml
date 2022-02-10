@@ -28,7 +28,7 @@
                         <local:BorderEntry x:Name="entrySiteName"  HorizontalOptions="FillAndExpand"/>
 
                         <Label Text="Material"/>
-                        <local:Dropdown  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CompassDirDesc}"
+                        <local:Dropdown  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
                             x:Name="pMaterial" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Manufacturer"/>
                         <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer" HorizontalOptions="FillAndExpand"/>
@@ -96,7 +96,7 @@
                         <Label Text="Choose an intersection"/>
                         <Picker ItemsSource="{Binding IntersectionList}" ItemDisplayBinding="{Binding IntersectionName}" x:Name="pIntersection"  HorizontalOptions="FillAndExpand"/>
                         <Label Text="Direction of Travel"/>
-                        <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CodeDescription}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
+                        <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirection}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Orientation"/>
                         <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
                             x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>

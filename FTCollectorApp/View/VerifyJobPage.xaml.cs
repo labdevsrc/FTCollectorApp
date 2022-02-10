@@ -20,6 +20,7 @@ using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.Service;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.Utils;
+//using Acr.UserDialogs;
 
 namespace FTCollectorApp.View
 {
@@ -88,6 +89,24 @@ namespace FTCollectorApp.View
             foreach (var ownerName in ownerNames)
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
 
+            /*await LocationService.GetLocation();
+            if (LocationService.Coords == null)
+            {
+                UserDialogs.Instance.Confirm(new ConfirmConfig
+                {
+                    Title = "Warning",
+                    Message = "Location Service Not Available. Please Enable Device Location",
+                    OkText = "Continue",
+                    CancelText = "Close",
+                    OnAction = async (confirmed) =>
+                    {
+                        if (confirmed)
+                            //UserDialogs.Instance.Alert(Title="Close");
+                            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+                }
+                });
+
+            }*/
 
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 

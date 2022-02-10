@@ -15,10 +15,10 @@ namespace FTCollectorApp.View.SitesPage
     {
         string MajorMinorType;
         string TagNumber;
-        public StructureSitePage(string majorType, string minorType, string tagNumber)
+        public StructureSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
-            MajorMinorType = $"{majorType} - {minorType}";
+            MajorMinorType = $"Structure - {minorType}";
         }
 
         protected override void OnAppearing()
