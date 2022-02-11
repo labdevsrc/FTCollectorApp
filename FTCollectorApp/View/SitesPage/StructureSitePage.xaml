@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.StructureSitePage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem  Clicked="btnCamera" IconImageSource="icon_camera.png" 
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
                 Order="Primary"
                 Priority="0" />
     </ContentPage.ToolbarItems>
