@@ -12,6 +12,7 @@ using FTCollectorApp.ViewModel;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.Service;
+using System.Collections.ObjectModel;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -26,6 +27,7 @@ namespace FTCollectorApp.View.SitesPage
 
         string Notes, SiteType;
         string InstalledAt, Manufactured;
+        public ObservableCollection<string> SiteTypes = new ObservableCollection<string>();
 
         public StructureSitePage(string minorType, string tagNumber)
         {
@@ -33,13 +35,7 @@ namespace FTCollectorApp.View.SitesPage
             BindingContext = new BdSitePageViewModel();
 
 
-            MajorMinorType = $"Structure - {minorType}";
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-            {
-                conn.CreateTable<CodeSiteType>();
-                var CodeSiteTable = conn.Table<CodeSiteType>().ToList();
-                SiteType = CodeSiteTable.Where(a => a.MajorType == "Structure" && a.MinorType == minorType).Select(g => g.CodeKey).First().ToString();
-            }
+
 
             for (int i = 0; i < 100; i++)
             {
@@ -51,38 +47,43 @@ namespace FTCollectorApp.View.SitesPage
 
             TagNumber = tagNumber;
             entryTagNum.Text = tagNumber;
-            //pickerDotDisctrict.ItemsSource = DotDistrict;
+            pickerDotDisctrict.ItemsSource = DotDistrict;
             pickerElectSiteKey.ItemsSource = DotDistrict;
             pickerHasPowerDisconnect.ItemsSource = YesNo;
             picker3rdpComms.ItemsSource = YesNo;
             pickerLaneClosure.ItemsSource = YesNo;
-
+            pKIPS.ItemsSource = DotDistrict;
+            pDiameter.ItemsSource = DotDistrict;
 
             //pHaveSunShield.ItemsSource = YesNo;
             pHasGround.ItemsSource = YesNo;
             pHasKey.ItemsSource = YesNo;
             //pKeyType.ItemsSource = DotDistrict;
             //pDirectionTravel.ItemsSource = DotDistrict;
-            pIsSiteClearZone.ItemsSource = YesNo;
-            pBucketTruck.ItemsSource = YesNo;
+            //pIsSiteClearZone.ItemsSource = YesNo;
+            //pBucketTruck.ItemsSource = YesNo;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
+
+
+
             IsBusy = true;
-            entrySiteType.Text = MajorMinorType;
+            
             entryTagNum.Text = TagNumber;
             ownerName.Text = Session.OwnerName;
+            //pSiteType.ItemsSource = SiteTypes; //Instead of this entrySiteType.Text = MajorMinorType;
 
             //buildingClass.SelectedIndexChanged += OnItemSelectedIndexChange;
-            pIntersection.SelectedIndexChanged += OnItemSelectedIndexChange;
+            //pIntersection.SelectedIndexChanged += OnItemSelectedIndexChange;
             pRoadway.SelectedIndexChanged += OnItemSelectedIndexChange;
             pDirTravel.SelectedIndexChanged += OnItemSelectedIndexChange;
 
             pOrientation.SelectedIndexChanged += OnItemSelectedIndexChange;
-            pMaterial.SelectedIndexChanged += OnItemSelectedIndexChange;
+            //pMaterial.SelectedIndexChanged += OnItemSelectedIndexChange;
             //pMounting.SelectedIndexChanged += OnItemSelectedIndexChange;
 
             // Cabinet didn't have Filter type and Filter size dropdown
@@ -98,14 +99,16 @@ namespace FTCollectorApp.View.SitesPage
             pHasKey.SelectedIndexChanged += OnItemSelectedIndexChange;
             //pKeyType.SelectedIndexChanged += OnItemSelectedIndexChange;
             //pDirectionTravel.SelectedIndexChanged += OnItemSelectedIndexChange;
-            pBucketTruck.SelectedIndexChanged += OnItemSelectedIndexChange;
-            pIsSiteClearZone.SelectedIndexChanged += OnItemSelectedIndexChange;
+            //pBucketTruck.SelectedIndexChanged += OnItemSelectedIndexChange;
+            //pIsSiteClearZone.SelectedIndexChanged += OnItemSelectedIndexChange;
             pickerLaneClosure.SelectedIndexChanged += OnItemSelectedIndexChange;
             //pickerDotDisctrict.SelectedIndexChanged += OnItemSelectedIndexChange;
             pickerHasPowerDisconnect.SelectedIndexChanged += OnItemSelectedIndexChange;
             pickerElectSiteKey.SelectedIndexChanged += OnItemSelectedIndexChange;
             picker3rdpComms.SelectedIndexChanged += OnItemSelectedIndexChange;
-
+            pSiteType.SelectedIndexChanged += OnItemSelectedIndexChange;
+            pKIPS.SelectedIndexChanged += OnItemSelectedIndexChange;
+            pDiameter.SelectedIndexChanged += OnItemSelectedIndexChange;
             //dateManufactured.DateSelected += OnDateSelected;
             //dateInstalled.DateSelected += OnDateSelected;
             InstalledAt = DateTime.Now.ToString("yyyy-MM-dd");
@@ -122,43 +125,51 @@ namespace FTCollectorApp.View.SitesPage
         int KeyType;
         int IsSiteClearZone;
         int KeyTypeSelected = 0;
+        int KIPScnt = 0;
+        int DiameterCnt = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
         string ManufacturerKeySelected, ModelKeySelected;
+        string MajorRoadSelected, MinorRoadSelected, SiteTypeSelected;
+
         private void OnItemSelectedIndexChange(object sender, EventArgs e)
         {
-            //IsHaveSunShield = pHaveSunShield.SelectedIndex == -1 ? 0 : pHaveSunShield.SelectedIndex;
+            // IsHaveSunShield = pHaveSunShield.SelectedIndex == -1 ? 0 : pHaveSunShield.SelectedIndex;
             IsHasGround = pHasGround.SelectedIndex == -1 ? 0 : pHasGround.SelectedIndex;
             IsHasKey = pHasKey.SelectedIndex == -1 ? 0 : pHasKey.SelectedIndex;
-            //KeyTypeSelected = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
-            //KeyType = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
+            // KeyTypeSelected = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
+            // KeyType = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
             // DirectionTravel = pDirectionTravel.SelectedIndex == -1 ? 0 : pDirectionTravel.SelectedIndex;
-            IsBucketTruck = pBucketTruck.SelectedIndex == -1 ? 0 : pBucketTruck.SelectedIndex;
-            IsSiteClearZone = pIsSiteClearZone.SelectedIndex == -1 ? 0 : pIsSiteClearZone.SelectedIndex;
+            //IsBucketTruck = pBucketTruck.SelectedIndex == -1 ? 0 : pBucketTruck.SelectedIndex;
+            //IsSiteClearZone = pIsSiteClearZone.SelectedIndex == -1 ? 0 : pIsSiteClearZone.SelectedIndex;
             IsLaneClosure = pickerLaneClosure.SelectedIndex == -1 ? 0 : pickerLaneClosure.SelectedIndex;
-            //DotDistrictCnt = pickerDotDisctrict.SelectedIndex == -1 ? 0 : pickerDotDisctrict.SelectedIndex;
+            DotDistrictCnt = pickerDotDisctrict.SelectedIndex == -1 ? 0 : pickerDotDisctrict.SelectedIndex;
             IsHasPowerDisconnect = pickerHasPowerDisconnect.SelectedIndex == -1 ? 0 : pickerHasPowerDisconnect.SelectedIndex;
             ElectSiteKeyCnt = pickerElectSiteKey.SelectedIndex == -1 ? 0 : pickerElectSiteKey.SelectedIndex;
             Is3rdComms = picker3rdpComms.SelectedIndex == -1 ? 0 : picker3rdpComms.SelectedIndex;
-            IsSiteClearZone = pIsSiteClearZone.SelectedIndex == -1 ? 0 : pIsSiteClearZone.SelectedIndex;
+            //IsSiteClearZone = pIsSiteClearZone.SelectedIndex == -1 ? 0 : pIsSiteClearZone.SelectedIndex;
+            KIPScnt = pKIPS.SelectedIndex == -1 ? 0 : pKIPS.SelectedIndex;
+            DiameterCnt = pDiameter.SelectedIndex == -1 ? 0 : pDiameter.SelectedIndex;
 
-
-            /*if (buildingClass.SelectedIndex != -1)
+            if (pMajorRoadway.SelectedIndex != -1)
             {
-                var selected = buildingClass.SelectedItem as BuildingType;
-                buildingClassiKeySelected = selected.BuildingTypeKey;
+                var selected = pMajorRoadway.SelectedItem as InterSectionRoad;
+                MajorRoadSelected = selected.major_roadway;
             }
-            if (pMounting.SelectedIndex != -1)
-            {
-                var selected = pMounting.SelectedItem as Mounting;
-                MountingSelected = selected.MountingKey;  /// object reference not set to instance
-            }*/
 
-            if (pIntersection.SelectedIndex != -1)
+
+
+            if (pMajorRoadway.SelectedIndex != -1)
             {
-                var selected = pIntersection.SelectedItem as InterSectionRoad;
-                IntersectionSelected = selected.IntersectionKey;
+                // DO NOTHING
+                // JUST A LIST/REFERENCE
             }
+            if (pMinorRoadway.SelectedIndex != -1)
+            {
+                // DO NOTHING
+                // JUST A LIST/REFERENCE
+            }
+
             if (pRoadway.SelectedIndex != -1)
             {
                 var selected = pRoadway.SelectedItem as Roadway;
@@ -178,12 +189,6 @@ namespace FTCollectorApp.View.SitesPage
 
             ///////////////////////////////////////////////////////////////////
 
-            if (pMaterial.SelectedIndex != -1)
-            {
-                var selected = pMaterial.SelectedItem as MaterialCode;
-                MaterialCodeKeySelected = selected.MaterialKey;
-            }
-
             if (pManufacturer.SelectedIndex != -1)
             {
                 var selected = pManufacturer.SelectedItem as Manufacturer;
@@ -196,6 +201,11 @@ namespace FTCollectorApp.View.SitesPage
                 ModelKeySelected = selected.DevTypeKey;
             }
 
+            if (pSiteType.SelectedIndex != -1)
+            {
+                var selected = pSiteType.SelectedItem as CodeSiteType;
+                SiteTypeSelected = selected.SiteType;
+            }
         }
 
         private void btnCamera(object sender, EventArgs e)
@@ -225,9 +235,9 @@ namespace FTCollectorApp.View.SitesPage
                 new KeyValuePair<string, string>("jobnum",Session.jobnum), //  7 
 
                 new KeyValuePair<string, string>("tag",TagNumber), //8
-                new KeyValuePair<string, string>("site2", entrySiteName.Text),  /// site_id
+                new KeyValuePair<string, string>("site2", ""),  /// site_id
                 new KeyValuePair<string, string>("type2", SiteType),  /// code_site_type.key
-                new KeyValuePair<string, string>("sitname2", entrySiteName.Text),
+                new KeyValuePair<string, string>("sitname2", ""),
 
 
                 new KeyValuePair<string, string>("mfr2", ""),  // manufacturer , for Cabinet, pull box
@@ -274,7 +284,7 @@ namespace FTCollectorApp.View.SitesPage
                 new KeyValuePair<string, string>("vault2", ""),
                 new KeyValuePair<string, string>("trlane2", ""),
                 new KeyValuePair<string, string>("bucket2", IsBucketTruck == 1 ? "1":"0"),
-                new KeyValuePair<string, string>("serialno", ""),
+                new KeyValuePair<string, string>("serialno", entrySerialNumber.Text),
                 new KeyValuePair<string, string>("key", ""),
                 new KeyValuePair<string, string>("ktype", KeyTypeSelected.ToString()),
                 new KeyValuePair<string, string>("ground", IsHasGround == 1 ? "1":"0"),
@@ -297,6 +307,11 @@ namespace FTCollectorApp.View.SitesPage
         }
 
 
+        private void OnDateSelected(object sender, DateChangedEventArgs e)
+        {
+            InstalledAt = dateInstalled.Date.ToString("yyyy-MM-dd");
+            Manufactured = dateManufactured.Date.ToString("yyyy-MM-dd");
+        }
 
         private async void OnClicked(object sender, EventArgs e)
         {

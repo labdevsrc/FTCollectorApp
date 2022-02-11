@@ -12,7 +12,18 @@ namespace FTCollectorApp.ViewModel
 {
     public class BdSitePageViewModel
     {
-
+        public ObservableCollection<CodeSiteType> StructureSiteType
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CodeSiteType>();
+                    var CodeSiteTable = conn.Table<CodeSiteType>().Where(a => a.MajorType == "Structure").ToList();
+                    return new ObservableCollection<CodeSiteType>(CodeSiteTable);
+                }
+            }
+        }
         public ObservableCollection<CodeSiteType> CodeSite
         {
             get
@@ -57,8 +68,8 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<InterSectionRoad>();
-                    var intersectionTable = conn.Table<InterSectionRoad>().ToList();
-                    var data = intersectionTable.Where(a => a.OWNER_CD == Session.ownerCD).ToList();
+                    var data = conn.Table<InterSectionRoad>().Where(a => a.OWNER_CD == Session.ownerCD).GroupBy(b => b.IntersectionName).Select(g => g.First()).ToList();
+                    //var data = intersectionTable.Where(a => a.OWNER_CD == Session.ownerCD).ToList();
                     return new ObservableCollection<InterSectionRoad>(data);
                 }
             }
