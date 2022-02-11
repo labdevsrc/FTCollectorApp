@@ -87,20 +87,18 @@ namespace FTCollectorApp.View.SitesPage
 
             //pRoadway.ItemsSource = RoadwayList;
             pRoadway.SelectedIndexChanged += OnItemSelectedIndexChange;
-
-            //pDirTravel.ItemsSource = TravelDirectionList;
             pDirTravel.SelectedIndexChanged += OnItemSelectedIndexChange;
-
             pOrientation.SelectedIndexChanged += OnItemSelectedIndexChange;
             pMaterial.SelectedIndexChanged += OnItemSelectedIndexChange;
-
-            //pMounting.ItemsSource = MountingTypeList;
             pMounting.SelectedIndexChanged += OnItemSelectedIndexChange;
 
 
             pFilterType.SelectedIndexChanged += OnItemSelectedIndexChange;
             pFilterSize.SelectedIndexChanged += OnItemSelectedIndexChange;
-
+            
+            // Building didn't have Model & Manufacturer
+            //pModel.SelectedIndexChanged += OnItemSelectedIndexChange;
+            //pManufacturer.SelectedIndexChanged += OnItemSelectedIndexChange;
 
             Notes = editorNotes.Text;
 

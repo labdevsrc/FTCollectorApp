@@ -96,7 +96,7 @@
                         <Label Text="Choose an intersection"/>
                         <Picker ItemsSource="{Binding IntersectionList}" ItemDisplayBinding="{Binding IntersectionName}" x:Name="pIntersection"  HorizontalOptions="FillAndExpand"/>
                         <Label Text="Direction of Travel"/>
-                        <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirection}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
+                        <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Orientation"/>
                         <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
                             x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>

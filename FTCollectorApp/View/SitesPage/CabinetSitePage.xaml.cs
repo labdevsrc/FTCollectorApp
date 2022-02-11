@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using SQLite;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -23,7 +24,7 @@ namespace FTCollectorApp.View.SitesPage
         List<string> YesNo = new List<string>();
 
 
-        string Notes;
+        string Notes, SiteType;
         string InstalledAt, Manufactured;
 
         public CabinetSitePage(string minorType, string tagNumber)
@@ -33,6 +34,12 @@ namespace FTCollectorApp.View.SitesPage
 
 
             MajorMinorType = $"Cabinet - {minorType}";
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<CodeSiteType>();
+                var CodeSiteTable = conn.Table<CodeSiteType>().ToList();
+                SiteType = CodeSiteTable.Where(a => a.MajorType == "Cabinet" && a.MinorType == minorType).Select(g => g.CodeKey).First().ToString();
+            }
 
             for (int i = 0; i < 100; i++)
             {
@@ -74,10 +81,14 @@ namespace FTCollectorApp.View.SitesPage
             pRoadway.SelectedIndexChanged += OnItemSelectedIndexChange;
             pDirTravel.SelectedIndexChanged += OnItemSelectedIndexChange;
 
-            //pOrientation.SelectedIndexChanged += OnItemSelectedIndexChange;
+            pOrientation.SelectedIndexChanged += OnItemSelectedIndexChange;
             pMaterial.SelectedIndexChanged += OnItemSelectedIndexChange;
             pMounting.SelectedIndexChanged += OnItemSelectedIndexChange;
-            pModel.SelectedIndexChanged += OnItemSelectedIndexChange;
+
+            // Cabinet didn't have Filter type and Filter size dropdown
+            //pFilterType.SelectedIndexChanged += OnItemSelectedIndexChange; 
+            //pFilterSize.SelectedIndexChanged += OnItemSelectedIndexChange;
+            pModel.SelectedIndexChanged += OnItemSelectedIndexChange; 
             pManufacturer.SelectedIndexChanged += OnItemSelectedIndexChange;
 
             Notes = editorNotes.Text;
@@ -97,7 +108,8 @@ namespace FTCollectorApp.View.SitesPage
 
             dateManufactured.DateSelected += OnDateSelected;
             dateInstalled.DateSelected += OnDateSelected;
-
+            InstalledAt = DateTime.Now.ToString("yyyy-MM-dd");
+            Manufactured = DateTime.Now.ToString("yyyy-MM-dd");
 
             IsBusy = false;
 
@@ -109,6 +121,7 @@ namespace FTCollectorApp.View.SitesPage
             IsHaveSunShield = 0, IsHasGround = 0, IsHasKey = 0, ElectSiteKeyCnt = 0, Is3rdComms = 0;
         int KeyType;
         int IsSiteClearZone;
+        int KeyTypeSelected = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
         string ManufacturerKeySelected, ModelKeySelected;
@@ -117,8 +130,9 @@ namespace FTCollectorApp.View.SitesPage
             IsHaveSunShield = pHaveSunShield.SelectedIndex == -1 ? 0 : pHaveSunShield.SelectedIndex;
             IsHasGround = pHasGround.SelectedIndex == -1 ? 0 : pHasGround.SelectedIndex;
             IsHasKey = pHasKey.SelectedIndex == -1 ? 0 : pHasKey.SelectedIndex;
+            KeyTypeSelected = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
             KeyType = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
-            DirectionTravel = pDirectionTravel.SelectedIndex == -1 ? 0 : pDirectionTravel.SelectedIndex;
+            // DirectionTravel = pDirectionTravel.SelectedIndex == -1 ? 0 : pDirectionTravel.SelectedIndex;
             IsBucketTruck = pBucketTruck.SelectedIndex == -1 ? 0 : pBucketTruck.SelectedIndex;
             IsSiteClearZone = pIsSiteClearZone.SelectedIndex == -1 ? 0 : pIsSiteClearZone.SelectedIndex;
             IsLaneClosure = pickerLaneClosure.SelectedIndex == -1 ? 0 : pickerLaneClosure.SelectedIndex;
@@ -159,7 +173,7 @@ namespace FTCollectorApp.View.SitesPage
             if (pOrientation.SelectedIndex != -1)
             {
                 var selected = pOrientation.SelectedItem as Orientation;
-                OrientationSelected = selected.OrientationDetail;
+                OrientationSelected = selected.OrientationHV;
             }
 
             ///////////////////////////////////////////////////////////////////
@@ -179,7 +193,7 @@ namespace FTCollectorApp.View.SitesPage
             if (pModel.SelectedIndex != -1)
             {
                 var selected = pModel.SelectedItem as DevType;
-                ModelKeySelected = selected.DevTypeDesc;
+                ModelKeySelected = selected.DevTypeKey;
             }
 
         }
@@ -197,8 +211,8 @@ namespace FTCollectorApp.View.SitesPage
 
         private void OnDateSelected(object sender, DateChangedEventArgs e)
         {
-            InstalledAt = dateInstalled.Date.ToString("MM-dd-yyyy");
-            Manufactured = dateManufactured.Date.ToString("MM-dd-yyyy");
+            InstalledAt = dateInstalled.Date.ToString("yyyy-MM-dd");
+            Manufactured = dateManufactured.Date.ToString("yyyy-MM-dd");
         }
 
 
@@ -207,85 +221,83 @@ namespace FTCollectorApp.View.SitesPage
 
 
             var keyValues = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>("type1","1"),  // 1: Building 
-                new KeyValuePair<string, string>("jno",Session.jobnum), //  7 
-                new KeyValuePair<string, string>("uid", Session.uid.ToString()), //1
-                new KeyValuePair<string, string>("tag",TagNumber), //8
-                //new KeyValuePair<string, string>("typecode",typecode),
-                new KeyValuePair<string, string>("plansheet","0"),
-                new KeyValuePair<string, string>("psitem","0"),
-
-                //new KeyValuePair<string, string>("gps_offset_latitude", offsetLat),
-                //new KeyValuePair<string, string>("gps_offset_longitude", offsetLon),
-                new KeyValuePair<string, string>("LATITUDE", Session.lattitude2),
-                new KeyValuePair<string, string>("LONGITUDE", Session.longitude2),
-                new KeyValuePair<string, string>("altitude", Session.altitude),  //4
-                new KeyValuePair<string, string>("accuracy", Session.accuracy), //3
-
-                //new KeyValuePair<string, string>("evtype", Session.event_type),
-                
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),  // 2
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 2
-                new KeyValuePair<string, string>("owner", Session.ownerkey), //5
-                new KeyValuePair<string, string>("user", Session.uid.ToString()),
-                new KeyValuePair<string, string>("stage", Session.stage),
-                //new KeyValuePair<string, string>("gpstime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
-                new KeyValuePair<string, string>("ownerCD", Session.ownerCD), // 6
-                new KeyValuePair<string, string>("owner_key", Session.ownerkey),
-                new KeyValuePair<string, string>("jobkey", Session.jobkey),
-                //new KeyValuePair<string, string>("createdfrm", "field collection"),
-                new KeyValuePair<string, string>("usercounty", Session.countycode),
-                //new KeyValuePair<string, string>("ajaxname", Constants.CreateSiteTableUrl),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy), //3
+                new KeyValuePair<string, string>("altitude", Session.altitude),  //4
+                new KeyValuePair<string, string>("oid", Session.ownerkey), //1
+                //new KeyValuePair<string, string>("owner", Session.ownerkey), //5
+                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 6
+                new KeyValuePair<string, string>("jobnum",Session.jobnum), //  7 
+
+                new KeyValuePair<string, string>("tag",TagNumber), //8
+                new KeyValuePair<string, string>("site2", entrySiteName.Text),  /// site_id
+                new KeyValuePair<string, string>("type2", SiteType),  /// code_site_type.key
+                new KeyValuePair<string, string>("sitname2", entrySiteName.Text),
 
 
-
-                new KeyValuePair<string, string>("serialno", entrySerial.Text),
-                new KeyValuePair<string, string>("notes", Notes),
+                new KeyValuePair<string, string>("mfr2", ""),  // manufacturer , for Cabinet, pull box
+                new KeyValuePair<string, string>("mfd2", Manufactured),
+                new KeyValuePair<string, string>("mod2", ""), /// model name, Building : x,  Cabinet/Pull Box : o
+                new KeyValuePair<string, string>("pic2", ""),
+                new KeyValuePair<string, string>("otag", ""),
                 new KeyValuePair<string, string>("roadway", RoadwaySelected),
-                new KeyValuePair<string, string>("intersect2", IntersectionSelected),
-                new KeyValuePair<string, string>("notes", Notes),
-                new KeyValuePair<string, string>("sunshield2", IsHaveSunShield == 1 ? "1":"0"),
-                new KeyValuePair<string, string>("ground", IsHasGround == 1 ? "1":"0"),
+                new KeyValuePair<string, string>("pid", ""),
+                new KeyValuePair<string, string>("loct", ""),
+                new KeyValuePair<string, string>("staddr", entryStreetAddr.Text), // site_address
+                new KeyValuePair<string, string>("pscode", entryPostalCode.Text),
 
+                new KeyValuePair<string, string>("btype", buildingClassiKeySelected),
+                new KeyValuePair<string, string>("orientation", OrientationSelected),
 
-                new KeyValuePair<string, string>("bucket2", IsBucketTruck == 1 ? "1":"0"),
                 new KeyValuePair<string, string>("laneclosure", IsLaneClosure == 1 ? "1":"0"),
                 new KeyValuePair<string, string>("dotdis",  DotDistrictCnt.ToString()),
-
-
-                new KeyValuePair<string, string>("mounting1", MountingSelected),
-                new KeyValuePair<string, string>("gps_offset_longitude", ""),
-                new KeyValuePair<string, string>("gps_offset_latitude", ""),
-                new KeyValuePair<string, string>("traveldir", TravelDirSelected),
-                new KeyValuePair<string, string>("installed2", InstalledAt),
-                new KeyValuePair<string, string>("mfd2", Manufactured),
-
-                new KeyValuePair<string, string>("pscode", entryPostalCode.Text),
-                new KeyValuePair<string, string>("staddr", entryStreetAddr.Text),
-                new KeyValuePair<string, string>("site2", entrySiteName.Text),
-                new KeyValuePair<string, string>("udsowner", UDSOwner.Text),
-                new KeyValuePair<string, string>("btype", buildingClassiKeySelected),
+                new KeyValuePair<string, string>("powr", IsHasPowerDisconnect == 1 ? "1":"0"),
                 new KeyValuePair<string, string>("elecsite", ElectSiteKeyCnt.ToString()),
                 new KeyValuePair<string, string>("comm", Is3rdComms == 1 ? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", commsProvide.Text),
-                new KeyValuePair<string, string>("key", ""),
-                new KeyValuePair<string, string>("ktype", KeyType.ToString()),
+                new KeyValuePair<string, string>("sitaddr", entryStreetAddr.Text), // site_street_addres
+                new KeyValuePair<string, string>("udsowner", ""),
 
+                new KeyValuePair<string, string>("rs2", "L"),
 
                 new KeyValuePair<string, string>("height2", entryHeight.Text),
                 new KeyValuePair<string, string>("depth2", entryDepth.Text),
                 new KeyValuePair<string, string>("width2", entryWidth.Text),
                 new KeyValuePair<string, string>("CLEAR_ZONE_IND2", IsSiteClearZone  == 1 ? "1":"0"),
+
+                new KeyValuePair<string, string>("intersect2", IntersectionSelected),
+                new KeyValuePair<string, string>("material2", MaterialCodeKeySelected),
+                new KeyValuePair<string, string>("mounting2", MountingSelected),
+                new KeyValuePair<string, string>("offilter2", FilterTypeSelected),
+                new KeyValuePair<string, string>("fltrsize2", FilterSizeKeySelected),
+                new KeyValuePair<string, string>("sunshield2", IsHaveSunShield == 1 ? "1":"0"),
+                new KeyValuePair<string, string>("installed2", InstalledAt),
+                new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
+
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
                 new KeyValuePair<string, string>("vault2", ""),
                 new KeyValuePair<string, string>("trlane2", ""),
+                new KeyValuePair<string, string>("bucket2", IsBucketTruck == 1 ? "1":"0"),
+                new KeyValuePair<string, string>("serialno", entrySerial.Text),
+                new KeyValuePair<string, string>("key", ""),
+                new KeyValuePair<string, string>("ktype", KeyTypeSelected.ToString()),
+                new KeyValuePair<string, string>("ground", IsHasGround == 1 ? "1":"0"),
+                new KeyValuePair<string, string>("traveldir", TravelDirSelected),
+                new KeyValuePair<string, string>("owner_key", Session.ownerkey),
+                new KeyValuePair<string, string>("owner_county", Session.countycode),
+                new KeyValuePair<string, string>("jobkey", Session.jobkey),
 
-                new KeyValuePair<string, string>("orientation", ""),
-                new KeyValuePair<string, string>("mod2", ""),
-                new KeyValuePair<string, string>("pic2", ""),
-                new KeyValuePair<string, string>("otag", ""),
-                new KeyValuePair<string, string>("fltrsize2", FilterSizeKeySelected),
+                new KeyValuePair<string, string>("gps_offset_latitude", ""),
+                new KeyValuePair<string, string>("gps_offset_longitude", ""),
+                new KeyValuePair<string, string>("LATITUDE", Session.lattitude2),
+                new KeyValuePair<string, string>("LONGITUDE", Session.longitude2),
 
+
+                new KeyValuePair<string, string>("plansheet","0"),
+                new KeyValuePair<string, string>("psitem","0"),
+                new KeyValuePair<string, string>("stage", Session.stage),
             };
 
 

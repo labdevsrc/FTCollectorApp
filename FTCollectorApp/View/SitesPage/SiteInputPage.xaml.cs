@@ -51,8 +51,8 @@ namespace FTCollectorApp.View.SitesPage
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
 
-                CodeSiteTypes.Clear();
-                Sites.Clear();
+                //CodeSiteTypes.Clear();
+                //Sites.Clear();
 
                 // Get code_site_type table from AWS
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
@@ -69,9 +69,11 @@ namespace FTCollectorApp.View.SitesPage
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<CodeSiteType>();
+                    conn.DeleteAll<CodeSiteType>();
                     conn.InsertAll(contentCodeSiteType);
 
                     conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
                     conn.InsertAll(contentSite);
                 }
             }
@@ -93,12 +95,13 @@ namespace FTCollectorApp.View.SitesPage
 
                 }
             }
+            IsBusy = false;
 
 
-            var majorTypes = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
-            foreach (var majorType in majorTypes)
-                majorTypePicker.Items.Add(majorType.MajorType);
-
+            //var majorTypes = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
+            //foreach (var majorType in majorTypes)
+            //    majorTypePicker.Items.Add(majorType.MajorType);
+            majorTypePicker.ItemsSource = MajorTypes;  // improve bugs , when back
 
             List<string> tagnumbers = new List<string>();
             var tagNumbers = Sites.GroupBy(b => b.TagNumber).Select(g => g.First()).ToList();
@@ -115,7 +118,7 @@ namespace FTCollectorApp.View.SitesPage
 
             Device.StartTimer(TimeSpan.FromSeconds(5), () => OnTimerTick());
 
-            IsBusy = false;
+
         }
         bool OnTimerTick()
         {
@@ -143,11 +146,8 @@ namespace FTCollectorApp.View.SitesPage
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                CodeSiteTypes.Clear();
-                Sites.Clear();
 
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
-
                 CodeSiteTypes = new ObservableCollection<CodeSiteType>(contentCodeSiteType);
                 Console.WriteLine(contentCodeSiteType);
 
@@ -162,9 +162,11 @@ namespace FTCollectorApp.View.SitesPage
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<CodeSiteType>();
+                    conn.DeleteAll<CodeSiteType>();
                     conn.InsertAll(contentCodeSiteType);
 
                     conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
                     conn.InsertAll(contentSite);
                 }
             }
@@ -181,14 +183,17 @@ namespace FTCollectorApp.View.SitesPage
                 }
                 else if (selectedMajorType.Equals("Cabinet"))
                 {
+                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     await Navigation.PushAsync(new CabinetSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Pull Box"))
                 {
+                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     await Navigation.PushAsync(new PullBoxSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Structure"))
                 {
+                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     await Navigation.PushAsync(new StructureSitePage(selectedMinorType, entryTagNum.Text));
                 }
             }
@@ -203,13 +208,28 @@ namespace FTCollectorApp.View.SitesPage
 
         private void majorTypeP_SelectedIdxChanged(object sender, EventArgs e)
         {
-            var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
-
+            //var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
+            selectedMajorType = majorTypePicker.SelectedItem.ToString();
             var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
             minorTypePicker.Items.Clear();
             foreach (var minorType in minorTypes)
                 minorTypePicker.Items.Add(minorType.MinorType);
         }
+
+        public ObservableCollection<string> MajorTypes
+        {
+            get
+            {
+                var data = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
+                List<string> temp = new List<string>();
+                foreach (var col in data)
+                {
+                    temp.Add(col.MajorType);
+                }
+                return new ObservableCollection<string>(temp);
+            }
+        }
+
 
         private async void minorTypeP_SelectedIdxChanged(object sender, EventArgs e)
         {
@@ -269,5 +289,62 @@ namespace FTCollectorApp.View.SitesPage
                 btnGPSOffset.IsEnabled = false;
             }
         }
+
+        /*            //majorTypePicker.ItemsSource = MajorTypes;  // MVVM Trail : still fail
+
+         * public ObservableCollection<CodeSiteType> CodeSiteTypes
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CodeSiteType>();
+                    var table = conn.Table<CodeSiteType>().ToList();
+                    return new ObservableCollection<CodeSiteType>(table);
+                }
+            }
+        }
+
+        public ObservableCollection<string> MajorTypes
+        {
+            get
+            {
+                var data = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
+                List<string> temp = new List<string>();
+                foreach (var col in data)
+                {
+                    temp.Add(col.MajorType);
+                }
+                return new ObservableCollection<string>(temp);
+            }
+        }
+
+
+        private void OnSelectedIdxChanged(object sender, EventArgs e)
+        {
+            if(majorTypePicker.SelectedIndex != -1)
+            {
+                selectedMajorType = majorTypePicker.SelectedItem.ToString();
+                var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
+                minorTypePicker.Items.Clear();
+                foreach (var minorType in minorTypes)
+                    minorTypePicker.Items.Add(minorType.MinorType);
+            }
+
+            if (minorTypePicker.SelectedIndex != -1)
+            {
+                if(majorTypePicker.SelectedIndex == -1)
+                {
+                    DisplayAlert("Warning", "Major Site Type must be selected first", "OK");
+                    return;
+                }
+
+                selectedMinorType = minorTypePicker.Items[minorTypePicker.SelectedIndex];
+                codekey = CodeSiteTypes.Where(a => (a.MajorType == selectedMajorType) && (a.MinorType == selectedMinorType)).Select(a => a.CodeKey).First();
+
+                Console.WriteLine($"key {codekey}, MajorType {selectedMajorType.ToString()}, MinorType {selectedMinorType.ToString()}");
+
+            }
+        }*/
     }
 }

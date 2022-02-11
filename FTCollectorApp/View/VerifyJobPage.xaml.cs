@@ -86,6 +86,7 @@ namespace FTCollectorApp.View
             var ownerNames = _jobdetails.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
             // populate to JobOwnerPicker
             jobOwnersPicker.Items.Clear();
+            jobNumbersPicker.Items.Clear();
             foreach (var ownerName in ownerNames)
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
 
@@ -154,6 +155,7 @@ namespace FTCollectorApp.View
             {
                 DisplayAlert("Warning", "Select Owner First", "OK");
                 Console.WriteLine("jobOwnersPicker.SelectedIndex -1 ");
+                return;
             }
 
             var selectedJobNumber = jobNumbersPicker.SelectedIndex;
