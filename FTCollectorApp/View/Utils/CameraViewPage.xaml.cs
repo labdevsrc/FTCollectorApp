@@ -8,16 +8,21 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using Xamarin.CommunityToolkit.UI.Views;
+using System.IO;
+using Amazon.S3.Transfer;
+using Amazon;
+using FTCollectorApp.Model;
 
 namespace FTCollectorApp.View.Utils
 {
     public partial class CameraViewPage : BasePage
 	{
 		// Note: not all options of the CameraView are on this page, make sure to discover them for yourself!
+		string fullpathFile;
 		public CameraViewPage()
 		{
 			InitializeComponent();
-
+			BindingContext = this;
 			zoomLabel.Text = string.Format("Zoom: {0}", zoomSlider.Value);
 		}
 
@@ -74,26 +79,37 @@ namespace FTCollectorApp.View.Utils
 			zoomSlider.IsEnabled = e;
 		}
 
-		void CameraView_MediaCaptured(object? sender, MediaCapturedEventArgs e)
+		async void CameraView_MediaCaptured(object? sender, MediaCapturedEventArgs e)
 		{
-			/*switch (cameraView.CaptureMode)
+			IsBusy = true;
+			try
 			{
-				default:
-				case CameraCaptureMode.Default:
-				case CameraCaptureMode.Photo:
-					//previewVideo.IsVisible = false;
-					previewPicture.IsVisible = true;
-					previewPicture.Rotation = e.Rotation;
-					previewPicture.Source = e.Image;
-					doCameraThings.Text = "Snap Picture";
-					break;
-				case CameraCaptureMode.Video:
-				//	previewPicture.IsVisible = false;
-					//previewVideo.IsVisible = true;
-					//previewVideo.Source = e.Video;
-				//	doCameraThings.Text = "Start Recording";
-					break;
-			}*/
+				var pictnaming = $"{Session.OwnerName}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png"; 
+				Console.WriteLine($"Start capture stream from {App.ImageFileLocation}");
+				fullpathFile = Path.Combine(App.ImageFileLocation, pictnaming);
+				using (FileStream fs = new FileStream(App.ImageFileLocation, FileMode.Create, FileAccess.Write))
+				{
+					fs.Write(e.ImageData, 0, e.ImageData.Length);
+				}
+			}
+			catch (Exception exp)
+			{
+				Console.WriteLine($"Exception {exp.ToString()}");
+
+			}
+
+			var fileTransferUtility = new TransferUtility(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.USEast2);
+			try
+			{
+				await fileTransferUtility.UploadAsync(fullpathFile, Constants.BUCKET_NAME);
+			}
+			catch (Exception exp)
+			{
+				Console.WriteLine($"Exception {exp.ToString()}");
+			}
+
+			IsBusy = false;
+
 		}
 	}
 }

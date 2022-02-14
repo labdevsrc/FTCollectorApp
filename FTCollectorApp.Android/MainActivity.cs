@@ -32,6 +32,10 @@ namespace FTCollectorApp.Droid
             string folderPath_ = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string signaturefullPath= Path.Combine(folderPath_, signature);
 
+            //string imgFileName = DateTime.Now.ToString("yyyy-MM-dd_HH-MM-SS.png");
+            string imgFolderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            //string imgFullPath = Path.Combine(imgFolderPath, imgFileName);
+
             // signature temp file
             string pendingTaskFileName = "pendingFileTask.txt";
             string folderPath__ = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
@@ -40,7 +44,7 @@ namespace FTCollectorApp.Droid
             Rg.Plugins.Popup.Popup.Init(this);
             //UserDialogs.Init(this);
 
-            LoadApplication(new App(fullPath, signaturefullPath, pendingTaskFileNamefullPath));
+            LoadApplication(new App(fullPath, signaturefullPath, pendingTaskFileNamefullPath, imgFolderPath));
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

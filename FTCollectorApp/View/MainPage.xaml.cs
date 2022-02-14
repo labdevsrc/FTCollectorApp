@@ -103,6 +103,9 @@ namespace FTCollectorApp.View
                     Users = new ObservableCollection<User>(userdetails);
                 }
             }
+
+
+
             base.OnAppearing();
             //await LocationService.GetLocation();
 

@@ -117,7 +117,7 @@
     </ScrollView>-->
             <StackLayout
             AbsoluteLayout.LayoutFlags="PositionProportional"  
-            AbsoluteLayout.LayoutBounds=".20,.20,100,100"   
+            AbsoluteLayout.LayoutBounds=".40,.75,100,100"   
                         Margin="5"
                         Orientation="Horizontal">
                 <Switch
@@ -128,7 +128,7 @@
             </StackLayout>
             <StackLayout 
             AbsoluteLayout.LayoutFlags="PositionProportional"  
-            AbsoluteLayout.LayoutBounds=".50,.95,100,100"                   
+            AbsoluteLayout.LayoutBounds=".20,.95,300,100"                   
                 Orientation="Horizontal">
                 <Label x:Name="zoomLabel" />
                 <Slider
@@ -144,7 +144,7 @@
             
             <StackLayout
                 AbsoluteLayout.LayoutFlags="PositionProportional"  
-                AbsoluteLayout.LayoutBounds=".20,.95,100,100"                  
+                AbsoluteLayout.LayoutBounds=".20,.75,100,100"                  
                         Margin="5"
                         Orientation="Horizontal">
                 <Switch

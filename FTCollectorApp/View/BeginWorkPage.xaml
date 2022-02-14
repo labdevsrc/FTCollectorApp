@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage Title="Begin Work"  xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage Title="Begin Work"  xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FTCollectorApp.View"
             xmlns:fa="clr-namespace:FontAwesome"
              x:Class="FTCollectorApp.View.BeginWorkPage" x:Name="TabItem">
 
-    <ContentPage Title="BeginWork">
+    <!--<ContentPage Title="BeginWork">-->
         <ContentPage.Resources>
             <ResourceDictionary>
                 <Style TargetType="Button">
@@ -28,10 +28,10 @@
         
     </ContentPage>
 
-    <local:MapPage Title="Find Me" x:Name="TabMap"/>
+    <!--<local:MapPage Title="Find Me" x:Name="TabMap"/>
     <ContentPage Title="LogOut">
         <StackLayout Padding="20" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
             <Button x:Name="btnLogOut" Text="LOG OUT" Clicked="btnLogOut_Clicked"/>
         </StackLayout>
     </ContentPage>
-</TabbedPage>
+ </ContentPage>-->

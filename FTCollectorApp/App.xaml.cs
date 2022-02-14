@@ -17,6 +17,7 @@ namespace FTCollectorApp
         public static string DatabaseLocation = string.Empty;
         public static string SignatureFileLocation = string.Empty;
         public static string InternalStorageLocation = string.Empty;
+        public static string ImageFileLocation = string.Empty;
         private const string TaskCountKey = "TaskCount";
         private const string PendingTaskKey = "PendingTask";
         public App()
@@ -47,7 +48,7 @@ namespace FTCollectorApp
             DatabaseLocation = databaseLoc;
         }
 
-        public App(string databaseLoc, string signatureLoc, string storeLoc)
+        public App(string databaseLoc, string signatureLoc, string storeLoc, string imageFilename)
         {
             InitializeComponent();
 
@@ -56,6 +57,7 @@ namespace FTCollectorApp
             DatabaseLocation = databaseLoc;
             SignatureFileLocation = signatureLoc;
             InternalStorageLocation = storeLoc;
+            ImageFileLocation = imageFilename;
         }
 
         /*protected override void OnStartup()

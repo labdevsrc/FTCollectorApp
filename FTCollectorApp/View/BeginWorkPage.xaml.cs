@@ -11,7 +11,7 @@ using Xamarin.Forms.Xaml;
 namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BeginWorkPage : TabbedPage
+    public partial class BeginWorkPage : ContentPage
     {
         public BeginWorkPage()
         {
@@ -20,9 +20,8 @@ namespace FTCollectorApp.View
             btnCrewList.Clicked += (s, e) => Navigation.PushAsync(new SelectCrewPage());
             btnEqCheckOut.Clicked += (s, e) => Navigation.PushAsync(new EqCheckOutPage());
             btnEqCheckIn.Clicked += (s, e) => Navigation.PushAsync(new EqCheckInPage());
-            btnOdometer.Clicked += (s, e) => Navigation.PushAsync(new OdometerInputPage());
+            btnOdometer.Clicked += (s, e) => Navigation.PushAsync(new OdometerPopup());
 
-            
 
         }
 

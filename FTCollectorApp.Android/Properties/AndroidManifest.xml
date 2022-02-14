@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.ftcollectorapp" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="20" android:targetSdkVersion="30" />
+	<uses-sdk android:minSdkVersion="20" android:targetSdkVersion="29" />
 	<application android:label="FTCollectorApp.Android" android:theme="@style/MainTheme">
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyABS5HQDZVCLCRyUSTuLBTewtYQ6ZUFZ1E" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />

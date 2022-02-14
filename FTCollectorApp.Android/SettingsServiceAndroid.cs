@@ -9,17 +9,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace FTCollectorApp.Droid
 {
-    public class CloseApplication : ICloseApps
+    public class SettingsServiceAndroid : ISettingsService
     {
-        public void closeApplication()
+        public void OpenSettings()
         {
-            var activity = (Activity)Android.App.Application.Context;
-            activity.FinishAffinity();
-            //CrossCurrentActivity.Current.Activity.FinishAndRemoveTask();
+            var intent = new Android.Content.Intent(Android.Provider.Settings.ActionLocationSourceSettings);
+            Android.App.Application.Context.StartActivity(intent);
         }
     }
 }

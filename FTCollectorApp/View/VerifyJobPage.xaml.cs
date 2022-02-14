@@ -91,24 +91,18 @@ namespace FTCollectorApp.View
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
 
             /*await LocationService.GetLocation();
+
             if (LocationService.Coords == null)
             {
-                UserDialogs.Instance.Confirm(new ConfirmConfig
-                {
-                    Title = "Warning",
-                    Message = "Location Service Not Available. Please Enable Device Location",
-                    OkText = "Continue",
-                    CancelText = "Close",
-                    OnAction = async (confirmed) =>
+                bool answer = await DisplayAlert("Alert", "Would you like to enable Device GPS?", "Yes", "No");
+                if (answer)
+                    if (Device.RuntimePlatform == global::Xamarin.Forms.Device.Android)
                     {
-                        if (confirmed)
-                            //UserDialogs.Instance.Alert(Title="Close");
-                            await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
-                }
-                });
-
+                        var test = DependencyService.Get<ISettingsService>();
+                        test.OpenSettings();
+                    }
             }*/
-
+            
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
             IsBusy = false;
@@ -199,9 +193,9 @@ namespace FTCollectorApp.View
             speaker?.Speak("Job verified!");
 
 
-            await Navigation.PushAsync(new SiteInputPage());
+            //await Navigation.PushAsync(new SiteInputPage());
             //await Navigation.PushAsync(new EquipmenReturnPage());
-            //await Navigation.PushAsync(new BeginWorkPage());
+            await Navigation.PushAsync(new BeginWorkPage());
         }
 
         async Task OnSubmit()
