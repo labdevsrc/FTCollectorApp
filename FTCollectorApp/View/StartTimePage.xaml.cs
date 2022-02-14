@@ -29,10 +29,23 @@ namespace FTCollectorApp.View
 
                 Button btnCrew1 = new Button { Text = "Start Time for " + cname };
                 stackLayout.Children.Add(btnCrew1);
-                btnCrew1.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new StartTimePopupView(cntCrew));
+                btnCrew1.Clicked += (s, e) => OnClicked(cntCrew);
             }
             Session.crewCnt = cntCrew;
         }
 
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+
+
+        }
+
+        private void OnClicked(int Count)
+        {
+            PopupNavigation.Instance.PushAsync(new StartTimePopupView(Count));
+        }
     }
 }

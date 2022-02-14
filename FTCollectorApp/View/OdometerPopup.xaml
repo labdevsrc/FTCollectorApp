@@ -14,7 +14,18 @@
             <Label Text="Odometer:"/>
             <Entry x:Name="entryOdometer" />
             <Grid ColumnDefinitions="*,*,*,*">
-                <Button x:Name="btnSave" Grid.Column="2" Text="Save" Clicked="btnSave_Clicked"/>
+                <Button x:Name="btnSave" Grid.Column="2" Text="Save" Clicked="btnSave_Clicked">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                    Binding="{Binding Source={x:Reference entryOdometer},
+                                    Path=Text.Length}"
+                    Value="0">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="BackgroundColor" Value="Gray"/>
+
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <Button x:Name="btnClose" Grid.Column="3" Text="Close" />
             </Grid>
         </StackLayout>

@@ -1,4 +1,5 @@
 ﻿
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace FTCollectorApp.View
             btnCrewList.Clicked += (s, e) => Navigation.PushAsync(new SelectCrewPage());
             btnEqCheckOut.Clicked += (s, e) => Navigation.PushAsync(new EqCheckOutPage());
             btnEqCheckIn.Clicked += (s, e) => Navigation.PushAsync(new EqCheckInPage());
-            btnOdometer.Clicked += (s, e) => Navigation.PushAsync(new OdometerPopup());
+            btnOdometer.Clicked += (s, e) => PopupNavigation.Instance.PushAsync(new OdometerPopup());
 
 
         }

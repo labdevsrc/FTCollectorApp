@@ -76,6 +76,7 @@ namespace FTCollectorApp.Service
             return JsonConvert.DeserializeObject<T>(json);
         }
         public static async Task PostJobEvent() => await PostJobEvent("", "");
+        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo);
         public static async Task PostJobEvent(string param1, string param2)
         {
 
@@ -86,7 +87,7 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("min", Session.event_type == Session.ClockIn ? param1 : "0"),
                 new KeyValuePair<string, string>("hr", Session.event_type == Session.ClockIn ? param2 : "0"),
 
-
+                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
                 
                 // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
@@ -98,9 +99,10 @@ namespace FTCollectorApp.Service
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
-
+                new KeyValuePair<string, string>("odometer", Session.event_type),
                 new KeyValuePair<string, string>("evtype", Session.event_type),
-
+                new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
+                
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
 
                 new KeyValuePair<string, string>("ajaxname", Constants.InsertJobEvents)

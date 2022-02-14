@@ -62,7 +62,7 @@ namespace FTCollectorApp.View
                 if (Session.crewCnt == _countCrew)
                 {
                     await PopupNavigation.Instance.PopAsync(true);
-                    await Navigation.PushAsync(new SiteInputPage());
+                    await Navigation.PushAsync(new BeginWorkPage());
                 }
                 else
                     await PopupNavigation.Instance.PopAsync(true);
