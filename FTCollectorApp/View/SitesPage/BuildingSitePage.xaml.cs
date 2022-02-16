@@ -236,9 +236,9 @@ namespace FTCollectorApp.View.SitesPage
                 new KeyValuePair<string, string>("sitname2", entrySiteName.Text),
 
 
-                new KeyValuePair<string, string>("mfr2", ""),  // manufacturer , for Cabinet, pull box
-                new KeyValuePair<string, string>("mfd2", Manufactured),
-                new KeyValuePair<string, string>("mod2", ""), /// model name, Building : x,  Cabinet/Pull Box : o
+                new KeyValuePair<string, string>("manufacturer", ""),  // manufacturer , for Cabinet, pull box
+                new KeyValuePair<string, string>("manufactured_date", Manufactured),
+                new KeyValuePair<string, string>("model", ""), /// model name, Building : x,  Cabinet/Pull Box : o
                 new KeyValuePair<string, string>("pic2", ""),
                 new KeyValuePair<string, string>("otag", ""),
                 new KeyValuePair<string, string>("roadway", RoadwaySelected),

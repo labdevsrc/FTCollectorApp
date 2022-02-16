@@ -26,7 +26,18 @@
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-                <Button x:Name="btnClose" Grid.Column="3" Text="Close" />
+                <Button x:Name="btnClose" Grid.Column="3" Text="Close">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                        Binding="{Binding Source={x:Reference entryOdometer},
+                                        Path=Text.Length}"
+                        Value="0">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="BackgroundColor" Value="Gray"/>
+
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

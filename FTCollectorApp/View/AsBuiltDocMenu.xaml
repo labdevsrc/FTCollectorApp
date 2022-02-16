@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.AsBuiltDocMenu">
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Label Text="As Built Documents" FontSize="Large" HorizontalOptions="Center"/>
+            <Button x:Name="btnSite" Text="Site" Clicked="btnSite_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnTraceFiber" Text="Trace Fiber" Clicked="btnTraceF_Clicked"  HorizontalOptions="FillAndExpand"/>            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

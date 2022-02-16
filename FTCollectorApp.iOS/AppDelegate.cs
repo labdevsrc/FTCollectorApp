@@ -41,9 +41,9 @@ namespace FTCollectorApp.iOS
             string folderPath__ = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
             string pendingTaskFileNamefullPath = Path.Combine(folderPath__, pendingTaskFileName);
 
-            string imgFileName = DateTime.Now.ToString("yyyyMMdd_HHMMSS.png");
+            //string imgFileName = DateTime.Now.ToString("yyyyMMdd_HHMMSS.png");
             string imgFolderPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "..", "Library");
-            string imgFullPath = Path.Combine(imgFolderPath, imgFileName);
+            string imgFullPath = Path.Combine(imgFolderPath, "");
 
             Rg.Plugins.Popup.Popup.Init();
 

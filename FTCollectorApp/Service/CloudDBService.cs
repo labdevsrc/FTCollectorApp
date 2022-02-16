@@ -483,6 +483,8 @@ namespace FTCollectorApp.Service
             GetBuildingDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
         public static Task<IEnumerable<AFiberCable>> GetAFCable() =>
             GetBuildingDropDownParamsAsync<IEnumerable<AFiberCable>>("frcable");
+        public static Task<IEnumerable<CableType>> GetCableType() =>
+            GetBuildingDropDownParamsAsync<IEnumerable<CableType>>("cable_type");
 
         public static Task<IEnumerable<CableStructure>> GetCableStructure() =>
             GetBuildingDropDownParamsAsync<IEnumerable<CableStructure>>("cable_structure");

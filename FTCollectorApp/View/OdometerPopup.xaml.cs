@@ -26,11 +26,10 @@ namespace FTCollectorApp.View
             try
             {
                 await CloudDBService.PostJobEvent(entryOdometer.Text);
-                bool answer = await DisplayAlert("Confirm", "Confirm and go to Site page?", "OK", "Cancel");
+                bool answer = await DisplayAlert("Confirm", "Confirm and go to Site menu page?", "OK", "Cancel");
                 if (answer)
                 {
-                    await PopupNavigation.Instance.PopAsync(true);
-                    await Navigation.PushAsync(new SiteInputPage());
+                    await Navigation.PushAsync(new AsBuiltDocMenu());
                 }
                 else
                     await PopupNavigation.Instance.PopAsync(true);

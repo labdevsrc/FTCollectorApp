@@ -124,7 +124,7 @@ namespace FTCollectorApp.View
 
                 var contentTravellen = await CloudDBService.GetCompassDir(); // travellen
                 var contentBuildingType = await CloudDBService.GetBuildingType(); //bClassification
-
+                var contentCableType = await CloudDBService.GetCableType(); //cable_type
 
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
@@ -172,11 +172,6 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<Roadway>();
                     conn.InsertAll(contentRoadway);
 
-                    //conn.CreateTable<OwnerRoadway>();
-                    //conn.DeleteAll<OwnerRoadway>();
-                    //conn.InsertAll(contentOwnRoadway);
-
-
 
                     conn.CreateTable<InterSectionRoad>();
                     conn.DeleteAll<InterSectionRoad>();
@@ -209,15 +204,19 @@ namespace FTCollectorApp.View
                     conn.InsertAll(contentDevType);
 
                     conn.CreateTable<RackNumber>();
+                    conn.DeleteAll<RackNumber>();
                     conn.InsertAll(contentRackNumber);
 
                     conn.CreateTable<RackType>();
+                    conn.DeleteAll<RackType>();
                     conn.InsertAll(contentRackType);
 
                     conn.CreateTable<Sheath>();
+                    conn.DeleteAll<Sheath>();
                     conn.InsertAll(contentSheath);
 
                     conn.CreateTable<ReelId>();
+                    conn.DeleteAll<ReelId>();
                     conn.InsertAll(contentReelId);
 
                     conn.CreateTable<Chassis>();
@@ -249,6 +248,7 @@ namespace FTCollectorApp.View
                     conn.InsertAll(contentSpliceType);
 
                     conn.CreateTable<LaborClass>();
+                    conn.DeleteAll<LaborClass>();
                     conn.InsertAll(contentLaborClass);
 
                     conn.CreateTable<CompassDirection>();
@@ -258,6 +258,15 @@ namespace FTCollectorApp.View
                     conn.CreateTable<BuildingType>();
                     conn.DeleteAll<BuildingType>();
                     conn.InsertAll(contentBuildingType);
+
+                    conn.CreateTable<AFiberCable>();
+                    conn.DeleteAll<AFiberCable>();
+                    conn.InsertAll(contentAFCable);
+
+                    conn.CreateTable<CableType>();
+                    conn.DeleteAll<CableType>();
+                    conn.InsertAll(contentCableType);
+
                 }
             }
             catch(Exception e)

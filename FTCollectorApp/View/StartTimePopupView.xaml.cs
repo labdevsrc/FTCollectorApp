@@ -22,10 +22,12 @@ namespace FTCollectorApp.View
 
         public string HourMins;
         int _countCrew;
-        public StartTimePopupView(int countCrew)
+        string crewname;
+        public StartTimePopupView(string cname)
         {
             InitializeComponent();
-            _countCrew = countCrew;
+            crewname = cname;
+            //_countCrew = countCrew;
         }
 
 
@@ -41,6 +43,8 @@ namespace FTCollectorApp.View
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
             Session.event_type = Session.LunchOut;
+            Session.sessioncrew.Remove(crewname);
+
             await OnJobSaveEvent();
 
 
@@ -61,7 +65,7 @@ namespace FTCollectorApp.View
                 await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
                 if (Session.crewCnt == _countCrew)
                 {
-                    await PopupNavigation.Instance.PopAsync(true);
+                    // navigate directly to BeginWorkPate
                     await Navigation.PushAsync(new BeginWorkPage());
                 }
                 else

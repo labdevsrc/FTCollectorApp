@@ -15,37 +15,38 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StartTimePage : ContentPage
     {
+        ArrayList crewnames = new ArrayList();
         public StartTimePage()
         {
             InitializeComponent();
-            ArrayList crewnames = new ArrayList();
+            
             crewnames = (ArrayList)Session.sessioncrew;
 
+        }
+
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            stackLayout.Children.Clear();
             int cntCrew = 0;
-            
             foreach (var cname in crewnames)
             {
                 cntCrew++;
 
                 Button btnCrew1 = new Button { Text = "Start Time for " + cname };
                 stackLayout.Children.Add(btnCrew1);
-                btnCrew1.Clicked += (s, e) => OnClicked(cntCrew);
+                btnCrew1.Clicked += (s, e) => OnClicked(cname.ToString());
             }
             Session.crewCnt = cntCrew;
-        }
-
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-
 
         }
 
-        private void OnClicked(int Count)
+        private async void OnClicked(string crewname)
         {
-            PopupNavigation.Instance.PushAsync(new StartTimePopupView(Count));
+
+            await PopupNavigation.Instance.PushAsync(new StartTimePopupView(crewname));
+
         }
     }
 }

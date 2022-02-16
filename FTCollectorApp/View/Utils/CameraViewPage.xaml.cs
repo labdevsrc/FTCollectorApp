@@ -85,8 +85,9 @@ namespace FTCollectorApp.View.Utils
 			try
 			{
 				var pictnaming = $"{Session.OwnerName}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png"; 
-				Console.WriteLine($"Start capture stream from {App.ImageFileLocation}");
+
 				fullpathFile = Path.Combine(App.ImageFileLocation, pictnaming);
+				Console.WriteLine($"Start capture stream from {fullpathFile}");
 				using (FileStream fs = new FileStream(App.ImageFileLocation, FileMode.Create, FileAccess.Write))
 				{
 					fs.Write(e.ImageData, 0, e.ImageData.Length);
@@ -111,5 +112,15 @@ namespace FTCollectorApp.View.Utils
 			IsBusy = false;
 
 		}
-	}
+
+        private void btnCamera(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

@@ -69,7 +69,6 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<InterSectionRoad>();
                     var data = conn.Table<InterSectionRoad>().Where(a => a.OWNER_CD == Session.ownerCD).GroupBy(b => b.IntersectionName).Select(g => g.First()).ToList();
-                    //var data = intersectionTable.Where(a => a.OWNER_CD == Session.ownerCD).ToList();
                     return new ObservableCollection<InterSectionRoad>(data);
                 }
             }
@@ -216,5 +215,62 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        public ObservableCollection<AFiberCable> aFiberCableList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<AFiberCable>();
+                    var table = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
+                    foreach (var col in table)
+                    {
+                        col.CableIdDesc = HttpUtility.HtmlDecode(col.CableIdDesc); // should use for escape char "
+                    }
+                    return new ObservableCollection<AFiberCable>(table);
+                }
+            }
+        }
+
+        public ObservableCollection<CableType> CableTypeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CableType>();
+                    var table = conn.Table<CableType>().ToList();
+                    return new ObservableCollection<CableType>(table);
+                }
+            }
+        }
+
+        public ObservableCollection<Sheath> SheathList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Sheath>();
+                    var table = conn.Table<Sheath>().ToList();
+                    return new ObservableCollection<Sheath>(table);
+                }
+            }
+        }
+
+
+        public ObservableCollection<ReelId> ReelIdList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ReelId>();
+                    var rwTable = conn.Table<ReelId>().ToList();
+                    var table = rwTable.Where(a => a.JobNum == Session.jobnum).ToList();
+                    return new ObservableCollection<ReelId>(table);
+                }
+            }
+        }
     }
 }
