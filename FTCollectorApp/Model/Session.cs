@@ -34,8 +34,8 @@ namespace FTCollectorApp.Model
         public static int crewCnt { get; set; }
 
         public static string JobShowAll { get; set; }
-        public static string OffsetBearing { get; set; }
-        public static string OffsetDistance { get; set; }
+        public static string lattitude_offset { get; set; }
+        public static string longitude_offset { get; set; }
 
         public const string EventLogin = "1";
         public const string JOB_VERIFIED = "2";

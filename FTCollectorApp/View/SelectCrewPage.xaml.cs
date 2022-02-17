@@ -51,9 +51,9 @@ namespace FTCollectorApp.View
             //Session.event_type = Session.CrewAssembled;
             //await CloudDBService.PostJobEvent();             // need to update event_type 
             //await Navigation.PushAsync(new StartTimePage()); // simple page change - vicky
-            
+
             ///////////// add Rajib's code - start //////////////////////
-            
+            ArrayList crewnamelist = new ArrayList();
             String timenow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             int x = 0;
             try
@@ -104,6 +104,7 @@ namespace FTCollectorApp.View
                     name6 = crewlist[ind].ToString();
                     crewnamelist.Add(employeePicker6.Items[employeePicker6.SelectedIndex]);
                 }
+
                 Session.sessioncrew = crewnamelist;
 
                 //                

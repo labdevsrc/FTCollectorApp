@@ -201,9 +201,9 @@ namespace FTCollectorApp.View.SitesPage
                await  DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
         }
 
-        private void btnGPSOffset_Clicked(object sender, EventArgs e)
+        private async void btnGPSOffset_Clicked(object sender, EventArgs e)
         {
-
+            await PopupNavigation.Instance.PushAsync(new OffsetGPSPopUp());
         }
 
         private void majorTypeP_SelectedIdxChanged(object sender, EventArgs e)

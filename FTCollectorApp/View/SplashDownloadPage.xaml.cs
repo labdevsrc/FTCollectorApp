@@ -75,36 +75,50 @@ namespace FTCollectorApp.View
             txtLoading.Text = "Downloading...";
             try
             {
+                txtLoading.Text = "Downloading end_user table";
                 var contentUser = await CloudDBService.GetEndUserFromAWSMySQLTable();
+                txtLoading.Text = "Downloading Job table";
                 var contentJob = await CloudDBService.GetJobFromAWSMySQLTable();
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
+
+                txtLoading.Text = "Downloading Site table";
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
                 var contentCrewDefault = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
 
-
+                txtLoading.Text = "Downloading manufacturer table";
                 var contentManuf = await CloudDBService.GetManufacturerTable(); //manufacturer_list 
                 var contentJobSumittal = await CloudDBService.GetJobSubmittalTable(); //job_submittal
                 var contentKeyType = await CloudDBService.GetKeyTypeTable(); // keytype
+                txtLoading.Text = "Downloading code_material table";
                 var contentMaterialCode = await CloudDBService.GetMaterialCodeTable(); // material
                 var contentMounting = await CloudDBService.GetMountingTable(); // mounting
 
-
+                txtLoading.Text = "Downloading roadway table";
                 var contentRoadway = await CloudDBService.GetRoadway();  // roadway
                 //var contentOwnRoadway = await CloudDBService.GetOwnerRoadway();  // owner_roadway, this will be joined to roadway
                 var contentElectCircuit = await CloudDBService.GetElectricCircuit(); //intersection
+                txtLoading.Text = "Downloading intersection table";
                 var contentIntersection = await CloudDBService.GetIntersection(); //electric
+
                 var contentDirection = await CloudDBService.GetDirection(); //direction
+                txtLoading.Text = "Downloading code_duct_size table";
                 var contentDuctSize = await CloudDBService.GetDuctSize(); //dsize
                 var contentDuctType = await CloudDBService.GetDuctType(); //ducttype
                 var contentGroupType = await CloudDBService.GetGroupType(); //grouptype
+
+
                 var contentDevType = await CloudDBService.GetDevType(); //devtype
                 var contentRackNumber = await CloudDBService.GetRackNumber();
                 var contentRackType = await CloudDBService.GetRackType(); //racktype
+                txtLoading.Text = "Downloading code_fiber_sheath_type table";
                 var contentSheath = await CloudDBService.GetSheath(); // sheath
                 var contentReelId = await CloudDBService.GetReelId(); // reelid
                 var contentOrientation = await CloudDBService.GetOrientation();  // sbto
                 var contentChassis = await CloudDBService.GetChassis();  // sbto
+
+                txtLoading.Text = "Downloading a_fiber_cable table";
                 var contentAFCable = await CloudDBService.GetAFCable();  // frcable
+                txtLoading.Text = "Downloading a_fiber_reel table";
                 var contentCabStructure = await CloudDBService.GetCableStructure(); //cable_structure
 
                 //var contentSide = await CloudDBService.GetSide(); //side
@@ -117,15 +131,18 @@ namespace FTCollectorApp.View
 
                 var contentDimension = await CloudDBService.GetDimensions();   // dimesnsions
                 var contentFilterSize = await CloudDBService.GetFilterSize(); //fltrsizes
+                txtLoading.Text = "Downloading  code_filter_type table";
                 var contentFilterType = await CloudDBService.GetFilterType(); //fltrsizes
                 var contentSpliceType = await CloudDBService.GetSpliceType();//splicetype
                 var contentLaborClass  = await CloudDBService.GetLaborClass();// laborclass
 
 
                 var contentTravellen = await CloudDBService.GetCompassDir(); // travellen
+                txtLoading.Text = "Downloading code_site_type table";
                 var contentBuildingType = await CloudDBService.GetBuildingType(); //bClassification
                 var contentCableType = await CloudDBService.GetCableType(); //cable_type
 
+                txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<User>();
@@ -268,6 +285,7 @@ namespace FTCollectorApp.View
                     conn.InsertAll(contentCableType);
 
                 }
+                txtLoading.Text = "Populating Local SQLite done!";
             }
             catch(Exception e)
             {

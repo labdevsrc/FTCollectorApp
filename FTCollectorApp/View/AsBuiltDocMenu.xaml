@@ -5,6 +5,7 @@
     <ContentPage.Content>
         <StackLayout Padding="10">
             <Label Text="As Built Documents" FontSize="Large" HorizontalOptions="Center"/>
+            <Label Text="" FontSize="Large" HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnSite" Text="Site" Clicked="btnSite_Clicked"  HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnTraceFiber" Text="Trace Fiber" Clicked="btnTraceF_Clicked"  HorizontalOptions="FillAndExpand"/>            
         </StackLayout>

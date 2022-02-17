@@ -44,12 +44,17 @@ namespace FTCollectorApp.View
         {
             Session.event_type = Session.LunchOut;
             Session.sessioncrew.Remove(crewname);
+            Session.crewCnt = Session.sessioncrew.Count;
 
             await OnJobSaveEvent();
 
 
         }
-
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            Console.WriteLine("OnDisappearing()");
+        }
         async Task OnJobSaveEvent()
         {
 
@@ -63,13 +68,15 @@ namespace FTCollectorApp.View
                 int user_minutes = int.Parse(dt.ToString("mm"));
 
                 await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
-                if (Session.crewCnt == _countCrew)
+                if (Session.crewCnt == 0)
                 {
                     // navigate directly to BeginWorkPate
+
+                    await Task.Delay(1000);
                     await Navigation.PushAsync(new BeginWorkPage());
                 }
-                else
-                    await PopupNavigation.Instance.PopAsync(true);
+                
+                await PopupNavigation.Instance.PopAsync(true);
 
             }
             catch {
