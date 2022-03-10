@@ -28,7 +28,13 @@ namespace FTCollectorApp.View
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            Console.WriteLine("[StartTimePage] OnAppearing ");
+
+            //Button btnCrewLeader = new Button { Text = "Start Time for " + Session.crew_leader };
             stackLayout.Children.Clear();
+            //stackLayout.Children.Add(btnCrewLeader);
+            //btnCrewLeader.Clicked += (s, e) => OnClicked(Session.crew_leader);
+
             int cntCrew = 0;
             foreach (var cname in crewnames)
             {

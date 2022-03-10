@@ -75,9 +75,9 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json);
         }
-        public static async Task PostJobEvent() => await PostJobEvent("", "");
-        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo);
-        public static async Task PostJobEvent(string param1, string param2)
+        public static async Task PostJobEvent() => await PostJobEvent("", "","");
+        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo,"");
+        public static async Task PostJobEvent(string param1, string param2, string perDiem)
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -87,9 +87,9 @@ namespace FTCollectorApp.Service
                 new KeyValuePair<string, string>("min", Session.event_type == Session.ClockIn ? param1 : "0"),
                 new KeyValuePair<string, string>("hr", Session.event_type == Session.ClockIn ? param2 : "0"),
 
+                new KeyValuePair<string, string>("perdiem",perDiem),
                 new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
-                new KeyValuePair<string, string>("gps_sts", Session.gps_sts),
-                
+
                 // xSaveJobEvents.php Line 59 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 60 : $latitude =$_POST['lattitude2'];
                 new KeyValuePair<string, string>("manual_latti", Session.gps_sts == "1" ? "0":Session.manual_latti),
@@ -565,8 +565,59 @@ namespace FTCollectorApp.Service
         }
 
 
+        
+        public static async Task PostSaveFiberOpticCable(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostSaveBuilding Json : {json}");
+            HttpResponseMessage response = null; 
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                response = await client.PostAsync(Constants.UpdateAfiberCableTableUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var isi = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[PostSaveBuilding] Response from  OK = 200 , content :" + isi);
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
 
 
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+        }
         public static async Task PostSaveBuilding(List<KeyValuePair<string, string>> keyValues)
         {
 

@@ -12,6 +12,8 @@ using System.IO;
 using Amazon.S3.Transfer;
 using Amazon;
 using FTCollectorApp.Model;
+using FTCollectorApp.Utils;
+using PCLStorage;
 
 namespace FTCollectorApp.View.Utils
 {
@@ -58,6 +60,9 @@ namespace FTCollectorApp.View.Utils
 		void DoCameraThings_Clicked(object? sender, EventArgs e)
 		{
 			cameraView.Shutter();
+			var player = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
+			player.Load("camera.mp3");
+			player.Play();
 			//doCameraThings.Text = cameraView.CaptureMode == CameraCaptureMode.Video
 			//	? "Stop Recording"
 			//	: "Snap Picture";
@@ -82,32 +87,33 @@ namespace FTCollectorApp.View.Utils
 		async void CameraView_MediaCaptured(object? sender, MediaCapturedEventArgs e)
 		{
 			IsBusy = true;
-			try
-			{
-				var pictnaming = $"{Session.OwnerName}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png"; 
-
-				fullpathFile = Path.Combine(App.ImageFileLocation, pictnaming);
-				Console.WriteLine($"Start capture stream from {fullpathFile}");
-				using (FileStream fs = new FileStream(App.ImageFileLocation, FileMode.Create, FileAccess.Write))
-				{
-					fs.Write(e.ImageData, 0, e.ImageData.Length);
-				}
-			}
-			catch (Exception exp)
-			{
-				Console.WriteLine($"Exception {exp.ToString()}");
-
-			}
-
 			var fileTransferUtility = new TransferUtility(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.USEast2);
 			try
 			{
-				await fileTransferUtility.UploadAsync(fullpathFile, Constants.BUCKET_NAME);
+				var pictnaming = $"{Session.OwnerName}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png";
+				IFolder rootFolder = FileSystem.Current.LocalStorage;
+				IFolder folder = await rootFolder.CreateFolderAsync("images",
+					CreationCollisionOption.OpenIfExists);
+				IFile file = await folder.CreateFileAsync(pictnaming,
+					CreationCollisionOption.ReplaceExisting);
+				//await file.WriteAllTextAsync(e.ImageData)
+				
+				//fullpathFile = Path.Combine(App.ImageFileLocation, pictnaming);
+				Console.WriteLine($"Start capture stream from {file.Path.ToString()}");
+				//using (FileStream fs = new FileStream(folder.Path, FileMode.Create, FileAccess.Write))
+				using(var fs = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
+				{
+					await fs.WriteAsync(e.ImageData, 0, e.ImageData.Length);
+				}
+
+				await fileTransferUtility.UploadAsync(file.Path.ToString(), Constants.BUCKET_NAME);
 			}
 			catch (Exception exp)
 			{
 				Console.WriteLine($"Exception {exp.ToString()}");
+
 			}
+
 
 			IsBusy = false;
 
@@ -122,5 +128,6 @@ namespace FTCollectorApp.View.Utils
         {
 
         }
+
     }
 }

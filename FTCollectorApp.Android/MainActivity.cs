@@ -32,9 +32,9 @@ namespace FTCollectorApp.Droid
             string folderPath_ = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string signaturefullPath= Path.Combine(folderPath_, signature);
 
-            //string imgFileName = DateTime.Now.ToString("yyyy-MM-dd_HH-MM-SS.png");
+            string imgFileName = "sample";// DateTime.Now.ToString("yyyy-MM-dd_HH-MM-SS.png");
             string imgFolderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-            string imgFullPath = Path.Combine(imgFolderPath, "");
+            string imgFullPath = Path.Combine(imgFolderPath, imgFileName);
 
             // signature temp file
             string pendingTaskFileName = "pendingFileTask.txt";

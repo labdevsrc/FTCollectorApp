@@ -15,6 +15,9 @@
         <ToolbarItem  Clicked="btnGPSSetting_Clicked"  Text="GPS"
                  Order="Primary"
                  Priority="0" />
+        <ToolbarItem  Clicked="btnFindMe"  Text="FindMe"
+                 Order="Primary"
+                 Priority="1" />        
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
     <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

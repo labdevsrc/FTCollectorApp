@@ -21,7 +21,7 @@ namespace FTCollectorApp.View
     {
 
         public string HourMins;
-        int _countCrew;
+
         string crewname;
         public StartTimePopupView(string cname)
         {
@@ -37,7 +37,7 @@ namespace FTCollectorApp.View
             //HourMins = DateTime.Now.ToString("HH:mm");
             entryStartTime.Text = DateTime.Now.ToString("H:m");
             btnClose.Clicked += (s,e) => PopupNavigation.Instance.PopAsync(true);
-            
+            pickPerDiem.SelectedIndex = 0;
         }
 
         private async void btnSave_Clicked(object sender, EventArgs e)
@@ -45,7 +45,10 @@ namespace FTCollectorApp.View
             Session.event_type = Session.LunchOut;
             Session.sessioncrew.Remove(crewname);
             Session.crewCnt = Session.sessioncrew.Count;
-
+            if (pickPerDiem.SelectedIndex == -1)
+            {                
+                return;
+            }
             await OnJobSaveEvent();
 
 
@@ -57,17 +60,18 @@ namespace FTCollectorApp.View
         }
         async Task OnJobSaveEvent()
         {
-
+            var perDiemIdx = pickPerDiem.SelectedIndex.ToString();
             Session.event_type = Session.ClockIn;
-            var perDiemChoice = pickPerDiem.Items[pickPerDiem.SelectedIndex];
 
             try
             {
                 DateTime dt = DateTime.Parse(entryStartTime.Text.Trim());
                 int user_hours = int.Parse(dt.ToString("HH"));
                 int user_minutes = int.Parse(dt.ToString("mm"));
+                
 
-                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString());
+
+                await CloudDBService.PostJobEvent(user_hours.ToString(), user_minutes.ToString(), perDiemIdx);
                 if (Session.crewCnt == 0)
                 {
                     // navigate directly to BeginWorkPate

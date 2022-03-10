@@ -38,6 +38,13 @@
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidSupportedAbis />
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Users\TSUKUBA\ftapps.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>ftapps123</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>ftapps</AndroidSigningKeyAlias>
+    <AndroidApkSignerAdditionalArguments>
+    </AndroidApkSignerAdditionalArguments>
+    <AndroidSigningKeyPass>ftapps123</AndroidSigningKeyPass>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +55,19 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidKeyStore>true</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Users\TSUKUBA\ftapps.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>ftapps123</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>ftapps</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>ftapps123</AndroidSigningKeyPass>
+    <AndroidApkSignerAdditionalArguments>
+    </AndroidApkSignerAdditionalArguments>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <AndroidLinkMode>Full</AndroidLinkMode>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -121,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\cam_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\camera.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

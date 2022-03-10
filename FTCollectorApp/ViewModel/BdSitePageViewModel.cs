@@ -227,6 +227,7 @@ namespace FTCollectorApp.ViewModel
                     {
                         col.CableIdDesc = HttpUtility.HtmlDecode(col.CableIdDesc); // should use for escape char "
                     }
+
                     return new ObservableCollection<AFiberCable>(table);
                 }
             }

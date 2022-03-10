@@ -152,4 +152,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\cam_white.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\camera.mp3" />
+  </ItemGroup>
 </Project>

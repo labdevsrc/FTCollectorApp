@@ -9,8 +9,12 @@ namespace FTCollectorApp.Model.Reference
         public int id { get; set; }
         public string AFRKey { get; set; }
         public string CableIdDesc { get; set; }
+        public string CableType { get; set; }
         public string JobKey { get; set; }
         public string JobNumber { get; set; }
         public string OwnerKey { get; set; }
+        public string Manufacturer { get; set; }
+        public string Model { get; set; }
+
     }
 }

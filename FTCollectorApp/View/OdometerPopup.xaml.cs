@@ -31,8 +31,8 @@ namespace FTCollectorApp.View
                 {
                     await Navigation.PushAsync(new AsBuiltDocMenu());
                 }
-                else
-                    await PopupNavigation.Instance.PopAsync(true);
+                //await Task.Delay(500);
+                await PopupNavigation.Instance.PopAsync(true);
             }
             catch
             {

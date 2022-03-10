@@ -29,7 +29,10 @@ namespace FTCollectorApp.View
     {
 
         public List<string> OwnerName;
-
+        private const int PageNumber = 3;
+        private const string PageNumberKey = "PageNumber";
+        private const string JobOwnerKey = "JobOwner";
+        private const string JobNumberKey = "JobNumber";
         private ObservableCollection<Job> _jobdetails = new ObservableCollection<Job>();
 
         public VerifyJobPage()
@@ -82,6 +85,13 @@ namespace FTCollectorApp.View
                 }
             }
 
+            if (Application.Current.Properties.ContainsKey(PageNumberKey))
+            {
+                var prevPageNumber = (int)Application.Current.Properties[PageNumberKey];
+            }
+
+
+
             // select OwnerName from Job (LINQ command)
             var ownerNames = _jobdetails.GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
             // populate to JobOwnerPicker
@@ -89,6 +99,19 @@ namespace FTCollectorApp.View
             jobNumbersPicker.Items.Clear();
             foreach (var ownerName in ownerNames)
                 jobOwnersPicker.Items.Add(ownerName.OwnerName);
+
+            if (Application.Current.Properties.ContainsKey(JobOwnerKey))
+            {
+                if(jobOwnersPicker != null)
+                    jobOwnersPicker.SelectedIndex = (int) Application.Current.Properties[JobOwnerKey];
+            }
+
+            if (Application.Current.Properties.ContainsKey(JobNumberKey))
+            {
+                if (jobNumbersPicker != null)
+                    jobNumbersPicker.SelectedIndex = (int)Application.Current.Properties[JobNumberKey];
+                
+            }
 
             /*await LocationService.GetLocation();
 
@@ -102,7 +125,10 @@ namespace FTCollectorApp.View
                         test.OpenSettings();
                     }
             }*/
-            
+
+
+
+
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
             IsBusy = false;
@@ -133,13 +159,18 @@ namespace FTCollectorApp.View
         {
 
             // get selected owner Name
-            var owner = jobOwnersPicker.Items[jobOwnersPicker.SelectedIndex];
+            if (jobOwnersPicker.SelectedIndex != -1)
+            {
+                var owner = jobOwnersPicker.Items[jobOwnersPicker.SelectedIndex];
 
-            // SELECT JobNumber from Job where OwnerName = (selected) owner (LINQ command)
-            var _jobNumbergrouped = _jobdetails.Where(a => a.OwnerName == owner).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
-            jobNumbersPicker.Items.Clear();
-            foreach (var jobNumbergrouped in _jobNumbergrouped)
-                jobNumbersPicker.Items.Add(jobNumbergrouped.JobNumber);
+                // SELECT JobNumber from Job where OwnerName = (selected) owner (LINQ command)
+                var _jobNumbergrouped = _jobdetails.Where(a => a.OwnerName == owner).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
+                jobNumbersPicker.Items.Clear();
+                foreach (var jobNumbergrouped in _jobNumbergrouped)
+                    jobNumbersPicker.Items.Add(jobNumbergrouped.JobNumber);
+
+                Application.Current.Properties["JobOwner"] = jobOwnersPicker.SelectedIndex;
+            }
         }
 
         private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -149,7 +180,11 @@ namespace FTCollectorApp.View
             {
                 DisplayAlert("Warning", "Select Owner First", "OK");
                 Console.WriteLine("jobOwnersPicker.SelectedIndex -1 ");
-                return;
+                if (Application.Current.Properties.ContainsKey(JobOwnerKey))
+                {
+                    if (jobOwnersPicker != null)
+                        jobOwnersPicker.SelectedIndex = (int)Application.Current.Properties[JobOwnerKey];
+                }
             }
 
             var selectedJobNumber = jobNumbersPicker.SelectedIndex;
@@ -182,6 +217,10 @@ namespace FTCollectorApp.View
             Session.JobShowAll = QueryOwnerJobNumber.Select(a => a.ShowAll).First();
             Session.jobnum = jobNumber.ToString();
             Session.OwnerName = owner.ToString();
+
+            Application.Current.Properties[JobNumberKey] = jobNumbersPicker.SelectedIndex;
+            Application.Current.Properties[JobOwnerKey] = jobOwnersPicker.SelectedIndex;
+
         }
 
         private async void submit_Clicked(object sender, EventArgs e)
@@ -192,6 +231,7 @@ namespace FTCollectorApp.View
             var speaker = DependencyService.Get<ITextToSpeech>();
             speaker?.Speak("Job verified!");
 
+            Application.Current.Properties["PageNumber"] = 3;
 
             //await Navigation.PushAsync(new SiteInputPage());
             //await Navigation.PushAsync(new EquipmenReturnPage());
@@ -218,6 +258,16 @@ namespace FTCollectorApp.View
         private async void btnGPSSetting_Clicked(object sender, EventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
+        }
+
+        private void btnFindMe(object sender, EventArgs e)
+        {
+
+
+            var browser = new WebView
+            {
+                Source = "http://ec2-52-14-97-126.us-east-2.compute.amazonaws.com/FiberTrakArcGIS/UserMap.aspx?user=" + Session.uid
+            };
         }
     }
 }

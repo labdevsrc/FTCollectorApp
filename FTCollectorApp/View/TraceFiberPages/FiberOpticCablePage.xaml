@@ -8,10 +8,8 @@
         <StackLayout Padding="20">
             <Label Text="Fiber Optic Cable" FontSize="Large" HorizontalOptions="Center" WidthRequest="80" />
             <Label Text="Enter cable Id" HorizontalOptions="Start" />
-            <local:Dropdown x:Name="pCableId" 
-                            ItemsSource="{Binding aFiberCableList}" ItemDisplayBinding="{Binding CableIdDesc}"
-                            HorizontalOptions="FillAndExpand"/>
-            <Label Text="Cable Type" HorizontalOptions="Start" />
+                <local:Dropdown x:Name="pCableId" HorizontalOptions="FillAndExpand" ItemDisplayBinding="{Binding CableIdDesc}"/>
+                <Label Text="Cable Type" HorizontalOptions="Start" />
             <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand"
                             ItemsSource="{Binding CableTypeList}" ItemDisplayBinding="{Binding CodeCableDesc}"/>
             <Label Text="Manufacturer" HorizontalOptions="Start" />

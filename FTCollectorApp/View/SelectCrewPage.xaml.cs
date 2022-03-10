@@ -25,22 +25,7 @@ namespace FTCollectorApp.View
         private ObservableCollection<User> Users = new ObservableCollection<User>();
         private ObservableCollection<Crewdefault> Crewtable = new ObservableCollection<Crewdefault>();
         ArrayList crewnamelist = new ArrayList();
-
-        string _crewleader;
-
-        public string CrewLeader
-        {
-            get => _crewleader;
-            set {
-                if (_crewleader == value)
-                    return;
-                _crewleader = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        public SelectCrewPage()
+       public SelectCrewPage()
         {
             InitializeComponent();
             BindingContext = this;
@@ -54,8 +39,9 @@ namespace FTCollectorApp.View
 
             ///////////// add Rajib's code - start //////////////////////
             ArrayList crewnamelist = new ArrayList();
+            crewnamelist.Add(Session.crew_leader);
             String timenow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            int x = 0;
+            int x = 1;
             try
             {
 
