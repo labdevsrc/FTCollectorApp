@@ -74,6 +74,8 @@ namespace FTCollectorApp
 
         protected override void OnResume()
         {
+            Console.WriteLine("OnResume()");
+
         }
 
 

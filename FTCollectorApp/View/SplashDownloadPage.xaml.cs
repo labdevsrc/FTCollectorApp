@@ -123,7 +123,9 @@ namespace FTCollectorApp.View
 
                 //var contentSide = await CloudDBService.GetSide(); //side
                 var contentTraceWareTag = await CloudDBService.GetTraceWareTag(); // tracewaretag
+                txtLoading.Text = "Downloading owner table";
                 var contentOwner    = await CloudDBService.GetOwners(); //owners
+                txtLoading.Text = "Downloading owner conduits";
                 var contentOwners   = await CloudDBService.GetConduits(); // conduits
                 var contentAllCountry = await CloudDBService.GetAllCountry(); //allcountry
                 var contentInstallType = await CloudDBService.GetInstallType(); // installtype
@@ -140,7 +142,9 @@ namespace FTCollectorApp.View
                 var contentTravellen = await CloudDBService.GetCompassDir(); // travellen
                 txtLoading.Text = "Downloading code_site_type table";
                 var contentBuildingType = await CloudDBService.GetBuildingType(); //bClassification
-                var contentCableType = await CloudDBService.GetCableType(); //cable_type
+                var contentCableType = await CloudDBService.GetCableType(); //code_cable_type
+                var equipmentType = await CloudDBService.GetEquipmentType(); //code_equipment_type
+                var equipmentDetail = await CloudDBService.GetEquipmentDetail(); //equipment
 
                 txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -284,6 +288,13 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<CableType>();
                     conn.InsertAll(contentCableType);
 
+                    conn.CreateTable<EquipmentType>();
+                    conn.DeleteAll<EquipmentType>();
+                    conn.InsertAll(equipmentType);
+
+                    conn.CreateTable<EquipmentDetailType>();
+                    conn.DeleteAll<EquipmentDetailType>();
+                    conn.InsertAll(equipmentDetail);
                 }
                 txtLoading.Text = "Populating Local SQLite done!";
             }

@@ -13,6 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="View\StartTimePopUpViewNew.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="View\StartTimePopUpViewNew.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.7.6" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.7.14" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

@@ -173,6 +173,12 @@ namespace FTCollectorApp.View
             }
         }
 
+        protected override void OnDisappearing()
+        {
+            Console.WriteLine("OnDisappearing()");
+            base.OnDisappearing();
+        }
+
         private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedOwner = jobOwnersPicker.SelectedIndex;

@@ -33,7 +33,7 @@ namespace FTCollectorApp.View.SitesPage
         public BuildingSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
-            BindingContext = new BdSitePageViewModel();
+            BindingContext = new DropDownViewModel();
 
             MajorMinorType = $"Building - {minorType}";
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))

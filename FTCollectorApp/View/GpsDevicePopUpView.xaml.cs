@@ -16,21 +16,16 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GpsDevicePopUpView 
     {
+
         Location _location;
-        private bool _isBusy;
+
+        private const string DeviceCheckedKey = "device_checked";
+        private const string ExternalCheckedKey = "external_checked";
+        private const string ManualCheckedKey = "manual_checked";
+        private const string ManualLattitudeKey = "manual_lattitude";
+        private const string ManualLongitudeKey = "manual_longitude";
 
         // Turn IsBusy to bind with XAML component Activity
-        public bool isBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                if (_isBusy == value)
-                    return;
-                _isBusy = value;
-                OnPropertyChanged();
-            }
-        }
 
         public GpsDevicePopUpView()
         {
@@ -41,11 +36,35 @@ namespace FTCollectorApp.View
             Session.longitude2 = "0";
             BindingContext = this;
             this.CloseWhenBackgroundIsClicked = false;
+            
         }
 
         protected override async void OnAppearing()
         {
-            isBusy = true;
+            base.OnAppearing();
+            IsBusy = true;
+
+            if (Application.Current.Properties.ContainsKey(DeviceCheckedKey))
+            {
+                deviceChecked.IsChecked = (bool) Application.Current.Properties[DeviceCheckedKey];
+            }
+            if (Application.Current.Properties.ContainsKey(ExternalCheckedKey))
+            {
+                externalChecked.IsChecked = (bool) Application.Current.Properties[ExternalCheckedKey];
+            }
+            if (Application.Current.Properties.ContainsKey(ManualCheckedKey))
+            {
+                btnNoGPS.IsChecked = (bool) Application.Current.Properties[ManualCheckedKey];
+            }
+
+            if (Application.Current.Properties.ContainsKey(ManualLattitudeKey))
+            {
+                entryLat.Text = Application.Current.Properties[ManualLattitudeKey].ToString();
+            }
+            if (Application.Current.Properties.ContainsKey(ManualLongitudeKey))
+            {
+                entryLon.Text = Application.Current.Properties[ManualLongitudeKey].ToString();
+            }
 
             await LocationService.GetLocation();
             if (LocationService.Coords != null)
@@ -69,12 +88,37 @@ namespace FTCollectorApp.View
 
             Console.WriteLine($"GpsPopupView [OnAppearing]");
 
-            isBusy = false;
-            base.OnAppearing();
+            IsBusy = false;
+
         }
 
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
+
+            // reset all first
+            Application.Current.Properties[DeviceCheckedKey] = false;
+            Application.Current.Properties[ExternalCheckedKey] = false;
+            Application.Current.Properties[ManualCheckedKey] = false;
+            Application.Current.Properties[ManualLattitudeKey] = 0;
+
+            Application.Current.Properties[ManualLongitudeKey] = 0;
+
+            if (deviceChecked.IsChecked)
+                Application.Current.Properties[DeviceCheckedKey] = deviceChecked.IsChecked;
+            else if (externalChecked.IsChecked)
+                Application.Current.Properties[ExternalCheckedKey] = externalChecked.IsChecked;
+            else if (btnNoGPS.IsChecked)
+            {
+                if (entryLat.Text.Length < 2 || entryLon.Text.Length < 2)
+                {
+                    DisplayAlert("warning", "Coords must be 8 digit", "OK");
+                    return;
+                }
+                //IsValidCoords(entryLat.Text, entryLon.Text); cek if valid GPS coords
+                Application.Current.Properties[ManualCheckedKey] = btnNoGPS.IsChecked;
+                Application.Current.Properties[ManualLattitudeKey] = double.Parse(entryLat.Text);
+                Application.Current.Properties[ManualLongitudeKey] = double.Parse(entryLon.Text);
+            }
             await PopupNavigation.Instance.PopAsync(true);
         }
 

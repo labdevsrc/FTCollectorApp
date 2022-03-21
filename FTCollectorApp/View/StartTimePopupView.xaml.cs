@@ -78,6 +78,9 @@ namespace FTCollectorApp.View
 
                     await Task.Delay(1000);
                     await Navigation.PushAsync(new BeginWorkPage());
+
+
+                    MessagingCenter.Send<StartTimePopupView>(this, "OnAppearing");
                 }
                 
                 await PopupNavigation.Instance.PopAsync(true);

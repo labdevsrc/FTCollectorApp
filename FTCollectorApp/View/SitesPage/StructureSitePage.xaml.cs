@@ -32,7 +32,7 @@ namespace FTCollectorApp.View.SitesPage
         public StructureSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
-            BindingContext = new BdSitePageViewModel();
+            BindingContext = new DropDownViewModel();
 
 
 

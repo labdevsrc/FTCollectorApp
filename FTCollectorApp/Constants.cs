@@ -7,6 +7,8 @@ namespace FTCollectorApp
 
     public class Constants
     {
+        public const bool AutoSyncAWSTables = false;
+
         public const string BaseUrl = "https://collector.fibertrak.com/FTService/";
         public const string InsertTimeSheetUrl = "xPostTimesCheck.php";
         public const string GetJobTableUrl = "xamarinJob.php";

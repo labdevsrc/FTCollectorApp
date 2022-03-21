@@ -18,7 +18,9 @@
                 <!--<StackLayout Padding="20" VerticalOptions="CenterAndExpand">-->
                 <Label Text="Site" FontSize="Large" HorizontalOptions="Center"/>
                 <Label Text="Major Site Type*" HorizontalOptions="Start"/>
-                <Picker  x:Name="majorTypePicker"  SelectedIndexChanged="majorTypeP_SelectedIdxChanged" />
+                <Picker  x:Name="majorTypePicker"  SelectedIndexChanged="majorTypeP_SelectedIdxChanged" 
+                         ItemsSource="{Binding CodeSiteTypes}" ItemDisplayBinding="{Binding MajorType}"
+                         />
                 <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
                 <Picker  x:Name="minorTypePicker" SelectedIndexChanged="minorTypeP_SelectedIdxChanged"/>
                 <Label Text="Enter PC tag" HorizontalOptions="Start"/>

@@ -425,112 +425,115 @@ namespace FTCollectorApp.Service
 
 
         public static Task<IEnumerable<Manufacturer>> GetManufacturerTable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Manufacturer>>("manufacturer_list");
+            GetDropDownParamsAsync<IEnumerable<Manufacturer>>("manufacturer_list");
         public static Task<IEnumerable<JobSubmittal>> GetJobSubmittalTable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<JobSubmittal>>("job_submittal");
+            GetDropDownParamsAsync<IEnumerable<JobSubmittal>>("job_submittal");
 
         public static Task<IEnumerable<KeyType>> GetKeyTypeTable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<KeyType>>("keytype");
+            GetDropDownParamsAsync<IEnumerable<KeyType>>("keytype");
         public static Task<IEnumerable<MaterialCode>> GetMaterialCodeTable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<MaterialCode>>("materialcode");
+            GetDropDownParamsAsync<IEnumerable<MaterialCode>>("materialcode");
 
         public static Task<IEnumerable<Mounting>> GetMountingTable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Mounting>>("mounting");
+            GetDropDownParamsAsync<IEnumerable<Mounting>>("mounting");
 
         public static Task<IEnumerable<FilterType>> GetFilterType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<FilterType>>("filter_type");
+            GetDropDownParamsAsync<IEnumerable<FilterType>>("filter_type");
 
         public static Task<IEnumerable<Roadway>> GetRoadway() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Roadway>>("roadway");
+            GetDropDownParamsAsync<IEnumerable<Roadway>>("roadway");
 
         public static Task<IEnumerable<OwnerRoadway>> GetOwnerRoadway() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<OwnerRoadway>>("owner_roadway");
+            GetDropDownParamsAsync<IEnumerable<OwnerRoadway>>("owner_roadway");
 
         public static Task<IEnumerable<InterSectionRoad>> GetIntersection() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<InterSectionRoad>>("intersection");
+            GetDropDownParamsAsync<IEnumerable<InterSectionRoad>>("intersection");
 
         public static Task<IEnumerable<ElectricCircuit>> GetElectricCircuit() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<ElectricCircuit>>("electric");
+            GetDropDownParamsAsync<IEnumerable<ElectricCircuit>>("electric");
 
         public static Task<IEnumerable<Direction>> GetDirection() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Direction>>("direction");
+            GetDropDownParamsAsync<IEnumerable<Direction>>("direction");
         public static Task<IEnumerable<DuctSize>> GetDuctSize() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<DuctSize>>("dsize");
+            GetDropDownParamsAsync<IEnumerable<DuctSize>>("dsize");
         public static Task<IEnumerable<DuctType>> GetDuctType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<DuctType>>("ducttype");
+            GetDropDownParamsAsync<IEnumerable<DuctType>>("ducttype");
         public static Task<IEnumerable<GroupType>> GetGroupType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<GroupType>>("grouptype");
+            GetDropDownParamsAsync<IEnumerable<GroupType>>("grouptype");
 
 
         public static Task<IEnumerable<DevType>> GetDevType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<DevType>>("devtype");
+            GetDropDownParamsAsync<IEnumerable<DevType>>("devtype");
 
         public static Task<IEnumerable<RackNumber>> GetRackNumber() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<RackNumber>>("racknumber");
+            GetDropDownParamsAsync<IEnumerable<RackNumber>>("racknumber");
 
         public static Task<IEnumerable<RackType>> GetRackType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<RackType>>("racktype");
+            GetDropDownParamsAsync<IEnumerable<RackType>>("racktype");
         //
         public static Task<IEnumerable<Sheath>> GetSheath() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Sheath>>("sheath");
+            GetDropDownParamsAsync<IEnumerable<Sheath>>("sheath");
         public static Task<IEnumerable<ReelId>> GetReelId() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<ReelId>>("reelid");
+            GetDropDownParamsAsync<IEnumerable<ReelId>>("reelid");
 
         public static Task<IEnumerable<Orientation>> GetOrientation() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Orientation>>("sbto");
+            GetDropDownParamsAsync<IEnumerable<Orientation>>("sbto");
 
         public static Task<IEnumerable<Chassis>> GetChassis() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
+            GetDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
         public static Task<IEnumerable<AFiberCable>> GetAFCable() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<AFiberCable>>("frcable");
+            GetDropDownParamsAsync<IEnumerable<AFiberCable>>("frcable");
         public static Task<IEnumerable<CableType>> GetCableType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<CableType>>("cable_type");
-
+            GetDropDownParamsAsync<IEnumerable<CableType>>("cable_type");
+        public static Task<IEnumerable<EquipmentType>> GetEquipmentType() =>
+            GetDropDownParamsAsync<IEnumerable<EquipmentType>>("equipment_code");
+        public static Task<IEnumerable<EquipmentDetailType>> GetEquipmentDetail() =>
+            GetDropDownParamsAsync<IEnumerable<EquipmentDetailType>>("equipment_detail");
         public static Task<IEnumerable<CableStructure>> GetCableStructure() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<CableStructure>>("cable_structure");
+            GetDropDownParamsAsync<IEnumerable<CableStructure>>("cable_structure");
 
         ///
         //public static Task<IEnumerable<Side>> GetSide() =>
         //   GetBuildingDropDownParamsAsync<IEnumerable<Side>>("side");
         public static Task<IEnumerable<Tracewaretag>> GetTraceWareTag() =>
-           GetBuildingDropDownParamsAsync<IEnumerable<Tracewaretag>>("tracewaretag");
+           GetDropDownParamsAsync<IEnumerable<Tracewaretag>>("tracewaretag");
 
         //public static Task<IEnumerable<Cable>> GetCables() =>
         //   GetBuildingDropDownParamsAsync<IEnumerable<Cable>>("cables");
         public static Task<IEnumerable<ConduitsGroup>> GetConduits() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<ConduitsGroup>>("conduits");
+            GetDropDownParamsAsync<IEnumerable<ConduitsGroup>>("conduits");
         public static Task<IEnumerable<Owner>> GetOwners() =>
-           GetBuildingDropDownParamsAsync<IEnumerable<Owner>>("owners");
+           GetDropDownParamsAsync<IEnumerable<Owner>>("owners");
         public static Task<IEnumerable<County>> GetAllCountry() =>
-           GetBuildingDropDownParamsAsync<IEnumerable<County>>("allcountry");
+           GetDropDownParamsAsync<IEnumerable<County>>("allcountry");
         public static Task<IEnumerable<InstallType>> GetInstallType() =>
-           GetBuildingDropDownParamsAsync<IEnumerable<InstallType>>("installtype");
+           GetDropDownParamsAsync<IEnumerable<InstallType>>("installtype");
 
         public static Task<IEnumerable<DuctUsed>> GetDuctUsed() =>
-           GetBuildingDropDownParamsAsync<IEnumerable<DuctUsed>>("ductused");
+           GetDropDownParamsAsync<IEnumerable<DuctUsed>>("ductused");
 
         //////
         public static Task<IEnumerable<FilterSize>> GetFilterSize() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<FilterSize>>("fltrsizes");
+            GetDropDownParamsAsync<IEnumerable<FilterSize>>("fltrsizes");
 
         public static Task<IEnumerable<SpliceType>> GetSpliceType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
+            GetDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
 
         public static Task<IEnumerable<Chassis>> GetToEncloser() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
+            GetDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
 
         public static Task<IEnumerable<LaborClass>> GetLaborClass() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<LaborClass>>("laborclass");
+            GetDropDownParamsAsync<IEnumerable<LaborClass>>("laborclass");
 
         public static Task<IEnumerable<Dimensions>> GetDimensions() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<Dimensions>>("dimensions");
+            GetDropDownParamsAsync<IEnumerable<Dimensions>>("dimensions");
 
         public static Task<IEnumerable<CompassDirection>> GetCompassDir() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<CompassDirection>>("travellen");
+            GetDropDownParamsAsync<IEnumerable<CompassDirection>>("travellen");
 
         public static Task<IEnumerable<BuildingType>> GetBuildingType() =>
-            GetBuildingDropDownParamsAsync<IEnumerable<BuildingType>>("bClassification");
-        async static Task<T> GetBuildingDropDownParamsAsync<T>(string type)
+            GetDropDownParamsAsync<IEnumerable<BuildingType>>("bClassification");
+        async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("type",type),

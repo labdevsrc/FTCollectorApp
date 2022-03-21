@@ -30,7 +30,7 @@ namespace FTCollectorApp.View.SitesPage
         public PullBoxSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
-            BindingContext = new BdSitePageViewModel();
+            BindingContext = new DropDownViewModel();
 
 
             MajorMinorType = $"Pull Box - {minorType}";

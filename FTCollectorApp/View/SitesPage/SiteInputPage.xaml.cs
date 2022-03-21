@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -19,8 +20,30 @@ namespace FTCollectorApp.View.SitesPage
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SiteInputPage : ContentPage
     {
+        /// will be moved to View Model
+        public ObservableCollection<CodeSiteType> CodeSiteTypes
+        {
 
-        private ObservableCollection<CodeSiteType> CodeSiteTypes = new ObservableCollection<CodeSiteType>();
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CodeSiteType>();
+                    var table = conn.Table<CodeSiteType>().GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
+                    foreach (var col in table)
+                    {
+                        col.MinorType = HttpUtility.HtmlDecode(col.MinorType); // should use for escape char "
+                    }
+
+                    return new ObservableCollection<CodeSiteType>(table);
+                }
+            }
+            set
+            {
+
+            }
+        }
+
         private ObservableCollection<Site> Sites = new ObservableCollection<Site>();
         private ObservableCollection<string> TagNumbers;
         string selectedMinorType;
@@ -51,30 +74,32 @@ namespace FTCollectorApp.View.SitesPage
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
 
-                //CodeSiteTypes.Clear();
-                //Sites.Clear();
-
-                // Get code_site_type table from AWS
-                var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
-                CodeSiteTypes = new ObservableCollection<CodeSiteType>(contentCodeSiteType);
-                Console.WriteLine(contentCodeSiteType);
-
-                // Get Site table from AWS
-                var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
-                Sites = new ObservableCollection<Site>(contentSite);
-                Console.WriteLine(contentSite);
-
-                // push code_site_type Tables to local SQLite. Model is in Model.Job
-                // with using(SQLiteConnection) we didn't have to do conn.close()
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                if (Constants.AutoSyncAWSTables)  // automatically sync // vic-0310
                 {
-                    conn.CreateTable<CodeSiteType>();
-                    conn.DeleteAll<CodeSiteType>();
-                    conn.InsertAll(contentCodeSiteType);
+                    // Get code_site_type table from AWS
+                    // vic-0310
+                    //var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
+                    //CodeSiteTypes = new ObservableCollection<CodeSiteType>(contentCodeSiteType);
+                    //Console.WriteLine(contentCodeSiteType);
 
-                    conn.CreateTable<Site>();
-                    conn.DeleteAll<Site>();
-                    conn.InsertAll(contentSite);
+                    // Get Site table from AWS
+                    var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
+                    Sites = new ObservableCollection<Site>(contentSite);
+                    Console.WriteLine(contentSite);
+
+                    // push code_site_type Tables to local SQLite. Model is in Model.Job
+                    // with using(SQLiteConnection) we didn't have to do conn.close()
+                    using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                    {
+                        // vic-0310
+                        //conn.CreateTable<CodeSiteType>();
+                        //conn.DeleteAll<CodeSiteType>();
+                        //conn.InsertAll(contentCodeSiteType);
+
+                        conn.CreateTable<Site>();
+                        conn.DeleteAll<Site>();
+                        conn.InsertAll(contentSite);
+                    }
                 }
             }
             else
@@ -84,9 +109,10 @@ namespace FTCollectorApp.View.SitesPage
                 // with using(SQLiteConnection) we didn't have to do conn.close()
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
-                    conn.CreateTable<CodeSiteType>();
-                    var codesiteypes = conn.Table<CodeSiteType>().ToList();
-                    CodeSiteTypes = new ObservableCollection<CodeSiteType>(codesiteypes);
+                    // vic-0310
+                    //conn.CreateTable<CodeSiteType>();
+                    //var codesiteypes = conn.Table<CodeSiteType>().ToList();
+                    //CodeSiteTypes = new ObservableCollection<CodeSiteType>(codesiteypes);
 
                     conn.CreateTable<Site>();
                     var sites = conn.Table<Site>().ToList();
@@ -100,8 +126,9 @@ namespace FTCollectorApp.View.SitesPage
 
             //var majorTypes = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
             //foreach (var majorType in majorTypes)
-            //    majorTypePicker.Items.Add(majorType.MajorType);
-            majorTypePicker.ItemsSource = MajorTypes;  // improve bugs , when back
+            // majorTypePicker.Items.Add(majorType.MajorType);
+            
+            // majorTypePicker.ItemsSource = MajorTypes;  // improve bugs , when back
 
             List<string> tagnumbers = new List<string>();
             var tagNumbers = Sites.GroupBy(b => b.TagNumber).Select(g => g.First()).ToList();
@@ -146,28 +173,32 @@ namespace FTCollectorApp.View.SitesPage
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-
-                var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
-                CodeSiteTypes = new ObservableCollection<CodeSiteType>(contentCodeSiteType);
-                Console.WriteLine(contentCodeSiteType);
-
-
-                var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
-
-                Sites = new ObservableCollection<Site>(contentSite);
-                Console.WriteLine(contentSite);
-
-                // push code_site_type Tables to local SQLite. Model is in Model.Job
-                // with using(SQLiteConnection) we didn't have to do conn.close()
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                if (Constants.AutoSyncAWSTables)
                 {
-                    conn.CreateTable<CodeSiteType>();
-                    conn.DeleteAll<CodeSiteType>();
-                    conn.InsertAll(contentCodeSiteType);
+                    // vic-0310
+                    // var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
+                    // CodeSiteTypes = new ObservableCollection<CodeSiteType>(contentCodeSiteType);
+                    // Console.WriteLine(contentCodeSiteType);
 
-                    conn.CreateTable<Site>();
-                    conn.DeleteAll<Site>();
-                    conn.InsertAll(contentSite);
+
+                    var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
+
+                    Sites = new ObservableCollection<Site>(contentSite);
+                    Console.WriteLine(contentSite);
+
+                    // push code_site_type Tables to local SQLite. Model is in Model.Job
+                    // with using(SQLiteConnection) we didn't have to do conn.close()
+                    using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                    {
+                        // vic-0310
+                        //conn.CreateTable<CodeSiteType>();
+                        //conn.DeleteAll<CodeSiteType>();
+                        //conn.InsertAll(contentCodeSiteType);
+
+                        conn.CreateTable<Site>();
+                        conn.DeleteAll<Site>();
+                        conn.InsertAll(contentSite);
+                    }
                 }
             }
         }
@@ -209,11 +240,15 @@ namespace FTCollectorApp.View.SitesPage
         private void majorTypeP_SelectedIdxChanged(object sender, EventArgs e)
         {
             //var selectedMajorType = majorTypePicker.Items[majorTypePicker.SelectedIndex];
-            selectedMajorType = majorTypePicker.SelectedItem.ToString();
-            var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
-            minorTypePicker.Items.Clear();
-            foreach (var minorType in minorTypes)
-                minorTypePicker.Items.Add(minorType.MinorType);
+
+            if (majorTypePicker.SelectedIndex != -1)
+            {
+                selectedMajorType = majorTypePicker.SelectedItem.ToString();
+                var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
+                minorTypePicker.Items.Clear();
+                foreach (var minorType in minorTypes)
+                    minorTypePicker.Items.Add(minorType.MinorType);
+            }
         }
 
         public ObservableCollection<string> MajorTypes
@@ -290,61 +325,5 @@ namespace FTCollectorApp.View.SitesPage
             }
         }
 
-        /*            //majorTypePicker.ItemsSource = MajorTypes;  // MVVM Trail : still fail
-
-         * public ObservableCollection<CodeSiteType> CodeSiteTypes
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<CodeSiteType>();
-                    var table = conn.Table<CodeSiteType>().ToList();
-                    return new ObservableCollection<CodeSiteType>(table);
-                }
-            }
-        }
-
-        public ObservableCollection<string> MajorTypes
-        {
-            get
-            {
-                var data = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
-                List<string> temp = new List<string>();
-                foreach (var col in data)
-                {
-                    temp.Add(col.MajorType);
-                }
-                return new ObservableCollection<string>(temp);
-            }
-        }
-
-
-        private void OnSelectedIdxChanged(object sender, EventArgs e)
-        {
-            if(majorTypePicker.SelectedIndex != -1)
-            {
-                selectedMajorType = majorTypePicker.SelectedItem.ToString();
-                var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
-                minorTypePicker.Items.Clear();
-                foreach (var minorType in minorTypes)
-                    minorTypePicker.Items.Add(minorType.MinorType);
-            }
-
-            if (minorTypePicker.SelectedIndex != -1)
-            {
-                if(majorTypePicker.SelectedIndex == -1)
-                {
-                    DisplayAlert("Warning", "Major Site Type must be selected first", "OK");
-                    return;
-                }
-
-                selectedMinorType = minorTypePicker.Items[minorTypePicker.SelectedIndex];
-                codekey = CodeSiteTypes.Where(a => (a.MajorType == selectedMajorType) && (a.MinorType == selectedMinorType)).Select(a => a.CodeKey).First();
-
-                Console.WriteLine($"key {codekey}, MajorType {selectedMajorType.ToString()}, MinorType {selectedMinorType.ToString()}");
-
-            }
-        }*/
     }
 }

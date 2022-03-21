@@ -30,7 +30,7 @@ namespace FTCollectorApp.View.SitesPage
         public CabinetSitePage(string minorType, string tagNumber)
         {
             InitializeComponent();
-            BindingContext = new BdSitePageViewModel();
+            BindingContext = new DropDownViewModel();
 
 
             MajorMinorType = $"Cabinet - {minorType}";

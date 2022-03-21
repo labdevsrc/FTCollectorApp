@@ -24,7 +24,7 @@ namespace FTCollectorApp.View
 
         }
 
-
+       
         protected override void OnAppearing()
         {
             base.OnAppearing();
