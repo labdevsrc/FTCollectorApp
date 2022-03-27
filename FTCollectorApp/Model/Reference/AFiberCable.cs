@@ -4,8 +4,10 @@ using System.Text;
 using SQLite;
 namespace FTCollectorApp.Model.Reference
 {
+    
     public class AFiberCable
     {
+        [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public string AFRKey { get; set; }
         public string CableIdDesc { get; set; }
@@ -15,6 +17,8 @@ namespace FTCollectorApp.Model.Reference
         public string OwnerKey { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
+        public string SMCount { get; set; }
+        public string MMCount { get; set; }
 
     }
 }

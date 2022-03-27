@@ -1,20 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.TraceFiberPages.DuctTracePage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Padding="10">
-            <Label Text="Duct Trace Page" FontSize="Large" />
-            <Grid RowDefinitions="*,*,*,*,*,*,*" ColumnDefinitions="*,*">
-                
-                
-                
-                
-                
-                
-                
-                
+        <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+
+            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*">
+                <Label Text="Duct Trace Page" Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="Large" />
+                <Label Text="Beginning Tag Number *" Grid.Column="0" Grid.Row="1" />
+                <Label Text="Site type"              Grid.Column="1" Grid.Row="1" />
+                <local:Dropdown2 Grid.Column="0" Grid.Row="2" x:Name="pTagNumber" 
+                                 ItemsSource="{Binding BeginningSiteList}" ItemDisplayBinding="{Binding HosTagNumber}"
+                                 SelectedIndexChanged="OnBeginSiteIndexChanged"
+                                 />
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="2" x:Name="txtSiteType"  IsEnabled="False"/>
+
+                <Label Text="Site name"  Grid.Row="3" Grid.ColumnSpan="2"/>
+                <local:BorderColorEntry  Grid.Row="4" Grid.ColumnSpan="2" x:Name="txtSiteName" IsEnabled="False"/>
+
+                <Label Text="Which Duct? *" Grid.Column="0" Grid.Row="5" />
+                <Label Text="Usage" Grid.Column="1" Grid.Row="5" />
+                <local:Dropdown Grid.Column="0" Grid.Row="6" x:Name="pWDuct" 
+                                 ItemDisplayBinding="{Binding WhichDucts}"
+                                SelectedIndexChanged="OnIndexChanged"
+                                 />
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="6" x:Name="txtUsage" IsEnabled="False"/>
+
+                <Label Text="Color" Grid.Column="0" Grid.Row="7" />
+                <Label Text="Size" Grid.Column="1" Grid.Row="7" />
+                <local:BorderEntry Grid.Column="0" Grid.Row="8" x:Name="txtColor" IsEnabled="False"/>
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="8" x:Name="txtSize" IsEnabled="False"/>
+
+                <Label Text="What Cable ? *" Grid.Column="0" Grid.Row="9" />
+                <Label Text="SM Count" Grid.Column="0" Grid.Row="11" />
+                <Label Text="MM Count" Grid.Column="1" Grid.Row="11" />                
+                <local:Dropdown2 Grid.Column="0" Grid.Row="10" x:Name="pCableId" 
+                                 ItemsSource="{Binding aFiberCableList}" ItemDisplayBinding="{Binding CableIdDesc}"
+                                 SelectedIndexChanged="OnIndexChanged"
+                                 />
+                <local:BorderColorEntry Grid.Column="0" Grid.Row="12" x:Name="txtSMCount" IsEnabled="False"/>
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="12" x:Name="txtMMCount" IsEnabled="False"/>
             </Grid>
+            <Grid RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                <Label Text="Sheath out" Grid.Column="0" Grid.Row="0" />
+                <Label Text="Unit Measure" Grid.Column="1" Grid.Row="0" />
+                <Label Text="Install Method" Grid.Column="2" Grid.Row="0" />
+                <local:BorderColorEntry Grid.Column="0" Grid.Row="2" x:Name="txtSheatOut" />                
+                <local:Dropdown2 Grid.Column="1" Grid.Row="2" x:Name="pUOM" 
+                                 ItemsSource="{Binding UnitOfMeasures}" ItemDisplayBinding="{Binding UOMUnit}"
+                                 />
+                <local:Dropdown2 Grid.Column="2" Grid.Row="2" x:Name="pInstallMethod" 
+                                 ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}"
+                                 />                
+
+            </Grid>
+
+            <Button Text="Save and Start Tracing" x:Name="btnSaveStart" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

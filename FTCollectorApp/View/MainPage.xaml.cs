@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Plugin.Connectivity;
 using FTCollectorApp.Service;
 using Rg.Plugins.Popup.Services;
+using FTCollectorApp.View.TraceFiberPages;
 //using Rg.Plugins.Popup.Services;
 
 namespace FTCollectorApp.View
@@ -140,8 +141,9 @@ namespace FTCollectorApp.View
         {
             Session.uid = Users.Where(a => (a.email == entryEmail.Text) && (a.password == entryPassword.Text)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
             Session.crew_leader = $"{txtFirstName.Text} {txtLastName.Text}";                                              //location = LocateService.Coords;
-            await Navigation.PushAsync(new VerifyJobPage()); // VerifyJobPage
+            //await Navigation.PushAsync(new VerifyJobPage()); // VerifyJobPage
             //await Navigation.PushAsync(new EqCheckOutPage()); // VerifyJobPage
+            await Navigation.PushAsync(new DuctTracePage()); // VerifyJobPage
         }
 
 

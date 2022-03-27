@@ -93,6 +93,7 @@
     <Compile Include="BorderEntryRenderer.cs" />
     <Compile Include="BorderlessEntryRenderer.cs" />
     <Compile Include="CloseApplication.cs" />
+    <Compile Include="Dropdown2Renderer.cs" />
     <Compile Include="DropdownRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

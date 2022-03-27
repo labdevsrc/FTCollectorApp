@@ -33,7 +33,18 @@ namespace FTCollectorApp.View
                 using (FileStream fs = new FileStream(App.SignatureFileLocation, FileMode.Create, FileAccess.Write))
                 {
                     image.CopyTo(fs);
+                    
                 }
+
+
+                // add text on signature
+                /*using (Graphics graphics = Graphics.FromImage())
+                {
+                    using (Font arialFont = new Font("Arial", 10))
+                    {
+                        graphics.DrawString("Test", arialFont, Brushes.Blue, firstLocation);
+                    }
+                }*/
             }
             catch(Exception exp)
             {

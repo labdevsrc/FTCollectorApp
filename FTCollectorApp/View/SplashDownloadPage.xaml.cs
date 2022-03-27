@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -80,15 +81,21 @@ namespace FTCollectorApp.View
                 txtLoading.Text = "Downloading Job table";
                 var contentJob = await CloudDBService.GetJobFromAWSMySQLTable();
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
-
                 txtLoading.Text = "Downloading Site table";
+                //var contentSite = await CloudDBService.GetSite();
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
+
                 var contentCrewDefault = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
 
                 txtLoading.Text = "Downloading manufacturer table";
                 var contentManuf = await CloudDBService.GetManufacturerTable(); //manufacturer_list 
                 var contentJobSumittal = await CloudDBService.GetJobSubmittalTable(); //job_submittal
                 var contentKeyType = await CloudDBService.GetKeyTypeTable(); // keytype
+                var equipmentType = await CloudDBService.GetEquipmentType(); //code_equipment_type
+                var equipmentDetail = await CloudDBService.GetEquipmentDetail(); //equipment
+
+
+                var unitOfmeasure = await CloudDBService.GetUOM(); //unit_of_measurement
                 txtLoading.Text = "Downloading code_material table";
                 var contentMaterialCode = await CloudDBService.GetMaterialCodeTable(); // material
                 var contentMounting = await CloudDBService.GetMountingTable(); // mounting
@@ -126,7 +133,7 @@ namespace FTCollectorApp.View
                 txtLoading.Text = "Downloading owner table";
                 var contentOwner    = await CloudDBService.GetOwners(); //owners
                 txtLoading.Text = "Downloading owner conduits";
-                var contentOwners   = await CloudDBService.GetConduits(); // conduits
+                var contentConduit   = await CloudDBService.GetConduits(); // conduits
                 var contentAllCountry = await CloudDBService.GetAllCountry(); //allcountry
                 var contentInstallType = await CloudDBService.GetInstallType(); // installtype
                 var contentDuctUsed = await CloudDBService.GetDuctUsed(); // ductused
@@ -143,9 +150,14 @@ namespace FTCollectorApp.View
                 txtLoading.Text = "Downloading code_site_type table";
                 var contentBuildingType = await CloudDBService.GetBuildingType(); //bClassification
                 var contentCableType = await CloudDBService.GetCableType(); //code_cable_type
-                var equipmentType = await CloudDBService.GetEquipmentType(); //code_equipment_type
-                var equipmentDetail = await CloudDBService.GetEquipmentDetail(); //equipment
 
+                var codeDuctInstallType = await CloudDBService.GetDuctInstallTypes(); //code_duct_installation
+
+                var codeColor = await CloudDBService.GetColorCode(); //code_colors
+
+
+
+                Thread.Sleep(5000);
                 txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
@@ -161,9 +173,7 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<CodeSiteType>();
                     conn.InsertAll(contentCodeSiteType);
 
-                    conn.CreateTable<Site>();
-                    conn.DeleteAll<Site>();
-                    conn.InsertAll(contentSite);
+
 
                     conn.CreateTable<Crewdefault>();
                     conn.DeleteAll<Crewdefault>();
@@ -295,6 +305,28 @@ namespace FTCollectorApp.View
                     conn.CreateTable<EquipmentDetailType>();
                     conn.DeleteAll<EquipmentDetailType>();
                     conn.InsertAll(equipmentDetail);
+
+                    conn.CreateTable<UnitOfMeasure>();
+                    conn.DeleteAll<UnitOfMeasure>();
+                    conn.InsertAll(unitOfmeasure);
+
+                    conn.CreateTable<DuctInstallType>();
+                    conn.DeleteAll<DuctInstallType>();
+                    conn.InsertAll(codeDuctInstallType);
+
+                    conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
+                    conn.InsertAll(contentSite);
+
+                    conn.CreateTable<ConduitsGroup>();
+                    conn.DeleteAll<ConduitsGroup>();
+                    conn.InsertAll(contentConduit);
+
+
+                    conn.CreateTable<ColorCode>();
+                    conn.DeleteAll<ColorCode>();
+                    conn.InsertAll(codeColor);
+
                 }
                 txtLoading.Text = "Populating Local SQLite done!";
             }

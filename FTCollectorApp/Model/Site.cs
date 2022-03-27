@@ -22,8 +22,10 @@ namespace FTCollectorApp.Model
         public string Stage { get; set; }
 
         public string SiteTypeKey { get; set; } // points into code_site_type
-        public string CabinetTypeKey { get; set; } // points into code_cabinet_type table
-        public string BuildingTypeKey { get; set; }  // points into code_building_type
+        public string SiteTypeDesc { get; set; } // points into code_site_type
+        public string DirOfTravel { get; set; } // points into code_site_type
+        //public string CabinetTypeKey { get; set; } // points into code_cabinet_type table
+        //public string BuildingTypeKey { get; set; }  // points into code_building_type
         public string LONGITUDE { get; set; }
 
         public string LATITUDE { get; set; }
@@ -31,6 +33,6 @@ namespace FTCollectorApp.Model
         public string GpsTime { get; set; }
 
 
-        public string CreatedBy { get; set; }
+        //public string CreatedBy { get; set; }
     }
 }

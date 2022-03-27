@@ -533,6 +533,15 @@ namespace FTCollectorApp.Service
 
         public static Task<IEnumerable<BuildingType>> GetBuildingType() =>
             GetDropDownParamsAsync<IEnumerable<BuildingType>>("bClassification");
+
+        public static Task<IEnumerable<UnitOfMeasure>> GetUOM() =>
+            GetDropDownParamsAsync<IEnumerable<UnitOfMeasure>>("unitofmeasure");
+        public static Task<IEnumerable<DuctInstallType>> GetDuctInstallTypes() =>
+            GetDropDownParamsAsync<IEnumerable<DuctInstallType>>("ductinstalltype");
+        
+        public static Task<IEnumerable<Site>> GetSite() =>
+            GetDropDownParamsAsync<IEnumerable<Site>>("Site");
+
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
