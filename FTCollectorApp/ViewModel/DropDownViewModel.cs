@@ -12,13 +12,6 @@ namespace FTCollectorApp.ViewModel
 {
     public class DropDownViewModel
     {
-        //DuctTracePage Dropdowns
-
-
-
-
-
-
 
         public ObservableCollection<EquipmentType> EquipmentTypes
         {

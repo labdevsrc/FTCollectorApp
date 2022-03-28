@@ -15,6 +15,8 @@ namespace FTCollectorApp.Model.Reference
         public string DirCnt { get; set; }
         public string HosTagNumber { get; set; }
         public string HostType { get; set; }
+        public string HostTypeKey { get; set; }
+        
         public string DuctUsage { get; set; }
         public string DuctSize { get; set; }
         public string DuctColor { get; set; }

@@ -538,7 +538,11 @@ namespace FTCollectorApp.Service
             GetDropDownParamsAsync<IEnumerable<UnitOfMeasure>>("unitofmeasure");
         public static Task<IEnumerable<DuctInstallType>> GetDuctInstallTypes() =>
             GetDropDownParamsAsync<IEnumerable<DuctInstallType>>("ductinstalltype");
-        
+
+        public static Task<IEnumerable<ColorCode>> GetColorCode() =>
+            GetDropDownParamsAsync<IEnumerable<ColorCode>>("code_color");
+
+
         public static Task<IEnumerable<Site>> GetSite() =>
             GetDropDownParamsAsync<IEnumerable<Site>>("Site");
 
@@ -646,6 +650,59 @@ namespace FTCollectorApp.Service
                 {
                     var isi = await response.Content.ReadAsStringAsync();
                     Console.WriteLine($"[PostSaveBuilding] Response from  OK = 200 , content :" + isi);
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+        }
+
+        public static async Task PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostDuctTrace Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                response = await client.PostAsync(Constants.PostDuctTrace, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var isi = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
                 }
             }
             else

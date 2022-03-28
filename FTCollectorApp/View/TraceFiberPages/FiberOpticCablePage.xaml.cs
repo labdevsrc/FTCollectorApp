@@ -28,7 +28,7 @@ namespace FTCollectorApp.View.TraceFiberPages
         public FiberOpticCablePage()
         {
             InitializeComponent();
-            BindingContext = new BdSitePageViewModel();
+            BindingContext = new DropDownViewModel();
 
             for (int i = 0; i < 20; i++)
             {
