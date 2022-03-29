@@ -8,17 +8,17 @@
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Label Text="Site Type"/>
-            <local:Dropdown x:Name="pSiteType" />
+            <local:Dropdown x:Name="pSiteType" SelectedIndexChanged="OnIndexChanged"/>
             <Label Text="Enter PCS tag number"/>
-            <local:Dropdown x:Name="pTagNumber" />
+            <local:Dropdown x:Name="pTagNumber" ItemDisplayBinding="{Binding TagNumber}"/>
             <Label Text="Station Number"/>
             <local:BorderColorEntry x:Name="staNumber" />
-            <Label Text="Station Number"/>
-            <local:BorderColorEntry x:Name="staNumber" />
-            <Label Text="Station Number"/>
-            <local:BorderColorEntry x:Name="staNumber" />
+            <Label Text="Plan sheet*"/>
+            <local:BorderColorEntry x:Name="planSheet" />
+            <Label Text="Plan sheet item"/>
+            <local:BorderColorEntry x:Name="planSheetItem" />
 
-            <Button Text="Save and Continue" />
+            <Button Text="Save and Continue" Clicked="OnClicked" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
