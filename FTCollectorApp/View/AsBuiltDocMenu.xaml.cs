@@ -1,4 +1,6 @@
-﻿using FTCollectorApp.View.SitesPage;
+﻿using FTCollectorApp.View.CablePages;
+using FTCollectorApp.View.FiberPages;
+using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.View.TraceFiberPages;
 using Rg.Plugins.Popup.Services;
 using System;
@@ -31,9 +33,34 @@ namespace FTCollectorApp.View
         }
 
 
-        private void gotoFiberOpticPage(object sender, EventArgs e)
+        private void gotoFOCablePage(object sender, EventArgs e)
         {
             Navigation.PushAsync(new FiberOpticCablePage());
+        }
+
+        private void btnPullCable_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new PullCablePage());
+        }
+
+        private void btnSpliceCable_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SpliceFiberPage());
+        }
+
+        private void btnTerminate_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnInstallDev_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OTDR_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }
