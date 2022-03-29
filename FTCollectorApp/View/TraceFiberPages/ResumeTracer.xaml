@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.TraceFiberPages.ResumeTracer">
+    <ContentPage.Content>
+        <StackLayout>
+
+            <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" />
+            <Label Padding="0,20,0,20" Text="TagNumber" />
+            <local:Dropdown x:Name="pTagNumber" ItemsSource="Con"/>
+            <Label Padding="0,20,0,20" Text="TagNumber" />
+            <local:BorderEntry x:Name="txtDuctName"/>
+            <Label Padding="0,20,0,20" Text="Fiber Cable" />
+            <local:BorderEntry x:Name="fiberCable"/>
+
+
+            <Button Padding="10" Text="Resume Tracing" Clicked="btnStartTracing_Clicked"/>
+            <Button Padding="10" x:Name="btnStart" Text="View Suspended fiber tracig activity" Clicked="btnResume_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

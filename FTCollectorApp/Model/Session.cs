@@ -37,6 +37,8 @@ namespace FTCollectorApp.Model
         public static string lattitude_offset { get; set; }
         public static string longitude_offset { get; set; }
 
+        public static string tag_number { get; set; }
+
         public const string EventLogin = "1";
         public const string JOB_VERIFIED = "2";
         public const string CrewAssembled = "3";

@@ -50,7 +50,7 @@ namespace FTCollectorApp.View
 
         private void btnTerminate_Clicked(object sender, EventArgs e)
         {
-
+            Navigation.PushAsync(new TerminateFiber());
         }
 
         private void btnInstallDev_Clicked(object sender, EventArgs e)

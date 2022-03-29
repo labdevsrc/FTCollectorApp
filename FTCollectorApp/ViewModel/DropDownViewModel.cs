@@ -12,6 +12,69 @@ namespace FTCollectorApp.ViewModel
 {
     public class DropDownViewModel
     {
+        // Duct Page - start
+        public ObservableCollection<DuctType> DuctMaterialList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<DuctType>();
+                    var table = conn.Table<DuctType>().ToList();
+                    return new ObservableCollection<DuctType>(table);
+                }
+            }
+        }
+        public ObservableCollection<DuctUsed> DuctUsageList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<DuctUsed>();
+                    var table = conn.Table<DuctUsed>().ToList();
+                    return new ObservableCollection<DuctUsed>(table);
+                }
+            }
+        }
+        public ObservableCollection<ColorCode> DuctColorCode
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ColorCode>();
+                    var table = conn.Table<ColorCode>().ToList();
+                    return new ObservableCollection<ColorCode>(table);
+                }
+            }
+        }
+        public ObservableCollection<DuctSize> DuctSizeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<DuctSize>();
+                    var table = conn.Table<DuctSize>().ToList();
+                    return new ObservableCollection<DuctSize>(table);
+                }
+            }
+        }
+
+        public ObservableCollection<DuctInstallType> DuctInstallList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<DuctInstallType>();
+                    var table = conn.Table<DuctInstallType>().ToList();
+                    return new ObservableCollection<DuctInstallType>(table);
+                }
+            }
+        }
+        // Duct Page - end
 
         public ObservableCollection<EquipmentType> EquipmentTypes
         {
@@ -116,6 +179,10 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+
+        /// Building Site Page, Structure Site Page, 
+        /// 
+
         public ObservableCollection<CompassDirection> TravelDirectionList
         {
             get

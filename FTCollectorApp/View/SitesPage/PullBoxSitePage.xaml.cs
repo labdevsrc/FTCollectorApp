@@ -50,6 +50,7 @@ namespace FTCollectorApp.View.SitesPage
             YesNo.Add("Y");
 
             TagNumber = tagNumber;
+            Session.tag_number = TagNumber;
             entryTagNum.Text = tagNumber;
             //pickerDotDisctrict.ItemsSource = DotDistrict;
             pickerElectSiteKey.ItemsSource = DotDistrict;

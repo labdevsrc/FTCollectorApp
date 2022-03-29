@@ -19,26 +19,26 @@
 
                 <Label Text="Direction"  Grid.Row="3" />
                 <local:Dropdown Grid.Row="4" Grid.ColumnSpan="2"   ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
-                         x:Name="pDirection" HorizontalOptions="FillAndExpand"/>
+                         x:Name="pDirection" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
 
-                <Label Text="Direction" Grid.Row="5"/>
+                <Label Text="Direction Count" Grid.Row="5"/>
                 <local:Dropdown2 Grid.Row="6" Grid.ColumnSpan="2" 
                          x:Name="pDirCnt" HorizontalOptions="FillAndExpand"/>
 
                 <Label Text="Conduit Diameter" Grid.Row="7"/>
-                <local:Dropdown Grid.Row="8" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                <local:Dropdown Grid.Row="8" Grid.ColumnSpan="2" ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
                          x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
 
                 <Label Text="Color :" Grid.Row="9"/>
-                <local:Dropdown Grid.Row="10" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
-                         x:Name="pDuctColor" HorizontalOptions="FillAndExpand"/>
+                <local:Dropdown Grid.Row="10" Grid.ColumnSpan="2" ItemsSource="{Binding DuctColorCode}" BackgroundColor="{Binding ColorHex}" 
+                       ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" HorizontalOptions="FillAndExpand"/>
 
                 <Label Text="Duct Material :" Grid.Row="11"/>
-                <local:Dropdown Grid.Row="12" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                <local:Dropdown Grid.Row="12" Grid.ColumnSpan="2" ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
                          x:Name="pDuctMaterial" HorizontalOptions="FillAndExpand"/>
 
                 <Label Text="Duct Used :" Grid.Row="13"/>
-                <local:Dropdown Grid.Row="14" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                <local:Dropdown Grid.Row="14" Grid.ColumnSpan="2" ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
                          x:Name="pDuctUsed" HorizontalOptions="FillAndExpand"/>
 
                 <Label Text="Install Method :" Grid.Row="15"/>
@@ -59,7 +59,7 @@
                 <Label Text="Has Inner Duct" Grid.Row="2"  />
                 <local:Dropdown x:Name="hasInnerDuct" Grid.Row="3"  />
 
-                <Label Text="Has Inner Duct" Grid.Row="2"   Grid.Column="1" />
+                <Label Text="Has Trace Wire" Grid.Row="2"   Grid.Column="1" />
                 <local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" />
                 
                 <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />

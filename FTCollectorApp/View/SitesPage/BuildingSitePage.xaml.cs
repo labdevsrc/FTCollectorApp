@@ -53,6 +53,7 @@ namespace FTCollectorApp.View.SitesPage
             YesNo.Add("Y");
 
             TagNumber = tagNumber;
+            Session.tag_number = TagNumber;
             entryTagNum.Text = tagNumber;
             pickerLaneClosure.ItemsSource = YesNo;
             pickerDotDisctrict.ItemsSource = DotDistrict;

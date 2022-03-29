@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.FiberPages.TerminateFiber">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Padding="0,20,0,20" Text="Terminate Fiber" FontSize="Large"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Site Type"/>
+            <local:Dropdown x:Name="pSiteType" />
+            <Label Text="Enter PCS tag number"/>
+            <local:Dropdown x:Name="pTagNumber" />
+            <Label Text="Station Number"/>
+            <local:BorderColorEntry x:Name="staNumber" />
+            <Label Text="Station Number"/>
+            <local:BorderColorEntry x:Name="staNumber" />
+            <Label Text="Station Number"/>
+            <local:BorderColorEntry x:Name="staNumber" />
+
+            <Button Text="Save and Continue" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
