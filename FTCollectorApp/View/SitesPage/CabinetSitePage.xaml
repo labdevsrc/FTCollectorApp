@@ -116,12 +116,12 @@
                             <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck"/>
                         </Grid>
 
-                        <Button Text="Record Ducts" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="btnRecDucts_Clicked"/>
-                        <Button Text="Fiber" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="btnFiber_Clicked"/>
-                        <Button Text="Tracer" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="btnTracer_Clicked"/>
-                        <Button Text="Record Racks" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="btnRecRacks_Clicked"/>
-                        <Button Text="Active Device" HorizontalOptions="FillAndExpand" x:Name="btnActive" Clicked="btnActive_Clicked"/>
-                        <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="btnSave_Clicked"/>
+                        <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="btnRecDucts_Clicked"/>
+                        <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="btnFiber_Clicked"/>
+                        <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="btnTracer_Clicked"/>
+                        <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="btnRecRacks_Clicked"/>
+                        <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnActive" Clicked="btnActive_Clicked"/>
+                        <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="OnClicked"/>
                     </StackLayout>
 
                 </ScrollView>

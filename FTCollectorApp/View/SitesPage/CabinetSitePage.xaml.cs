@@ -307,10 +307,12 @@ namespace FTCollectorApp.View.SitesPage
 
 
 
-        private async void btnSave_Clicked(object sender, EventArgs e)
+        private async void OnClicked(object sender, EventArgs e)
         {
             var KVPair = keyvaluepair();
             await CloudDBService.PostSaveBuilding(KVPair);
+            btnRecDucts.IsEnabled = true;
+
         }
 
         private void btnActive_Clicked(object sender, EventArgs e)
@@ -333,9 +335,9 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnRecDucts_Clicked(object sender, EventArgs e)
+        private async void btnRecDucts_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new DuctPage());
         }
     }
 }

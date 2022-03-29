@@ -16,6 +16,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -309,6 +310,7 @@ namespace FTCollectorApp.View.SitesPage
         {
             var KVPair = keyvaluepair();
             await CloudDBService.PostSaveBuilding(KVPair);
+            btnRecDucts.IsEnabled = true;
         }
 
         private void btnActive_Clicked(object sender, EventArgs e)
@@ -331,9 +333,9 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnRecDucts_Clicked(object sender, EventArgs e)
+        private async void btnRecDucts_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new DuctPage());
         }
 
 

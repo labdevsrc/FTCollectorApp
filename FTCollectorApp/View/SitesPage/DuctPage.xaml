@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.DuctPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+
+            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*">
+                <Label Text="Duct" Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="Large" />
+
+                <Label Text="Host Tag Number "  Grid.Row="1" />
+                <local:BorderColorEntry  Grid.Row="2" Grid.ColumnSpan="3" x:Name="txtHostTagNumber" IsEnabled="False"/>
+
+                <Label Text="Direction"  Grid.Row="3" />
+                <local:Dropdown Grid.Row="4" Grid.ColumnSpan="2"   ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                         x:Name="pDirection" HorizontalOptions="FillAndExpand"/>
+
+                <Label Text="Direction" Grid.Row="5"/>
+                <local:Dropdown2 Grid.Row="6" Grid.ColumnSpan="2" 
+                         x:Name="pDirCnt" HorizontalOptions="FillAndExpand"/>
+
+                <Label Text="Conduit Diameter" Grid.Row="7"/>
+                <local:Dropdown Grid.Row="8" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                         x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
+
+                <Label Text="Color :" Grid.Row="9"/>
+                <local:Dropdown Grid.Row="10" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                         x:Name="pDuctColor" HorizontalOptions="FillAndExpand"/>
+
+                <Label Text="Duct Material :" Grid.Row="11"/>
+                <local:Dropdown Grid.Row="12" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                         x:Name="pDuctMaterial" HorizontalOptions="FillAndExpand"/>
+
+                <Label Text="Duct Used :" Grid.Row="13"/>
+                <local:Dropdown Grid.Row="14" Grid.ColumnSpan="2" ItemsSource="{Binding Conduit}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                         x:Name="pDuctUsed" HorizontalOptions="FillAndExpand"/>
+
+                <Label Text="Install Method :" Grid.Row="15"/>
+                <local:Dropdown Grid.Row="16" Grid.ColumnSpan="2" ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}" 
+                         x:Name="pInstall" HorizontalOptions="FillAndExpand"/>
+
+            </Grid>
+            <Grid RowDefinitions="0.5*,*,0.5*,%" ColumnDefinitions="*,*,*">
+                <Label Text="Duct Plug" />
+                <local:Dropdown x:Name="isPlugged" Grid.Row="1" />
+
+                <Label Text="Is this duct open or filled" />
+                <local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1"/>
+
+                <Label Text="HasPullTape" />
+                <local:Dropdown x:Name="hasPullTape" Grid.Row="1" Grid.Column="2"/>
+
+                <Label Text="Has Inner Duct" Grid.Row="2"  />
+                <local:Dropdown x:Name="hasInnerDuct" Grid.Row="3"  />
+
+                <Label Text="Has Inner Duct" Grid.Row="2"   Grid.Column="1" />
+                <local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" />
+                
+                <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />
+                <local:Dropdown x:Name="percentOpen" Grid.Row="3"  Grid.Column="2" />
+
+            </Grid>
+
+            <Button Text="Save and Start Tracing" x:Name="btnSaveStart" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -120,7 +120,12 @@ namespace FTCollectorApp.View.SitesPage
         int DirectionTravel = 0, IsLaneClosure = 0, DotDistrictCnt = 0, IsHasPowerDisconnect = 0,
             IsHaveSunShield = 0, IsHasGround = 0, IsHasKey = 0, ElectSiteKeyCnt = 0, Is3rdComms = 0;
         int KeyType;
+
+
+
         int IsSiteClearZone;
+
+
         int KeyTypeSelected = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
@@ -302,6 +307,37 @@ namespace FTCollectorApp.View.SitesPage
         {
             var KVPair = keyvaluepair();
             await CloudDBService.PostSaveBuilding(KVPair);
+            btnRecDucts.IsEnabled = true;
         }
+
+
+        private void btnActive_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRecRacks_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnTracer_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFiber_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void btnRecDucts_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DuctPage());
+        }
+
+
+
     }
 }
+

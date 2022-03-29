@@ -101,12 +101,11 @@
                         <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
                             x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>
 
-                        <Button Text="Record Ducts" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="OnClicked"/>
-                        <Button Text="Fiber" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="OnClicked"/>
-                        <Button Text="Tracer" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="OnClicked"/>
-                        <Button Text="Complete This Trace" HorizontalOptions="FillAndExpand" x:Name="btnCompleteTrace" Clicked="OnClicked"/>
-                        <Button Text="Splice Enclosure" HorizontalOptions="FillAndExpand" x:Name="btnSpliceEnc" Clicked="OnClicked"/>
-                        <Button Text="Record Racks" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="OnClicked"/>
+                        <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="btnRecDucts_Clicked"/>
+                        <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="btnFiber_Clicked"/>
+                        <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="btnTracer_Clicked"/>
+                        <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="btnRecRacks_Clicked"/>
+                        <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnActive" Clicked="btnActive_Clicked"/>
                         <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="OnClicked"/>
                     </StackLayout>
 

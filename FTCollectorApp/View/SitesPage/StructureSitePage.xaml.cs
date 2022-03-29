@@ -317,6 +317,36 @@ namespace FTCollectorApp.View.SitesPage
         {
             var KVPair = keyvaluepair();
             await CloudDBService.PostSaveBuilding(KVPair);
+            btnRecDucts.IsEnabled = true;
         }
+
+
+        private void btnActive_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRecRacks_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnTracer_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFiber_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void btnRecDucts_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DuctPage());
+        }
+
+
+
     }
 }

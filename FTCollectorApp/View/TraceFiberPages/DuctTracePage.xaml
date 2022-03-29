@@ -11,7 +11,7 @@
         <StackLayout Padding="10" VerticalOptions="FillAndExpand">
 
             <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*">
-                <Label Text="Duct Trace Page" Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="Large" />
+                <Label Text="Duct Trace" Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="Large" />
                 <Label Text="Beginning Tag Number *" Grid.Column="0" Grid.Row="1" />
                 <Label Text="Site type"              Grid.Column="1" Grid.Row="1" />
                 <local:Dropdown2 Grid.Column="0" Grid.Row="2" x:Name="pTagNumber" 
