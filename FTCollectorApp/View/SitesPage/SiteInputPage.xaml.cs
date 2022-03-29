@@ -21,9 +21,8 @@ namespace FTCollectorApp.View.SitesPage
     public partial class SiteInputPage : ContentPage
     {
         /// will be moved to View Model
-        public ObservableCollection<CodeSiteType> CodeSiteTypes
+        public ObservableCollection<CodeSiteType> CodeMajorSiteTypes
         {
-
             get
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -34,13 +33,25 @@ namespace FTCollectorApp.View.SitesPage
                     {
                         col.MinorType = HttpUtility.HtmlDecode(col.MinorType); // should use for escape char "
                     }
-
                     return new ObservableCollection<CodeSiteType>(table);
                 }
             }
-            set
-            {
+        }
 
+        public ObservableCollection<CodeSiteType> CodeSiteTypes
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CodeSiteType>();
+                    var table = conn.Table<CodeSiteType>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.MinorType = HttpUtility.HtmlDecode(col.MinorType); // should use for escape char "
+                    }
+                    return new ObservableCollection<CodeSiteType>(table);
+                }
             }
         }
 
@@ -243,25 +254,16 @@ namespace FTCollectorApp.View.SitesPage
 
             if (majorTypePicker.SelectedIndex != -1)
             {
-                selectedMajorType = majorTypePicker.SelectedItem.ToString();
-                var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
-                minorTypePicker.Items.Clear();
-                foreach (var minorType in minorTypes)
-                    minorTypePicker.Items.Add(minorType.MinorType);
-            }
-        }
+                // before_code
+                //selectedMajorType = majorTypePicker.SelectedItem.ToString();
+                //var minorTypes = CodeSiteTypes.Where(a => a.MajorType == selectedMajorType).GroupBy(b => b.MinorType).Select(g => g.First()).ToList();
+                //minorTypePicker.Items.Clear();
+                //foreach (var minorType in minorTypes)
+                //    minorTypePicker.Items.Add(minorType.MinorType);
 
-        public ObservableCollection<string> MajorTypes
-        {
-            get
-            {
-                var data = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
-                List<string> temp = new List<string>();
-                foreach (var col in data)
-                {
-                    temp.Add(col.MajorType);
-                }
-                return new ObservableCollection<string>(temp);
+                // after_code : more compact
+                var selected = majorTypePicker.SelectedItem as CodeSiteType;
+                minorTypePicker.ItemsSource = CodeSiteTypes.Where(a => a.MajorType == selected.MajorType).ToList();
             }
         }
 
@@ -274,7 +276,7 @@ namespace FTCollectorApp.View.SitesPage
                 await DisplayAlert("Warning", "Please select Major Type first", "OK");
             }
             var selectedMinorTypeIdx = minorTypePicker.SelectedIndex;
-            if (selectedMinorTypeIdx == -1)
+            if (minorTypePicker.SelectedIndex == -1)
             {
                 Console.WriteLine("minorTypePicker.SelectedIndex : -1");
                 return;

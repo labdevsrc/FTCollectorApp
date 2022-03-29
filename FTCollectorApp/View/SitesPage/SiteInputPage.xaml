@@ -19,10 +19,10 @@
                 <Label Text="Site" FontSize="Large" HorizontalOptions="Center"/>
                 <Label Text="Major Site Type*" HorizontalOptions="Start"/>
                 <Picker  x:Name="majorTypePicker"  SelectedIndexChanged="majorTypeP_SelectedIdxChanged" 
-                         ItemsSource="{Binding CodeSiteTypes}" ItemDisplayBinding="{Binding MajorType}"
+                         ItemsSource="{Binding CodeMajorSiteTypes}" ItemDisplayBinding="{Binding MajorType}"
                          />
                 <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
-                <Picker  x:Name="minorTypePicker" SelectedIndexChanged="minorTypeP_SelectedIdxChanged"/>
+                <Picker  x:Name="minorTypePicker" SelectedIndexChanged="minorTypeP_SelectedIdxChanged" ItemDisplayBinding="{Binding MinorType}" />
                 <Label Text="Enter PC tag" HorizontalOptions="Start"/>
                 <local:BorderEntry Placeholder="tag number" x:Name="entryTagNum" TextChanged="entryTagNum_TextChanged" />
                 <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
