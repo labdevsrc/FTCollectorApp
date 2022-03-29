@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 using SQLite;
 using System.Collections.ObjectModel;
 using FTCollectorApp.Model.Reference;
+using FTCollectorApp.View.Utils;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -59,6 +60,11 @@ namespace FTCollectorApp.View.SitesPage
             hasInnerDuct.ItemsSource = YesNo;
             hasTraceWire.ItemsSource = YesNo;
             percentOpen.ItemsSource = SixtyToHundred;
+        }
+
+        private void btnCamera(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new CameraViewPage());
         }
     }
 }

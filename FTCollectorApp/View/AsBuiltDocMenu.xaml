@@ -7,7 +7,12 @@
             <Label Text="As Built Documents" FontSize="Large" HorizontalOptions="Center"/>
             <Label Text="" FontSize="Large" HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnSite" Text="Site" Clicked="btnSite_Clicked"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnTraceFiber" Text="Trace Fiber" Clicked="btnTraceF_Clicked"  HorizontalOptions="FillAndExpand"/>            
+            <Button x:Name="btnNewCable" Text="New Cable" Clicked="gotoFiberOpticPage"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnPullCable" Text="Pull a cable" Clicked="btnPullCable_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnSpliceCable" Text="Splice a cable" Clicked="btnSpliceCable_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnTerminateCable" Text="Terminate a fiber" Clicked="btnTerminate_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnInstallDev" Text="Install devices" Clicked="btnInstallDev_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnOTDRtest" Text="Perform OTDR test" Clicked="OTDR_Clicked"  HorizontalOptions="FillAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

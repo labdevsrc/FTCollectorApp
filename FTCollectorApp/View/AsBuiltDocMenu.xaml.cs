@@ -1,4 +1,5 @@
 ﻿using FTCollectorApp.View.SitesPage;
+using FTCollectorApp.View.TraceFiberPages;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,10 @@ namespace FTCollectorApp.View
             Navigation.PushAsync(new SiteInputPage());
         }
 
-        private void btnTraceF_Clicked(object sender, EventArgs e)
+
+        private void gotoFiberOpticPage(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new TraceFiberMenu());
+            Navigation.PushAsync(new FiberOpticCablePage());
         }
     }
 }
