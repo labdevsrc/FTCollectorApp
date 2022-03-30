@@ -42,7 +42,7 @@
                     </Button.Triggers>
                 </Button>
             </StackLayout>
-            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0321"/>
+            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0330"/>
         </StackLayout>
         
     </ContentPage.Content>

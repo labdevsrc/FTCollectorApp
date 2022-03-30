@@ -67,7 +67,7 @@
 
                     </Grid>
 
-                    <Button Text="Save and Start Tracing" x:Name="btnSaveStart" />
+                    <Button Text="Save and Start Tracing" x:Name="btnSaveStart" Clicked="btnSaveStart_Clicked"/>
                     </StackLayout>
 
                 </ScrollView>
