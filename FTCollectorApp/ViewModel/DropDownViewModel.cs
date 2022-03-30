@@ -45,6 +45,10 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<ColorCode>();
                     var table = conn.Table<ColorCode>().ToList();
+                    foreach(var col in table)
+                    {
+                        col.ColorName = col.ColorName + " \u2580\u2580\u2580";
+                    }
                     return new ObservableCollection<ColorCode>(table);
                 }
             }

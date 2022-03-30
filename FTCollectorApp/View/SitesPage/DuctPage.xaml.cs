@@ -122,6 +122,7 @@ namespace FTCollectorApp.View.SitesPage
             if (pDuctColor.SelectedIndex != -1)
             {
                 var selected = pDuctColor.SelectedItem as ColorCode;
+                pDuctColor.TextColor = Color.FromHex(selected.ColorHex);
                 selectedDuctColor = selected.ColorKey;
             }
 
