@@ -7,7 +7,8 @@
 
             <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" />
             <Label Padding="0,20,0,20" Text="TagNumber" />
-            <local:Dropdown x:Name="pTagNumber" ItemsSource="Con"/>
+            <local:Dropdown x:Name="pTagNumber" ItemsSource="{Binding BeginningSiteList }" 
+                            ItemDisplayBinding="{Binding HostTagNuumber}" SelectedIndexChanged="OnIndexChanged"/>
             <Label Padding="0,20,0,20" Text="TagNumber" />
             <local:BorderEntry x:Name="txtDuctName"/>
             <Label Padding="0,20,0,20" Text="Fiber Cable" />

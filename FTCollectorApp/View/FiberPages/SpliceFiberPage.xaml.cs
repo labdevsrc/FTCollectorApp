@@ -16,5 +16,10 @@ namespace FTCollectorApp.View.FiberPages
         {
             InitializeComponent();
         }
+
+        private void OnIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -9,65 +9,70 @@
                  Priority="0" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+                    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                     <Label Text="Duct"  HorizontalOptions="Center" FontSize="Large" />
 
-            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*">
-                <Label Text="Duct" Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="Large" />
+                    <Label Text="Host Tag Number "  />
+                    <local:BorderColorEntry x:Name="txtHostTagNumber" IsEnabled="False"/>
 
-                <Label Text="Host Tag Number "  Grid.Row="1" />
-                <local:BorderColorEntry  Grid.Row="2" Grid.ColumnSpan="3" x:Name="txtHostTagNumber" IsEnabled="False"/>
+                    <Label Text="Direction" />
+                    <local:Dropdown  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
+                             x:Name="pDirection" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
 
-                <Label Text="Direction"  Grid.Row="3" />
-                <local:Dropdown Grid.Row="4" Grid.ColumnSpan="2"   ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
-                         x:Name="pDirection" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+                    <Label Text="Direction Count" />
+                    <local:Dropdown2 x:Name="pDirCnt" HorizontalOptions="FillAndExpand"/>
 
-                <Label Text="Direction Count" Grid.Row="5"/>
-                <local:Dropdown2 Grid.Row="6" Grid.ColumnSpan="2" 
-                         x:Name="pDirCnt" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Conduit Diameter" />
+                    <local:Dropdown ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
+                             x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
 
-                <Label Text="Conduit Diameter" Grid.Row="7"/>
-                <local:Dropdown Grid.Row="8" Grid.ColumnSpan="2" ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
-                         x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Color :" />
+                    <local:Dropdown ItemsSource="{Binding DuctColorCode}" BackgroundColor="{Binding ColorHex}" 
+                           ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" HorizontalOptions="FillAndExpand"/>
 
-                <Label Text="Color :" Grid.Row="9"/>
-                <local:Dropdown Grid.Row="10" Grid.ColumnSpan="2" ItemsSource="{Binding DuctColorCode}" BackgroundColor="{Binding ColorHex}" 
-                       ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Duct Material :" />
+                    <local:Dropdown  ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
+                             x:Name="pDuctMaterial" HorizontalOptions="FillAndExpand"/>
 
-                <Label Text="Duct Material :" Grid.Row="11"/>
-                <local:Dropdown Grid.Row="12" Grid.ColumnSpan="2" ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
-                         x:Name="pDuctMaterial" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Duct Used :" />
+                    <local:Dropdown ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
+                             x:Name="pDuctUsed" HorizontalOptions="FillAndExpand"/>
 
-                <Label Text="Duct Used :" Grid.Row="13"/>
-                <local:Dropdown Grid.Row="14" Grid.ColumnSpan="2" ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
-                         x:Name="pDuctUsed" HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Install Method :" />
+                    <local:Dropdown ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}" 
+                             x:Name="pInstall" HorizontalOptions="FillAndExpand"/>
 
-                <Label Text="Install Method :" Grid.Row="15"/>
-                <local:Dropdown Grid.Row="16" Grid.ColumnSpan="2" ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}" 
-                         x:Name="pInstall" HorizontalOptions="FillAndExpand"/>
 
-            </Grid>
-            <Grid RowDefinitions="0.5*,*,0.5*,%" ColumnDefinitions="*,*,*">
-                <Label Text="Duct Plug" />
-                <local:Dropdown x:Name="isPlugged" Grid.Row="1" />
+                    <Grid RowDefinitions="0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
+                        <Label Text="Duct Plug" />
+                        <local:Dropdown x:Name="isPlugged" Grid.Row="1" />
 
-                <Label Text="Is this duct open or filled" />
-                <local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1"/>
+                        <Label Text="Is this duct open or filled" />
+                        <local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1"/>
 
-                <Label Text="HasPullTape" />
-                <local:Dropdown x:Name="hasPullTape" Grid.Row="1" Grid.Column="2"/>
+                        <Label Text="HasPullTape" />
+                        <local:Dropdown x:Name="hasPullTape" Grid.Row="1" Grid.Column="2"/>
 
-                <Label Text="Has Inner Duct" Grid.Row="2"  />
-                <local:Dropdown x:Name="hasInnerDuct" Grid.Row="3"  />
+                        <Label Text="Has Inner Duct" Grid.Row="2"  />
+                        <local:Dropdown x:Name="hasInnerDuct" Grid.Row="3"  />
 
-                <Label Text="Has Trace Wire" Grid.Row="2"   Grid.Column="1" />
-                <local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" />
+                        <Label Text="Has Trace Wire" Grid.Row="2"   Grid.Column="1" />
+                        <local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" />
                 
-                <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />
-                <local:Dropdown x:Name="percentOpen" Grid.Row="3"  Grid.Column="2" />
+                        <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />
+                        <local:Dropdown x:Name="percentOpen" Grid.Row="3"  Grid.Column="2" />
 
-            </Grid>
+                    </Grid>
 
-            <Button Text="Save and Start Tracing" x:Name="btnSaveStart" />
+                    <Button Text="Save and Start Tracing" x:Name="btnSaveStart" />
+                    </StackLayout>
+
+                </ScrollView>
+                    
         </StackLayout>
+        </AbsoluteLayout>            
     </ContentPage.Content>
 </ContentPage>

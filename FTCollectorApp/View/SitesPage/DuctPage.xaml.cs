@@ -104,7 +104,7 @@ namespace FTCollectorApp.View.SitesPage
         {
             if (pDirection.SelectedIndex != -1)
             {
-                var selected = pDuctSize.SelectedItem as CompassDirection;
+                var selected = pDirection.SelectedItem as CompassDirection;
                 selectedDirection = selected.CompasKey;
             }
 

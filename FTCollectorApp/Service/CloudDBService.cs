@@ -545,6 +545,8 @@ namespace FTCollectorApp.Service
 
         public static Task<IEnumerable<Site>> GetSite() =>
             GetDropDownParamsAsync<IEnumerable<Site>>("Site");
+        public static Task<IEnumerable<AFiberConnection>> GetFiberConnection() =>
+            GetDropDownParamsAsync<IEnumerable<AFiberConnection>>("a_fiber_connection");
 
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
