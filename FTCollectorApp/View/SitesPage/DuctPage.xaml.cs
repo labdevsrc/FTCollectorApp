@@ -54,7 +54,7 @@ namespace FTCollectorApp.View.SitesPage
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            txtHostTagNumber.Text = "49585";// Session.tag_number;
+            txtHostTagNumber.Text = Session.tag_number;
 
         }
 

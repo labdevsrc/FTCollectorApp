@@ -5,7 +5,7 @@
              x:Class="FTCollectorApp.View.CablePages.PullCablePage">
     <ContentPage.Content>
         <StackLayout>
-            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*," ColumnDefinitions="*,*,*">
+            <Grid RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
                 <Label Text="Pull Cable" HorizontalOptions="Center" FontSize="Large"/>
 
                 <Label Text="Cable Type" Grid.Row="1"/>
