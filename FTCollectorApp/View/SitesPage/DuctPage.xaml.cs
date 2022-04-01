@@ -67,12 +67,7 @@ namespace FTCollectorApp.View.SitesPage
         string selectedDuctSize, selectedDirection, selectedDuctMaterial, selectedDuctColor,
             selectedDuctInstall, selectedDuctUsage;
 
-        private async void btnSaveStart_Clicked(object sender, EventArgs e)
-        {
-            var KVPair = keyvaluepair();
-            await CloudDBService.PostDuctTrace(KVPair);
-            await Navigation.PopAsync();
-        }
+
 
         string IsPlugged, IsOpen, HasPullTape, HasInnerDuct, HasTraceWire;
         int PercentageOpen, selectedDirCnt;
@@ -170,6 +165,21 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
+        private void btnRecInner_Clicked(object sender, EventArgs e)
+        {
 
+        }
+
+        private void btnFinishDRect_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void btnSaveStart_Clicked(object sender, EventArgs e)
+        {
+            var KVPair = keyvaluepair();
+            await CloudDBService.PostDuctTrace(KVPair);
+            await Navigation.PopAsync();
+        }
     }
 }

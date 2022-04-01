@@ -95,15 +95,15 @@
                         <Editor x:Name="editorNotes" Placeholder="Enter notes here" 
                                 HorizontalOptions="FillAndExpand" MaxLength="250"   />
 
-                        <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
+                        <Grid Padding="5,5,15,5" RowDefinitions="0.5*,0.5*,0.5*,0.5*,0.5*,0.5*" ColumnDefinitions="*,*,*">
                             <Label Grid.Row="0" Grid.Column="0" Text="Does it have a sun shield"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pHaveSunShield"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pHasGround"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pHasKey"/>
-                            <Label Grid.Row="2" Grid.Column="0" Text="Key Type"/>
-                            <local:Dropdown Grid.Row="3" Grid.Column="0" x:Name="pKeyType"/>
+                            <Label Grid.Row="2" Grid.Column="0" Text="Key Type" x:Name="txtType" IsVisible="false"/>
+                            <local:Dropdown Grid.Row="3" Grid.Column x:Name="pKeyType" IsVisible="false" />
                             <Label Grid.Row="4" Grid.Column="0" Text="Direction of Travel"/>
                             <Label Grid.Row="4" Grid.Column="1" Text="Is site in a clear Zone?"/>
                             <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>

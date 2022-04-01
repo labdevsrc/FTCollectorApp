@@ -4,15 +4,11 @@
              x:Class="FTCollectorApp.View.AsBuiltDocMenu">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Label Text="As Built Documents" FontSize="Large" HorizontalOptions="Center"/>
-            <Label Text="" FontSize="Large" HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnSite" Text="Site" Clicked="btnSite_Clicked"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnNewCable" Text="New Cable" Clicked="gotoFOCablePage"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnPullCable" Text="Pull a cable" Clicked="btnPullCable_Clicked"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnSpliceCable" Text="Splice a cable" Clicked="btnSpliceCable_Clicked"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnTerminateCable" Text="Terminate a fiber" Clicked="btnTerminate_Clicked"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnInstallDev" Text="Install devices" Clicked="btnInstallDev_Clicked"  HorizontalOptions="FillAndExpand"/>
-            <Button x:Name="btnOTDRtest" Text="Perform OTDR test" Clicked="OTDR_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Label Text="As Built Documents" FontSize="Large" HorizontalOptions="Center" Padding="0,20,0,20"/>
+
+            <Button x:Name="btnSite" Text="Site" Clicked="btnSite_Clicked"  HorizontalOptions="FillAndExpand" Padding="20"/>
+            <Button x:Name="btnTraceMenu" Text="Trace Fiber" Clicked="OpenTraceMenu"  HorizontalOptions="FillAndExpand" Padding="20"/>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

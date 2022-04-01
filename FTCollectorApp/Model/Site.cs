@@ -33,6 +33,6 @@ namespace FTCollectorApp.Model
         public string GpsTime { get; set; }
 
 
-        //public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

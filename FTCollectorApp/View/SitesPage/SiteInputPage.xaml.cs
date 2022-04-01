@@ -63,7 +63,7 @@ namespace FTCollectorApp.View.SitesPage
 
 
         private bool TagNumberMatch = false;
-
+        private bool TagNumberExisted = false;
 
 
         public SiteInputPage()
@@ -218,29 +218,40 @@ namespace FTCollectorApp.View.SitesPage
         {
             if (TagNumberMatch)
             {
-                if (selectedMajorType.Equals("Building"))
+                if(TagNumberExisted)
+                {
+                    var OkAnswer = await DisplayAlert("Please Confirm", "Update existed Tag Number ? ", "OK", "Cancel");
+                    if (OkAnswer)
+                        await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                    else
+                        return;
+                }
+                else // create new tag
                 {
                     await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                }
+
+                if (selectedMajorType.Equals("Building"))
+                {
                     await Navigation.PushAsync(new BuildingSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Cabinet"))
                 {
-                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     await Navigation.PushAsync(new CabinetSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Pull Box"))
                 {
-                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     await Navigation.PushAsync(new PullBoxSitePage(selectedMinorType, entryTagNum.Text));
                 }
                 else if (selectedMajorType.Equals("Structure"))
                 {
-                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     await Navigation.PushAsync(new StructureSitePage(selectedMinorType, entryTagNum.Text));
                 }
             }
             else
-               await  DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
+            {
+                await DisplayAlert("Warning", "Re enter Tag number correctly", "OK");
+            }
         }
 
         private async void btnGPSOffset_Clicked(object sender, EventArgs e)
@@ -302,10 +313,7 @@ namespace FTCollectorApp.View.SitesPage
         private async void entryTagNum_TextChanged(object sender, EventArgs e)
         {
             if (TagNumbers.Contains(entryTagNum.Text))
-            {
-                await DisplayAlert("Warning", $"Tag {entryTagNum.Text} already taken", "OK");
-                entryTagNum.Text = "";
-            }
+                TagNumberExisted = true;
         }
 
         private void entryTagNum2_TextChanged(object sender, EventArgs e)
@@ -313,7 +321,7 @@ namespace FTCollectorApp.View.SitesPage
             if (entryTagNum.Text.Equals(entryTagNum2.Text))
             {
                 stsReEnter.Text = "Match!";
-                stsReEnter.TextColor = Color.Blue;
+
                 btnRecordGPS.IsEnabled = true;
                 btnGPSOffset.IsEnabled = true;
                 TagNumberMatch = true;
@@ -321,7 +329,7 @@ namespace FTCollectorApp.View.SitesPage
             else
             {
                 stsReEnter.Text = "Check Again Tag";
-                stsReEnter.TextColor = Color.Red;
+
                 btnRecordGPS.IsEnabled = false;
                 btnGPSOffset.IsEnabled = false;
             }

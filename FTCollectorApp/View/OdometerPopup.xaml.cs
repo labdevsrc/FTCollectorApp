@@ -1,4 +1,5 @@
-﻿using FTCollectorApp.Service;
+﻿using FTCollectorApp.Model;
+using FTCollectorApp.Service;
 using FTCollectorApp.View.SitesPage;
 using Rg.Plugins.Popup.Services;
 using System;
@@ -29,7 +30,10 @@ namespace FTCollectorApp.View
                 bool answer = await DisplayAlert("Confirm", "Confirm and go to Site menu page?", "OK", "Cancel");
                 if (answer)
                 {
-                    await Navigation.PushAsync(new AsBuiltDocMenu());
+                    if (Session.stage =="A")
+                        await Navigation.PushAsync(new AsBuiltDocMenu());
+                    if (Session.stage == "I")
+                        await Navigation.PushAsync(new MainMenuInstall());
                 }
                 //await Task.Delay(500);
                 await PopupNavigation.Instance.PopAsync(true);

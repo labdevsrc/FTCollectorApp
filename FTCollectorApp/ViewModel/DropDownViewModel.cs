@@ -12,6 +12,24 @@ namespace FTCollectorApp.ViewModel
 {
     public class DropDownViewModel
     {
+        // Splice Fiber (SpliceFiberPage) - start
+        public ObservableCollection<Site> SitebyJobOwnerCreated
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Site>();
+                    var table = conn.Table<Site>().
+                        Where(a => (a.JobKey == Session.jobkey) && (a.OWNER_CD == Session.ownerCD) && (a.CreatedBy == Session.uid)).OrderBy(a => a.TagNumber).ToList();
+                    return new ObservableCollection<Site>(table);
+                }
+            }
+        }
+
+        // Splice Fiber (SpliceFiberPage) - end
+
+
         // Duct Page - start
         public ObservableCollection<DuctType> DuctMaterialList
         {
@@ -316,6 +334,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        // "select cable_id from a_fiber_cable where OWNER_CD='$ownerCD'"
         public ObservableCollection<AFiberCable> aFiberCableList
         {
             get

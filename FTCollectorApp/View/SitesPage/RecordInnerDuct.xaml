@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"             
+             x:Class="FTCollectorApp.View.SitesPage.RecordInnerDuct">
+    <ContentPage.Content>
+        <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+                <Label Text="Record Inner Ducts"  HorizontalOptions="Center" FontSize="Large" />
+
+                <Label Text="Host Tag Number "  />
+                <local:BorderColorEntry x:Name="txtHostTagNumber" IsEnabled="False"/>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -139,6 +139,12 @@ namespace FTCollectorApp.View.SitesPage
         {
             IsHaveSunShield =  pHaveSunShield.SelectedIndex == -1 ? 0 : pHaveSunShield.SelectedIndex;
             IsHasGround = pHasGround.SelectedIndex == -1 ? 0 : pHasGround.SelectedIndex;
+            if(pHasKey.SelectedIndex != -1)
+            {
+                // show key type entry when haskey = Y
+                pKeyType.IsVisible = pHasKey.SelectedIndex == 1 ? true : false;
+                txtType.IsVisible = pHasKey.SelectedIndex == 1 ? true : false;
+            }
             IsHasKey = pHasKey.SelectedIndex == -1 ? 0 : pHasKey.SelectedIndex;
             KeyTypeSelected = pKeyType.SelectedIndex == -1 ? 0 : pKeyType.SelectedIndex;
             //DirectionTravel = pDirectionTravel.SelectedIndex == -1 ? 0 : pDirectionTravel.SelectedIndex;

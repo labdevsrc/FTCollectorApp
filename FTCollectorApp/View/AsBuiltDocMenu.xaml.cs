@@ -32,35 +32,9 @@ namespace FTCollectorApp.View
             Navigation.PushAsync(new SiteInputPage());
         }
 
-
-        private void gotoFOCablePage(object sender, EventArgs e)
+        private void OpenTraceMenu(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new FiberOpticCablePage());
-        }
-
-        private void btnPullCable_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new PullCablePage());
-        }
-
-        private void btnSpliceCable_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new SpliceFiberPage());
-        }
-
-        private void btnTerminate_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new TerminateFiber());
-        }
-
-        private void btnInstallDev_Clicked(object sender, EventArgs e)
-        {
-
-        }
-
-        private void OTDR_Clicked(object sender, EventArgs e)
-        {
-
+            Navigation.PushAsync(new TraceFiberMenu());
         }
     }
 }
