@@ -1,5 +1,6 @@
 ﻿using FTCollectorApp.Model;
 using FTCollectorApp.Service;
+using FTCollectorApp.Utils;
 using FTCollectorApp.View.Utils;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
@@ -76,6 +77,8 @@ namespace FTCollectorApp.View.SitesPage
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            var speaker = DependencyService.Get<ITextToSpeech>();
+            speaker?.Speak("New Site");
 
             IsBusy = true;
             Console.WriteLine("Connection : " + Connectivity.NetworkAccess.ToString());
@@ -216,20 +219,23 @@ namespace FTCollectorApp.View.SitesPage
 
         private async void btnRecordGPS_Clicked(object sender, EventArgs e)
         {
+            string result = String.Empty;
             if (TagNumberMatch)
             {
                 if(TagNumberExisted)
                 {
                     var OkAnswer = await DisplayAlert("Please Confirm", "Update existed Tag Number ? ", "OK", "Cancel");
                     if (OkAnswer)
-                        await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                        result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                     else
                         return;
                 }
                 else // create new tag
                 {
-                    await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                    result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                 }
+
+
 
                 if (selectedMajorType.Equals("Building"))
                 {

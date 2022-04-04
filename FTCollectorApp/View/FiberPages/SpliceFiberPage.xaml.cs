@@ -1,4 +1,8 @@
-﻿using System;
+﻿using FTCollectorApp.Model;
+using FTCollectorApp.Model.Reference;
+using FTCollectorApp.Service;
+using FTCollectorApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,6 +48,8 @@ namespace FTCollectorApp.View.FiberPages
         }
 
         string selectedSiteType, selectedSiteName, fromCable, toCable;
+        string fromBuffer, tobuffer, fromfiber, tofiber;
+        string fromSheathMark, fromSheathMarkEom, toSheathMark, toSheathMarkEom, toChassisMark, toChassisMarkEom;
         private void OnIndexChanged(object sender, EventArgs e)
         {
             if (pSiteType.SelectedIndex != -1)
@@ -68,13 +74,14 @@ namespace FTCollectorApp.View.FiberPages
                 var selected = pToCable.SelectedItem as AFiberCable;
                 toCable = selected.AFRKey;
             }
-            fromSheathMark = pFromSheathMark.SelectedIndex == -1 ? "0" : pFromSheathMark.SelectedIndex;
-            fromSheathMarkEom = pFromSheathMarkEom.SelectedIndex == -1 ? "0" : pFromSheathMarkEom.SelectedIndex;
-            toSheathMark = pToSheathMark.SelectedIndex == -1 ? "0" : pToSheathMark.SelectedIndex;
-            toSheathMarkEom = pToSheathMarkEom.SelectedIndex == -1 ? "0" : pToSheathMarkEom.SelectedIndex;
+            fromSheathMark = pFromSheathMark.SelectedIndex == -1 ? "0" : pFromSheathMark.SelectedIndex.ToString();
+            fromSheathMarkEom = pFromSheathMarkEom.SelectedIndex == -1 ? "0" : pFromSheathMarkEom.SelectedIndex.ToString();
+            toSheathMark = pToSheathMark.SelectedIndex == -1 ? "0" : pToSheathMark.SelectedIndex.ToString();
+            toSheathMarkEom = pToSheathMarkEom.SelectedIndex == -1 ? "0" : pToSheathMarkEom.SelectedIndex.ToString();
 
-            toChassisMark = pToChassisMark.SelectedIndex == -1 ? "0" : pToChassisMark.SelectedIndex;
-            toChassisMarkEom = pToChassisMarkEom.SelectedIndex == -1 ? "0" : pToChassisMarkEom.SelectedIndex;
+            toChassisMark = pToChassisMark.SelectedIndex == -1 ? "0" : pToChassisMark.SelectedIndex.ToString();
+            toChassisMarkEom = pToChassisMarkEom.SelectedIndex == -1 ? "0" : pToChassisMarkEom.SelectedIndex.ToString();
+
 
 
         }
@@ -141,7 +148,7 @@ namespace FTCollectorApp.View.FiberPages
         {
             var KVPair = keyvaluepair();
             await CloudDBService.PostSaveSplice(KVPair);
-            btnRecDucts.IsEnabled = true;
+
         }
     }
 }

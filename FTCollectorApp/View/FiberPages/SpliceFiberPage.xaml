@@ -7,7 +7,8 @@
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <ScrollView>
                     <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
-                        <Label Text="Building" FontSize="Large" HorizontalOptions="Center"/>
+                        <Label Text="Fiber Splice" FontSize="Large" HorizontalOptions="Center"/>
+                        <Label Text="Site" Padding="5" />
                         <local:Dropdown x:Name="pTagNumber" SelectedIndexChanged="OnIndexChanged" ItemsSource="{Binding SitebyJobOwnerCreated}"
                             ItemDisplayBinding =" {Binding TagNumber}" />
 
@@ -45,6 +46,6 @@
                     </StackLayout>
                 </ScrollView>
             </StackLayout>
-                    </AbsoluteLayout>    
+          </AbsoluteLayout>    
     </ContentPage.Content>
 </ContentPage>

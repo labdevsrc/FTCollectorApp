@@ -12,6 +12,24 @@ namespace FTCollectorApp.ViewModel
 {
     public class DropDownViewModel
     {
+        // Racks Page - start
+        
+        public ObservableCollection<RackType> RackTypeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<RackType>();
+                    var table = conn.Table<RackType>().ToList();
+                    return new ObservableCollection<RackType>(table);
+                }
+            }
+        }
+
+        // Racks Page - end
+
+
         // Splice Fiber (SpliceFiberPage) - start
         public ObservableCollection<Site> SitebyJobOwnerCreated
         {
@@ -20,9 +38,12 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<Site>();
-                    var table = conn.Table<Site>().
-                        Where(a => (a.JobKey == Session.jobkey) && (a.OWNER_CD == Session.ownerCD) && (a.CreatedBy == Session.uid)).OrderBy(a => a.TagNumber).ToList();
-                    return new ObservableCollection<Site>(table);
+                    var ownerid = Session.uid.ToString();
+                    var table = conn.Table<Site>().ToList();
+                    var table2 = table.
+                        Where(a => (a.JobKey == Session.jobkey) && (a.OWNER_CD == Session.ownerCD)).OrderBy(a => a.TagNumber);
+                    Console.WriteLine();
+                    return new ObservableCollection<Site>(table2);
                 }
             }
         }
@@ -97,6 +118,9 @@ namespace FTCollectorApp.ViewModel
             }
         }
         // Duct Page - end
+
+
+
 
         public ObservableCollection<EquipmentType> EquipmentTypes
         {
@@ -330,6 +354,32 @@ namespace FTCollectorApp.ViewModel
                         col.DevTypeDesc = HttpUtility.HtmlDecode(col.DevTypeDesc); // should use for escape char "
                     }
                     return new ObservableCollection<DevType>(table);
+                }
+            }
+        }
+
+        /// <summary>
+        ///  This list is for Cabinet Site Page input
+        /// </summary>
+
+        public ObservableCollection<ModelDetail> ModelDetailList
+        {
+            get
+            {
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ModelDetail>();
+                    var table = conn.Table<ModelDetail>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
+                        if (col.ModelCode1 == "")
+                            col.ModelCode1 = col.ModelCode2;
+                        if (col.ModelCode2 == "")
+                            col.ModelCode2 = col.ModelCode1;
+                    }
+                    return new ObservableCollection<ModelDetail>(table);
                 }
             }
         }

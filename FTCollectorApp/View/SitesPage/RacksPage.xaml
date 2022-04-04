@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.RacksPage">
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Text="Racks" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="Enter rack number" />
+            <local:Dropdown x:Name="pRackNum" />
+            <Label Text="Type"/>
+            <Picker  ItemsSource="{Binding RackTypeList}" ItemDisplayBinding="{Binding RackMaterialDesc}" x:Name="pType"
+                     HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+            <Label Text="Front Back "/>
+            <Picker x:Name="pFrontBack"
+                     HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+
+            <Label Text="Orientation"/>
+            <Picker  x:Name="pOrientation" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+            <Label Text="Manufacturer"/>
+            <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
+                     HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+            <Label Text="Model"/>
+            <local:Dropdown  ItemsSource="{Binding ModelList}" ItemDisplayBinding="{Binding DevTypeDesc}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand"/>
+
+            <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
+                <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
+                <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
+                <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
+                <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="entryHeight"/>
+                <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="entryDepth"/>
+                <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth"/>
+            </Grid>
+            <Label Text="Y Pos"/>
+            <Label Text="X Pos"/>
+            <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos"/>
+            <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos"/>
+
+
+            <Button Text="Submit Rack" Padding="0,10,0,10" Clicked="OnClicked"/>
+            <Button Text="Finished Documenting Racks" Padding="0,10,0,10" Clicked="ExitPage"/>
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

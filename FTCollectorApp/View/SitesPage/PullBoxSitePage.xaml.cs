@@ -307,8 +307,18 @@ namespace FTCollectorApp.View.SitesPage
         private async void OnClicked(object sender, EventArgs e)
         {
             var KVPair = keyvaluepair();
-            await CloudDBService.PostSaveBuilding(KVPair);
+            var result = await CloudDBService.PostSaveBuilding(KVPair);
+            if (result.Equals("OK"))
+            {
+                await DisplayAlert("Success", "Uploading Data Done", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Warning", result, "OK");
+            }
             btnRecDucts.IsEnabled = true;
+            btnRecRacks.IsEnabled = true;
+
         }
 
 
@@ -317,9 +327,9 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnRecRacks_Clicked(object sender, EventArgs e)
+        private async void btnRecRacks_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new RacksPage());
         }
 
         private void btnTracer_Clicked(object sender, EventArgs e)

@@ -103,7 +103,7 @@
                             <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pHasGround"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pHasKey"/>
                             <Label Grid.Row="2" Grid.Column="0" Text="Key Type" x:Name="txtType" IsVisible="false"/>
-                            <local:Dropdown Grid.Row="3" Grid.Column x:Name="pKeyType" IsVisible="false" />
+                            <local:Dropdown Grid.Row="3" Grid.ColumnSpan="3"  x:Name="pKeyType" IsVisible="false" />
                             <Label Grid.Row="4" Grid.Column="0" Text="Direction of Travel"/>
                             <Label Grid.Row="4" Grid.Column="1" Text="Is site in a clear Zone?"/>
                             <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>

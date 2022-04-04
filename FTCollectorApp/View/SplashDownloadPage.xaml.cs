@@ -115,6 +115,7 @@ namespace FTCollectorApp.View
 
 
                 var contentDevType = await CloudDBService.GetDevType(); //devtype
+                var contentModelDetail = await CloudDBService.GetModelDetail(); //model
                 var contentRackNumber = await CloudDBService.GetRackNumber();
                 var contentRackType = await CloudDBService.GetRackType(); //racktype
                 txtLoading.Text = "Downloading code_fiber_sheath_type table";
@@ -233,6 +234,16 @@ namespace FTCollectorApp.View
                     conn.CreateTable<DevType>();
                     conn.DeleteAll<DevType>();
                     conn.InsertAll(contentDevType);
+
+                    conn.CreateTable<ModelDetail>();
+                    conn.DeleteAll<ModelDetail>();
+                    conn.InsertAll(contentModelDetail);
+
+
+                    
+
+
+
 
                     conn.CreateTable<RackNumber>();
                     conn.DeleteAll<RackNumber>();

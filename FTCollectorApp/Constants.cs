@@ -23,6 +23,8 @@ namespace FTCollectorApp
         public const string UpdateAfiberCableTableUrl = "xFiberOpticCableSave.php";
         public const string PostDuctTrace = "ajaxSaveduct.php";
         public const string GetBuildingsParamUrl = "getBuildingEntries.php";
+        public const string PostSplice = "ajaxSaveSplice.php";
+        public const string SaveRacks = "ajaxSaveRack.php";
         //////////////////// AWS S3 params ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";
 

@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SQLite;
+using System.Collections.ObjectModel;
+using System.Web;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -26,6 +28,29 @@ namespace FTCollectorApp.View.SitesPage
 
         string Notes, SiteType;
         string InstalledAt, Manufactured;
+
+
+        public ObservableCollection<ModelDetail> ModelDetailList
+        {
+            get
+            {
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ModelDetail>();
+                    var table = conn.Table<ModelDetail>().Where(a=> a.ManufKey == ManufacturerKeySelected).ToList();
+                    foreach (var col in table)
+                    {
+                        col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
+                        if (col.ModelCode1 == "") // sometimes this model entri is null
+                            col.ModelCode1 = col.ModelCode2;
+                        if (col.ModelCode2 == "")
+                            col.ModelCode2 = col.ModelCode1;
+                    }
+                    return new ObservableCollection<ModelDetail>(table);
+                }
+            }
+        }
 
         public CabinetSitePage(string minorType, string tagNumber)
         {
@@ -124,8 +149,10 @@ namespace FTCollectorApp.View.SitesPage
         int IsSiteClearZone;
         int KeyTypeSelected = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
+
+
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
-        string ManufacturerKeySelected, ModelKeySelected;
+        string ManufacturerKeySelected, ModelKeySelected, ModelDetailSelected;
         private void OnItemSelectedIndexChange(object sender, EventArgs e)
         {
             IsHaveSunShield = pHaveSunShield.SelectedIndex == -1 ? 0 : pHaveSunShield.SelectedIndex;
@@ -189,13 +216,25 @@ namespace FTCollectorApp.View.SitesPage
             {
                 var selected = pManufacturer.SelectedItem as Manufacturer;
                 ManufacturerKeySelected = selected.ManufKey;
+                pModel.ItemsSource = ModelDetailList;
+
             }
+
+           // if (pModel.SelectedIndex != -1)
+           // {
+           //     var selected = pModel.SelectedItem as DevType;
+           //     ModelKeySelected = selected.DevTypeKey;
+           // }
 
             if (pModel.SelectedIndex != -1)
             {
-                var selected = pModel.SelectedItem as DevType;
-                ModelKeySelected = selected.DevTypeKey;
+                var selected = pModel.SelectedItem as ModelDetail;
+                ModelDetailSelected = selected.ModelKey;
+                entryWidth.Text = selected.width;
+                entryDepth.Text = selected.depth;
+                entryHeight.Text = selected.height;
             }
+
 
         }
 
@@ -219,7 +258,6 @@ namespace FTCollectorApp.View.SitesPage
 
         List<KeyValuePair<string, string>> keyvaluepair()
         {
-
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),  // 2
@@ -311,8 +349,18 @@ namespace FTCollectorApp.View.SitesPage
         private async void OnClicked(object sender, EventArgs e)
         {
             var KVPair = keyvaluepair();
-            await CloudDBService.PostSaveBuilding(KVPair);
+            var result = await CloudDBService.PostSaveBuilding(KVPair);
+            if (result.Equals("OK"))
+            {
+                await DisplayAlert("Success", "Uploading Data Done", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Warning", result, "RETRY");
+
+            }
             btnRecDucts.IsEnabled = true;
+            btnRecRacks.IsEnabled = true;
 
         }
 
@@ -321,9 +369,19 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnRecRacks_Clicked(object sender, EventArgs e)
+        private async void btnRecRacks_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new RacksPage());
+            /*var KVPair = keyvaluepair();
+            var result = await CloudDBService.PostSaveRacks(KVPair);
+            if (result.Equals("OK"))
+            {
+                await DisplayAlert("Success", "Uploading Data Done", "OK");
+            }
+            else
+            {
+                await DisplayAlert("Warning", result, "OK");
+            }*/
         }
 
         private void btnTracer_Clicked(object sender, EventArgs e)
