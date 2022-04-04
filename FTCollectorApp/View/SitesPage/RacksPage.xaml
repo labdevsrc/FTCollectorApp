@@ -3,6 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.RacksPage">
     <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>        
+        
         <StackLayout Padding="20">
             <Label Text="Racks" FontSize="Large" HorizontalOptions="Center" />
             <Label Text="Enter rack number" />
@@ -39,7 +43,20 @@
 
             <Button Text="Submit Rack" Padding="0,10,0,10" Clicked="OnClicked"/>
             <Button Text="Finished Documenting Racks" Padding="0,10,0,10" Clicked="ExitPage"/>
-            
-        </StackLayout>
+
+                    </StackLayout>
+
+                </ScrollView>
+            </StackLayout>
+            <!--<StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>-->
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
