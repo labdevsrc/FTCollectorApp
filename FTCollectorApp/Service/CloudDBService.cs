@@ -560,6 +560,10 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<AFiberConnection>> GetFiberConnection() =>
             GetDropDownParamsAsync<IEnumerable<AFiberConnection>>("a_fiber_connection");
 
+        public static Task<IEnumerable<ChassisType>> GetChassisTypes() =>
+            GetDropDownParamsAsync<IEnumerable<ChassisType>>("code_chassis_type");
+
+
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -760,7 +764,67 @@ namespace FTCollectorApp.Service
             }
             return "Internet No Connection";
         }
+        
 
+        public static async Task<string> PostActiveDevice(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostActiveDevice Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    response = await client.PostAsync(Constants.SaveActiveDevice, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostActiveDevice] Response from  OK = 200 , content :" + isi);
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+            }
+            return "Internet No Connection";
+        }
         public static async Task<string> PostSaveRacks(List<KeyValuePair<string, string>> keyValues)
         {
 

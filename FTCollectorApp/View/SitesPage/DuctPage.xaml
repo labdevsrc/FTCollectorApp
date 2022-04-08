@@ -30,7 +30,7 @@
                              x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Color :" />
-                    <Picker ItemsSource="{Binding DuctColorCode}" 
+                    <Picker ItemsSource="{Binding DuctColorCode}" TextColor="{Binding ColorHex}"
                            ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" />
 
                     <Label Text="Duct Material :" />

@@ -63,12 +63,13 @@
                         <Label Text="Manufacturer"/>
                         <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Model"/>
-                        <local:Dropdown  ItemsSource="{Binding ModelList}" ItemDisplayBinding="{Binding DevTypeDesc}"
-                            x:Name="pModel" HorizontalOptions="FillAndExpand"/>
+                        <local:Dropdown ItemDisplayBinding="{Binding ModelNumber}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnChangeModel"/>
+
+                        <local:BorderColorEntry x:Name="modelDescription" />
 
 
-
-                        <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
+                        <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
                             <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
@@ -99,8 +100,8 @@
                         <Editor x:Name="editorNotes" Placeholder="Enter notes here" 
                                 HorizontalOptions="FillAndExpand" MaxLength="250"   />
 
-                        <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
-                            <Label Grid.Row="0" Grid.Column="0" Text="Does it have a sun shield"/>
+                        <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*,0.5*,*" ColumnDefinitions="*,*,*">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Have a sun shield"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pHaveSunShield"/>
@@ -126,7 +127,7 @@
 
                 </ScrollView>
             </StackLayout>
-            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+            <!--<StackLayout IsVisible="{Binding IsBusy}" Padding="12"
                  AbsoluteLayout.LayoutFlags="PositionProportional"
                  AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
 
@@ -134,7 +135,7 @@
 
                 <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
 
-            </StackLayout>
+            </StackLayout>-->
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

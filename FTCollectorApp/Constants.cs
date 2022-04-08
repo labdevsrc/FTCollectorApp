@@ -25,7 +25,10 @@ namespace FTCollectorApp
         public const string GetBuildingsParamUrl = "getBuildingEntries.php";
         public const string PostSplice = "ajaxSaveSplice.php";
         public const string SaveRacks = "ajaxSaveRack.php";
-        //////////////////// AWS S3 params ////////////////////////////////
+        public const string SaveActiveDevice = "ajaxSaveActiveDevice.php";
+
+
+        //////////////////// AWS S3 params - start ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";
 
         /*
@@ -46,5 +49,6 @@ namespace FTCollectorApp
         public const string BUCKET_REGION = "us-east-2";
         public const string ACCES_KEY_ID = "AKIAJTM6EJOVYMZEVPPQ";
         public const string SECRET_ACCESS_KEY = "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";
+        //////////////////// AWS S3 params - end ////////////////////////////////
     }
 }

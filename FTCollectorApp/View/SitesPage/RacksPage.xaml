@@ -2,6 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.RacksPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>    
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
@@ -24,10 +29,12 @@
             <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
                      HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
             <Label Text="Model"/>
-            <local:Dropdown  ItemsSource="{Binding ModelList}" ItemDisplayBinding="{Binding DevTypeDesc}"
-                            x:Name="pModel" HorizontalOptions="FillAndExpand"/>
+            <local:Dropdown ItemDisplayBinding="{Binding ModelNumber}"
+                x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnModelChanged"/>
 
-            <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
+            <local:BorderColorEntry x:Name="modelDescription" />
+
+            <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
                 <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
                 <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
                 <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
@@ -36,8 +43,9 @@
                 <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth"/>
             </Grid>
             <Label Text="Y Pos"/>
-            <Label Text="X Pos"/>
             <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos"/>
+
+            <Label Text="X Pos"/>
             <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos"/>
 
 

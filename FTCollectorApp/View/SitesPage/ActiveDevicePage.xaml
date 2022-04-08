@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.SitesPage.ActiveDevicePage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+                 Order="Primary"
+                 Priority="0" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <ScrollView>
+
+                    <StackLayout Padding="20">
+                        <Label Text="Active Device" FontSize="Large" />
+                        <Label Text="Host Tag #" />
+                        <local:BorderColorEntry x:Name="txtHostTagNumber" IsEnabled="False"/>
+                        <Label Text="Number" />
+                        <local:Dropdown x:Name="pNumber" SelectedIndexChanged="OnIndexChanged"/>
+                        <Label Text="Chassis Type" />
+                        <local:Dropdown x:Name="pChassisType" SelectedIndexChanged="OnIndexChanged" />
+                        <Label Text="Manufacturer"/>
+                        <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
+                                 HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+                        <WebView x:Name="webview" HeightRequest="500" WidthRequest="400" IsVisible="false"/>
+                        <Button Text="See pic" Clicked="SeePic" />
+                        <Label Text="Model"/>
+                        <local:Dropdown ItemDisplayBinding="{Binding ModelNumber}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnModelChanged"/>
+
+                        <local:BorderColorEntry x:Name="modelDescription" />
+
+                        <Label Text="Serial Number"/>
+                        <local:BorderEntry x:Name="txtSerialNum" />
+                        <Label Text="Enter manufactured" />
+                        <DatePicker x:Name="dateManufactured" HorizontalOptions="FillAndExpand" DateSelected="OnDateSelected"/>
+                        <Label Text="Installed at" />
+                        <DatePicker x:Name="dateInstalled" HorizontalOptions="FillAndExpand"  DateSelected="OnDateSelected"/>
+
+                        <Grid RowDefinitions="0.5*,*" ColumnDefinitions="*,*">
+                            <Label Text="RackNumber" />
+                            <local:Dropdown x:Name="pRackNumber" Grid.Column="1" />
+                            <Label Text="Rack Description" Grid.Column="1"/>
+                            <local:BorderColorEntry x:Name="RackDesc" Grid.Column="1" Grid.Row="1"/>                            
+                        </Grid>
+                        <Label Text="Enter Position"/>
+                        <local:Dropdown x:Name="pPosition" SelectedIndexChanged="OnIndexChanged"/>
+                        
+                        <Label Text="Slots / Blades / Trays"/>
+                        <local:Dropdown x:Name="pSlotBladeTray" SelectedIndexChanged="OnIndexChanged"/>
+                        
+                        <Label Text="Notes and Comment "/>
+                        <local:BorderEntry x:Name="sComment" />
+
+                        <Button Text="Click here to addd IP Address +" BorderColor="Transparent" BackgroundColor="Transparent" Scale="0.5"/>
+
+                        <Grid RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*,*,*,*,*,*,*" IsVisible="false" >
+                            <Label Text="IP Address" />
+                            <local:BorderEntry x:Name="IP1"  Grid.Row="1"/>
+                            <Label Text="." Grid.Column="1" Grid.Row="1"/>
+                            <local:BorderEntry x:Name="IP2" Grid.Column="2" Grid.Row="1"/>
+                            <Label Text="." Grid.Column="3" Grid.Row="1"/>
+                            <local:BorderEntry x:Name="IP3" Grid.Column="4" Grid.Row="1"/>
+                            <Label Text="." Grid.Column="5" Grid.Row="1"/>
+                            <local:BorderEntry x:Name="IP4" Grid.Column="6" Grid.Row="1"/>
+
+                            <Label Text="Subnet Mask" Grid.Row="2" />
+                            <local:BorderEntry x:Name="Subnet1"  Grid.Row="3"/>
+                            <Label Text="." Grid.Column="1" Grid.Row="3"/>
+                            <local:BorderEntry x:Name="Subnet2" Grid.Column="2" Grid.Row="3"/>
+                            <Label Text="." Grid.Column="3" Grid.Row="3"/>
+                            <local:BorderEntry x:Name="Subnet3" Grid.Column="4" Grid.Row="3"/>
+                            <Label Text="." Grid.Column="5" Grid.Row="3"/>
+                            <local:BorderEntry x:Name="Subnet4" Grid.Column="6" Grid.Row="3"/>
+
+                            <Label Text="Gateway" Grid.Row="4" />
+                            <local:BorderEntry x:Name="GWIP1"  Grid.Row="5"/>
+                            <Label Text="." Grid.Column="1" Grid.Row="5"/>
+                            <local:BorderEntry x:Name="GWIP2" Grid.Column="2" Grid.Row="5"/>
+                            <Label Text="." Grid.Column="3" Grid.Row="5"/>
+                            <local:BorderEntry x:Name="GWIP3" Grid.Column="4" Grid.Row="5"/>
+                            <Label Text="." Grid.Column="5" Grid.Row="5"/>
+                            <local:BorderEntry x:Name="GWIP4" Grid.Column="6" Grid.Row="5"/>
+
+                            <Label Text="Protocol" Grid.Row="6" />
+                            <local:BorderEntry x:Name="txtProtocol" Grid.Column="1" Grid.Row="7"/>
+                        </Grid>
+
+
+                        <Button Text="Save and Continue" Clicked="btnSaveContinue"/>
+                        <Button Text="Ports" Clicked="btnGotoPortPage"/>
+                        <Button Text="Port Connection" Clicked="btnPortConn"/>
+                        <Button Text="Finished Active Devices" Clicked="btnExit"/>                        
+                     </StackLayout>
+
+                </ScrollView>
+            </StackLayout>
+            <!--<StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>-->
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

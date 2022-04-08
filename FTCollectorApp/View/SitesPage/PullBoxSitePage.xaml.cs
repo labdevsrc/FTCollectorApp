@@ -12,6 +12,8 @@ using FTCollectorApp.ViewModel;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.Service;
+using System.Collections.ObjectModel;
+using System.Web;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -26,6 +28,29 @@ namespace FTCollectorApp.View.SitesPage
 
         string Notes, SiteType;
         string InstalledAt, Manufactured;
+
+        public ObservableCollection<ModelDetail> ModelDetailList
+        {
+            get
+            {
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ModelDetail>();
+                    var table = conn.Table<ModelDetail>().Where(a => a.ManufKey == ManufacturerKeySelected).ToList();
+                    foreach (var col in table)
+                    {
+                        col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
+                        if (col.ModelCode1 == "") // sometimes this model entri is null
+                            col.ModelCode1 = col.ModelCode2;
+                        if (col.ModelCode2 == "")
+                            col.ModelCode2 = col.ModelCode1;
+                    }
+                    return new ObservableCollection<ModelDetail>(table);
+                }
+            }
+        }
+
 
         public PullBoxSitePage(string minorType, string tagNumber)
         {
@@ -129,8 +154,22 @@ namespace FTCollectorApp.View.SitesPage
 
         int KeyTypeSelected = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
+
+        private void OnMdelChanged(object sender, EventArgs e)
+        {
+            if (pModel.SelectedIndex != -1)
+            {
+                var selected = pModel.SelectedItem as ModelDetail;
+                modelDescription.Text = selected.ModelDescription;
+                ModelDetailSelected = selected.ModelKey;
+                entryWidth.Text = selected.width;
+                entryDepth.Text = selected.depth;
+                entryHeight.Text = selected.height;
+            }
+        }
+
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
-        string ManufacturerKeySelected, ModelKeySelected;
+        string ManufacturerKeySelected, ModelKeySelected, ModelDetailSelected;
         private void OnItemSelectedIndexChange(object sender, EventArgs e)
         {
             //IsHaveSunShield = pHaveSunShield.SelectedIndex == -1 ? 0 : pHaveSunShield.SelectedIndex;
@@ -194,13 +233,10 @@ namespace FTCollectorApp.View.SitesPage
             {
                 var selected = pManufacturer.SelectedItem as Manufacturer;
                 ManufacturerKeySelected = selected.ManufKey;
+                pModel.ItemsSource = ModelDetailList;
             }
 
-            if (pModel.SelectedIndex != -1)
-            {
-                var selected = pModel.SelectedItem as DevType;
-                ModelKeySelected = selected.DevTypeKey;
-            }
+
 
         }
 

@@ -38,7 +38,7 @@ namespace FTCollectorApp.View.SitesPage
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<ModelDetail>();
-                    var table = conn.Table<ModelDetail>().Where(a=> a.ManufKey == ManufacturerKeySelected).ToList();
+                    var table = conn.Table<ModelDetail>().Where(a=> a.ManufKey == ManufacturerKeySelected).OrderBy(b => b.ModelNumber).ToList();
                     foreach (var col in table)
                     {
                         col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
@@ -79,6 +79,7 @@ namespace FTCollectorApp.View.SitesPage
             entryTagNum.Text = tagNumber;
             pickerDotDisctrict.ItemsSource = DotDistrict;
             pickerElectSiteKey.ItemsSource = DotDistrict;
+            pRackCount.ItemsSource = DotDistrict;
             pickerHasPowerDisconnect.ItemsSource = YesNo;
             picker3rdpComms.ItemsSource = YesNo;
             pickerLaneClosure.ItemsSource = YesNo;
@@ -114,7 +115,7 @@ namespace FTCollectorApp.View.SitesPage
             // Cabinet didn't have Filter type and Filter size dropdown
             //pFilterType.SelectedIndexChanged += OnItemSelectedIndexChange; 
             //pFilterSize.SelectedIndexChanged += OnItemSelectedIndexChange;
-            pModel.SelectedIndexChanged += OnItemSelectedIndexChange; 
+            //pModel.SelectedIndexChanged += OnItemSelectedIndexChange; 
             pManufacturer.SelectedIndexChanged += OnItemSelectedIndexChange;
 
             Notes = editorNotes.Text;
@@ -131,6 +132,7 @@ namespace FTCollectorApp.View.SitesPage
             pickerHasPowerDisconnect.SelectedIndexChanged += OnItemSelectedIndexChange;
             pickerElectSiteKey.SelectedIndexChanged += OnItemSelectedIndexChange;
             picker3rdpComms.SelectedIndexChanged += OnItemSelectedIndexChange;
+            pRackCount.SelectedIndexChanged += OnItemSelectedIndexChange;
 
             dateManufactured.DateSelected += OnDateSelected;
             dateInstalled.DateSelected += OnDateSelected;
@@ -150,6 +152,19 @@ namespace FTCollectorApp.View.SitesPage
         int KeyTypeSelected = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
 
+        private void OnChangeModel(object sender, EventArgs e)
+        {
+            if (pModel.SelectedIndex != -1)
+            {
+                var selected = pModel.SelectedItem as ModelDetail;
+                ModelDetailSelected = selected.ModelKey;
+                modelDescription.Text = selected.ModelDescription;
+                entryWidth.Text = selected.width;
+                entryDepth.Text = selected.depth;
+                entryHeight.Text = selected.height;
+                Console.WriteLine();
+            }
+        }
 
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
         string ManufacturerKeySelected, ModelKeySelected, ModelDetailSelected;
@@ -217,24 +232,8 @@ namespace FTCollectorApp.View.SitesPage
                 var selected = pManufacturer.SelectedItem as Manufacturer;
                 ManufacturerKeySelected = selected.ManufKey;
                 pModel.ItemsSource = ModelDetailList;
-
+                Console.WriteLine();
             }
-
-           // if (pModel.SelectedIndex != -1)
-           // {
-           //     var selected = pModel.SelectedItem as DevType;
-           //     ModelKeySelected = selected.DevTypeKey;
-           // }
-
-            if (pModel.SelectedIndex != -1)
-            {
-                var selected = pModel.SelectedItem as ModelDetail;
-                ModelDetailSelected = selected.ModelKey;
-                entryWidth.Text = selected.width;
-                entryDepth.Text = selected.depth;
-                entryHeight.Text = selected.height;
-            }
-
 
         }
 
@@ -258,7 +257,18 @@ namespace FTCollectorApp.View.SitesPage
 
         List<KeyValuePair<string, string>> keyvaluepair()
         {
-
+      /*url: 'ajaxSavecabinet.php',      
+      data: {"time":getCurtime(),"owner2": owner2,"tag": tag2,"site2": site2,"sitname2": sitname2,
+      "mfd2": mfd2,"mfr2": mfr2,"mod2": mod2,"pic2": pic2,"rs2": rs2,"height2": height2,
+      "depth2": depth2,"width2": width2,"CLEAR_ZONE_IND2": CLEAR_ZONE_IND2,"longitude2": longitude2,
+      "lattitude2": lattitude2,"intersect2": intersect2,"material2": material2,"mounting2": mounting2,
+      "offilter2": offilter2,"fltrsize2": fltrsize2,"sunshield2": sunshield2,"installed2": installed2
+      ,"comment2": comment2,"etc2": etc2,"fosc2": fosc2,"vault2": vault2,"trlane2": trlane2,
+      "bucket2": bucket2,"type2":type2,"serialno":serialno,"ground":ground,"key":key,"ktype":ktype,
+      "traveldir":traveldir,"roadway":roadway,"accuracy":accuracy,"altitude":altitude,"loct":loct,"ctype":ctype,
+      "laneclosure":laneclosure,"dotdis":dotdis,"powr":powr,"elecsite":elecsite,"comm":comm,"commprovider":commprovider,"sitaddr":sitaddr,"udsowner":udsowner,"orientationid":orientationid,"otag":otag},*/
+            
+            
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),  // 2
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 2

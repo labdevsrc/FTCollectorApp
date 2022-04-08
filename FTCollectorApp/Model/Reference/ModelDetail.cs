@@ -16,5 +16,8 @@ namespace FTCollectorApp.Model.Reference
         public string height { get; set; }
         public string width { get; set; }
         public string depth { get; set; }
+        public string ModelDescription { get; set; }
+        public string PictUrl { get; set; }
+        
     }
 }

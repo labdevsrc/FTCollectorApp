@@ -374,11 +374,13 @@ namespace FTCollectorApp.ViewModel
                     foreach (var col in table)
                     {
                         col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
+                        col.ModelDescription = HttpUtility.HtmlDecode(col.ModelDescription); // should use for escape char 
                         if (col.ModelCode1 == "")
                             col.ModelCode1 = col.ModelCode2;
                         if (col.ModelCode2 == "")
                             col.ModelCode2 = col.ModelCode1;
                     }
+                    Console.WriteLine();
                     return new ObservableCollection<ModelDetail>(table);
                 }
             }

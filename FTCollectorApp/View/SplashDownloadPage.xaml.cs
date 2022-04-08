@@ -156,7 +156,7 @@ namespace FTCollectorApp.View
 
                 var codeColor = await CloudDBService.GetColorCode(); //code_colors
 
-
+                var contentChassisType = await CloudDBService.GetChassisTypes(); //code_colors
 
                 Thread.Sleep(5000);
                 txtLoading.Text = "Download done! Populating SQLite...";
@@ -265,6 +265,10 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<Chassis>();
                     conn.InsertAll(contentChassis);
 
+                    conn.CreateTable<ChassisType>();
+                    conn.DeleteAll<ChassisType>();
+                    conn.InsertAll(contentChassisType);
+
                     conn.CreateTable<CableStructure>();
                     conn.DeleteAll<CableStructure>();
                     conn.InsertAll(contentCabStructure);
@@ -343,7 +347,10 @@ namespace FTCollectorApp.View
             }
             catch(Exception e)
             {
-                await DisplayAlert("Warning", "Error during download database","RETRY");
+                bool answer = await DisplayAlert("Warning", "Error during download database","RETRY", "CLOSE");
+                if (answer)
+                    DownloadTables();
+
                 Console.WriteLine(e.ToString());
 
             }

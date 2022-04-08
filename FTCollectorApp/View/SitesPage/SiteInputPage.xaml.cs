@@ -56,6 +56,7 @@ namespace FTCollectorApp.View.SitesPage
             }
         }
 
+
         private ObservableCollection<Site> Sites = new ObservableCollection<Site>();
         private ObservableCollection<string> TagNumbers;
         string selectedMinorType;
@@ -131,18 +132,19 @@ namespace FTCollectorApp.View.SitesPage
                     conn.CreateTable<Site>();
                     var sites = conn.Table<Site>().ToList();
                     Sites = new ObservableCollection<Site>(sites);
-                    //listviewPost.ItemsSource = listPost; //= new ObservableCollection<Post>(posts);
+                    /*Console.WriteLine();
+
+                    var table = Sites.GroupBy(b => b.TagNumber).Select(g => g.First()).ToList();
+                    foreach (var col in table)
+                    {
+                        TagNumbers.Add(col.TagNumber);
+                    }
+                    Console.WriteLine();*/
 
                 }
             }
             IsBusy = false;
 
-
-            //var majorTypes = CodeSiteTypes.GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
-            //foreach (var majorType in majorTypes)
-            // majorTypePicker.Items.Add(majorType.MajorType);
-            
-            // majorTypePicker.ItemsSource = MajorTypes;  // improve bugs , when back
 
             List<string> tagnumbers = new List<string>();
             var tagNumbers = Sites.GroupBy(b => b.TagNumber).Select(g => g.First()).ToList();
@@ -152,11 +154,8 @@ namespace FTCollectorApp.View.SitesPage
             }
             TagNumbers = new ObservableCollection<string>(tagnumbers);
 
-            //await LocateService.GetLocation(); // get current location
-            //await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
-            stagePicker.Text = Session.stage;
-            //stagePicker.Items.Add(Session.stage);
 
+            stagePicker.Text = Session.stage;
             Device.StartTimer(TimeSpan.FromSeconds(5), () => OnTimerTick());
 
 
@@ -181,6 +180,14 @@ namespace FTCollectorApp.View.SitesPage
                 }
             });
             return true;
+        }
+
+        protected override void OnDisappearing()
+        {
+            // need to stop timer here
+
+
+            base.OnDisappearing();
         }
 
         private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
@@ -319,7 +326,12 @@ namespace FTCollectorApp.View.SitesPage
         private async void entryTagNum_TextChanged(object sender, EventArgs e)
         {
             if (TagNumbers.Contains(entryTagNum.Text))
+            {
+                Console.WriteLine();
+                Session.site_key = Sites.Where(a => (a.TagNumber == entryTagNum.Text)).Select(b => b.SiteKey).First();
+                Console.WriteLine();
                 TagNumberExisted = true;
+            }
         }
 
         private void entryTagNum2_TextChanged(object sender, EventArgs e)
