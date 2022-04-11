@@ -30,10 +30,13 @@
                              x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Color :" />
-                    <Picker ItemsSource="{Binding DuctColorCode}" TextColor="{Binding ColorHex}"
-                           ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" />
+                    <Button x:Name="btnSelectColor" Command="{Binding ShowPopupCommand}" BackgroundColor="{Binding SelectedColor.ColorHex}"
+                            Text="{Binding SelectedColor.ColorName}" TextColor="Black"/>                        
+                    <!--<Picker ItemsSource="{Binding DuctColorCode}" TextColor="{Binding ColorHex}"
+                           ItemDisplayBinding ="{Binding ColorName}" x:Name="pDuctColor" />-->
 
-                    <Label Text="Duct Material :" />
+
+                        <Label Text="Duct Material :" />
                     <local:Dropdown  ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
                              x:Name="pDuctMaterial" HorizontalOptions="FillAndExpand"/>
 

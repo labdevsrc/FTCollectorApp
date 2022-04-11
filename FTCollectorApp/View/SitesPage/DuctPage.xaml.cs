@@ -13,6 +13,8 @@ using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.Model;
 using FTCollectorApp.Service;
+using Rg.Plugins.Popup.Services;
+using System.Windows.Input;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -27,8 +29,8 @@ namespace FTCollectorApp.View.SitesPage
         {
             InitializeComponent();
             Console.WriteLine();
-            BindingContext = new DropDownViewModel();
-
+            //BindingContext = new DropDownViewModel();
+            BindingContext = new DuctViewModel();
             for (int i = 0; i < 10; i++)
             {
                 OneToTen.Add(i.ToString());
@@ -49,13 +51,20 @@ namespace FTCollectorApp.View.SitesPage
             hasInnerDuct.ItemsSource = YesNo;
             hasTraceWire.ItemsSource = YesNo;
             percentOpen.ItemsSource = SixtyToHundred;
+
+            if (string.IsNullOrEmpty(Session.colorHex))
+                Session.colorHex = "FFFFFF";
+            //SelectedColor = new ColorCode() { ColorHex = "FFFFFF" };
+
         }
+
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             txtHostTagNumber.Text = Session.tag_number;
 
+            //btnSelectColor.BackgroundColor = Color.FromHex(Session.colorHex);
         }
 
 
@@ -70,6 +79,9 @@ namespace FTCollectorApp.View.SitesPage
 
 
         string IsPlugged, IsOpen, HasPullTape, HasInnerDuct, HasTraceWire;
+
+
+
         int PercentageOpen, selectedDirCnt;
 
         List<KeyValuePair<string, string>> keyvaluepair()
@@ -98,6 +110,8 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
+        public ColorCode SelectedDuctColor;
+
         private void OnIndexChanged(object sender, EventArgs e)
         {
             if (pDirection.SelectedIndex != -1)
@@ -117,12 +131,13 @@ namespace FTCollectorApp.View.SitesPage
                 selectedDuctSize = selected.DuctKey;
             }
 
-            if (pDuctColor.SelectedIndex != -1)
+            /*if (pDuctColor.SelectedIndex != -1)
             {
-                var selected = pDuctColor.SelectedItem as ColorCode;
-                pDuctColor.TextColor = Color.FromHex(selected.ColorHex);
-                selectedDuctColor = selected.ColorKey;
-            }
+                SelectedDuctColor = pDuctColor.SelectedItem as ColorCode;
+                pDuctColor.TitleColor = Color.FromHex(SelectedDuctColor.ColorHex);
+                selectedDuctColor = SelectedDuctColor.ColorKey;
+
+            }*/
 
 
             if (pDuctUsed.SelectedIndex != -1)

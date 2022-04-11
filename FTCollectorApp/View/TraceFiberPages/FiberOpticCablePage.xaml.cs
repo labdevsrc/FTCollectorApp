@@ -152,7 +152,10 @@ namespace FTCollectorApp.View.TraceFiberPages
                     pModel.IsEnabled = false;
 
                 }
-
+                else
+                {
+                    //
+                }
 
             }
 

@@ -20,8 +20,10 @@
                 </Style.Triggers>
             </Style>
 
-            <Style TargetType="Entry">
-                
+
+            <Style TargetType="Picker" >
+                <Setter Property="TitleColor" Value="Blue" />
+                <Setter Property="TextColor" Value="Aquamarine" />
             </Style>
 
             <Color x:Key="blueColor">#1E90FF</Color>

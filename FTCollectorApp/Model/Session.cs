@@ -40,12 +40,16 @@ namespace FTCollectorApp.Model
         public static string tag_number { get; set; }
         public static string site_key { get; set; }
 
+        public static string colorHex { get; set; }
+
         public const string EventLogin = "1";
         public const string JOB_VERIFIED = "2";
         public const string CrewAssembled = "3";
         public const string LunchOut = "13";
         public const string LunchIn = "14";
         public const string ClockIn = "15";
+
+
         /* 1	employee login
         2	job verified
         3	crew assembled
