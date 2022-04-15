@@ -13,6 +13,7 @@ using FTCollectorApp.Model.Reference;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.Service;
 using System.Collections.ObjectModel;
+using FTCollectorApp.View.SitesPage.Fiber;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -337,9 +338,9 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnFiber_Clicked(object sender, EventArgs e)
+        private async void btnFiber_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new FiberMainMenu());
         }
 
         private async void btnRecDucts_Clicked(object sender, EventArgs e)

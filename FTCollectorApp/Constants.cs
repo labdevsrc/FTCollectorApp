@@ -23,9 +23,9 @@ namespace FTCollectorApp
         public const string UpdateAfiberCableTableUrl = "xFiberOpticCableSave.php";
         public const string PostDuctTrace = "ajaxSaveduct.php";
         public const string GetBuildingsParamUrl = "getBuildingEntries.php";
-        public const string PostSplice = "ajaxSaveSplice.php";
-        public const string SaveRacks = "ajaxSaveRack.php";
-        public const string SaveActiveDevice = "ajaxSaveActiveDevice.php";
+        public const string PostSplice = "ajaxSavesplice.php";
+        public const string SaveRacks = "ajaxSaverack.php";
+        public const string SaveActiveDevice = "ajaxSaveactivedevice.php";
 
 
         //////////////////// AWS S3 params - start ////////////////////////////////

@@ -72,9 +72,9 @@
 
                     <Button Text="Record Inner Duct" x:Name="btnRecInner" Clicked="btnRecInner_Clicked"/>
 
-                    <Button Text="Save and Start Tracing" x:Name="btnSaveStart" Clicked="btnSaveStart_Clicked"/>
+                    <Button Text="Save and Continue" x:Name="btnSaveStart" Clicked="btnSaveStart_Clicked"/>
 
-                    <Button Text="Finishe Duct Recording" x:Name="btnFinishDRect" Clicked="btnFinishDRect_Clicked"/>                        
+                    <Button Text="Finished Duct Recording" x:Name="btnFinishDRect" Clicked="btnFinishDRect_Clicked"/>                        
                     </StackLayout>
 
                 </ScrollView>

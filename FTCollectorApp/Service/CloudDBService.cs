@@ -882,10 +882,10 @@ namespace FTCollectorApp.Service
                     }
                 }
             }
-            return "Internet No Connection";
+            return "Fail to update";
         }
 
-        public static async Task PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
+        public static async Task<string> PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
         {
 
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
@@ -896,11 +896,21 @@ namespace FTCollectorApp.Service
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                response = await client.PostAsync(Constants.PostDuctTrace, content);
-                if (response.IsSuccessStatusCode)
+                
+                try
                 {
-                    var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
+                    response = await client.PostAsync(Constants.PostDuctTrace, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
+
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
                 }
             }
             else
@@ -936,6 +946,7 @@ namespace FTCollectorApp.Service
 
 
             }
+            return "Fail to update";
         }
     }
 

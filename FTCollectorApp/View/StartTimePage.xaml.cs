@@ -1,8 +1,10 @@
 ﻿using FTCollectorApp.Model;
+using FTCollectorApp.ViewModel;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,21 +21,17 @@ namespace FTCollectorApp.View
         public StartTimePage()
         {
             InitializeComponent();
-            
+            BindingContext = new SelectCrewViewModel();            
             crewnames = (ArrayList)Session.sessioncrew;
-
         }
 
-       
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
             Console.WriteLine("[StartTimePage] OnAppearing ");
 
-            //Button btnCrewLeader = new Button { Text = "Start Time for " + Session.crew_leader };
             stackLayout.Children.Clear();
-            //stackLayout.Children.Add(btnCrewLeader);
-            //btnCrewLeader.Clicked += (s, e) => OnClicked(Session.crew_leader);
 
             int cntCrew = 0;
             foreach (var cname in crewnames)

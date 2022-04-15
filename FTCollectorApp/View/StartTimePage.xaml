@@ -14,6 +14,20 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout x:Name="stackLayout" Padding="20" >
+            <ListView ItemsSource="{Binding CrewRoles}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="30">
+                                <Button BackgroundColor="Gray"  TextColor="White"
+                                       Text="{Binding CrewRoles.EmployeeName}"
+                                       Command="{Binding ShowStartTimePopUp}"
+                                       />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

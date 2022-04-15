@@ -14,6 +14,7 @@ using Xamarin.Forms.Xaml;
 using SQLite;
 using System.Collections.ObjectModel;
 using System.Web;
+using FTCollectorApp.View.SitesPage.Fiber;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -382,6 +383,7 @@ namespace FTCollectorApp.View.SitesPage
         private async void btnRecRacks_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new RacksPage());
+            btnActive.IsEnabled = true;
             /*var KVPair = keyvaluepair();
             var result = await CloudDBService.PostSaveRacks(KVPair);
             if (result.Equals("OK"))
@@ -399,9 +401,9 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnFiber_Clicked(object sender, EventArgs e)
+        private async void btnFiber_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new FiberMainMenu());
         }
 
         private async void btnRecDucts_Clicked(object sender, EventArgs e)

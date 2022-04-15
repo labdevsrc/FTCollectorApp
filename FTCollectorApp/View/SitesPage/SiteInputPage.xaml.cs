@@ -224,6 +224,17 @@ namespace FTCollectorApp.View.SitesPage
             }
         }
 
+        CodeSiteType _selectedMajorType;
+        public CodeSiteType SelectedMajorType
+        {
+            get => _selectedMajorType;
+            set
+            {
+                _selectedMajorType = value;
+                OnPropertyChanged(nameof(SelectedMajorType));
+            }
+        }
+
         private async void btnRecordGPS_Clicked(object sender, EventArgs e)
         {
             string result = String.Empty;
@@ -241,7 +252,6 @@ namespace FTCollectorApp.View.SitesPage
                 {
                     result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
                 }
-
 
 
                 if (selectedMajorType.Equals("Building"))
@@ -287,6 +297,9 @@ namespace FTCollectorApp.View.SitesPage
 
                 // after_code : more compact
                 var selected = majorTypePicker.SelectedItem as CodeSiteType;
+
+                SelectedMajorType = selected;
+
                 minorTypePicker.ItemsSource = CodeSiteTypes.Where(a => a.MajorType == selected.MajorType).ToList();
             }
         }

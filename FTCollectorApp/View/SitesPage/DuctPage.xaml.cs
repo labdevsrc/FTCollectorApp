@@ -25,6 +25,19 @@ namespace FTCollectorApp.View.SitesPage
         List<string> YesNo = new List<string>();
         List<string> SixtyToHundred = new List<string>();
 
+        public ICommand SendResultCommand { get; set; }
+        private string _result;
+        public string UpdateData
+        {
+            get => _result;
+            set
+            {
+                _result = value;
+                OnPropertyChanged(nameof(UpdateData));
+            }
+        }
+
+
         public DuctPage()
         {
             InitializeComponent();
@@ -52,9 +65,6 @@ namespace FTCollectorApp.View.SitesPage
             hasTraceWire.ItemsSource = YesNo;
             percentOpen.ItemsSource = SixtyToHundred;
 
-            if (string.IsNullOrEmpty(Session.colorHex))
-                Session.colorHex = "FFFFFF";
-            //SelectedColor = new ColorCode() { ColorHex = "FFFFFF" };
 
         }
 
@@ -185,15 +195,24 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnFinishDRect_Clicked(object sender, EventArgs e)
+        private async void btnFinishDRect_Clicked(object sender, EventArgs e)
         {
-
+            var KVPair = keyvaluepair();
+            var result = await CloudDBService.PostDuctTrace(KVPair);
+            if (result.Equals("OK"))
+            {
+                SendResultCommand?.Execute("OK");
+            }
         }
 
         private async void btnSaveStart_Clicked(object sender, EventArgs e)
         {
             var KVPair = keyvaluepair();
-            await CloudDBService.PostDuctTrace(KVPair);
+            var result = await CloudDBService.PostDuctTrace(KVPair);
+            if (result.Equals("OK"))
+            {
+                SendResultCommand?.Execute("OK");
+            }
             await Navigation.PopAsync();
         }
     }

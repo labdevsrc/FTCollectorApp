@@ -45,7 +45,7 @@ namespace FTCollectorApp.View
             try
             {
 
-                String OWNER_CD = "PCS005";
+                String OWNER_CD = Session.ownerCD;
 
                 String name1 = "";
                 String name2 = "";
@@ -172,8 +172,11 @@ namespace FTCollectorApp.View
                     Console.WriteLine("CreateTable<Crewdefault> ");
                     var crewdetails = conn.Table<Crewdefault>().ToList();
                     Crewtable = new ObservableCollection<Crewdefault>(crewdetails);
+                    
+
                     foreach (var s in Crewtable)
                     {
+
                         Console.WriteLine(s.Id + "- " + s.crew_leader + " " + s.team_member + " " + s.created_on);
                     }
                 }
@@ -183,6 +186,7 @@ namespace FTCollectorApp.View
             {
                 throw ex;
             }
+
 
             if (x == 1)
             {

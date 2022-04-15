@@ -113,6 +113,9 @@ namespace FTCollectorApp.View.TraceFiberPages
         {
             InitializeComponent();
 
+            // the reason why put ConduitsGroupListTable instead of each subclass ex DuctConduitDatas, etc
+            // to reduce code noise
+
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<ConduitsGroup>();

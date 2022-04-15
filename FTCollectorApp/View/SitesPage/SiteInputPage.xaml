@@ -11,6 +11,13 @@
                  Priority="0">
             
         </ToolbarItem>
+        <ToolbarItem Command="{Binding UserActivityCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="{StaticResource FontAwesomeSolid}"
+                    Glyph="{x:Static fa:FontAwesomeIcons.User}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>    
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -40,7 +47,7 @@
                 <local:BorderColorEntry x:Name="planSheet" IsReadOnly="True"/>
                 <Label Text="Stage" />
                 <local:BorderColorEntry x:Name="planSheetItem" IsReadOnly="True"/>                
-                <Button x:Name="btnRecordGPS" Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
+                <Button x:Name="btnRecordGPS" Command="{Binding RecordGPSCommand}"  Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
                     Clicked="btnRecordGPS_Clicked">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"

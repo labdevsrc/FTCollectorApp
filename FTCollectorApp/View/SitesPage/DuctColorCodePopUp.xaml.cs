@@ -12,17 +12,31 @@ using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Model;
 using System.Windows.Input;
 using Rg.Plugins.Popup.Pages;
+using System.Collections.ObjectModel;
+using SQLite;
 
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ColorCodePopUp : PopupPage
+    public partial class DuctColorCodePopUp : PopupPage
     {
-        public ColorCodePopUp(ColorCode selectedColor) 
+        public ObservableCollection<ColorCode> DuctColorCode
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ColorCode>();
+                    var table = conn.Table<ColorCode>().ToList();
+                    return new ObservableCollection<ColorCode>(table);
+                }
+            }
+        }
+        public DuctColorCodePopUp(ColorCode selectedColor) 
         {
             InitializeComponent();
-            //BindingContext = new DropDownViewModel();
-            BindingContext = new DuctViewModel();
+
+            BindingContext = this;
             SelectedColor = selectedColor;
         }
 
@@ -34,25 +48,26 @@ namespace FTCollectorApp.View.SitesPage
             {
                 _selectedColor = value;
                 OnPropertyChanged(nameof(SelectedColor));
+                Console.WriteLine();
             }
         }
 
         public ICommand ColorSelectedCommand { get; set; }
+
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
-            ColorSelectedCommand?.Execute(SelectedColor);
-            await PopupNavigation.Instance.PopAsync(true);
+            ColorSelectedCommand?.Execute(SelectedColor); //with Mode=TwoWay, no need this ?
+            Console.WriteLine();
+            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync(true);
         }
 
-        string selectedColor;
+        /*string selectedColor;
 
         private void listViewColorList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var selected = e.SelectedItem as ColorCode;
-            //btnSave.BackgroundColor = sele
             SelectedColor = selected;
-            Session.colorHex = selected.ColorHex;
             selectedColor = selected.ColorKey;
-        }
+        }*/
     }
 }

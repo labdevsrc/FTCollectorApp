@@ -99,20 +99,20 @@
                             <Label Grid.Row="0" Grid.Column="0" Text="Does it have a sun shield"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pHaveSunShield"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pHasGround"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pHasKey"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pHaveSunShield" Title="Select"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pHasGround" Title="Select"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pHasKey" Title="Select"/>
                             <Label Grid.Row="2" Grid.Column="0" Text="Key Type" x:Name="txtType" IsVisible="false"/>
                             <local:Dropdown Grid.Row="3" Grid.ColumnSpan="3"  x:Name="pKeyType" IsVisible="false" />
                             <Label Grid.Row="4" Grid.Column="0" Text="Direction of Travel"/>
                             <Label Grid.Row="4" Grid.Column="1" Text="Is site in a clear Zone?"/>
                             <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>
-                            <local:Dropdown Grid.Row="5" Grid.Column="0" x:Name="pDirectionTravel"/>
-                            <local:Dropdown Grid.Row="5" Grid.Column="1" x:Name="pIsSiteClearZone"/>
-                            <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck"/>                            
+                            <local:Dropdown Grid.Row="5" Grid.Column="0" x:Name="pDirectionTravel" Title="Select" />
+                            <local:Dropdown Grid.Row="5" Grid.Column="1" x:Name="pIsSiteClearZone" Title="Select"/>
+                            <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck" Title="Select"/>                            
                         </Grid>
 
-                        <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="btnRecDucts_Clicked"/>
+                        <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Command="{Binding ShowDuctPageCommand}"/>
                         <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="btnFiber_Clicked"/>
                         <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="btnTracer_Clicked"/>
                         <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="btnRecRacks_Clicked"/>

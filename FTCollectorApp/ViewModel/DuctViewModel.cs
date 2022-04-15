@@ -15,9 +15,18 @@ namespace FTCollectorApp.ViewModel
     {
         public DuctViewModel()
         {
+
+            // from Duct Color Selection PopUp
+
+            ColorSelectedCommand = new Command(ductcolor => ExecuteColorSelectedCommand(ductcolor as ColorCode));
+
+            // from DuctPage
             ShowPopupCommand = new Command(async _ => await ExecuteShowPopupCommand());
-            ColorSelectedCommand = new Command(ductcolor => ExecuteCountrySelectedCommand(ductcolor as ColorCode));
+
         }
+
+
+
         /// get selected color from popup - start
         private ColorCode _selectedColor;
         public ColorCode SelectedColor
@@ -30,17 +39,21 @@ namespace FTCollectorApp.ViewModel
         public ICommand ColorSelectedCommand { get; }
         private Task ExecuteShowPopupCommand()
         {
-            var popup = new ColorCodePopUp(SelectedColor)
+            var popup = new DuctColorCodePopUp(SelectedColor)
             {
                 ColorSelectedCommand = ColorSelectedCommand
             };
             return Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(popup);
         }
-        private void ExecuteCountrySelectedCommand(ColorCode ductcolor)
+        // with Mode=TwoWay, no need this ?
+        private void ExecuteColorSelectedCommand(ColorCode ductcolor)
         {
             SelectedColor = ductcolor;
             Console.WriteLine();
         }
+
+
+
         /// get selected color from popup - end
         /// 
 
@@ -69,18 +82,7 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
-        public ObservableCollection<ColorCode> DuctColorCode
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<ColorCode>();
-                    var table = conn.Table<ColorCode>().ToList();
-                    return new ObservableCollection<ColorCode>(table);
-                }
-            }
-        }
+
         public ObservableCollection<DuctSize> DuctSizeList
         {
             get

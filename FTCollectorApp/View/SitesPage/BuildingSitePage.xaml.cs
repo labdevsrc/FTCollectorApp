@@ -2,6 +2,7 @@
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
+using FTCollectorApp.View.SitesPage.Fiber;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.ViewModel;
 using SQLite;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -35,6 +37,7 @@ namespace FTCollectorApp.View.SitesPage
         {
             InitializeComponent();
             BindingContext = new DropDownViewModel();
+            //BindingContext = new BuildingSiteViewModel();
 
             MajorMinorType = $"Building - {minorType}";
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -70,6 +73,10 @@ namespace FTCollectorApp.View.SitesPage
             pKeyType.ItemsSource = DotDistrict;
             pIsSiteClearZone.ItemsSource = YesNo;
             pBucketTruck.ItemsSource = YesNo;
+
+
+            //Icommand
+
         }
 
         protected override void OnAppearing()
@@ -316,8 +323,16 @@ namespace FTCollectorApp.View.SitesPage
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
             var KVPair = keyvaluepair();
-            await CloudDBService.PostSaveBuilding(KVPair);
-            btnRecDucts.IsEnabled = true;
+            var result = await CloudDBService.PostSaveBuilding(KVPair);
+            if (result.Equals("OK"))
+            {
+                DisplayAlert("Success", "Data saved succesfully", "OK");
+
+                var speaker = DependencyService.Get<ITextToSpeech>();
+                speaker?.Speak("Update Success");
+                btnRecDucts.IsEnabled = true;
+                btnRecRacks.IsEnabled = true;
+            }
         }
 
         private void btnActive_Clicked(object sender, EventArgs e)
@@ -337,12 +352,13 @@ namespace FTCollectorApp.View.SitesPage
 
         private void btnFiber_Clicked(object sender, EventArgs e)
         {
-
+            Navigation.PushAsync(new FiberMainMenu());
         }
 
         private async void btnRecDucts_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new DuctPage());
+            // disable temporarily
+           //await Navigation.PushAsync(new DuctPage());
         }
 
 

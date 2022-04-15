@@ -3,17 +3,59 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
+using FTCollectorApp.View.SitesPage;
 using SQLite;
+using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
-    public class DropDownViewModel
+    public class DropDownViewModel : BaseViewModel
     {
         // Racks Page - start
-        
+        public DropDownViewModel()
+        {
+            ShowDuctPageCommand = new Command(async _ => await ExecuteNavigateToDuctPageCommand());
+            SendResultCommand = new Command(resultPage => ExecuteGetResultCommand(ResultPage));
+
+        }
+        ////////////
+        ///
+        public ICommand SendResultCommand { get; }
+        public ICommand ShowDuctPageCommand { get; }
+        private Task ExecuteNavigateToDuctPageCommand()
+        {
+            var gotoDuctPage = new DuctPage()
+            {
+                SendResultCommand = SendResultCommand
+            };
+            Console.WriteLine();
+            return Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
+        }
+
+        //public string ResultPage;
+        private string _resultPage;
+        public string ResultPage
+        {
+            get => _resultPage;
+            set
+            {
+                _resultPage = value;
+                OnPropertyChanged(nameof(ResultPage));
+            }
+        }
+
+        private void ExecuteGetResultCommand(string result)
+        {
+            ResultPage = result;
+            Console.WriteLine();
+        }
+
+
         public ObservableCollection<RackType> RackTypeList
         {
             get
