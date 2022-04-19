@@ -26,7 +26,8 @@ namespace FTCollectorApp
         public const string PostSplice = "ajaxSavesplice.php";
         public const string SaveRacks = "ajaxSaverack.php";
         public const string SaveActiveDevice = "ajaxSaveactivedevice.php";
-
+        public const string SaveSlack = "ajaxSaveslack.php";
+        public const string SaveSheathMark = "ajaxSaveSheathmark.php";
 
         //////////////////// AWS S3 params - start ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";

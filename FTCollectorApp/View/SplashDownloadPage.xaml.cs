@@ -36,11 +36,14 @@ namespace FTCollectorApp.View
             CrossConnectivity.Current.ConnectivityChanged += OnConnectivityHandler;
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                bool answer = await DisplayAlert("Welcome", "Press DOWNLOAD for downloading require tables. Or choose LOGIN for LOGIN directly ", "DOWNLOAD", "LOGIN");
-                if (answer)                    
-                    await DownloadTables();
-                else
-                    Navigation.PushAsync(new MainPage());
+                if (!IsBusy)  // blocks overlap display allert when accidentally, user move to other application
+                {
+                    bool answer = await DisplayAlert("Welcome", "Press DOWNLOAD for downloading require tables. Or choose LOGIN for LOGIN directly ", "DOWNLOAD", "LOGIN");
+                    if (answer)
+                        await DownloadTables();
+                    else
+                        Navigation.PushAsync(new MainPage());
+                }
             }
             else
             {

@@ -15,6 +15,7 @@ using SQLite;
 using System.Collections.ObjectModel;
 using System.Web;
 using FTCollectorApp.View.SitesPage.Fiber;
+using System.Windows.Input;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -30,6 +31,23 @@ namespace FTCollectorApp.View.SitesPage
         string Notes, SiteType;
         string InstalledAt, Manufactured;
 
+        string Result;
+ 
+        ICommand BackFromRacksPageCommand { get; set; }
+        ICommand NavigatetoRackCommand { get; set; }
+        private void ExecuteBackFromRacksPageCommand(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task ExecuteNavigatetoRackCommand(string v)
+        {
+            //var pages = new RacksPage()
+            //{
+            //    ResultCommand = Result
+            //}
+            return Navigation.PushAsync(new RacksPage());
+        }
 
         public ObservableCollection<ModelDetail> ModelDetailList
         {
@@ -57,7 +75,8 @@ namespace FTCollectorApp.View.SitesPage
         {
             InitializeComponent();
             BindingContext = new DropDownViewModel();
-
+            BackFromRacksPageCommand = new Command(Result => ExecuteBackFromRacksPageCommand(Result as string));
+            NavigatetoRackCommand = new Command(Result => ExecuteNavigatetoRackCommand(Result as string));
 
             MajorMinorType = $"Cabinet - {minorType}";
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -94,6 +113,8 @@ namespace FTCollectorApp.View.SitesPage
             pIsSiteClearZone.ItemsSource = YesNo;
             pBucketTruck.ItemsSource = YesNo;
         }
+
+
 
         protected override void OnAppearing()
         {
@@ -375,25 +396,16 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnActive_Clicked(object sender, EventArgs e)
+        private async void btnActive_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new ActiveDevicePage());
         }
 
         private async void btnRecRacks_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new RacksPage());
+            btnFiber.IsEnabled = true;
             btnActive.IsEnabled = true;
-            /*var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostSaveRacks(KVPair);
-            if (result.Equals("OK"))
-            {
-                await DisplayAlert("Success", "Uploading Data Done", "OK");
-            }
-            else
-            {
-                await DisplayAlert("Warning", result, "OK");
-            }*/
         }
 
         private void btnTracer_Clicked(object sender, EventArgs e)

@@ -56,6 +56,9 @@ namespace FTCollectorApp.ViewModel
         }
 
 
+
+
+
         public ObservableCollection<RackType> RackTypeList
         {
             get

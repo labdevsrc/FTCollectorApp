@@ -75,8 +75,8 @@ namespace FTCollectorApp.Service
 
             return JsonConvert.DeserializeObject<T>(json);
         }
-        public static async Task PostJobEvent() => await PostJobEvent("", "","");
-        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo,"");
+        public static async Task PostJobEvent() => await PostJobEvent("", "", "");
+        public static async Task PostJobEvent(string odo) => await PostJobEvent("", odo, "");
         public static async Task PostJobEvent(string param1, string param2, string perDiem)
         {
 
@@ -172,7 +172,7 @@ namespace FTCollectorApp.Service
 
             // Open the file containing the data that you want to deserialize.
             using (FileStream fs = new FileStream("PendingTaskFile.dat", FileMode.Open))
-            { 
+            {
                 try
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
@@ -312,7 +312,7 @@ namespace FTCollectorApp.Service
                         return "OK";
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return e.ToString();
                 }
@@ -658,7 +658,7 @@ namespace FTCollectorApp.Service
             HttpContent content = new FormUrlEncodedContent(keyValues);
             var json = JsonConvert.SerializeObject(keyValues);
             Console.WriteLine($"PostSaveBuilding Json : {json}");
-            HttpResponseMessage response = null; 
+            HttpResponseMessage response = null;
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
@@ -764,7 +764,7 @@ namespace FTCollectorApp.Service
             }
             return "Internet No Connection";
         }
-        
+
 
         public static async Task<string> PostActiveDevice(List<KeyValuePair<string, string>> keyValues)
         {
@@ -846,7 +846,7 @@ namespace FTCollectorApp.Service
                         return "OK";
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return e.ToString();
                 }
@@ -896,7 +896,7 @@ namespace FTCollectorApp.Service
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                
+
                 try
                 {
                     response = await client.PostAsync(Constants.PostDuctTrace, content);
@@ -948,12 +948,137 @@ namespace FTCollectorApp.Service
             }
             return "Fail to update";
         }
+
+
+        public static async Task<string> PostSheathMark(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostSheathMark Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                try
+                {
+                    response = await client.PostAsync(Constants.SaveSheathMark, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostSheathMark] Response from  OK = 200 , content :" + isi);
+
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+            return "Fail to update";
+        }
+
+
+
+    public async static Task<string> PostAsync(List<KeyValuePair<string, string >> keyValues, String Url)
+    {
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostSheathMark Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                try
+                {
+                    response = await client.PostAsync(Constants.SaveSheathMark, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostSheathMark] Response from  OK = 200 , content :" + isi);
+
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+            return "Fail to update";
+        }
     }
-
-
-
-
-
 }
 
 

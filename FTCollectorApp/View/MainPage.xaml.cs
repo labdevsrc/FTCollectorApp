@@ -145,7 +145,9 @@ namespace FTCollectorApp.View
             await Navigation.PushAsync(new VerifyJobPage()); // VerifyJobPage
             //await Navigation.PushAsync(new EqCheckOutPage()); // VerifyJobPage
             //await Navigation.PushAsync(new DuctTracePage()); // VerifyJobPage
-            //await Navigation.PushAsync(new DuctPage()); // VerifyJobPage
+            //await Navigation.PushAsync(new RacksPage()); // VerifyJobPage
+            //await Navigation.PushAsync(new ActiveDevicePage()); // VerifyJobPage
+
         }
 
 

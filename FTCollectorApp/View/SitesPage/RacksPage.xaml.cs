@@ -14,115 +14,36 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SQLite;
 using System.Web;
+using System.Windows.Input;
+using System.ComponentModel;
 
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RacksPage : ContentPage
     {
-        List<string> OneToAHundred = new List<string>();
-        List<string> FrontBack = new List<string>();
-        List<string> Orientation = new List<string>();
 
-        public ObservableCollection<ModelDetail> ModelDetailList
-        {
-            get
-            {
-
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<ModelDetail>();
-                    var table = conn.Table<ModelDetail>().Where(a => a.ManufKey == ManufacturerKeySelected).ToList();
-                    foreach (var col in table)
-                    {
-                        col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
-                        if (col.ModelCode1 == "") // sometimes this model entri is null
-                            col.ModelCode1 = col.ModelCode2;
-                        if (col.ModelCode2 == "")
-                            col.ModelCode2 = col.ModelCode1;
-                    }
-                    return new ObservableCollection<ModelDetail>(table);
-                }
-            }
-        }
-
+        Command ResultCommand { get; set; }
         public RacksPage()
         {
             InitializeComponent();
-            BindingContext = new DropDownViewModel();
-
-            // Populate Drop down number
-            for(int i = 0; i < 100; i++)
-            {
-                OneToAHundred.Add(i.ToString());
-            }
-            FrontBack.Add("Front");
-            FrontBack.Add("Back");
-
-            Orientation.Add("Horizontal");
-            Orientation.Add("Vertical");
+            BindingContext = new RacksViewModel();
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            pRackNum.ItemsSource = OneToAHundred;
-            pFrontBack.ItemsSource = FrontBack;
-            pOrientation.ItemsSource = Orientation;
-
-        }
-
-
-        string sRackNumber, sOrientation;
-        string selectedType, ManufacturerKeySelected, selectedModel;
-        string ModelDetailSelected, height, depth, width;
 
         private void btnCamera(object sender, EventArgs e)
         {
             Navigation.PushAsync(new CameraViewPage());
         }
 
+
         private async void ExitPage(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
         }
 
-        private void OnIndexChanged(object sender, EventArgs e)
-        {
-            sRackNumber = pRackNum.SelectedIndex != -1 ? "0" : pRackNum.SelectedIndex.ToString();
-            sOrientation = pOrientation.SelectedIndex != -1 ? "0" : pOrientation.SelectedIndex.ToString();
 
-            if (pType.SelectedIndex != -1)
-            {
-                var selected = pType.SelectedItem as RackType;
-                selectedType = selected.RackTypeKey;
-            }
-            if (pManufacturer.SelectedIndex != -1)
-            {
-                var selected = pManufacturer.SelectedItem as Manufacturer;
-                ManufacturerKeySelected = selected.ManufKey;
-                pModel.ItemsSource = ModelDetailList;
-            }
-
-        }
-
-
-        private void OnModelChanged(object sender, EventArgs e)
-        {
-            if (pModel.SelectedIndex != -1)
-            {
-                var selected = pModel.SelectedItem as ModelDetail;
-                modelDescription.Text = selected.ModelDescription;
-                ModelDetailSelected = selected.ModelKey;
-                entryWidth.Text = selected.width;
-                entryDepth.Text = selected.depth;
-                entryHeight.Text = selected.height;
-            }
-        }
-
-
-
-        List<KeyValuePair<string, string>> keyvaluepair()
+        /*List<KeyValuePair<string, string>> keyvaluepair()
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -141,19 +62,19 @@ namespace FTCollectorApp.View.SitesPage
         //"ypos":ypos,"manufacturer":mfr,"model":mod,"height":height,"width":width,"depth":depth,
         //"time":getCurtime()};
 
-                new KeyValuePair<string, string>("type", selectedType),  
-                new KeyValuePair<string, string>("racknumber", sRackNumber),
-                new KeyValuePair<string, string>("orientation", sOrientation.Equals("Horizontal") ? "H" : "V"),
-                new KeyValuePair<string, string>("orientation", sOrientation.Equals("Horizontal") ? "H" : "V"),
+                new KeyValuePair<string, string>("type", SelectedRackType.RackTypeKey),  
+                new KeyValuePair<string, string>("racknumber", SelectedRackNumber),
+                new KeyValuePair<string, string>("orientation", SelectedOrientation.Equals("Horizontal") ? "H" : "V"),
 
                 new KeyValuePair<string, string>("xpos", Ypos.Text),  
                 new KeyValuePair<string, string>("ypos", Xpos.Text),
-                new KeyValuePair<string, string>("manufacturer", ManufacturerKeySelected), 
-                new KeyValuePair<string, string>("model", selectedModel),
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer.ManufKey),
+                //new KeyValuePair<string, string>("manufacturer", ManufacturerKeySelected), 
+                new KeyValuePair<string, string>("model", SelectedModelDetail.ModelKey),
 
-                new KeyValuePair<string, string>("height", entryHeight.Text),
-                new KeyValuePair<string, string>("width", entryWidth.Text),
-                new KeyValuePair<string, string>("depth", entryDepth.Text)
+                new KeyValuePair<string, string>("height", SelectedModelDetail.height),
+                new KeyValuePair<string, string>("width", SelectedModelDetail.width),
+                new KeyValuePair<string, string>("depth", SelectedModelDetail.depth)
             };
 
 
@@ -166,7 +87,7 @@ namespace FTCollectorApp.View.SitesPage
         private async void OnClicked(object sender, EventArgs e)
         {
             var KVPair = keyvaluepair();
-
+            ResultCommand?.Execute("OK");
             var result = await CloudDBService.PostSaveRacks(KVPair);
             if (result.Equals("OK"))
             {
@@ -176,8 +97,7 @@ namespace FTCollectorApp.View.SitesPage
             {
                 await DisplayAlert("Warning", result, "OK");
             }
-        }
-
+        }*/
 
     }
 }

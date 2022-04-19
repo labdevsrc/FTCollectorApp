@@ -8,6 +8,7 @@ using System.Web;
 using System.Windows.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
+using FTCollectorApp.Service;
 using SQLite;
 using Xamarin.Forms;
 
@@ -66,9 +67,11 @@ namespace FTCollectorApp.ViewModel
             ClosePageCommand = new Command(async _ => await ExecuteSaveCloseCommand());
         }
 
-        private Task ExecuteSaveCloseCommand()
+        private async Task ExecuteSaveCloseCommand()
         {
-            return Application.Current.MainPage.Navigation.PopAsync(true);
+            //var Result = await CloudDBService.PostSheathMark();
+            //GetResultCommand?.Execute("OK");
+            await Application.Current.MainPage.Navigation.PopAsync(true);
         }
 
         public ICommand ClosePageCommand { get; }

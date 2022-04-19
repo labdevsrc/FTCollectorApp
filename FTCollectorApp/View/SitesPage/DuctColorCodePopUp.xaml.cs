@@ -58,7 +58,7 @@ namespace FTCollectorApp.View.SitesPage
         {
             ColorSelectedCommand?.Execute(SelectedColor); //with Mode=TwoWay, no need this ?
             Console.WriteLine();
-            Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync(true);
+            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PopAsync(true);
         }
 
         /*string selectedColor;

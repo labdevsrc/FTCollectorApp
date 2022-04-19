@@ -139,6 +139,17 @@ namespace FTCollectorApp.View.SitesPage
             IsHaveSunShield = 0, IsHasGround = 0, IsHasKey =0, ElectSiteKeyCnt = 0, Is3rdComms = 0;
         int KeyTypeSelected = 0;
         int IsSiteClearZone, RackCountSelected =0 , KeyCodeSelected =0;
+
+        private void btnConnectDevice_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnComplete_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, MaterialCodeKeySelected;
         string MountingSelected, FilterTypeSelected, FilterSizeKeySelected, OrientationSelected;
 
@@ -335,14 +346,16 @@ namespace FTCollectorApp.View.SitesPage
             }
         }
 
-        private void btnActive_Clicked(object sender, EventArgs e)
+        private async void btnActive_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new ActiveDevicePage());
         }
 
-        private void btnRecRacks_Clicked(object sender, EventArgs e)
+        private async void btnRecRacks_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new RacksPage());
+            btnFiber.IsEnabled = true;
+            btnActive.IsEnabled = true;
         }
 
         private void btnTracer_Clicked(object sender, EventArgs e)
@@ -350,15 +363,15 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnFiber_Clicked(object sender, EventArgs e)
+        private async  void btnFiber_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new FiberMainMenu());
+            await Navigation.PushAsync(new FiberMainMenu());
         }
 
         private async void btnRecDucts_Clicked(object sender, EventArgs e)
         {
             // disable temporarily
-           //await Navigation.PushAsync(new DuctPage());
+           await Navigation.PushAsync(new DuctPage());
         }
 
 

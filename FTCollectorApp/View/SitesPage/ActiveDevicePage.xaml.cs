@@ -15,13 +15,140 @@ using FTCollectorApp.View.Utils;
 using System.Web;
 using FTCollectorApp.Service;
 using System.Net;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FTCollectorApp.View.SitesPage
 {
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ActiveDevicePage : ContentPage
     {
-        List<string> OneToHundred = new List<string>();
+
+
+        /*string _selectedPosition;
+        public string SelectedPosition
+        {
+            get => _selectedPosition;
+            set
+            {
+                _selectedPosition = value;
+                OnPropertyChanged(nameof(SelectedPosition));
+                Console.WriteLine();
+            }
+        }
+
+        string _selectednumber;
+        public string SelectedNumber
+        {
+            get => _selectednumber;
+            set
+            {
+                _selectednumber = value;
+                OnPropertyChanged(nameof(SelectedNumber));
+                Console.WriteLine();
+            }
+        }
+
+
+        //// ////// //////
+        
+        string _selectedSlotBladeTray;
+        public string SelectedSlotBladeTray
+        {
+            get => _selectedSlotBladeTray;
+            set
+            {
+                _selectedSlotBladeTray = value;
+                OnPropertyChanged(nameof(SelectedSlotBladeTray));
+                Console.WriteLine();
+            }
+        }
+        ChassisType _selectedCT;
+        public ChassisType SelectedCT
+        {
+            get => _selectedCT;
+            set
+            {
+                _selectedCT = value;
+                OnPropertyChanged(nameof(SelectedCT));
+                Console.WriteLine();
+            }
+        }
+
+        RackNumber _selectedRackNumber;
+        public RackNumber SelectedRackNumber
+        {
+            get => _selectedRackNumber;
+            set
+            {
+                _selectedRackNumber = value;
+                OnPropertyChanged(nameof(SelectedRackNumber));
+                Console.WriteLine();
+            }
+        }
+
+        Manufacturer _manufacturerSelected;
+        public Manufacturer SelectedManufacturer
+        {
+            get => _manufacturerSelected;
+            set
+            {
+                _manufacturerSelected = value;
+                OnPropertyChanged(nameof(SelectedManufacturer));
+                Console.WriteLine();
+                pModel.ItemsSource = ModelDetailList;// populate model
+                Console.WriteLine();
+            }
+        }
+
+        ModelDetail _modeldetailSelected;
+        public ModelDetail SelectedModelDetail
+        {
+            get => _modeldetailSelected;
+            set
+            {
+                if (SelectedManufacturer == null)
+                {
+                    DisplayAlert("Warning", "Select Manufacturer First", "OK");
+                    return;
+                }
+                _modeldetailSelected = value;
+                OnPropertyChanged(nameof(SelectedModelDetail));
+                Console.WriteLine();
+            }
+        }
+
+
+
+        public ObservableCollection<ChassisType> ChassisTypeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ChassisType>();
+                    var table = conn.Table<ChassisType>().ToList();
+                    return new ObservableCollection<ChassisType>(table);
+                }
+            }
+        }
+
+
+        public ObservableCollection<RackNumber> RackRailShelfs
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<RackNumber>();
+                    var table = conn.Table<RackNumber>().Where(a => a.SiteId == Session.tag_number).ToList();
+                    Console.WriteLine();
+                    return new ObservableCollection<RackNumber>(table);
+                }
+            }
+        }
+
+
         public ObservableCollection<ModelDetail> ModelDetailList
         {
             get
@@ -30,7 +157,8 @@ namespace FTCollectorApp.View.SitesPage
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<ModelDetail>();
-                    var table = conn.Table<ModelDetail>().Where(a => a.ManufKey == ManufacturerKeySelected).ToList();
+                    var table = conn.Table<ModelDetail>().Where(a => a.ManufKey == SelectedManufacturer.ManufKey).ToList();
+                    Console.WriteLine();
                     foreach (var col in table)
                     {
                         col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
@@ -43,37 +171,58 @@ namespace FTCollectorApp.View.SitesPage
                 }
             }
         }
+
+        public ObservableCollection<Manufacturer> ManufacturerList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Manufacturer>();
+                    var table = conn.Table<Manufacturer>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.ManufName = HttpUtility.HtmlDecode(col.ManufName); // should use for escape char "
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<Manufacturer>(table);
+                }
+            }
+        }*/
+
         public ActiveDevicePage()
         {
+           //Session.tag_number = "54501"; // for test
+
             InitializeComponent();
             //BindingContext = new DropDownViewModel();
+            BindingContext = new ActiveDeviceViewModel();
 
-            for (int i = 1; i <100 ; i++)
-            {
-                OneToHundred.Add(i.ToString());
-            }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+
             txtHostTagNumber.Text = Session.tag_number;
-            pNumber.ItemsSource = OneToHundred;
-            pRackNumber.ItemsSource = OneToHundred;
-            pPosition.ItemsSource = OneToHundred;
-            pSlotBladeTray.ItemsSource = OneToHundred;
+            //pNumber.ItemsSource = OneToHundred;
+            //pRackNumber.ItemsSource = OneToHundred;
+            //pPosition.ItemsSource = OneToHundred;
+            //pSlotBladeTray.ItemsSource = OneToHundred;
 
-
+            
         }
 
-        string ManufacturerKeySelected, ModelDetailSelected;
-        string selectedCTType, rackNumber, selectedPos, selectedSlotBladeTray, selectedNum;
         string InstalledAt, Manufactured;
         string SerialNum, selectedWebUrl;
 
+        bool IsIPvisible = false;
         private void btnAddIP(object sender, EventArgs e)
         {
 
+            ipAddressEntries.IsVisible = IsIPvisible;
+            IsIPvisible = !IsIPvisible;
         }
 
         private void btnGotoPortPage(object sender, EventArgs e)
@@ -91,32 +240,11 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void OnIndexChanged(object sender, EventArgs e)
-        {
-            selectedSlotBladeTray = pSlotBladeTray.SelectedIndex != -1 ? "0" : pSlotBladeTray.SelectedIndex.ToString();
-            selectedPos = pPosition.SelectedIndex != -1 ? "0" : pPosition.SelectedIndex.ToString();
-            rackNumber = pRackNumber.SelectedIndex != -1 ? "0" : pRackNumber.SelectedIndex.ToString();
-            selectedNum = pNumber.SelectedIndex != -1 ? "0" : pNumber.SelectedIndex.ToString();
-
-
-            if (pChassisType.SelectedIndex != -1)
-            {
-                var selected = pChassisType.SelectedItem as ChassisType;
-                selectedCTType = selected.CTKey;
-            }
-            if (pManufacturer.SelectedIndex != -1)
-            {
-                var selected = pManufacturer.SelectedItem as Manufacturer;
-                ManufacturerKeySelected = selected.ManufKey;
-                pModel.ItemsSource = ModelDetailList;
-            }
-
-        }
         bool displayed = false;
         private void SeePic(object sender, EventArgs e)
         {
-            webview.IsVisible = displayed;
-            webview.Source = selectedWebUrl;
+            //webview.IsVisible = displayed;
+            //webview.Source = SelectedModelDetail.PictUrl;
             displayed = !displayed;
 
         }
@@ -128,30 +256,16 @@ namespace FTCollectorApp.View.SitesPage
         }
 
 
-        private void OnModelChanged(object sender, EventArgs e)
+
+
+
+        private void btnCamera(object sender, EventArgs e)
         {
-            if (pModel.SelectedIndex != -1)
-            {
-                var selected = pModel.SelectedItem as ModelDetail;
-                modelDescription.Text = selected.ModelDescription;
-                ModelDetailSelected = selected.ModelKey;
-                selectedWebUrl = selected.PictUrl;
-            }
+            Navigation.PushAsync(new CameraViewPage());
         }
 
-        /* Some community said IPAdress tryparse is not good practise
-         * 
-         * string IsIPAddressValid(string ipaddress)
-        {
-            //string ipaddress = IP1.Text + "." + IP2.Text + "." + IP3.Text + "." + IP4.Text;
-            IPAddress ip;
-            bool ValidateIP = IPAddress.TryParse(ipaddress, out ip);
-            if (ValidateIP)
-                return ipaddress;
-            else
-                return "0.0.0.0";
-        }*/
-
+        /*
+        
         string IsIPAddressValid(string ipaddress)
         {
             //  Split string by ".", check that array length is 4
@@ -167,13 +281,7 @@ namespace FTCollectorApp.View.SitesPage
 
             return ipaddress;
         }
-
-
-        private void btnCamera(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new CameraViewPage());
-        }
-
+        
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -185,9 +293,9 @@ namespace FTCollectorApp.View.SitesPage
                 new KeyValuePair<string, string>("tag", Session.tag_number), 
 
 
-                new KeyValuePair<string, string>("manufacturer", ManufacturerKeySelected),  
-                new KeyValuePair<string, string>("model", ModelDetailSelected),  
-                new KeyValuePair<string, string>("rack_number", rackNumber), 
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer.ManufKey),  
+                new KeyValuePair<string, string>("model", SelectedModelDetail.ModelKey),  
+                new KeyValuePair<string, string>("rack_number", SelectedRackNumber.Racknumber), 
 
 
                 new KeyValuePair<string, string>("comment", sComment.Text),  
@@ -200,7 +308,11 @@ namespace FTCollectorApp.View.SitesPage
                 new KeyValuePair<string, string>("protocol", txtProtocol.Text),
                 new KeyValuePair<string, string>("getway", IsIPAddressValid(GWIP1.Text + "." + GWIP2.Text + "." + GWIP3.Text + "." + GWIP4.Text)),
 
-                new KeyValuePair<string, string>("slotb", selectedSlotBladeTray)
+                new KeyValuePair<string, string>("slotblade", SelectedSlotBladeTray),
+                new KeyValuePair<string, string>("position", SelectedPosition),
+                new KeyValuePair<string, string>("rack_number", SelectedRackNumber.Racknumber),
+                
+
             };
 
 
@@ -213,6 +325,6 @@ namespace FTCollectorApp.View.SitesPage
             var KVPair = keyvaluepair();
             await CloudDBService.PostActiveDevice(KVPair);
             await Navigation.PopAsync();
-        }
+        }*/
     }
 }

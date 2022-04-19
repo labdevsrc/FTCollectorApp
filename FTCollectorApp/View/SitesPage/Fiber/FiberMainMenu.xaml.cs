@@ -17,14 +17,14 @@ namespace FTCollectorApp.View.SitesPage.Fiber
             InitializeComponent();
         }
 
-        private void btnCable_Clicked(object sender, EventArgs e)
+        private async void btnCable_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new FiberOpticCable());
         }
 
-        private void btnSheathMark_Clicked(object sender, EventArgs e)
+        private async void btnSheathMark_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new SheathMark());
         }
 
         private void btnSlack_Clicked(object sender, EventArgs e)

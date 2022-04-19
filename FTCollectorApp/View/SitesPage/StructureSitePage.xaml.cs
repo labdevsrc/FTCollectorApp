@@ -323,14 +323,16 @@ namespace FTCollectorApp.View.SitesPage
         }
 
 
-        private void btnActive_Clicked(object sender, EventArgs e)
+        private async void btnActive_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new ActiveDevicePage());
         }
 
-        private void btnRecRacks_Clicked(object sender, EventArgs e)
+        private async void btnRecRacks_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new RacksPage());
+            btnFiber.IsEnabled = true;
+            btnActive.IsEnabled = true;
         }
 
         private void btnTracer_Clicked(object sender, EventArgs e)

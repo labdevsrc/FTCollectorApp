@@ -12,45 +12,72 @@
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <ScrollView>        
         
-        <StackLayout Padding="20">
-            <Label Text="Racks" FontSize="Large" HorizontalOptions="Center" />
-            <Label Text="Enter rack number" />
-            <local:Dropdown x:Name="pRackNum" />
-            <Label Text="Type"/>
-            <Picker  ItemsSource="{Binding RackTypeList}" ItemDisplayBinding="{Binding RackMaterialDesc}" x:Name="pType"
-                     HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
-            <Label Text="Front Back "/>
-            <Picker x:Name="pFrontBack"
-                     HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+                <StackLayout Padding="20">
+                    <Label Text="Racks" FontSize="Large" HorizontalOptions="Center" />
+                    <Label Text="Enter rack number" />
+                        <local:Dropdown x:Name="pRackNum" SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                                <x:String>10</x:String>                                
+                            </Picker.Items>
+                        </local:Dropdown>
+                        <Label Text="Type"/>
+                    <Picker  ItemsSource="{Binding RackTypeList}" ItemDisplayBinding="{Binding RackMaterialDesc}" x:Name="pType"
+                             SelectedItem="{Binding SelectedRackType, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand" />
+                    <Label Text="Front Back "/>
+                        <Picker x:Name="pFrontBack"  SelectedItem="{Binding SelectedFrontBack, Mode=TwoWay}" 
+                             HorizontalOptions="FillAndExpand" >
+                            <Picker.Items>
+                                <x:String>Front</x:String>
+                                <x:String>Back</x:String>
+                            </Picker.Items>
+                        </Picker>
 
-            <Label Text="Orientation"/>
-            <Picker  x:Name="pOrientation" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
-            <Label Text="Manufacturer"/>
-            <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
-                     HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
-            <Label Text="Model"/>
-            <local:Dropdown ItemDisplayBinding="{Binding ModelNumber}"
-                x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnModelChanged"/>
+                    <Label Text="Orientation"/>
+                        <Picker  x:Name="pOrientation" HorizontalOptions="FillAndExpand" 
+                             SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" >
+                            <Picker.Items>
+                                <x:String>Horizontal</x:String>
+                                <x:String>Vertical</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    <Label Text="Manufacturer"/>
+                    <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
+                             SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
+                             HorizontalOptions="FillAndExpand" />
+                    <Label Text="Model"/>
+                        <local:Dropdown ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelNumber}"
+                                         SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
+                        x:Name="pModel" HorizontalOptions="FillAndExpand" />
 
-            <local:BorderColorEntry x:Name="modelDescription" />
+                    <local:BorderColorEntry x:Name="modelDescription" Text="{Binding SelectedModelDetail.ModelDescription}"/>
 
-            <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
-                <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
-                <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
-                <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
-                <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="entryHeight"/>
-                <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="entryDepth"/>
-                <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth"/>
-            </Grid>
-            <Label Text="Y Pos"/>
-            <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos"/>
+                    <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                        <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="entryHeight" Text="{Binding SelectedModelDetail.height}"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="entryDepth" Text="{Binding SelectedModelDetail.depth}"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth" Text="{Binding SelectedModelDetail.width}"/>
+                    </Grid>
+                    <Label Text="Y Pos"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos"/>
 
-            <Label Text="X Pos"/>
-            <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos"/>
+                    <Label Text="X Pos"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos"/>
 
 
-            <Button Text="Submit Rack" Padding="0,10,0,10" Clicked="OnClicked"/>
-            <Button Text="Finished Documenting Racks" Padding="0,10,0,10" Clicked="ExitPage"/>
+                        <Button Text="Submit Rack" Padding="0,10,0,10" Command="{Binding SaveCommand}" />
+                        <Button Text="Finished Documenting Racks" Padding="0,10,0,10" Command="{Binding SaveandBackCommand}"/>
 
                     </StackLayout>
 
