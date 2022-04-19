@@ -14,7 +14,7 @@ using FTCollectorApp.Service;
 
 namespace FTCollectorApp.ViewModel
 {
-    public class ActiveDeviceViewModel : ObservableObject
+    public partial class ActiveDeviceViewModel : ObservableObject
     {
         [ObservableProperty]
         string selectedPosition;
@@ -72,7 +72,17 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         string _IP4;
+        [ObservableProperty]
+        string subnet1;
 
+        [ObservableProperty]
+        string subnet2;
+
+        [ObservableProperty]
+        string subnet3;
+
+        [ObservableProperty]
+        string subnet4;
         [ObservableProperty]
         string _GWIP1;
 
@@ -97,13 +107,16 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string protocol;
         [ObservableProperty]
-        string videoprotocol;
+        string videoProtocol;
         [ObservableProperty]
         string _VLAN;
 
+        [ObservableProperty]
+        string selectedManufDate;
+        [ObservableProperty]
+        string selectedInstallDate;
 
-        public ICommand ToggleWebViewCommand { get; set; }
-        public ICommand ToggleIPEntriesCommand { get; set; }
+
         public ObservableCollection<ChassisType> ChassisTypeList
         {
             get
@@ -174,12 +187,15 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+        public ICommand ToggleWebViewCommand { get; set; }
+        public ICommand ToggleIPEntriesCommand { get; set; }
+        public ICommand SaveContinueCommand { get; set; }
 
-        
         public ActiveDeviceViewModel()
         {
             ToggleWebViewCommand = new Command(() => isDisplayed = !isDisplayed);
             ToggleIPEntriesCommand = new Command(() => isShow = !isShow);
+            SaveContinueCommand = new Command(() => ExecuteSaveContinueCommand());
         }
 
 
@@ -200,14 +216,18 @@ namespace FTCollectorApp.ViewModel
 
 
                 new KeyValuePair<string, string>("comment", Comment),
-                new KeyValuePair<string, string>("manufactured_date", Manufactured),
-                new KeyValuePair<string, string>("installed2", InstalledAt),
+                new KeyValuePair<string, string>("manufactured_date", SelectedManufDate), //Manufactured),
+                new KeyValuePair<string, string>("installed2",SelectedInstallDate), //InstalledAt),
 
 
                 new KeyValuePair<string, string>("ipaddr", IsIPAddressValid(IP1 + "." + IP2 + "." + IP3 + "." + IP4)),
-                new KeyValuePair<string, string>("subnet", ""),
+                new KeyValuePair<string, string>("subnet", IsIPAddressValid(Subnet1 + "." + Subnet2 + "." + Subnet3 + "." + Subnet4)),
                 new KeyValuePair<string, string>("protocol", Protocol),
+                new KeyValuePair<string, string>("vidioproto", VideoProtocol),
+                new KeyValuePair<string, string>("vlan", VLAN),
+
                 new KeyValuePair<string, string>("getway", IsIPAddressValid(GWIP1 + "." + GWIP2 + "." + GWIP3 + "." + GWIP4)),
+                new KeyValuePair<string, string>("multicastip", IsIPAddressValid(MCast1 + "." + MCast2 + "." + MCast3 + "." + MCast4)),
 
                 new KeyValuePair<string, string>("slotblade", SelectedSlotBladeTray),
                 new KeyValuePair<string, string>("position", SelectedPosition),
@@ -236,13 +256,14 @@ namespace FTCollectorApp.ViewModel
             return ipaddress;
         }
 
-        private async void btnSaveContinue(object sender, EventArgs e)
+        private async void ExecuteSaveContinueCommand()
         {
             var KVPair = keyvaluepair();
             var result = await CloudDBService.PostActiveDevice(KVPair);
             if(result.Equals("OK"))
             {
                 // Do something
+                Console.WriteLine();
             }
             await Application.Current.MainPage.Navigation.PopAsync();
         }

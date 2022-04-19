@@ -43,18 +43,19 @@
                                  IsVisible="{Binding IsDisplayed}"/>
                         <Button x:Name="btnPictShow" Text="See pic"  Clicked="SeePic" Command="{Binding ToggleWebViewCommand}" />
                         <Label Text="Model"/>
-                        <local:Dropdown ItemDisplayBinding="{Binding ModelNumber}"
-                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedItem="{Binding SelectedModel, Mode=TwoWay}"/>
+                        <local:Dropdown ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelNumber}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"/>
 
-                        <local:BorderColorEntry x:Name="modelDescription" />
+                        <local:BorderColorEntry Text="{Binding SelectedModelDetail.ModelDescription }"/>
 
                         <Label Text="Serial Number"/>
                         <local:BorderEntry x:Name="txtSerialNum" />
                         <Label Text="Enter manufactured" />
-                        <DatePicker x:Name="dateManufactured" HorizontalOptions="FillAndExpand" DateSelected="OnDateSelected"
-                                    DateSelected="{Binding SelectedManufDate,Mode=TwoWay}"/>
+                        <DatePicker x:Name="dateManufactured" HorizontalOptions="FillAndExpand" 
+                                    Date="{Binding SelectedManufDate,Mode=TwoWay}"/>
                         <Label Text="Installed at" />
-                        <DatePicker x:Name="dateInstalled" HorizontalOptions="FillAndExpand"  DateSelected="OnDateSelected"/>
+                        <DatePicker x:Name="dateInstalled" HorizontalOptions="FillAndExpand" 
+                                    Date="{Binding SelectedInstallDate,Mode=TwoWay}" />
 
                         <Grid RowDefinitions="0.5*,*" ColumnDefinitions="*,*">
                             <Label Text="RackNumber" />
@@ -84,7 +85,7 @@
                         </local:Dropdown>
                         
                         <Label Text="Slots / Blades / Trays"/>
-                        <local:Dropdown x:Name="pSlotBladeTray">
+                        <local:Dropdown x:Name="pSlotBladeTray" SelectedItem="{Binding SelectedSlotBladeTray, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>1</x:String>
                                 <x:String>2</x:String>
@@ -99,12 +100,12 @@
                             </Picker.Items>                            
                         </local:Dropdown>
                         <Label Text="Notes and Comment "/>
-                        <local:BorderEntry x:Name="sComment" />
+                        <local:BorderEntry x:Name="sComment" Text="{Binding Comment}"/>
 
                         <Button x:Name="btnShow"  Text="Click here to addd IP Address +" FontSize="Medium" BorderColor="Transparent" 
-                                BackgroundColor="Transparent" Scale="0.5" Clicked="btnAddIP" Command="{Binding ShowIPEntries}"/>
+                                BackgroundColor="Transparent" Scale="0.5" Clicked="btnAddIP" Command="{Binding ToggleIPEntriesCommand}"/>
 
-                        <Grid x:Name="ipAddressEntries"  RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" 
+                        <Grid x:Name="ipAddressEntries"  RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" 
                               ColumnDefinitions="1.5*,0.1*,1.5*,0.1*,1.5*,0.1*,1.5*,0.1*" 
                               IsVisible="false" >
                             <Label Text="IP Address" Grid.ColumnSpan="2" />
@@ -125,39 +126,39 @@
                             <Label Text="." Grid.Column="5" Grid.Row="3"/>
                             <local:BorderEntry x:Name="Subnet4" Text="{Binding Subnet4,Mode=TwoWay}" Grid.Column="6" Grid.Row="3"/>
 
-                            <Label Text="Protocol" Grid.Row="6" Grid.ColumnSpan="2"  />
-                            <local:BorderEntry x:Name="txtProtocol" Text="{Binding Protocol, Mode=TwoWay}" Grid.Row="7" Grid.ColumnSpan="8" />
-                            <Label Text="Video Protocol" Grid.Row="8" Grid.ColumnSpan="2"  />
-                            <local:BorderEntry x:Name="txtVidProtocol" Text="{Binding VideoProtocol, Mode=TwoWay}" Grid.Row="9" Grid.ColumnSpan="8" />
+                            <Label Text="Protocol" Grid.Row="4" Grid.ColumnSpan="8"  />
+                            <local:BorderEntry x:Name="txtProtocol" Text="{Binding Protocol, Mode=TwoWay}" Grid.Row="5" Grid.ColumnSpan="8" />
+                            <Label Text="Video Protocol" Grid.Row="6" Grid.ColumnSpan="8"  />
+                            <local:BorderEntry x:Name="txtVidProtocol" Text="{Binding VideoProtocol, Mode=TwoWay}" Grid.Row="7" Grid.ColumnSpan="8" />
                             
 
-                            <Label Text="Enter Gateway" Grid.Row="10" Grid.ColumnSpan="2" />
-                            <local:BorderEntry x:Name="GWIP1" Text="{Binding GWIP1, Mode=TwoWay}"  Grid.Row="11"/>
-                            <Label Text="." Grid.Column="1" Grid.Row="5"/>
-                            <local:BorderEntry x:Name="GWIP2" Text="{Binding GWIP2, Mode=TwoWay}" Grid.Column="2" Grid.Row="11"/>
-                            <Label Text="." Grid.Column="3" Grid.Row="5"/>
-                            <local:BorderEntry x:Name="GWIP3" Text="{Binding GWIP3, Mode=TwoWay}" Grid.Column="4" Grid.Row="11"/>
-                            <Label Text="." Grid.Column="5" Grid.Row="5"/>
-                            <local:BorderEntry x:Name="GWIP4" Text="{Binding GWIP4, Mode=TwoWay}" Grid.Column="6" Grid.Row="11"/>
+                            <Label Text="Enter Gateway" Grid.Row="8" Grid.ColumnSpan="8" />
+                            <local:BorderEntry x:Name="GWIP1" Text="{Binding GWIP1, Mode=TwoWay}"  Grid.Row="9"/>
+                            <Label Text="." Grid.Column="1" Grid.Row="9"/>
+                            <local:BorderEntry x:Name="GWIP2" Text="{Binding GWIP2, Mode=TwoWay}" Grid.Column="2" Grid.Row="9"/>
+                            <Label Text="." Grid.Column="3" Grid.Row="9"/>
+                            <local:BorderEntry x:Name="GWIP3" Text="{Binding GWIP3, Mode=TwoWay}" Grid.Column="4" Grid.Row="9"/>
+                            <Label Text="." Grid.Column="5" Grid.Row="9"/>
+                            <local:BorderEntry x:Name="GWIP4" Text="{Binding GWIP4, Mode=TwoWay}" Grid.Column="6" Grid.Row="9"/>
 
-                            <Label Text="Enter MulticastIP" Grid.Row="12" Grid.ColumnSpan="2" />
-                            <local:BorderEntry Text="{Binding MCast1, Mode=TwoWay}"  Grid.Row="13"/>
-                            <Label Text="." Grid.Column="1" Grid.Row="5"/>
-                            <local:BorderEntry Text="{Binding MCast2, Mode=TwoWay}" Grid.Column="2" Grid.Row="13"/>
-                            <Label Text="." Grid.Column="3" Grid.Row="5"/>
-                            <local:BorderEntry Text="{Binding MCast3, Mode=TwoWay}" Grid.Column="4" Grid.Row="13"/>
-                            <Label Text="." Grid.Column="5" Grid.Row="5"/>
-                            <local:BorderEntry Text="{Binding MCast4, Mode=TwoWay}" Grid.Column="6" Grid.Row="13"/>
+                            <Label Text="Enter MulticastIP" Grid.Row="10" Grid.ColumnSpan="8" />
+                            <local:BorderEntry Text="{Binding MCast1, Mode=TwoWay}"  Grid.Row="11"/>
+                            <Label Text="." Grid.Column="1" Grid.Row="11"/>
+                            <local:BorderEntry Text="{Binding MCast2, Mode=TwoWay}" Grid.Column="2" Grid.Row="11"/>
+                            <Label Text="." Grid.Column="3" Grid.Row="11"/>
+                            <local:BorderEntry Text="{Binding MCast3, Mode=TwoWay}" Grid.Column="4" Grid.Row="11"/>
+                            <Label Text="." Grid.Column="5" Grid.Row="11"/>
+                            <local:BorderEntry Text="{Binding MCast4, Mode=TwoWay}" Grid.Column="6" Grid.Row="11"/>
 
-                            <Label Text="VLAN" Grid.Row="6" Grid.ColumnSpan="14"  />
-                            <local:BorderEntry Text="{Binding VLAN, Mode=TwoWay}" Grid.Row="15" Grid.ColumnSpan="8" />
+                            <Label Text="VLAN" Grid.Row="12" Grid.ColumnSpan="8"  />
+                            <local:BorderEntry Text="{Binding VLAN, Mode=TwoWay}" Grid.Row="13" Grid.ColumnSpan="8" />
 
-                            <Button Text="Save and Continue" Clicked="btnSaveContinue" Grid.Row="15"/>
+                            <Button Text="Update Chassis" Clicked="btnUpdateChassis" Grid.Row="16"/>
 
                         </Grid>
 
 
-                        <Button Text="Save and Continue" Clicked="btnSaveContinue"/>
+                        <Button Text="Save and Continue" Clicked="btnSaveContinue" Command="{Binding SaveContinueCommand}"/>
                         <Button Text="Ports" Clicked="btnGotoPortPage"/>
                         <Button Text="Port Connection" Clicked="btnPortConn"/>
                         <Button Text="Finished Active Devices" Clicked="btnExit"/>                        

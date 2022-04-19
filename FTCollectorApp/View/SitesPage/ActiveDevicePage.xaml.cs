@@ -249,6 +249,16 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
+        private void btnUpdateChassis(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveContinue(object sender, EventArgs e)
+        {
+
+        }
+
         private void OnDateSelected(object sender, DateChangedEventArgs e)
         {
             InstalledAt = dateInstalled.Date.ToString("yyyy-MM-dd");
