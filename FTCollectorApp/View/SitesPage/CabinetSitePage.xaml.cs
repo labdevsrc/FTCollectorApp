@@ -35,6 +35,7 @@ namespace FTCollectorApp.View.SitesPage
  
         ICommand BackFromRacksPageCommand { get; set; }
         ICommand NavigatetoRackCommand { get; set; }
+        ICommand ResultCommand { get; set; }
         private void ExecuteBackFromRacksPageCommand(string v)
         {
             throw new NotImplementedException();
@@ -42,11 +43,17 @@ namespace FTCollectorApp.View.SitesPage
 
         private Task ExecuteNavigatetoRackCommand(string v)
         {
-            //var pages = new RacksPage()
-            //{
-            //    ResultCommand = Result
-            //}
+            var pages = new DuctPage()
+            {
+                SendResultCommand = ResultCommand
+            };
             return Navigation.PushAsync(new RacksPage());
+        }
+
+        private void ExecuteResultCommand()
+        {
+            Console.WriteLine();
+
         }
 
         public ObservableCollection<ModelDetail> ModelDetailList
@@ -112,6 +119,8 @@ namespace FTCollectorApp.View.SitesPage
             pDirectionTravel.ItemsSource = DotDistrict;
             pIsSiteClearZone.ItemsSource = YesNo;
             pBucketTruck.ItemsSource = YesNo;
+
+            ResultCommand = new Command(ExecuteResultCommand);
         }
 
 

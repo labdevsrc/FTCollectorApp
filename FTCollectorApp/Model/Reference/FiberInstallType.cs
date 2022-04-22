@@ -5,7 +5,7 @@ using SQLite;
 
 namespace FTCollectorApp.Model.Reference
 {
-    public class InstallType
+    public class FiberInstallType
     {
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }

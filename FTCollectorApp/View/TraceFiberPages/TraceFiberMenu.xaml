@@ -5,7 +5,7 @@
     <ContentPage.Content>
       <StackLayout Padding="10">
             <Label Padding="0,20,0,20" Text="Trace Fiber" FontSize="Large" />
-            <Button Padding="10" Text="Select Cable to Trace" Clicked="btnSelectCable_Clicked"/>
+            <Button Padding="10" Text="Select a Duct to Trace" Clicked="btnSelectDuct"/>
             <Button Padding="10" x:Name="btnStart" Text="Start a Trace" Clicked="btnStart_Clicked"/>
         </StackLayout>
     </ContentPage.Content>

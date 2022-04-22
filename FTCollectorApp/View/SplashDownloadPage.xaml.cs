@@ -138,8 +138,9 @@ namespace FTCollectorApp.View
                 var contentOwner    = await CloudDBService.GetOwners(); //owners
                 txtLoading.Text = "Downloading owner conduits";
                 var contentConduit   = await CloudDBService.GetConduits(); // conduits
-                var contentAllCountry = await CloudDBService.GetAllCountry(); //allcountry
-                var contentInstallType = await CloudDBService.GetInstallType(); // installtype
+
+                var ductInstallType = await CloudDBService.GetDuctInstallType(); // installtype
+                var fiberInstallType = await CloudDBService.GetFiberInstallType(); // installtype
                 var contentDuctUsed = await CloudDBService.GetDuctUsed(); // ductused
 
                 var contentDimension = await CloudDBService.GetDimensions();   // dimesnsions
@@ -165,6 +166,14 @@ namespace FTCollectorApp.View
                 txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
+                    conn.CreateTable<DuctInstallType>();
+                    conn.DeleteAll<DuctInstallType>();
+                    conn.InsertAll(ductInstallType);
+
+                    conn.CreateTable<FiberInstallType>();
+                    conn.DeleteAll<FiberInstallType>();
+                    conn.InsertAll(fiberInstallType);
+
                     conn.CreateTable<User>();
                     conn.DeleteAll<User>();
                     conn.InsertAll(contentUser);
@@ -176,8 +185,6 @@ namespace FTCollectorApp.View
                     conn.CreateTable<CodeSiteType>();
                     conn.DeleteAll<CodeSiteType>();
                     conn.InsertAll(contentCodeSiteType);
-
-
 
                     conn.CreateTable<Crewdefault>();
                     conn.DeleteAll<Crewdefault>();

@@ -518,8 +518,11 @@ namespace FTCollectorApp.Service
            GetDropDownParamsAsync<IEnumerable<Owner>>("owners");
         public static Task<IEnumerable<County>> GetAllCountry() =>
            GetDropDownParamsAsync<IEnumerable<County>>("allcountry");
-        public static Task<IEnumerable<InstallType>> GetInstallType() =>
-           GetDropDownParamsAsync<IEnumerable<InstallType>>("installtype");
+        public static Task<IEnumerable<FiberInstallType>> GetFiberInstallType() =>
+           GetDropDownParamsAsync<IEnumerable<FiberInstallType>>("fiberinstalltype");
+
+        public static Task<IEnumerable<DuctInstallType>> GetDuctInstallType() =>
+   GetDropDownParamsAsync<IEnumerable<DuctInstallType>>("ductinstalltype");
 
         public static Task<IEnumerable<DuctUsed>> GetDuctUsed() =>
            GetDropDownParamsAsync<IEnumerable<DuctUsed>>("ductused");
@@ -651,7 +654,7 @@ namespace FTCollectorApp.Service
             }
         }
 
-        public static async Task PostSaveFiberOpticCable(List<KeyValuePair<string, string>> keyValues)
+        public static async Task<string> PostSaveFiberOpticCable(List<KeyValuePair<string, string>> keyValues)
         {
 
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
@@ -662,11 +665,19 @@ namespace FTCollectorApp.Service
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                response = await client.PostAsync(Constants.UpdateAfiberCableTableUrl, content);
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var isi = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"[PostSaveBuilding] Response from  OK = 200 , content :" + isi);
+                    response = await client.PostAsync(Constants.UpdateAfiberCableTableUrl, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostSaveBuilding] Response from  OK = 200 , content :" + isi);
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
                 }
             }
             else
@@ -699,9 +710,8 @@ namespace FTCollectorApp.Service
                         throw;
                     }
                 }
-
-
             }
+            return "Update failed";
         }
         public static async Task<string> PostSaveBuilding(List<KeyValuePair<string, string>> keyValues)
         {
@@ -762,7 +772,7 @@ namespace FTCollectorApp.Service
                     }
                 }
             }
-            return "Internet No Connection";
+            return "Update failed";
         }
 
 
@@ -823,7 +833,7 @@ namespace FTCollectorApp.Service
                     }
                 }
             }
-            return "Internet No Connection";
+            return "Update failed";
         }
         public static async Task<string> PostSaveRacks(List<KeyValuePair<string, string>> keyValues)
         {

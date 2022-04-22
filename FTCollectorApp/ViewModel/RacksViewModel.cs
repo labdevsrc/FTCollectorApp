@@ -55,62 +55,6 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         RackType selectedRackType;
 
-        /*string _selectedRackNumber;
-        public string SelectedRackNumber
-        {
-            get => _selectedRackNumber;
-            set => SetProperty(ref _selectedRackNumber, value);
-        }
-
-
-        string _selectedOrientation;
-        public string SelectedOrientation
-        {
-            get => _selectedOrientation;
-            set => SetProperty(ref _selectedOrientation, value);
-        }
-        string _selectedFrontBack;
-        public string SelectedFrontBack
-        {
-            get => _selectedFrontBack;
-            set => SetProperty(ref _selectedFrontBack, value);
-        }
-
-        Manufacturer _manufacturerSelected;
-        public Manufacturer SelectedManufacturer
-        {
-            get => _manufacturerSelected;
-            set
-            {
-                SetProperty(ref _manufacturerSelected, value);
-                _modelDetailList.Where(a => a.ManufKey == value.ManufKey);
-                OnPropertyChanged(nameof(ModelDetailList));
-                Console.WriteLine();
-            }
-        }
-
-        ModelDetail _modeldetailSelected;
-        public ModelDetail SelectedModelDetail
-        {
-            get => _modeldetailSelected;
-            set
-            {
-                SetProperty(ref _modeldetailSelected, value);
-                Console.WriteLine();
-            }
-        }
-
-        RackType _selectedRackType;
-        public RackType SelectedRackType
-        {
-            get => _selectedRackType;
-            set
-            {
-                SetProperty(ref _selectedRackType, value);
-                Console.WriteLine();
-            }
-        }*/
-
 
         public ObservableCollection<RackType> RackTypeList
         {

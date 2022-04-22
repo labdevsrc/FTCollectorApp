@@ -11,11 +11,14 @@
                     HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
             <Button x:Name="btnPullCable" Text="Pull a cable" Clicked="btnPullCable_Clicked"  
                     HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
-            <Button x:Name="btnSpliceCable" Text="Splice a cable" Clicked="btnSpliceCable_Clicked"  
+            <Button x:Name="btnSpliceCable" Text="Splice a fiber" Clicked="btnSpliceCable_Clicked"  
                     HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>
             <Button x:Name="btnTerminateCable" Text="Terminate a fiber" Clicked="btnTerminate_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnTraceFiber" Text="Trace a fiber" Clicked="btnTraceFiber_Clicked" 
+                    HorizontalOptions="FillAndExpand" Padding="0,10,0,10"/>            
             <Button x:Name="btnInstallDev" Text="Install devices" Clicked="btnInstallDev_Clicked"  HorizontalOptions="FillAndExpand"/>
             <Button x:Name="btnOTDRtest" Text="Perform OTDR test" Clicked="OTDR_Clicked"  HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="btnInstallDevices" Text="Install Devices" Clicked="Install_Clicked"  HorizontalOptions="FillAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.View.TraceFiberPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace FTCollectorApp.View.SitesPage.Fiber
 
         private async void btnCable_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new FiberOpticCable());
+            await Navigation.PushAsync(new FiberOpticCablePage());
         }
 
         private async void btnSheathMark_Clicked(object sender, EventArgs e)

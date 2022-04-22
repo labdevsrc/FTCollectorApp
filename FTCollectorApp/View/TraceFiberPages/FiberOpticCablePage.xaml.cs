@@ -18,7 +18,7 @@ namespace FTCollectorApp.View.TraceFiberPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FiberOpticCablePage : ContentPage
     {
-        List<string> TwoHundreds = new List<string>();
+        //List<string> TwoHundreds = new List<string>();
         string InstalledAt, Manufactured;
 
         ObservableCollection<CableType> cableTypeList;
@@ -28,17 +28,7 @@ namespace FTCollectorApp.View.TraceFiberPages
         public FiberOpticCablePage()
         {
             InitializeComponent();
-            BindingContext = new DropDownViewModel();
-
-            for (int i = 0; i < 20; i++)
-            {
-                TwoHundreds.Add(i.ToString());
-            }
-
-            pSingleModeCount.ItemsSource = TwoHundreds;
-            pMultiModeCount.ItemsSource = TwoHundreds;
-            pBufferCount.ItemsSource = TwoHundreds;
-            pMultimodeDia.ItemsSource = TwoHundreds;
+            BindingContext = new FiberOpticCableViewModel();
         }
 
         protected override void OnAppearing()
@@ -46,7 +36,7 @@ namespace FTCollectorApp.View.TraceFiberPages
             base.OnAppearing();
             // Populate 
 
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            /*using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<AFiberCable>();
                 var tableAFC = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
@@ -79,11 +69,11 @@ namespace FTCollectorApp.View.TraceFiberPages
             pSheathTpe.SelectedIndexChanged += OnSelectedIdxChanged;
 
             InstalledAt = DateTime.Now.ToString("yyyy-MM-dd");
-            Manufactured = DateTime.Now.ToString("yyyy-MM-dd");
+            Manufactured = DateTime.Now.ToString("yyyy-MM-dd");*/
 
         }
 
-        string CableIdSelected, CableTypeSelected, CableTypeDescSelected, ModelSelected, SheathTypeSelected, ReelIdSelected;
+        /*string CableIdSelected, CableTypeSelected, CableTypeDescSelected, ModelSelected, SheathTypeSelected, ReelIdSelected;
         string ManufacturerSelected = null;
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
@@ -238,7 +228,7 @@ namespace FTCollectorApp.View.TraceFiberPages
 
             return keyValues;
 
-        }
+        }*/
 
     }
 }

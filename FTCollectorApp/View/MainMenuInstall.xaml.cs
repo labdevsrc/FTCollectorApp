@@ -67,5 +67,17 @@ namespace FTCollectorApp.View
         {
 
         }
+
+        private void btnTraceFiber_Clicked(object sender, EventArgs e)
+        {
+            var speaker = DependencyService.Get<ITextToSpeech>();
+            speaker?.Speak("Trace a Fiber");
+            Navigation.PushAsync(new TraceFiberMenu());
+        }
+
+        private void Install_Clicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }

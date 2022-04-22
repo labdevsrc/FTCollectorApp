@@ -22,7 +22,9 @@ namespace FTCollectorApp.View.TraceFiberPages
             Navigation.PushAsync(new TracingMenuPage());
         }
 
-        private async void btnSelectCable_Clicked(object sender, EventArgs e)
+
+
+        private async void btnSelectDuct(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new FiberOpticCablePage());
         }

@@ -13,6 +13,7 @@ using FTCollectorApp.Model;
 using System.Net.Http;
 using Xamarin.Essentials;
 using FTCollectorApp.View.SitesPage;
+using System.Windows.Input;
 
 namespace FTCollectorApp.View
 {
@@ -42,6 +43,8 @@ namespace FTCollectorApp.View
 
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
+
+
             Session.event_type = Session.LunchOut;
             Session.sessioncrew.Remove(crewname);
             Session.crewCnt = Session.sessioncrew.Count;
@@ -83,15 +86,30 @@ namespace FTCollectorApp.View
                     MessagingCenter.Send<StartTimePopupView>(this, "OnAppearing");
                 }
                 
+                FinishTimeSetCommand?.Execute(CommandParam);
+                
                 await PopupNavigation.Instance.PopAsync(true);
 
             }
-            catch {
+            catch { 
                 
                 await DisplayAlert("Warning", "Time format must be HH:MM", "OK");
             }
 
         }
+
+        
+        string commandParam;
+        public string CommandParam
+        {
+            get => commandParam;
+            set
+            {
+                commandParam = value;
+                OnPropertyChanged(nameof(CommandParam));
+            }
+        }
+        public ICommand FinishTimeSetCommand { get; set; }
 
         private void entryStartTime_TextChanged(object sender, TextChangedEventArgs e)
         {

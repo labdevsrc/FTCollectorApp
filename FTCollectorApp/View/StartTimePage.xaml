@@ -14,7 +14,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout x:Name="stackLayout" Padding="20" >
-            <ListView ItemsSource="{Binding CrewRoles}">
+            <ListView ItemsSource="{Binding CrewRoles}" SelectedItem="{Binding SelectedCrewRole, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
