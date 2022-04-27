@@ -35,9 +35,9 @@ namespace FTCollectorApp.View
             btnSpliceCable.IsEnabled = toggleMenu;
             btnTerminateCable.IsEnabled = toggleMenu;
             btnTraceFiber.IsEnabled = toggleMenu;
-            btnInstallDev.IsEnabled = toggleMenu;
-            btnOTDRtest.IsEnabled = toggleMenu;
-            btnInstallDevices.IsEnabled = toggleMenu;
+            btnInstallDev.IsEnabled = true;
+            btnOTDRtest.IsEnabled = true;
+            btnInstallDevices.IsEnabled = true;
 
             base.OnAppearing();
         }

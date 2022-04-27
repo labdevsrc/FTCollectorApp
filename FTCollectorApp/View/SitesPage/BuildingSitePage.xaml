@@ -63,9 +63,9 @@
                             <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
-                            <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="entryHeight"/>
-                            <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="entryDepth"/>
-                            <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="entryHeight" Keyboard="Numeric"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="entryDepth" Keyboard="Numeric"/>
+                            <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth" Keyboard="Numeric"/>
                         </Grid>
                         
                         <Label Text="Material"/>

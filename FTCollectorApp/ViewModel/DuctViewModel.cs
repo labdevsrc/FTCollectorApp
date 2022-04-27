@@ -30,17 +30,24 @@ namespace FTCollectorApp.ViewModel
             SaveCommand = new Command(
                 execute: async () =>
                 {
-                    save();
-                    Console.WriteLine();
-                    RefreshCanExecutes();
-            });
+                    var KVPair = keyvaluepair();
+                    string result = await CloudDBService.PostDuctSave(KVPair);
+                    if (result.Equals("OK"))
+                    {
+                        Console.WriteLine();
+                    }
+                });
             SaveBackCommand = new Command(
                 execute: async () =>
                 {
-                    save();
-                    Console.WriteLine();
-                    RefreshCanExecutes();
-                    await Application.Current.MainPage.Navigation.PopAsync();
+                    var KVPair = keyvaluepair();
+                    string result = await CloudDBService.PostDuctSave(KVPair);
+                    if (result.Equals("OK"))
+                    {
+                        Console.WriteLine();
+                        await Application.Current.MainPage.Navigation.PopAsync();
+                    }
+
                 });
             DefaultHostTagNumber = Session.tag_number;
 
@@ -203,21 +210,6 @@ namespace FTCollectorApp.ViewModel
 
             return keyValues;
 
-        }
-
-        async Task save()
-        {
-            var KVPair = keyvaluepair();
-
-            string result = await CloudDBService.PostDuctSave(KVPair);
-            if (result.Equals("OK"))
-            {
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.WriteLine();
-            }
         }
     }
 }

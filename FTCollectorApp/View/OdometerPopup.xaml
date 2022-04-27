@@ -12,7 +12,7 @@
         VerticalOptions="Center"     
             >
             <Label Text="Odometer:"/>
-            <Entry x:Name="entryOdometer" />
+            <Entry x:Name="entryOdometer" Keyboard="Numeric" />
             <Grid ColumnDefinitions="*,*,*,*">
                 <Button x:Name="btnSave" Grid.Column="2" Text="Save" Clicked="btnSave_Clicked">
                     <Button.Triggers>
