@@ -3,6 +3,7 @@ using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
 using FTCollectorApp.View.SitesPage.Fiber;
+using FTCollectorApp.View.TraceFiberPages;
 using FTCollectorApp.View.Utils;
 using FTCollectorApp.ViewModel;
 using SQLite;
@@ -146,6 +147,11 @@ namespace FTCollectorApp.View.SitesPage
         }
 
         private void btnComplete_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnTracer_Clicked(object sender, EventArgs e)
         {
 
         }
@@ -345,7 +351,7 @@ namespace FTCollectorApp.View.SitesPage
                 btnRecRacks.IsEnabled = true;
             }
         }
-
+        
         private async void btnActive_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ActiveDevicePage());
@@ -356,11 +362,12 @@ namespace FTCollectorApp.View.SitesPage
             await Navigation.PushAsync(new RacksPage());
             btnFiber.IsEnabled = true;
             btnActive.IsEnabled = true;
+            btnTracer.IsEnabled = true;
         }
 
-        private void btnTracer_Clicked(object sender, EventArgs e)
+        private async void btnTracer_ClickedAsync(object sender, EventArgs e)
         {
-
+            await Navigation.PushAsync(new TraceFiberMenu());
         }
 
         private async  void btnFiber_Clicked(object sender, EventArgs e)

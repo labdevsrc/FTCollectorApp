@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.Web;
 using FTCollectorApp.View.SitesPage.Fiber;
 using System.Windows.Input;
+using FTCollectorApp.View.TraceFiberPages;
 
 namespace FTCollectorApp.View.SitesPage
 {
@@ -182,6 +183,11 @@ namespace FTCollectorApp.View.SitesPage
         int IsSiteClearZone;
         int KeyTypeSelected = 0;
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, Orientation, MaterialCodeKeySelected;
+
+        private void btnComplete_Clicked(object sender, EventArgs e)
+        {
+
+        }
 
         private void OnChangeModel(object sender, EventArgs e)
         {
@@ -415,9 +421,15 @@ namespace FTCollectorApp.View.SitesPage
             await Navigation.PushAsync(new RacksPage());
             btnFiber.IsEnabled = true;
             btnActive.IsEnabled = true;
+            btnTracer.IsEnabled = true;
         }
 
-        private void btnTracer_Clicked(object sender, EventArgs e)
+        private async void btnTracer_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new TraceFiberMenu());
+        }
+
+        private void btnConnectDevice_Clicked(object sender, EventArgs e)
         {
 
         }

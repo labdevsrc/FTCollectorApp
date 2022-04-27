@@ -8,11 +8,16 @@ using SQLite;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using FTCollectorApp.View.SitesPage;
+using CommunityToolkit.Mvvm.ComponentModel;
+using FTCollectorApp.Model;
+using FTCollectorApp.Service;
 
 namespace FTCollectorApp.ViewModel
 {
-    public class DuctViewModel : BaseViewModel
+    public partial class DuctViewModel : ObservableObject
     {
+        [ObservableProperty]
+        string defaultHostTagNumber;
         public DuctViewModel()
         {
 
@@ -22,21 +27,38 @@ namespace FTCollectorApp.ViewModel
 
             // from DuctPage
             ShowPopupCommand = new Command(async _ => await ExecuteShowPopupCommand());
+            SaveCommand = new Command(
+                execute: async () =>
+                {
+                    save();
+                    Console.WriteLine();
+                    RefreshCanExecutes();
+            });
+            SaveBackCommand = new Command(
+                execute: async () =>
+                {
+                    save();
+                    Console.WriteLine();
+                    RefreshCanExecutes();
+                    await Application.Current.MainPage.Navigation.PopAsync();
+                });
+            DefaultHostTagNumber = Session.tag_number;
 
         }
-
-
+        public ICommand SaveCommand { get; set; }
+        public ICommand SaveBackCommand { get; set; }
+        void RefreshCanExecutes()
+        {
+            (SaveCommand as Command).ChangeCanExecute();
+            (SaveBackCommand as Command).ChangeCanExecute();
+        }
 
         /// get selected color from popup - start
-        private ColorCode _selectedColor;
-        public ColorCode SelectedColor
-        {
-            get => _selectedColor;
-            set => SetProperty(ref _selectedColor, value);
-        }
+        [ObservableProperty]
+        ColorCode selectedColor;
 
-        public ICommand ShowPopupCommand { get; }
-        public ICommand ColorSelectedCommand { get; }
+        public ICommand ShowPopupCommand { get; set; }
+        public ICommand ColorSelectedCommand { get; set; }
         private Task ExecuteShowPopupCommand()
         {
             var popup = new DuctColorCodePopUp(SelectedColor)
@@ -123,5 +145,79 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        [ObservableProperty]
+        string selectedDirectionCnt;
+
+        [ObservableProperty]
+        string isPlugged;
+
+        [ObservableProperty]
+        string isOpen;
+
+        [ObservableProperty]
+        string hasPullTape;
+
+        [ObservableProperty]
+        string hasInnerDuct;
+
+        [ObservableProperty]
+        string hasTraceWire;
+
+        [ObservableProperty]
+        string percentOpen;
+
+        [ObservableProperty]
+        DuctSize selectedDuctSize;
+
+        [ObservableProperty]
+        DuctType selectedDuctType;
+
+        [ObservableProperty]
+        DuctInstallType selectedDuctInstallType;
+
+        [ObservableProperty]
+        CompassDirection selectedDirection;
+
+        List<KeyValuePair<string, string>> keyvaluepair()
+        {
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
+                new KeyValuePair<string, string>("host_tag_number", Session.tag_number),  // 2
+                new KeyValuePair<string, string>("direction", SelectedDirection.CompasKey  == null ? "": SelectedDirection.CompasKey),  // 3
+                new KeyValuePair<string, string>("direction_count", SelectedDirectionCnt ??= ""),  // 4
+                new KeyValuePair<string, string>("duct_size",  SelectedDuctSize.DuctKey == null ? "": SelectedDuctSize.DuctKey),  // 5
+                new KeyValuePair<string, string>("duct_color", SelectedColor.ColorKey == null ? "": SelectedColor.ColorKey),  // 6
+                new KeyValuePair<string, string>("duct_type",  selectedDuctType.DucTypeKey == null ?"" : SelectedDuctType.DucTypeKey),  // 7
+                new KeyValuePair<string, string>("site_type_key", Session.site_type_key),  // 8
+                new KeyValuePair<string, string>("duct_usage", ""),  // 9
+                new KeyValuePair<string, string>("install", SelectedDuctInstallType.DuctInstallKey == null ? "":  SelectedDuctInstallType.DuctInstallKey),  // 10
+
+
+                new KeyValuePair<string, string>("openpercent", PercentOpen ??= ""),  // 11
+                new KeyValuePair<string, string>("has_trace_wire", HasTraceWire ??= ""),  // 12
+                new KeyValuePair<string, string>("has_pull_tape", HasPullTape ??= ""),  // 12
+            };
+
+
+            return keyValues;
+
+        }
+
+        async Task save()
+        {
+            var KVPair = keyvaluepair();
+
+            string result = await CloudDBService.PostDuctSave(KVPair);
+            if (result.Equals("OK"))
+            {
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+        }
     }
 }

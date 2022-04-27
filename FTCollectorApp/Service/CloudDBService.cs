@@ -660,7 +660,7 @@ namespace FTCollectorApp.Service
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
             HttpContent content = new FormUrlEncodedContent(keyValues);
             var json = JsonConvert.SerializeObject(keyValues);
-            Console.WriteLine($"PostSaveBuilding Json : {json}");
+            Console.WriteLine($"PostSaveFiberOpticCable Json : {json}");
             HttpResponseMessage response = null;
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
@@ -671,7 +671,7 @@ namespace FTCollectorApp.Service
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"[PostSaveBuilding] Response from  OK = 200 , content :" + isi);
+                        Console.WriteLine($"[PostSaveFiberOpticCable] Response from  OK = 200 , content :" + isi);
                         return "OK";
                     }
                 }
@@ -894,8 +894,12 @@ namespace FTCollectorApp.Service
             }
             return "Fail to update";
         }
-
         public static async Task<string> PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
+        {
+            return "Under Contruction";
+        }
+
+        public static async Task<string> PostDuctSave(List<KeyValuePair<string, string>> keyValues)
         {
 
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
@@ -909,7 +913,7 @@ namespace FTCollectorApp.Service
 
                 try
                 {
-                    response = await client.PostAsync(Constants.PostDuctTrace, content);
+                    response = await client.PostAsync(Constants.ajaxSaveduct, content);
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
@@ -920,6 +924,7 @@ namespace FTCollectorApp.Service
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.ToString());
                     return e.ToString();
                 }
             }
@@ -935,7 +940,7 @@ namespace FTCollectorApp.Service
                 var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
                 test.Add($"Task-{app.TaskCount}", keyValues);
 
-
+                Console.WriteLine();
                 // To serialize the hashtable and its key/value pairs,
                 // you must first open a stream for writing.
                 // In this case, use a file stream.

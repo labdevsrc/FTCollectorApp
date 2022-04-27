@@ -154,8 +154,12 @@ namespace FTCollectorApp.View.SitesPage
             }
             TagNumbers = new ObservableCollection<string>(tagnumbers);
 
-
-            stagePicker.Text = Session.stage;
+            if(Session.stage.Equals("I"))
+                stagePicker.Text = "Install";
+            else if (Session.stage.Equals("A"))
+                stagePicker.Text = "As Built";
+            else if (Session.stage.Equals("R"))
+                stagePicker.Text = "Repair";
             Device.StartTimer(TimeSpan.FromSeconds(5), () => OnTimerTick());
 
 
@@ -244,13 +248,20 @@ namespace FTCollectorApp.View.SitesPage
                 {
                     var OkAnswer = await DisplayAlert("Please Confirm", "Update existed Tag Number ? ", "OK", "Cancel");
                     if (OkAnswer)
+                    {
                         result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                        Session.Result = "CreateSiteOK";
+                    }
                     else
                         return;
                 }
                 else // create new tag
                 {
                     result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                    if (result.Equals("OK"))
+                    {
+                        Session.Result = "CreateSiteOK";
+                    }
                 }
 
 
@@ -325,7 +336,7 @@ namespace FTCollectorApp.View.SitesPage
 
 
             codekey = CodeSiteTypes.Where(a => (a.MajorType == selectedMajorType) && (a.MinorType == selectedMinorType)).Select(a => a.CodeKey).First();
-            
+            Session.site_type_key = codekey;
             Console.WriteLine($"key {codekey}, MajorType {selectedMajorType.ToString()}, MinorType {selectedMinorType.ToString()}");
 
         }

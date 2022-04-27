@@ -1,4 +1,5 @@
-﻿using FTCollectorApp.Utils;
+﻿using FTCollectorApp.Model;
+using FTCollectorApp.Utils;
 using FTCollectorApp.View.CablePages;
 using FTCollectorApp.View.FiberPages;
 using FTCollectorApp.View.SitesPage;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -17,11 +18,29 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainMenuInstall : ContentPage
     {
+        bool toggleMenu = false;
         public MainMenuInstall()
         {
             InitializeComponent();
         }
+        protected override void OnAppearing()
+        {
+            if (Session.Result.Equals("CreateSiteOK"))
+            {
+                toggleMenu = true;
+            }
 
+            btnNewCable.IsEnabled = toggleMenu;
+            btnPullCable.IsEnabled = toggleMenu;
+            btnSpliceCable.IsEnabled = toggleMenu;
+            btnTerminateCable.IsEnabled = toggleMenu;
+            btnTraceFiber.IsEnabled = toggleMenu;
+            btnInstallDev.IsEnabled = toggleMenu;
+            btnOTDRtest.IsEnabled = toggleMenu;
+            btnInstallDevices.IsEnabled = toggleMenu;
+
+            base.OnAppearing();
+        }
         private void btnSite_Clicked(object sender, EventArgs e)
         {
             var speaker = DependencyService.Get<ITextToSpeech>();
@@ -29,12 +48,13 @@ namespace FTCollectorApp.View
             Navigation.PushAsync(new SiteInputPage());
         }
 
+        public ICommand ResultCommand { get; set; }
 
-        private void gotoFOCablePage(object sender, EventArgs e)
+        private async void gotoFOCablePage(object sender, EventArgs e)
         {
             var speaker = DependencyService.Get<ITextToSpeech>();
             speaker?.Speak("New Cable");
-            Navigation.PushAsync(new FiberOpticCablePage());
+            await Navigation.PushAsync(new FiberOpticCablePage());
         }
 
         private void btnPullCable_Clicked(object sender, EventArgs e)

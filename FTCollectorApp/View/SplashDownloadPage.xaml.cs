@@ -27,6 +27,7 @@ namespace FTCollectorApp.View
         {
             InitializeComponent();
             BindingContext = this;
+            Session.Result = "InitializingDownload";
 
         }
 

@@ -39,8 +39,9 @@ namespace FTCollectorApp.Model
 
         public static string tag_number { get; set; }
         public static string site_key { get; set; }
-
+        public static string site_type_key { get; set; }
         public static int SITE_PAGE_COUNT { get; set; }
+        public static string Result { get; set; }
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input
         // 3

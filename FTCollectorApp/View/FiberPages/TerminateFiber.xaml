@@ -3,14 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.FiberPages.TerminateFiber">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Padding="0,20,0,20" Text="Terminate Fiber" FontSize="Large"
+        <StackLayout Padding="20" >
+            <Label  Text="Terminate Fiber" FontSize="Large"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Label Text="Site Type"/>
-            <local:Dropdown x:Name="pSiteType" SelectedIndexChanged="OnIndexChanged"/>
+            <local:Dropdown x:Name="pSiteType" SelectedItem="{Binding SelectedSiteType,Mode=TwoWay}"
+                            >
+                <Picker.Items>
+                    <x:String>Building</x:String>
+                    <x:String>Cabinet</x:String>
+                    <x:String>Structure</x:String>
+                </Picker.Items>
+                
+            </local:Dropdown>
             <Label Text="Enter PCS tag number"/>
-            <local:Dropdown x:Name="pTagNumber" ItemDisplayBinding="{Binding TagNumber}"/>
+            <local:Dropdown x:Name="pTagNumber" ItemsSource="{Binding Sites}" 
+                            ItemDisplayBinding="{Binding TagNumber}" 
+                            SelectedItem="{Binding selectedTagNumber,Mode=TwoWay}"/>
             <Label Text="Station Number"/>
             <local:BorderColorEntry x:Name="staNumber" />
             <Label Text="Plan sheet*"/>

@@ -1,4 +1,5 @@
 ﻿using FTCollectorApp.View.TraceFiberPages;
+using FTCollectorApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace FTCollectorApp.View.CablePages
         public PullCablePage()
         {
             InitializeComponent();
+            BindingContext = new PullCableViewModel();
         }
 
         private void btnNewFiber_Clicked(object sender, EventArgs e)
