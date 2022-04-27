@@ -905,7 +905,7 @@ namespace FTCollectorApp.Service
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
             HttpContent content = new FormUrlEncodedContent(keyValues);
             var json = JsonConvert.SerializeObject(keyValues);
-            Console.WriteLine($"PostDuctTrace Json : {json}");
+            Console.WriteLine($"PostDuctSave Json : {json}");
             HttpResponseMessage response = null;
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)

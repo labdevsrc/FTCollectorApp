@@ -254,30 +254,45 @@ namespace FTCollectorApp.ViewModel
         public ICommand SaveBackCommand { get; set; }
         List<KeyValuePair<string, string>> keyvaluepair()
         {
-            
-            string CableName = string.IsNullOrWhiteSpace(NewCableName) ? SelectedFiberCable.CableIdDesc : NewCableName;
+
+            string CableName = string.Empty;
+            if (SelectedFiberCable?.CableIdDesc is null)
+                CableName = "NA";
+            else
+                CableName = SelectedFiberCable.CableIdDesc;
+
+            //if (string.IsNullOrWhiteSpace(NewCableName) ? SelectedFiberCable.CableIdDesc : NewCableName;
+
+            // duct color convert
+            string color = string.Empty;
+            if (SelectedColor?.ClrKey is null)
+                color = "0";
+            else if (SelectedColor.ClrKey.Equals("Aqua"))
+                color = "62.5";
+            else if (SelectedColor.ClrKey.Equals("Orange"))
+                color = "62.5";
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("cable_id", CableName), // this is should be 
-                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufKey is null ? "" : SelectedManufacturer.ManufKey),
-                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelKey is null ? "" : SelectedModelDetail.ModelKey ),
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufKey is null ? "0" : SelectedManufacturer.ManufKey),
+                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelKey is null ? "0" : SelectedModelDetail.ModelKey ),
                 new KeyValuePair<string, string>("manufactured_date", SelectedManufacturedDate.ToString("yyyy-MM-dd")),
-                new KeyValuePair<string, string>("label", textLabel ??= ""),
-                new KeyValuePair<string, string>("cablelen", ""),
+                new KeyValuePair<string, string>("label", textLabel ??= "NA"),
+                new KeyValuePair<string, string>("cablelen", "0"),
 
 
 
-                new KeyValuePair<string, string>("singlemode_count", SMCount ??= "" ), //3
-                new KeyValuePair<string, string>("multimode_count", MMCount ??= ""),  //4
-                new KeyValuePair<string, string>("buffer_count", SelectedBufferCnt ??= "" ), //1
+                new KeyValuePair<string, string>("singlemode_count", SMCount ??= "0" ), //3
+                new KeyValuePair<string, string>("multimode_count", MMCount ??= "0"),  //4
+                new KeyValuePair<string, string>("buffer_count", SelectedBufferCnt ??= "0" ), //1
                 //new KeyValuePair<string, string>("reel", SelectedReelId.ReelKey ??= ""), // 6
-                new KeyValuePair<string, string>("reel", SelectedReelId?.ReelKey is null ? "" : SelectedReelId.ReelKey ), //8
+                new KeyValuePair<string, string>("reel", SelectedReelId?.ReelKey is null ? "0" : SelectedReelId.ReelKey ), //8
                 new KeyValuePair<string, string>("installed_date", SelectedInstalledAt.ToString("yyyy-MM-dd")), //  7 
 
-                new KeyValuePair<string, string>("cabtype", SelectedCableType?.CodeCableKey is null ? "" : SelectedCableType.CodeCableKey ), //8
+                new KeyValuePair<string, string>("cabtype", SelectedCableType?.CodeCableKey is null ? "0" : SelectedCableType.CodeCableKey ), //8
                 new KeyValuePair<string, string>("installtyp", SelectedInstallType?.FbrInstallKey is null ? "" : SelectedInstallType.FbrInstallKey),  /// site_id
-                new KeyValuePair<string, string>("sheath", SelectedSheath?.SheathKey is null ? "" : SelectedSheath.SheathKey ),  /// code_site_type.key
-                new KeyValuePair<string, string>("multimode_diameter", SelectedColor?.ClrKey is null ? "" : SelectedColor.ClrKey),
+                new KeyValuePair<string, string>("sheath", SelectedSheath?.SheathKey is null ? "0" : SelectedSheath.SheathKey ),  /// code_site_type.key
+                new KeyValuePair<string, string>("multimode_diameter", color),
 
                 new KeyValuePair<string, string>("oname", Session.OwnerName), //1
                 new KeyValuePair<string, string>("owner", Session.ownerkey), //1
@@ -288,10 +303,11 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),  // 2
                 new KeyValuePair<string, string>("jobnum", Session.jobnum), //  7 
                 new KeyValuePair<string, string>("stage", Session.stage),
-                new KeyValuePair<string, string>("country", Session.countycode),
-                new KeyValuePair<string, string>("geo_length", ""),
-                new KeyValuePair<string, string>("asite", ""),
-                new KeyValuePair<string, string>("zsite", ""),
+                new KeyValuePair<string, string>("country", "USA"),
+                new KeyValuePair<string, string>("cablelen", "1"),
+                new KeyValuePair<string, string>("geo_length", "1"),
+                new KeyValuePair<string, string>("asite", "0"),
+                new KeyValuePair<string, string>("zsite", "0"),
             };
             return keyValues;
         }

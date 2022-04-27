@@ -185,19 +185,19 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
                 new KeyValuePair<string, string>("host_tag_number", Session.tag_number),  // 2
-                new KeyValuePair<string, string>("direction", SelectedDirection.CompasKey  == null ? "": SelectedDirection.CompasKey),  // 3
-                new KeyValuePair<string, string>("direction_count", SelectedDirectionCnt ??= ""),  // 4
-                new KeyValuePair<string, string>("duct_size",  SelectedDuctSize.DuctKey == null ? "": SelectedDuctSize.DuctKey),  // 5
-                new KeyValuePair<string, string>("duct_color", SelectedColor.ColorKey == null ? "": SelectedColor.ColorKey),  // 6
-                new KeyValuePair<string, string>("duct_type",  selectedDuctType.DucTypeKey == null ?"" : SelectedDuctType.DucTypeKey),  // 7
+                new KeyValuePair<string, string>("direction", SelectedDirection.CompasKey  == null ? "0": SelectedDirection.CompasKey),  // 3
+                new KeyValuePair<string, string>("direction_count", SelectedDirectionCnt ??= "0"),  // 4
+                new KeyValuePair<string, string>("duct_size",  SelectedDuctSize.DuctKey == null ? "0": SelectedDuctSize.DuctKey),  // 5
+                new KeyValuePair<string, string>("duct_color", SelectedColor.ColorKey == null ? "0": SelectedColor.ColorKey),  // 6
+                new KeyValuePair<string, string>("duct_type",  selectedDuctType.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7
                 new KeyValuePair<string, string>("site_type_key", Session.site_type_key),  // 8
                 new KeyValuePair<string, string>("duct_usage", ""),  // 9
-                new KeyValuePair<string, string>("install", SelectedDuctInstallType.DuctInstallKey == null ? "":  SelectedDuctInstallType.DuctInstallKey),  // 10
+                new KeyValuePair<string, string>("install", SelectedDuctInstallType.DuctInstallKey == null ? "0":  SelectedDuctInstallType.DuctInstallKey),  // 10
 
 
-                new KeyValuePair<string, string>("openpercent", PercentOpen ??= ""),  // 11
-                new KeyValuePair<string, string>("has_trace_wire", HasTraceWire ??= ""),  // 12
-                new KeyValuePair<string, string>("has_pull_tape", HasPullTape ??= ""),  // 12
+                new KeyValuePair<string, string>("openpercent", PercentOpen ??= "100"),  // 11
+                new KeyValuePair<string, string>("has_trace_wire", HasTraceWire ??= "0"),  // 12
+                new KeyValuePair<string, string>("has_pull_tape", HasPullTape ??= "0"),  // 12
             };
 
 

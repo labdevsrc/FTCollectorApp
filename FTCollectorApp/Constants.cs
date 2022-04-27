@@ -20,7 +20,7 @@ namespace FTCollectorApp
         public const string SaveCrewUrl = "saveCrew.php";
         public const string CreateSiteTableUrl = "Createsite.php";
         public const string UpdateSiteTableUrl = "Savebuilding.php";
-        public const string UpdateAfiberCableTableUrl = "ajaxSavefosc.php";
+        public const string UpdateAfiberCableTableUrl = "ajaxSavefosccable.php";// ajaxSavefosc.php";
         public const string ajaxSaveduct = "ajaxSaveduct.php";
         public const string GetBuildingsParamUrl = "getBuildingEntries.php";
         public const string PostSplice = "ajaxSavesplice.php";
