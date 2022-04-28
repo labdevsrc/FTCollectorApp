@@ -849,6 +849,7 @@ namespace FTCollectorApp.Service
                 try
                 {
                     response = await client.PostAsync(Constants.SaveRacks, content);
+                    Console.WriteLine("Response : {0}", response);
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
@@ -918,13 +919,14 @@ namespace FTCollectorApp.Service
                     {
                         var isi = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
-
+                        Session.Result = "DuctSaveOK";
                         return "OK";
                     }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
+                    Session.Result = "DuctSaveFAIL";
                     return e.ToString();
                 }
             }
@@ -961,6 +963,7 @@ namespace FTCollectorApp.Service
 
 
             }
+            Session.Result = "DuctSaveFAIL";
             return "Fail to update";
         }
 

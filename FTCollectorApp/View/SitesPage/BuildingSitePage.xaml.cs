@@ -133,6 +133,10 @@ namespace FTCollectorApp.View.SitesPage
             //IsBusy = false;
             InstalledAt = DateTime.Now.ToString("yyyy-MM-dd");
             Manufactured = DateTime.Now.ToString("yyyy-MM-dd");
+
+
+            if (Session.Result.Equals("DuctSaveFAIL"))
+                btnRecDucts.BackgroundColor = Color.Red;
         }
 
         int IsBucketTruck = 0;

@@ -20,7 +20,7 @@
             <Label Text="Enter PCS tag number"/>
             <local:Dropdown x:Name="pTagNumber" ItemsSource="{Binding Sites}" 
                             ItemDisplayBinding="{Binding TagNumber}" 
-                            SelectedItem="{Binding selectedTagNumber,Mode=TwoWay}"/>
+                            SelectedItem="{Binding SelectedTagNumber,Mode=TwoWay}"/>
             <Label Text="Station Number"/>
             <local:BorderColorEntry x:Name="staNumber" />
             <Label Text="Plan sheet*"/>
@@ -28,7 +28,7 @@
             <Label Text="Plan sheet item"/>
             <local:BorderColorEntry x:Name="planSheetItem" />
 
-            <Button Text="Save and Continue" Clicked="OnClicked" />
+            <Button Text="Save and Continue" Command="{Binding SaveCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

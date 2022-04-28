@@ -31,20 +31,9 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         RackNumber selectedRackNumber;
 
-
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(ModelDetailList))]
         Manufacturer selectedManufacturer;
-        public Manufacturer SelectedManufacturer
-        {
-            get => selectedManufacturer;
-            set
-            {
-                SetProperty(ref selectedManufacturer, value);
-                _modelDetailList.Where(a => a.ManufKey == value.ManufKey);
-                OnPropertyChanged(nameof(ModelDetailList));
-                Console.WriteLine();
-            }
-        }
-
 
         [ObservableProperty]
         ModelDetail selectedModelDetail;
@@ -156,6 +145,9 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<ModelDetail>();
                     var table = conn.Table<ModelDetail>().ToList();
+                    if (SelectedManufacturer?.ManufKey != null)
+                        table = conn.Table<ModelDetail>().Where(a => a.ManufKey == SelectedManufacturer.ManufKey).ToList();
+
                     foreach (var col in table)
                     {
                         col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 

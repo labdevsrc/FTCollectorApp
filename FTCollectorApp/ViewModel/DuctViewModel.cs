@@ -198,7 +198,12 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("duct_color", SelectedColor.ColorKey == null ? "0": SelectedColor.ColorKey),  // 6
                 new KeyValuePair<string, string>("duct_type",  selectedDuctType.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7
                 new KeyValuePair<string, string>("site_type_key", Session.site_type_key),  // 8
-                new KeyValuePair<string, string>("duct_usage", ""),  // 9
+                new KeyValuePair<string, string>("duct_usage", "0"),  // 9
+                new KeyValuePair<string, string>("duct_grouptype", "0"),  // 9
+                new KeyValuePair<string, string>("duct_groupid", "0"),  // 9
+                new KeyValuePair<string, string>("duct_inuse", "1"),  // 9
+                new KeyValuePair<string, string>("duct_trace", "0"),  // 9
+
                 new KeyValuePair<string, string>("install", SelectedDuctInstallType.DuctInstallKey == null ? "0":  SelectedDuctInstallType.DuctInstallKey),  // 10
 
 

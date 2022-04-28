@@ -36,24 +36,21 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string selectedFrontBack;
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(ModelDetailList))]
         Manufacturer selectedManufacturer;
-        public Manufacturer SelectedManufacturer
-        {
-            get => selectedManufacturer;
-            set
-            {
-                SetProperty(ref selectedManufacturer, value);
-                _modelDetailList.Where(a => a.ManufKey == value.ManufKey);
-                OnPropertyChanged(nameof(ModelDetailList));
-                Console.WriteLine();
-            }
-        }
 
         [ObservableProperty]
         ModelDetail selectedModelDetail;
 
         [ObservableProperty]
         RackType selectedRackType;
+
+        [ObservableProperty]
+        string _XPos;
+
+        [ObservableProperty]
+        string _YPos;
 
 
         public ObservableCollection<RackType> RackTypeList
@@ -69,6 +66,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+
         ObservableCollection<ModelDetail> _modelDetailList;
         public ObservableCollection<ModelDetail> ModelDetailList
         {
@@ -79,6 +77,9 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<ModelDetail>();
                     var table = conn.Table<ModelDetail>().ToList();
+                    if (SelectedManufacturer?.ManufKey != null)
+                        table = conn.Table<ModelDetail>().Where(a => a.ManufKey == SelectedManufacturer.ManufKey).ToList(); 
+
                     foreach (var col in table)
                     {
                         col.ModelNumber = HttpUtility.HtmlDecode(col.ModelNumber); // should use for escape char 
@@ -88,6 +89,7 @@ namespace FTCollectorApp.ViewModel
                             col.ModelCode2 = col.ModelCode1;
                     }
                     _modelDetailList = new ObservableCollection<ModelDetail>(table);
+                    Console.WriteLine();
                     return _modelDetailList;
                 }
             }
@@ -131,13 +133,13 @@ namespace FTCollectorApp.ViewModel
         //"ypos":ypos,"manufacturer":mfr,"model":mod,"height":height,"width":width,"depth":depth,
         //"time":getCurtime()};
 
-                new KeyValuePair<string, string>("type", SelectedRackType.RackTypeKey),
+                new KeyValuePair<string, string>("type", SelectedRackType?.RackTypeKey==null ?"0":SelectedRackType.RackTypeKey),
                 new KeyValuePair<string, string>("racknumber", SelectedRackNumber),
                 new KeyValuePair<string, string>("orientation", SelectedOrientation.Equals("Horizontal") ? "H" : "V"),
 
-                new KeyValuePair<string, string>("xpos", ""),
-                new KeyValuePair<string, string>("ypos", ""),
-                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer.ManufKey),
+                new KeyValuePair<string, string>("xpos", XPos ??= ""),
+                new KeyValuePair<string, string>("ypos", YPos ??= ""),
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufKey==null ?"0": SelectedManufacturer.ManufKey),
                 //new KeyValuePair<string, string>("manufacturer", ManufacturerKeySelected), 
                 new KeyValuePair<string, string>("model", SelectedModelDetail.ModelKey),
 

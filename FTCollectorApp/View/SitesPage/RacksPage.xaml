@@ -70,10 +70,10 @@
                         <local:BorderEntry Grid.Row="1" Grid.Column="2" x:Name="entryWidth" Text="{Binding SelectedModelDetail.width}"/>
                     </Grid>
                     <Label Text="Y Pos"/>
-                    <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos"/>
+                    <local:BorderEntry Grid.Row="1" Grid.Column="0" x:Name="Ypos" Text="{Binding YPos, Mode=TwoWay}"/>
 
                     <Label Text="X Pos"/>
-                    <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="1" x:Name="Xpos" Text="{Binding XPos, Mode=TwoWay}"/>
 
 
                         <Button Text="Submit Rack" Padding="0,10,0,10" Command="{Binding SaveCommand}" />

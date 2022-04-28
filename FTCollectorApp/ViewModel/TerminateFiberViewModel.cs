@@ -26,19 +26,9 @@ namespace FTCollectorApp.ViewModel
             await Application.Current.MainPage.Navigation.PushAsync(new FiberTermination());
         }
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(Sites))]
         string selectedSiteType;
-        public string SelectedSiteType
-        {
-            get => selectedSiteType;
-            set
-            {
-                SetProperty(ref selectedSiteType, value);
-                _sites.Where(b => b.SiteTypeDesc == value);
-                
-                OnPropertyChanged(nameof(Sites));
-
-            }
-        }
 
         [ObservableProperty]
         Site selectedTagNumber;
@@ -53,6 +43,9 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<Site>();
                     var table = conn.Table<Site>().ToList();
+                    if (!string.IsNullOrEmpty(SelectedSiteType))
+                        table = conn.Table<Site>().Where(a => a.SiteTypeDesc.Equals(SelectedSiteType)).ToList();
+
                     _sites = new ObservableCollection<Site>(table);
                     return _sites;
                 }
