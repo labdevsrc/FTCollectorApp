@@ -17,7 +17,7 @@
                         <Label Text="Host Tag #" />
                         <local:BorderColorEntry x:Name="txtHostTagNumber" IsEnabled="False"/>
                         <Label Text="Number" />
-                        <local:Dropdown x:Name="pNumber" SelectedItem="{Binding SelectedNumber, Mode=TwoWay}">
+                        <local:Dropdown x:Name="pNumber" SelectedItem="{Binding SelectedActDevNumber, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>1</x:String>
                                 <x:String>2</x:String>
@@ -51,10 +51,10 @@
                         <Label Text="Serial Number"/>
                         <local:BorderEntry x:Name="txtSerialNum" />
                         <Label Text="Enter manufactured" />
-                        <DatePicker x:Name="dateManufactured" HorizontalOptions="FillAndExpand" 
+                        <DatePicker  HorizontalOptions="FillAndExpand" 
                                     Date="{Binding SelectedManufDate,Mode=TwoWay}"/>
                         <Label Text="Installed at" />
-                        <DatePicker x:Name="dateInstalled" HorizontalOptions="FillAndExpand" 
+                        <DatePicker HorizontalOptions="FillAndExpand" 
                                     Date="{Binding SelectedInstallDate,Mode=TwoWay}" />
 
                         <Grid RowDefinitions="0.5*,*" ColumnDefinitions="*,*">

@@ -6,7 +6,13 @@
         <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
                  Order="Primary"
                  Priority="0" />
-    </ContentPage.ToolbarItems>    
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:HVConverter x:Key="HVConverter" />
+            <local:FBConverter x:Key="FBConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
@@ -14,6 +20,16 @@
         
                 <StackLayout Padding="20">
                     <Label Text="Racks" FontSize="Large" HorizontalOptions="Center" />
+                    <Grid ColumnDefinitions="0.7*,0.1*" >
+                        <local:Dropdown SelectedItem="{Binding SelectedRackKey, Mode=TwoWay}"
+                                    ItemDisplayBinding="{Binding RackNumKey}" 
+                                    ItemsSource="{Binding RackKeyList}" />
+
+                        <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
+                                FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshDuctKeyListCommand}"
+                                />
+                    </Grid>
+
                     <Label Text="Enter rack number" />
                         <local:Dropdown x:Name="pRackNum" SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}">
                             <Picker.Items>
@@ -34,7 +50,7 @@
                              SelectedItem="{Binding SelectedRackType, Mode=TwoWay}"
                              HorizontalOptions="FillAndExpand" />
                     <Label Text="Front Back "/>
-                        <Picker x:Name="pFrontBack"  SelectedItem="{Binding SelectedFrontBack, Mode=TwoWay}" 
+                        <Picker x:Name="pFrontBack"  SelectedItem="{Binding SelectedFrontBack, Mode=TwoWay,Converter={StaticResource FBConverter}}" 
                              HorizontalOptions="FillAndExpand" >
                             <Picker.Items>
                                 <x:String>Front</x:String>
@@ -44,7 +60,7 @@
 
                     <Label Text="Orientation"/>
                         <Picker  x:Name="pOrientation" HorizontalOptions="FillAndExpand" 
-                             SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" >
+                             SelectedItem="{Binding SelectedOrientation, Mode=TwoWay,Converter={StaticResource HVConverter}}" >
                             <Picker.Items>
                                 <x:String>Horizontal</x:String>
                                 <x:String>Vertical</x:String>

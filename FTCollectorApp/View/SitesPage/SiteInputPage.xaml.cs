@@ -311,7 +311,7 @@ namespace FTCollectorApp.View.SitesPage
 
                 SelectedMajorType = selected;
 
-                minorTypePicker.ItemsSource = CodeSiteTypes.Where(a => a.MajorType == selected.MajorType).ToList();
+                minorTypePicker.ItemsSource = CodeSiteTypes.Where(a => a.MajorType == selected.MajorType).OrderBy(d => d.MinorType).ToList(); // change , A-Z order
             }
         }
 

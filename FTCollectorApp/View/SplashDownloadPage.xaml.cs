@@ -61,7 +61,7 @@ namespace FTCollectorApp.View
                             await DownloadTables();
                     }
                 });*/
-                DisplayAlert("Warning", "No Internet Available. Turn it ON now then retry", "Close");
+                await DisplayAlert("Warning", "No Internet Available. Turn it ON now then retry", "Close");
             }
 
         }
@@ -87,7 +87,7 @@ namespace FTCollectorApp.View
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
                 txtLoading.Text = "Downloading Site table";
                 //var contentSite = await CloudDBService.GetSite();
-                var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
+                //var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
 
                 var contentCrewDefault = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
 
@@ -162,8 +162,11 @@ namespace FTCollectorApp.View
                 var codeColor = await CloudDBService.GetColorCode(); //code_colors
 
                 var contentChassisType = await CloudDBService.GetChassisTypes(); //code_colors
+                var contentslotBladeTray = await CloudDBService.GetBladeTableKey(); //slotbladetray
 
-                Thread.Sleep(5000);
+                txtLoading.Text = "Site...";
+                var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
+                //Thread.Sleep(5000);
                 txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
@@ -249,12 +252,6 @@ namespace FTCollectorApp.View
                     conn.CreateTable<ModelDetail>();
                     conn.DeleteAll<ModelDetail>();
                     conn.InsertAll(contentModelDetail);
-
-
-                    
-
-
-
 
                     conn.CreateTable<RackNumber>();
                     conn.DeleteAll<RackNumber>();
@@ -352,6 +349,10 @@ namespace FTCollectorApp.View
                     conn.CreateTable<ColorCode>();
                     conn.DeleteAll<ColorCode>();
                     conn.InsertAll(codeColor);
+
+                    conn.CreateTable<SlotBladeTray>();
+                    conn.DeleteAll<SlotBladeTray>();
+                    conn.InsertAll(contentslotBladeTray);
 
                 }
                 txtLoading.Text = "Populating Local SQLite done!";

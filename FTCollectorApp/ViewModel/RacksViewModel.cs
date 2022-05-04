@@ -67,7 +67,20 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        ObservableCollection<ModelDetail> _modelDetailList;
+        public ObservableCollection<RackNumber> RackKeyList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<RackNumber>();
+                    var table = conn.Table<RackNumber>().Where(a => (a.SiteId == Session.tag_number) && (a.OWNER_CD == Session.OWNER_cd)).ToList();
+                    return new ObservableCollection<RackNumber>(table);
+                }
+            }
+        }
+
+        //ObservableCollection<ModelDetail> _modelDetailList;
         public ObservableCollection<ModelDetail> ModelDetailList
         {
             get
@@ -88,9 +101,9 @@ namespace FTCollectorApp.ViewModel
                         if (col.ModelCode2 == "")
                             col.ModelCode2 = col.ModelCode1;
                     }
-                    _modelDetailList = new ObservableCollection<ModelDetail>(table);
-                    Console.WriteLine();
-                    return _modelDetailList;
+                    return new ObservableCollection<ModelDetail>(table);
+                    //Console.WriteLine();
+                    //return _modelDetailList;
                 }
             }
         }
@@ -127,25 +140,21 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("jobkey", Session.jobkey),
                 new KeyValuePair<string, string>("tag",Session.tag_number),
                 new KeyValuePair<string, string>("sitekey",Session.site_key),
-
-         //racks.php
-        //var values={"type":type,"rnumber":rnumber,"orientation":ori,"xpos":xpos,
-        //"ypos":ypos,"manufacturer":mfr,"model":mod,"height":height,"width":width,"depth":depth,
-        //"time":getCurtime()};
-
+                new KeyValuePair<string, string>("front_back","F"),
                 new KeyValuePair<string, string>("type", SelectedRackType?.RackTypeKey==null ?"0":SelectedRackType.RackTypeKey),
                 new KeyValuePair<string, string>("racknumber", SelectedRackNumber),
-                new KeyValuePair<string, string>("orientation", SelectedOrientation.Equals("Horizontal") ? "H" : "V"),
+                new KeyValuePair<string, string>("orientation", SelectedOrientation ??= "0"),
 
                 new KeyValuePair<string, string>("xpos", XPos ??= ""),
                 new KeyValuePair<string, string>("ypos", YPos ??= ""),
-                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufKey==null ?"0": SelectedManufacturer.ManufKey),
-                //new KeyValuePair<string, string>("manufacturer", ManufacturerKeySelected), 
-                new KeyValuePair<string, string>("model", SelectedModelDetail.ModelKey),
+                new KeyValuePair<string, string>("manufacturer_key", SelectedManufacturer?.ManufKey==null ?"0": SelectedManufacturer.ManufKey),
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufName == null ?"0": SelectedManufacturer.ManufName), 
+                new KeyValuePair<string, string>("model_key", SelectedModelDetail?.ModelKey==null ?"0":SelectedModelDetail.ModelKey ),
+                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelDescription==null ?"0":SelectedModelDetail.ModelDescription ),
 
-                new KeyValuePair<string, string>("height", SelectedModelDetail.height),
-                new KeyValuePair<string, string>("width", SelectedModelDetail.width),
-                new KeyValuePair<string, string>("depth", SelectedModelDetail.depth)
+                new KeyValuePair<string, string>("height", SelectedModelDetail.height ??= "0"),
+                new KeyValuePair<string, string>("width", SelectedModelDetail.width ??= "0"),
+                new KeyValuePair<string, string>("depth", SelectedModelDetail.depth ??= "0")
             };
 
             Console.WriteLine();
@@ -158,17 +167,18 @@ namespace FTCollectorApp.ViewModel
         public ICommand SaveCommand { get; set; }
         private async Task ExecuteSaveandBackCommand()
         {
-            save();
-            Console.WriteLine();
+            /*var KVPair = keyvaluepair();
+
+            var result = await CloudDBService.PostSaveRacks(KVPair);
+            if (result.Equals("OK"))
+            {
+                Console.WriteLine();
+                await Application.Current.MainPage.Navigation.PopAsync();
+            }*/
             await Application.Current.MainPage.Navigation.PopAsync();
         }
 
         private async Task ExecuteSaveCommand()
-        {
-            save();
-        }
-
-        async void save()
         {
             var KVPair = keyvaluepair();
 
@@ -176,14 +186,15 @@ namespace FTCollectorApp.ViewModel
             if (result.Equals("OK"))
             {
                 Console.WriteLine();
-                //ResultCommand?.Execute("OK");
-                //await DisplayAlert("Success", "Uploading Data Done", "OK");
-            }
-            else
-            {
-                Console.WriteLine();
-                //ResultCommand?.Execute("FAIL");
-                //await DisplayAlert("Warning", result, "OK");
+
+                SelectedRackNumber = string.Empty;
+                SelectedOrientation = string.Empty;
+                SelectedFrontBack = string.Empty;
+                SelectedManufacturer.ManufName = string.Empty;
+                SelectedModelDetail.ModelNumber = string.Empty;
+
+                XPos = string.Empty; 
+                YPos = string.Empty;
             }
         }
     }

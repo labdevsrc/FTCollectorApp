@@ -491,8 +491,6 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<Orientation>> GetOrientation() =>
             GetDropDownParamsAsync<IEnumerable<Orientation>>("sbto");
 
-        public static Task<IEnumerable<Chassis>> GetChassis() =>
-            GetDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
         public static Task<IEnumerable<AFiberCable>> GetAFCable() =>
             GetDropDownParamsAsync<IEnumerable<AFiberCable>>("frcable");
         public static Task<IEnumerable<CableType>> GetCableType() =>
@@ -534,7 +532,7 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<SpliceType>> GetSpliceType() =>
             GetDropDownParamsAsync<IEnumerable<SpliceType>>("splicetype");
 
-        public static Task<IEnumerable<Chassis>> GetToEncloser() =>
+        public static Task<IEnumerable<Chassis>> GetChassis() =>
             GetDropDownParamsAsync<IEnumerable<Chassis>>("toencloser");
 
         public static Task<IEnumerable<LaborClass>> GetLaborClass() =>
@@ -566,6 +564,9 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<ChassisType>> GetChassisTypes() =>
             GetDropDownParamsAsync<IEnumerable<ChassisType>>("code_chassis_type");
 
+        public static Task<IEnumerable<SlotBladeTray>> GetBladeTableKey() =>
+           GetDropDownParamsAsync<IEnumerable<SlotBladeTray>>("slotbladetray");
+        
 
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
@@ -776,6 +777,7 @@ namespace FTCollectorApp.Service
         }
 
 
+
         public static async Task<string> PostActiveDevice(List<KeyValuePair<string, string>> keyValues)
         {
 
@@ -792,9 +794,14 @@ namespace FTCollectorApp.Service
                     response = await client.PostAsync(Constants.SaveActiveDevice, content);
                     if (response.IsSuccessStatusCode)
                     {
+
+
                         var isi = await response.Content.ReadAsStringAsync();
+                        var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);
                         Console.WriteLine($"[PostActiveDevice] Response from  OK = 200 , content :" + isi);
-                        return "OK";
+                        Console.WriteLine($"status : {0}", contentResponse?.sts);
+                        Console.WriteLine($"cnumber : {0}", contentResponse?.cnumber);
+                        return isi;
                     }
                 }
                 catch (Exception e)
@@ -898,6 +905,39 @@ namespace FTCollectorApp.Service
         public static async Task<string> PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
         {
             return "Under Contruction";
+        }
+
+        public static async Task<string> PostBladeSave(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostDuctSave Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                try
+                {
+                    response = await client.PostAsync(Constants.ajaxSaveSlotBTray, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
+                        Session.Result = "DuctSaveOK";
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "DuctSaveFAIL";
+                    return e.ToString();
+                }
+            }
+            return "Upload Fail";
         }
 
         public static async Task<string> PostDuctSave(List<KeyValuePair<string, string>> keyValues)

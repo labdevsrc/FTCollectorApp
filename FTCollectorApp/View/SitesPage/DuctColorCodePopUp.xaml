@@ -5,8 +5,10 @@
              x:Class="FTCollectorApp.View.SitesPage.DuctColorCodePopUp"
                  Title="Color Code Select">
 
-    <StackLayout Padding="20" HorizontalOptions="CenterAndExpand" BackgroundColor="Gray">
-        <ListView SeparatorVisibility="Default" SeparatorColor="White" x:Name="listViewColorList" 
+    <StackLayout Margin="20"
+                Padding="20"
+                BackgroundColor="White">
+        <ListView SeparatorVisibility="Default" SeparatorColor="DarkGray" x:Name="listViewColorList" 
                   ItemsSource="{Binding DuctColorCode}" SelectedItem ="{Binding SelectedColor, Mode=TwoWay} " 
                   >
             <ListView.ItemTemplate>

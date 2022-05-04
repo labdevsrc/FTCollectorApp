@@ -9,20 +9,29 @@
 
                     <StackLayout Padding="20">
                         <Label Text="Port" FontSize="Large" />
+                        <local:Dropdown ItemsSource="{Binding PortKeyList}" SelectedItem="{Binding PortKeyList.PortKey}"/>
                         <Label Text="Rack" />
-                        <local:Dropdown x:Name="pRackNum" SelectedIndexChanged="OnIndexChanged"/>
+                        <local:Dropdown SelectedItem="{Binding Port.RackCount}"/>
                         <Label Text="Chassis" />
-                        <local:Dropdown x:Name="pChassis" SelectedIndexChanged="OnIndexChanged"/>
+                        <local:Dropdown />
                         <Label Text="Blade" />
                         <local:Dropdown x:Name="pBlade" SelectedIndexChanged="OnIndexChanged"/>                        
-                        <Label Text="Port Number" />
+
                         <local:Dropdown x:Name="pPortNumber" SelectedIndexChanged="OnIndexChanged"/>
                         <Label Text="Transmit / Receive" />
-                        <local:Dropdown x:Name="pTxRx" SelectedIndexChanged="OnIndexChanged" />
-                        <Label Text="Rack" />
-                        <local:BorderEntry />
+                        <local:Dropdown >
+                            <Picker.Items>
+                                <x:String>Transmit</x:String>
+                                <x:String>Receive</x:String>
+                                <x:String>Full Duplex</x:String>
+                                <x:String>Unknown</x:String>
+                            </Picker.Items>
+                        </local:Dropdown>
+                        <Label Text="Port Number" />
+                        <local:BorderEntry Text="{Binding txtLabel}" />
                         <Label Text="Port type" />
-                        <local:Dropdown x:Name="pPortType" SelectedIndexChanged="OnIndexChanged" />
+                        <local:Dropdown x:Name="pPortType" >
+                        </local:Dropdown>
 
                         <Button Text="Save and Continue" Clicked="btnSaveContinue"/>
                         <Button Text="Done Port" Clicked="btnExit"/>

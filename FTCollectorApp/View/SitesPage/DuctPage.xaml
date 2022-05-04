@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             xmlns:fa="clr-namespace:FontAwesome"
              x:Class="FTCollectorApp.View.SitesPage.DuctPage">
     <ContentPage.ToolbarItems>
         <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
@@ -15,6 +16,16 @@
                     <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
                      <Label Text="Duct"  HorizontalOptions="Center" FontSize="Large" />
 
+                    <Label Text="Duct "  />
+                        <Grid ColumnDefinitions="0.7*,0.1*" >
+                            <local:Dropdown SelectedItem="{Binding SelectedDuctKey, Mode=TwoWay}"
+                                        ItemDisplayBinding="{Binding ConduitKey}" 
+                                        ItemsSource="{Binding DuctKeyList}" />
+
+                            <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
+                                   FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshDuctKeyListCommand}"
+                                    />
+                        </Grid>
                     <Label Text="Host Tag Number "  />
                     <local:BorderColorEntry x:Name="txtHostTagNumber" Text="{Binding DefaultHostTagNumber}" IsEnabled="False"/>
 
@@ -22,10 +33,10 @@
                     <local:Dropdown  ItemsSource="{Binding TravelDirectionList}" 
                                      ItemDisplayBinding="{Binding CompassDirDesc}" 
                                      SelectedItem="{Binding SelectedDirection, Mode=TwoWay}"
-                             x:Name="pDirection" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
-
+                             Title="{Binding SelectedDuctKey.Direction}" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+                        
                     <Label Text="Direction Count" />
-                    <local:Dropdown2 x:Name="pDirCnt" HorizontalOptions="FillAndExpand" 
+                        <local:Dropdown2 Title="{Binding SelectedDuctKey.DirCnt}" HorizontalOptions="FillAndExpand" 
                                      SelectedItem="{Binding SelectedDirectionCnt}">
                             <Picker.Items>
                                 <x:String>1</x:String>
@@ -44,7 +55,7 @@
                     <Label Text="Conduit Diameter" />
                     <local:Dropdown ItemsSource="{Binding DuctSizeList}" ItemDisplayBinding="{Binding Ductsize}" 
                                     SelectedItem="{Binding SelectedDuctSize, Mode=TwoWay}"
-                             x:Name="pDuctSize" HorizontalOptions="FillAndExpand"/>
+                            Title="{Binding SelectedDuctKey.DuctSize}" HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Color :" />
                     <Button x:Name="btnSelectColor" Command="{Binding ShowPopupCommand}" 
@@ -57,16 +68,16 @@
                         <Label Text="Duct Material :" />
                     <local:Dropdown  ItemsSource="{Binding DuctMaterialList}" ItemDisplayBinding="{Binding DucTypeDesc}" 
                                      SelectedItem="{Binding SelectedDuctType, Mode=TwoWay}"
-                             x:Name="pDuctMaterial" HorizontalOptions="FillAndExpand"/>
+                             HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Duct Used :" />
                     <local:Dropdown ItemsSource="{Binding DuctUsageList}" ItemDisplayBinding="{Binding DuctUsage}" 
-                             x:Name="pDuctUsed" HorizontalOptions="FillAndExpand"/>
+                             HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Install Method :" />
                     <local:Dropdown ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}" 
                              SelectedItem="{Binding SelectedDuctInstallType,Mode=TwoWay}"
-                             x:Name="pInstall" HorizontalOptions="FillAndExpand"/>
+                             HorizontalOptions="FillAndExpand"/>
 
 
                         <Grid RowDefinitions="0.3*,0.5*,0.3*,0.5*" ColumnDefinitions="*,*,*">
@@ -89,9 +100,11 @@
                         <Label Text="HasPullTape" Grid.Column="2"/>
                             <local:Dropdown x:Name="hasPullTape" Grid.Row="1" Grid.Column="2" SelectedItem="{Binding HasPullTape, Mode=TwoWay}">
                             <Picker.Items>
-                            <x:String>Y</x:String>
-                            <x:String>N</x:String>
-                        </Picker.Items>
+                                <x:String>None</x:String>
+                                <x:String>Jet Line</x:String>
+                                <x:String>String</x:String>
+                                <x:String>Mule tape</x:String>
+                            </Picker.Items>
                         </local:Dropdown>
 
                         <Label Text="Has Inner Duct" Grid.Row="2"  />
@@ -146,6 +159,14 @@
                 </ScrollView>
                     
         </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Loading..." HorizontalOptions="Center" TextColor="White"/>
+            </StackLayout>
         </AbsoluteLayout>            
     </ContentPage.Content>
 </ContentPage>

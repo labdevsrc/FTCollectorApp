@@ -45,7 +45,7 @@
                 <local:BorderColorEntry x:Name="staNumber" IsReadOnly="True"/>
                 <Label Text="Plan Sheet" />
                 <local:BorderColorEntry x:Name="planSheet" IsReadOnly="True"/>
-                <Label Text="Stage" />
+                <Label Text="Plan Sheet Item" />
                 <local:BorderColorEntry x:Name="planSheetItem" IsReadOnly="True"/>                
                 <Button x:Name="btnRecordGPS" Command="{Binding RecordGPSCommand}"  Text="Record GPS"  BackgroundColor="{StaticResource blueColor}"
                     Clicked="btnRecordGPS_Clicked">

@@ -11,22 +11,37 @@ using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 using FTCollectorApp.Service;
+using FTCollectorApp.View.SitesPage;
+using Newtonsoft.Json;
+using Rg.Plugins.Popup.Services;
+using FTCollectorApp.View;
 
 namespace FTCollectorApp.ViewModel
 {
     public partial class ActiveDeviceViewModel : ObservableObject
     {
         [ObservableProperty]
-        string selectedPosition;
+        string selectedPosition = "1";
 
-        [ObservableProperty]
-        string selectednumber;
+
+        string selectedActDevNumber = "1";
+        public string SelectedActDevNumber
+        {
+            get => selectedActDevNumber;
+            set
+            {
+                SetProperty(ref selectedActDevNumber, value);
+                selectedPosition = selectedActDevNumber;
+                Console.WriteLine();
+                OnPropertyChanged(nameof(SelectedPosition));
+            }
+        }
 
         [ObservableProperty]
         string selectedSlotBladeTray;
 
         [ObservableProperty]
-        ChassisType selectedCT;
+        ChassisType? selectedCT;
 
         [ObservableProperty]
         RackNumber selectedRackNumber;
@@ -110,10 +125,12 @@ namespace FTCollectorApp.ViewModel
         {
             get
             {
+                Console.WriteLine();
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<ChassisType>();
                     var table = conn.Table<ChassisType>().ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<ChassisType>(table);
                 }
             }
@@ -182,12 +199,18 @@ namespace FTCollectorApp.ViewModel
         public ICommand ToggleWebViewCommand { get; set; }
         public ICommand ToggleIPEntriesCommand { get; set; }
         public ICommand SaveContinueCommand { get; set; }
-
+        public ICommand FinishActiveDeviceCommand { get; set; }
+        public ICommand PortPageCommand { get; set; }
+        public ICommand PortConnectionCommand { get; set; }
         public ActiveDeviceViewModel()
         {
             ToggleWebViewCommand = new Command(() => isDisplayed = !isDisplayed);
             ToggleIPEntriesCommand = new Command(() => isShow = !isShow);
             SaveContinueCommand = new Command(() => ExecuteSaveContinueCommand());
+            FinishActiveDeviceCommand = new Command(() => ExecuteFinishActiveDeviceCommand());
+            PortPageCommand = new Command(() => ExecutePortPageCommand());
+            PortConnectionCommand = new Command(() => ExecutePortConnectionCommand());
+            Session.tag_number = "65901";
         }
 
 
@@ -200,30 +223,32 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("host_tag_number", Session.tag_number),
                 new KeyValuePair<string, string>("stage", Session.stage),
                 new KeyValuePair<string, string>("tag", Session.tag_number),
+                new KeyValuePair<string, string>("owner_key", Session.ownerkey),
+                new KeyValuePair<string, string>("manufacturer_key", SelectedManufacturer?.ManufKey is null ? "0":SelectedManufacturer.ManufKey),
+                new KeyValuePair<string, string>("model_key", SelectedModelDetail?.ModelKey is null ? "0":SelectedModelDetail.ModelKey ),
 
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufName is null ? "0":SelectedManufacturer.ManufKey),
+                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelDescription is null ? "0":SelectedModelDetail.ModelKey ),
+                new KeyValuePair<string, string>("actdevnumber", SelectedActDevNumber ??= "0"),
+                new KeyValuePair<string, string>("position", selectedPosition ??= "0"),
 
-                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer.ManufKey),
-                new KeyValuePair<string, string>("model", SelectedModelDetail.ModelKey),
-                new KeyValuePair<string, string>("rack_number", SelectedRackNumber.Racknumber),
-
-
-                new KeyValuePair<string, string>("comment", Comment),
+                new KeyValuePair<string, string>("comment", Comment ??= "NA"),
                 new KeyValuePair<string, string>("manufactured_date", SelectedManufDate), //Manufactured),
                 new KeyValuePair<string, string>("installed2",SelectedInstallDate), //InstalledAt),
 
 
                 new KeyValuePair<string, string>("ipaddr", IsIPAddressValid(IP1 + "." + IP2 + "." + IP3 + "." + IP4)),
                 new KeyValuePair<string, string>("subnet", IsIPAddressValid(Subnet1 + "." + Subnet2 + "." + Subnet3 + "." + Subnet4)),
-                new KeyValuePair<string, string>("protocol", Protocol),
-                new KeyValuePair<string, string>("vidioproto", VideoProtocol),
-                new KeyValuePair<string, string>("vlan", VLAN),
+                new KeyValuePair<string, string>("protocol", Protocol ??= "0"),
+                new KeyValuePair<string, string>("vidioproto", VideoProtocol ??= "0"),
+                new KeyValuePair<string, string>("vlan", VLAN ??= "0"),
 
                 new KeyValuePair<string, string>("getway", IsIPAddressValid(GWIP1 + "." + GWIP2 + "." + GWIP3 + "." + GWIP4)),
                 new KeyValuePair<string, string>("multicastip", IsIPAddressValid(MCast1 + "." + MCast2 + "." + MCast3 + "." + MCast4)),
 
-                new KeyValuePair<string, string>("slotblade", SelectedSlotBladeTray),
-                new KeyValuePair<string, string>("position", SelectedPosition),
-                new KeyValuePair<string, string>("rack_number", SelectedRackNumber.Racknumber),
+                new KeyValuePair<string, string>("slotblade", SelectedSlotBladeTray ??= "0"),
+                new KeyValuePair<string, string>("position", SelectedPosition ??= "0"),
+                new KeyValuePair<string, string>("rack_number", SelectedRackNumber?.Racknumber is null ? "0" : SelectedRackNumber.Racknumber),
 
 
             };
@@ -252,12 +277,64 @@ namespace FTCollectorApp.ViewModel
         {
             var KVPair = keyvaluepair();
             var result = await CloudDBService.PostActiveDevice(KVPair);
-            if(result.Equals("OK"))
+
+            if (result.Length > 30)
+            {
+                // Do something
+                Console.WriteLine();
+                var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
+                Console.WriteLine($"status : {0}", contentResponse.sts);
+                Console.WriteLine($"cnumber : {0}", contentResponse.cnumber);
+
+                if (contentResponse.sts.Equals("0")){
+                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully","Success"));
+                }
+                else if (contentResponse.sts.Equals("1")){
+                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Duplicated Active Dev Number", "Warning"));
+                }
+                else if (contentResponse.sts.Equals("2")){
+                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
+                }
+
+                var num = int.Parse(SelectedActDevNumber) + 1;
+                SelectedActDevNumber = num.ToString();
+            }
+        }
+
+        private async void ExecuteFinishActiveDeviceCommand()
+        {
+            var KVPair = keyvaluepair();
+            var result = await CloudDBService.PostActiveDevice(KVPair);
+            if (result.Equals("OK"))
             {
                 // Do something
                 Console.WriteLine();
             }
             await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+        private async void ExecutePortPageCommand()
+        {
+            var KVPair = keyvaluepair();
+            var result = await CloudDBService.PostActiveDevice(KVPair);
+            if (result.Equals("OK"))
+            {
+                // Do something
+                Console.WriteLine();
+            }
+            await Application.Current.MainPage.Navigation.PushAsync(new PortPage());
+        }
+
+        private async void ExecutePortConnectionCommand()
+        {
+            var KVPair = keyvaluepair();
+            var result = await CloudDBService.PostActiveDevice(KVPair);
+            if (result.Equals("OK"))
+            {
+                // Do something
+                Console.WriteLine();
+            }
+            await Application.Current.MainPage.Navigation.PushAsync(new PortConnection());
         }
     }
 }

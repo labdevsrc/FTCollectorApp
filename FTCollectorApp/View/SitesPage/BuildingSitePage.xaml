@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.BuildingSitePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:YesNoToOneZeroConverter x:Key="YesNoToOneZeroConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>    
     <ContentPage.ToolbarItems>
         <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
                  Order="Primary"
@@ -35,7 +40,7 @@
                             <Label Grid.Row="0" Grid.Column="0"  Text="Lane closure required"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Has Power disconnect"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pickerLaneClosure"/>
+                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pickerLaneClosure" SelectedItem="{Binding Converter={StaticResource YesNoToOneZeroConverter}}"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pickerDotDisctrict"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pickerHasPowerDisconnect"/>
                             <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>

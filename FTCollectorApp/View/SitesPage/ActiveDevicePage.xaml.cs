@@ -259,16 +259,6 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void OnDateSelected(object sender, DateChangedEventArgs e)
-        {
-            InstalledAt = dateInstalled.Date.ToString("yyyy-MM-dd");
-            Manufactured = dateManufactured.Date.ToString("yyyy-MM-dd");
-        }
-
-
-
-
-
         private void btnCamera(object sender, EventArgs e)
         {
             Navigation.PushAsync(new CameraViewPage());

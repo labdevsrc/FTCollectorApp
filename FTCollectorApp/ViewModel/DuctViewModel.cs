@@ -12,12 +12,18 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
 using FTCollectorApp.Service;
 
+
 namespace FTCollectorApp.ViewModel
 {
     public partial class DuctViewModel : ObservableObject
     {
         [ObservableProperty]
         string defaultHostTagNumber;
+
+        [ObservableProperty]
+        bool isBusy;
+
+
         public DuctViewModel()
         {
 
@@ -31,7 +37,7 @@ namespace FTCollectorApp.ViewModel
                 execute: async () =>
                 {
                     var KVPair = keyvaluepair();
-                    string result = await CloudDBService.PostDuctSave(KVPair);
+                    string result = await CloudDBService.PostDuctSave(KVPair); // async upload to AWS table
                     if (result.Equals("OK"))
                     {
                         Console.WriteLine();
@@ -49,11 +55,34 @@ namespace FTCollectorApp.ViewModel
                     }
 
                 });
+            RefreshDuctKeyListCommand = new Command(
+                execute: async () =>
+                {
+
+                    Console.WriteLine();
+                    IsBusy = true;
+                    var contentConduit = await CloudDBService.GetConduits(); // async download from AWS table
+                    if (contentConduit.ToString().Length > 20)
+                    {
+                        using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                        {
+                            conn.CreateTable<ConduitsGroup>();
+                            conn.DeleteAll<ConduitsGroup>();
+                            conn.InsertAll(contentConduit);
+                        }
+
+                        Console.WriteLine();
+                        OnPropertyChanged(nameof(DuctKeyList)); // update CONDUIT_GROUPS dropdown list
+                    }
+                    IsBusy = false;
+                    Console.WriteLine();
+                });
             DefaultHostTagNumber = Session.tag_number;
 
         }
         public ICommand SaveCommand { get; set; }
         public ICommand SaveBackCommand { get; set; }
+        public ICommand RefreshDuctKeyListCommand { get; set; }
         void RefreshCanExecutes()
         {
             (SaveCommand as Command).ChangeCanExecute();
@@ -87,6 +116,21 @@ namespace FTCollectorApp.ViewModel
         /// 
 
         // Duct Page - start
+        [ObservableProperty]
+        ConduitsGroup selectedDuctKey;
+
+        public ObservableCollection<ConduitsGroup> DuctKeyList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<ConduitsGroup>();
+                    var table = conn.Table<ConduitsGroup>().Where(a=>(a.HosTagNumber == Session.tag_number)&&(a.OwnerKey ==  Session.ownerkey)).ToList();
+                    return new ObservableCollection<ConduitsGroup>(table);
+                }
+            }
+        }
         public ObservableCollection<DuctType> DuctMaterialList
         {
             get
