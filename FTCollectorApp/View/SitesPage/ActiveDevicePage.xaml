@@ -153,15 +153,15 @@
                             <Label Text="VLAN" Grid.Row="12" Grid.ColumnSpan="8"  />
                             <local:BorderEntry Text="{Binding VLAN, Mode=TwoWay}" Grid.Row="13" Grid.ColumnSpan="8" />
 
-                            <Button Text="Update Chassis" Clicked="btnUpdateChassis" Grid.Row="16"/>
+                            <Button Text="Update Chassis" Clicked="btnUpdateChassis" Grid.Row="14" Grid.ColumnSpan="8"/>
 
                         </Grid>
 
-
-                        <Button Text="Save and Continue" Clicked="btnSaveContinue" Command="{Binding SaveContinueCommand}"/>
-                        <Button Text="Ports" Clicked="btnGotoPortPage"/>
-                        <Button Text="Port Connection" Clicked="btnPortConn"/>
-                        <Button Text="Finished Active Devices" Clicked="btnExit"/>                        
+                        <Button Text="Blades"  Command="{Binding BladePageCommand}"/>
+                        <Button Text="Save and Continue"  Command="{Binding SaveContinueCommand}"/>
+                        <Button Text="Ports"  Command="{Binding PortPageCommand}"/>
+                        <Button Text="Port Connection"  Command="{Binding PortConnectionCommand}"/>
+                        <Button Text="Finished Active Devices" Command="{Binding FinishActiveDeviceCommand}"/>                        
                      </StackLayout>
 
                 </ScrollView>

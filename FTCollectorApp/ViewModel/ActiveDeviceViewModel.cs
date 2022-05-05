@@ -202,6 +202,7 @@ namespace FTCollectorApp.ViewModel
         public ICommand FinishActiveDeviceCommand { get; set; }
         public ICommand PortPageCommand { get; set; }
         public ICommand PortConnectionCommand { get; set; }
+        public ICommand BladePageCommand { get; set; }
         public ActiveDeviceViewModel()
         {
             ToggleWebViewCommand = new Command(() => isDisplayed = !isDisplayed);
@@ -210,7 +211,7 @@ namespace FTCollectorApp.ViewModel
             FinishActiveDeviceCommand = new Command(() => ExecuteFinishActiveDeviceCommand());
             PortPageCommand = new Command(() => ExecutePortPageCommand());
             PortConnectionCommand = new Command(() => ExecutePortConnectionCommand());
-            Session.tag_number = "65901";
+            BladePageCommand = new Command(() => ExecuteBladePageCommand());
         }
 
 
@@ -227,8 +228,8 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("manufacturer_key", SelectedManufacturer?.ManufKey is null ? "0":SelectedManufacturer.ManufKey),
                 new KeyValuePair<string, string>("model_key", SelectedModelDetail?.ModelKey is null ? "0":SelectedModelDetail.ModelKey ),
 
-                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufName is null ? "0":SelectedManufacturer.ManufKey),
-                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelDescription is null ? "0":SelectedModelDetail.ModelKey ),
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufName is null ? "0":SelectedManufacturer.ManufName),
+                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelDescription is null ? "0":SelectedModelDetail.ModelDescription ),
                 new KeyValuePair<string, string>("actdevnumber", SelectedActDevNumber ??= "0"),
                 new KeyValuePair<string, string>("position", selectedPosition ??= "0"),
 
@@ -249,6 +250,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("slotblade", SelectedSlotBladeTray ??= "0"),
                 new KeyValuePair<string, string>("position", SelectedPosition ??= "0"),
                 new KeyValuePair<string, string>("rack_number", SelectedRackNumber?.Racknumber is null ? "0" : SelectedRackNumber.Racknumber),
+                //new KeyValuePair<string, string>("rack_key", SelectedRackNumber?.RackNumKey is null ? "0" : SelectedRackNumber.RackNumKey), // no need already in backend file
 
 
             };
@@ -282,19 +284,32 @@ namespace FTCollectorApp.ViewModel
             {
                 // Do something
                 Console.WriteLine();
-                var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
-                Console.WriteLine($"status : {0}", contentResponse.sts);
-                Console.WriteLine($"cnumber : {0}", contentResponse.cnumber);
+                try
+                {
+                    var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
+                    Console.WriteLine(contentResponse);
+                    //Console.WriteLine($"status : {0}", contentResponse.sts);
+                    //Console.WriteLine($"cnumber : {0}", contentResponse.cnumber);
 
-                if (contentResponse.sts.Equals("0")){
-                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully","Success"));
+                    if (contentResponse.sts.Equals("0"))
+                    {
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
+                    }
+                    else if (contentResponse.sts.Equals("1"))
+                    {
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Duplicated Active Dev Number", "Warning"));
+                    }
+                    else if (contentResponse.sts.Equals("2"))
+                    {
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
+                    }
                 }
-                else if (contentResponse.sts.Equals("1")){
-                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Duplicated Active Dev Number", "Warning"));
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
                 }
-                else if (contentResponse.sts.Equals("2")){
-                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
-                }
+
+
 
                 var num = int.Parse(SelectedActDevNumber) + 1;
                 SelectedActDevNumber = num.ToString();
@@ -303,38 +318,24 @@ namespace FTCollectorApp.ViewModel
 
         private async void ExecuteFinishActiveDeviceCommand()
         {
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostActiveDevice(KVPair);
-            if (result.Equals("OK"))
-            {
-                // Do something
-                Console.WriteLine();
-            }
             await Application.Current.MainPage.Navigation.PopAsync();
         }
 
         private async void ExecutePortPageCommand()
         {
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostActiveDevice(KVPair);
-            if (result.Equals("OK"))
-            {
-                // Do something
-                Console.WriteLine();
-            }
+
             await Application.Current.MainPage.Navigation.PushAsync(new PortPage());
         }
 
         private async void ExecutePortConnectionCommand()
         {
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostActiveDevice(KVPair);
-            if (result.Equals("OK"))
-            {
-                // Do something
-                Console.WriteLine();
-            }
             await Application.Current.MainPage.Navigation.PushAsync(new PortConnection());
         }
+
+        private async void ExecuteBladePageCommand()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new SlotBladePage());
+        }
+        
     }
 }

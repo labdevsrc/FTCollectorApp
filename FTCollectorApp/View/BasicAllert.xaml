@@ -8,10 +8,12 @@
         <StackLayout
                 Margin="20"
                 Padding="30"
-                BackgroundColor="White">
+                BackgroundColor="White"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
         <Label Text="{Binding MessageTxt, Mode=TwoWay}"  FontSize="Medium"
                     VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand" />
+                    HorizontalOptions="CenterAndExpand" TextColor="Black"/>
             <Button Text="OK" Clicked="OnOK"/>
         </StackLayout>
 

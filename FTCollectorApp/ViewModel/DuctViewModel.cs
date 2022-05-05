@@ -41,18 +41,15 @@ namespace FTCollectorApp.ViewModel
                     if (result.Equals("OK"))
                     {
                         Console.WriteLine();
+                        var num = int.Parse(SelectedDirectionCnt) + 1;
+                        SelectedDirectionCnt = num.ToString();
                     }
                 });
             SaveBackCommand = new Command(
                 execute: async () =>
                 {
-                    var KVPair = keyvaluepair();
-                    string result = await CloudDBService.PostDuctSave(KVPair);
-                    if (result.Equals("OK"))
-                    {
-                        Console.WriteLine();
-                        await Application.Current.MainPage.Navigation.PopAsync();
-                    }
+                    Console.WriteLine();
+                    await Application.Current.MainPage.Navigation.PopAsync();
 
                 });
             RefreshDuctKeyListCommand = new Command(
@@ -197,7 +194,7 @@ namespace FTCollectorApp.ViewModel
         }
 
         [ObservableProperty]
-        string selectedDirectionCnt;
+        string selectedDirectionCnt = "1";
 
         [ObservableProperty]
         string isPlugged;
@@ -236,11 +233,11 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
                 new KeyValuePair<string, string>("host_tag_number", Session.tag_number),  // 2
-                new KeyValuePair<string, string>("direction", SelectedDirection.CompasKey  == null ? "0": SelectedDirection.CompasKey),  // 3
+                new KeyValuePair<string, string>("direction", SelectedDirection?.CompasKey  == null ? "0": SelectedDirection.CompasKey),  // 3
                 new KeyValuePair<string, string>("direction_count", SelectedDirectionCnt ??= "0"),  // 4
-                new KeyValuePair<string, string>("duct_size",  SelectedDuctSize.DuctKey == null ? "0": SelectedDuctSize.DuctKey),  // 5
-                new KeyValuePair<string, string>("duct_color", SelectedColor.ColorKey == null ? "0": SelectedColor.ColorKey),  // 6
-                new KeyValuePair<string, string>("duct_type",  selectedDuctType.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7
+                new KeyValuePair<string, string>("duct_size",  SelectedDuctSize?.DuctKey == null ? "0": SelectedDuctSize.DuctKey),  // 5
+                new KeyValuePair<string, string>("duct_color", SelectedColor?.ColorKey == null ? "0": SelectedColor.ColorKey),  // 6
+                new KeyValuePair<string, string>("duct_type",  selectedDuctType?.DucTypeKey == null ?"0" : SelectedDuctType.DucTypeKey),  // 7
                 new KeyValuePair<string, string>("site_type_key", Session.site_type_key),  // 8
                 new KeyValuePair<string, string>("duct_usage", "0"),  // 9
                 new KeyValuePair<string, string>("duct_grouptype", "0"),  // 9
@@ -248,7 +245,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("duct_inuse", "1"),  // 9
                 new KeyValuePair<string, string>("duct_trace", "0"),  // 9
 
-                new KeyValuePair<string, string>("install", SelectedDuctInstallType.DuctInstallKey == null ? "0":  SelectedDuctInstallType.DuctInstallKey),  // 10
+                new KeyValuePair<string, string>("install", SelectedDuctInstallType?.DuctInstallKey == null ? "0":  SelectedDuctInstallType.DuctInstallKey),  // 10
 
 
                 new KeyValuePair<string, string>("openpercent", PercentOpen ??= "100"),  // 11

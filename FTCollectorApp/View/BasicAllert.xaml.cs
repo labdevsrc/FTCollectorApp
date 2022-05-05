@@ -15,10 +15,11 @@ namespace FTCollectorApp.View
     {
         public BasicAllert(string strMessage, string strTitle )
         {
-            InitializeComponent();
-            BindingContext = this;
             messageTxt = strMessage;
             titlePopUp = strTitle;
+            InitializeComponent();
+            BindingContext = this;
+
         }
 
         string messageTxt;

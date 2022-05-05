@@ -29,12 +29,31 @@ namespace FTCollectorApp.ViewModel
             RefreshBladeKeyListCommand = new Command(() => ExecuteRefreshBladeKeyListCommand());
             ShowPortPageCommand = new Command(async () => ExecuteShowPortPageCommand());
             ShowPortConnPageCommand = new Command(async () => ExecuteShowPortConnPageCommand());
-            Session.tag_number = "65901";
+            Session.tag_number = "51322";
         }
+        
+        [ObservableProperty]
+        bool isBusy;
 
-        private void ExecuteRefreshBladeKeyListCommand()
+        private async void ExecuteRefreshBladeKeyListCommand()
         {
-            AddtoSQLite();
+            Console.WriteLine();
+            IsBusy = true;
+            var contentSBT = await CloudDBService.GetBladeTableKey(); // async download from AWS table
+            if (contentSBT.ToString().Length > 20)
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<SlotBladeTray>();
+                    conn.DeleteAll<SlotBladeTray>();
+                    conn.InsertAll(contentSBT);
+                }
+
+                Console.WriteLine();
+                OnPropertyChanged(nameof(SlotBladeTrayTables)); // update CONDUIT_GROUPS dropdown list
+            }
+            IsBusy = false;
+            Console.WriteLine();
         }
 
         private async Task ExecuteSaveCommand()
@@ -44,7 +63,17 @@ namespace FTCollectorApp.ViewModel
 
             if (result.Equals("OK"))
             {
-                Console.WriteLine();
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<SlotBladeTray>();
+                    conn.Insert(KVPair);
+                    OnPropertyChanged(nameof(SlotBladeTrayTables));
+                    Console.WriteLine();
+                }
+
+                var num = int.Parse(SelectedBladeNum) + 1;
+                SelectedBladeNum = num.ToString();
+
             }
         }
 
@@ -110,7 +139,7 @@ namespace FTCollectorApp.ViewModel
 
 
         [ObservableProperty]
-        SlotBladeTray sessionSlotBladTray;
+        Chassis selectedChassisKey;
 
         [ObservableProperty]
         SlotBladeTray selectedBladSlotTray;
@@ -126,8 +155,11 @@ namespace FTCollectorApp.ViewModel
         string selectedPorts;
 
         [ObservableProperty]
-        string selectedBlade;
+        string selectedBladeNum =  "1";
 
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(ChassisList))]
+        string selectedRackNumber;
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -137,14 +169,15 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("tag", Session.tag_number),  // 2
                 new KeyValuePair<string, string>("direction", SelectedBladSlotTray?.orientation  == null ? "0": SelectedBladSlotTray.orientation),  // 3
                 new KeyValuePair<string, string>("orientation", SelectedOrientation ??= "0"),  // 4
-                new KeyValuePair<string, string>("slot_or_blade_number", SelectedOrientation ??= "0"),  // 4
+                new KeyValuePair<string, string>("slot_or_blade_number", SelectedPorts ??= "0"),  // 4
                 new KeyValuePair<string, string>("manufacturer_key",  SelectedManufacturer?.ManufKey == null ? "0": selectedManufacturer.ManufKey),  // 5
                 new KeyValuePair<string, string>("model_key", SelectedModelDetail?.ModelKey == null ? "0": SelectedModelDetail.ModelKey),  // 6
                 new KeyValuePair<string, string>("manufacturer",  SelectedManufacturer?.ManufName == null ? "0": selectedManufacturer.ManufName),  // 7
                 new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelDescription == null ? "0": SelectedModelDetail.ModelDescription),  // 8
                 new KeyValuePair<string, string>("textField", textField ??= "0"),  // 9
-                new KeyValuePair<string, string>("bnumber", SelectedBlade ??= "0"),
-                new KeyValuePair<string, string>("stage", Session.stage)
+                new KeyValuePair<string, string>("bnumber", SelectedBladeNum ??= "0"),
+                new KeyValuePair<string, string>("stage", Session.stage),
+                new KeyValuePair<string, string>("chasis_number", SelectedChassisKey?.ChassisKey == null ? "0": SelectedChassisKey.ChassisKey)
             };
 
 
@@ -200,6 +233,8 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<Chassis>();
                     var table = conn.Table<Chassis>().Where(a => a.TagNumber == Session.tag_number).ToList();
+                    if (SelectedRackNumber != null)
+                        table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number && a.rack_number == SelectedRackNumber)).ToList();
                     Console.WriteLine();
                     return new ObservableCollection<Chassis>(table);
                 }

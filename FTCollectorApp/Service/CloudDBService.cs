@@ -797,10 +797,10 @@ namespace FTCollectorApp.Service
 
 
                         var isi = await response.Content.ReadAsStringAsync();
-                        var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);
-                        Console.WriteLine($"[PostActiveDevice] Response from  OK = 200 , content :" + isi);
-                        Console.WriteLine($"status : {0}", contentResponse?.sts);
-                        Console.WriteLine($"cnumber : {0}", contentResponse?.cnumber);
+                        //var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);
+                        //Console.WriteLine($"[PostActiveDevice] Response from  OK = 200 , content :" + isi);
+                        //Console.WriteLine($"status : {0}", contentResponse?.sts);
+                        //Console.WriteLine($"cnumber : {0}", contentResponse?.cnumber);
                         return isi;
                     }
                 }
@@ -861,7 +861,7 @@ namespace FTCollectorApp.Service
                     {
                         var isi = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"[PostSaveRacks] Response from  OK = 200 , content :" + isi);
-                        return "OK";
+                        return isi;
                     }
                 }
                 catch (Exception e)

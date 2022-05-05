@@ -14,5 +14,6 @@ namespace FTCollectorApp.Model.Reference
         public string ChassisKey { get; set; }
         public string ModelKey { get; set; }
         public string TagNumber { get; set; }
+        public string rack_number { get; set; }
     }
 }
