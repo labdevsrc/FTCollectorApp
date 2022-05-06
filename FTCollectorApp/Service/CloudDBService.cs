@@ -566,8 +566,12 @@ namespace FTCollectorApp.Service
 
         public static Task<IEnumerable<SlotBladeTray>> GetBladeTableKey() =>
            GetDropDownParamsAsync<IEnumerable<SlotBladeTray>>("slotbladetray");
-        
 
+        public static Task<IEnumerable<PortType>> GetCodePortType() =>
+           GetDropDownParamsAsync<IEnumerable<PortType>>("code_port_type");
+        public static Task<IEnumerable<Ports>> GetPortTable() =>
+           GetDropDownParamsAsync<IEnumerable<Ports>>("port_table");
+        
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -907,6 +911,41 @@ namespace FTCollectorApp.Service
             return "Under Contruction";
         }
 
+        public static async Task<string> PostPortsSave(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostPortsSave Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                try
+                {
+                    response = await client.PostAsync(Constants.ajaxSavePorts, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostPortsSave] Response from  OK = 200 , content :" + isi);
+                        Session.Result = "PostPortsSaveOK";
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "PostPortsSaveFAIL";
+                    return e.ToString();
+                }
+            }
+            return "FAIL";
+        }
+
+        
+
         public static async Task<string> PostBladeSave(List<KeyValuePair<string, string>> keyValues)
         {
 
@@ -927,7 +966,7 @@ namespace FTCollectorApp.Service
                         var isi = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
                         Session.Result = "DuctSaveOK";
-                        return "OK";
+                        return isi;
                     }
                 }
                 catch (Exception e)
@@ -937,7 +976,7 @@ namespace FTCollectorApp.Service
                     return e.ToString();
                 }
             }
-            return "Upload Fail";
+            return "FAIL";
         }
 
         public static async Task<string> PostDuctSave(List<KeyValuePair<string, string>> keyValues)

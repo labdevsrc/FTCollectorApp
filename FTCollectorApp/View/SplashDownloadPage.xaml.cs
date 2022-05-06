@@ -164,12 +164,28 @@ namespace FTCollectorApp.View
                 var contentChassisType = await CloudDBService.GetChassisTypes(); //code_colors
                 var contentslotBladeTray = await CloudDBService.GetBladeTableKey(); //slotbladetray
 
+                var portType = await CloudDBService.GetCodePortType(); //code_port_type
+                var portTable = await CloudDBService.GetPortTable(); //code_port_type
+
                 txtLoading.Text = "Site...";
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
                 //Thread.Sleep(5000);
                 txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
+                    conn.CreateTable<PortType>();
+                    conn.DeleteAll<PortType>();
+                    conn.InsertAll(portType);
+
+                    conn.CreateTable<Port>();
+                    conn.DeleteAll<Port>();
+                    conn.InsertAll(portTable);
+
+                    conn.CreateTable<DuctInstallType>();
+                    conn.DeleteAll<DuctInstallType>();
+                    conn.InsertAll(ductInstallType);
+
+
                     conn.CreateTable<DuctInstallType>();
                     conn.DeleteAll<DuctInstallType>();
                     conn.InsertAll(ductInstallType);

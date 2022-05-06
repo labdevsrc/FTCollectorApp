@@ -31,32 +31,7 @@
                     <local:Dropdown ItemsSource="{Binding RackRailShelfs}" 
                                                 ItemDisplayBinding="{Binding Racknumber}" 
                                                 SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}"
-                                                Grid.Row="1">
-                        <Picker.Items>
-                            <x:String>1</x:String>
-                            <x:String>2</x:String>
-                            <x:String>3</x:String>
-                            <x:String>4</x:String>
-                            <x:String>5</x:String>
-                            <x:String>6</x:String>
-                            <x:String>7</x:String>
-                            <x:String>8</x:String>
-                            <x:String>9</x:String>
-                            <x:String>10</x:String>
-                            <x:String>11</x:String>
-                            <x:String>12</x:String>
-                            <x:String>13</x:String>
-                            <x:String>14</x:String>
-                            <x:String>15</x:String>
-                            <x:String>16</x:String>
-                            <x:String>17</x:String>
-                            <x:String>18</x:String>
-                            <x:String>19</x:String>
-                            <x:String>20</x:String>
-                        </Picker.Items>
-
-
-                    </local:Dropdown>
+                                                Grid.Row="1"/>
 
                     <Label Text="Chassis*" Grid.Column="1" />
                     <local:Dropdown ItemsSource="{Binding ChassisList}" 

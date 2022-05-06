@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.Service;
+using FTCollectorApp.View;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -61,8 +62,16 @@ namespace FTCollectorApp.ViewModel
             var KVPair = keyvaluepair();
             var result = await CloudDBService.PostBladeSave(KVPair);
 
-            if (result.Equals("OK"))
+
+            if (result.Trim().Equals("1"))
             {
+                Console.WriteLine();
+
+                var num = int.Parse(SelectedBladeNum) + 1;
+                SelectedBladeNum = num.ToString();
+
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Blade Updated Successfully", "Success"));
+
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<SlotBladeTray>();
@@ -70,10 +79,11 @@ namespace FTCollectorApp.ViewModel
                     OnPropertyChanged(nameof(SlotBladeTrayTables));
                     Console.WriteLine();
                 }
-
-                var num = int.Parse(SelectedBladeNum) + 1;
-                SelectedBladeNum = num.ToString();
-
+            }
+            else //"0" or fail
+            {
+                Console.WriteLine();
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(result, "Fail"));
             }
         }
 
@@ -155,11 +165,12 @@ namespace FTCollectorApp.ViewModel
         string selectedPorts;
 
         [ObservableProperty]
-        string selectedBladeNum =  "1";
+        string selectedBladeNum = "1";
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(ChassisList))]
-        string selectedRackNumber;
+        RackNumber selectedRackNumber;  // harus class !!, onpropertychanged dependency tidak bisa untuk string
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -169,7 +180,11 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("tag", Session.tag_number),  // 2
                 new KeyValuePair<string, string>("direction", SelectedBladSlotTray?.orientation  == null ? "0": SelectedBladSlotTray.orientation),  // 3
                 new KeyValuePair<string, string>("orientation", SelectedOrientation ??= "0"),  // 4
-                new KeyValuePair<string, string>("slot_or_blade_number", SelectedPorts ??= "0"),  // 4
+                new KeyValuePair<string, string>("chassis_key", SelectedChassisKey?.ChassisKey == null ? "0": SelectedChassisKey.ChassisKey),  // 4
+                new KeyValuePair<string, string>("slot_or_blade_number", SelectedBladeNum ??= "0"),  // 4
+                new KeyValuePair<string, string>("port", SelectedPorts ??= "0"),  // 4
+                new KeyValuePair<string, string>("rack_key",  SelectedRackNumber?.RackNumKey == null ? "0": SelectedRackNumber.RackNumKey),  // 5
+                new KeyValuePair<string, string>("rack_number",  SelectedRackNumber?.Racknumber == null ? "0": SelectedRackNumber.Racknumber),  // 5
                 new KeyValuePair<string, string>("manufacturer_key",  SelectedManufacturer?.ManufKey == null ? "0": selectedManufacturer.ManufKey),  // 5
                 new KeyValuePair<string, string>("model_key", SelectedModelDetail?.ModelKey == null ? "0": SelectedModelDetail.ModelKey),  // 6
                 new KeyValuePair<string, string>("manufacturer",  SelectedManufacturer?.ManufName == null ? "0": selectedManufacturer.ManufName),  // 7
@@ -231,10 +246,11 @@ namespace FTCollectorApp.ViewModel
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
+                    Console.WriteLine();
                     conn.CreateTable<Chassis>();
                     var table = conn.Table<Chassis>().Where(a => a.TagNumber == Session.tag_number).ToList();
                     if (SelectedRackNumber != null)
-                        table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number && a.rack_number == SelectedRackNumber)).ToList();
+                        table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number) && (a.rack_number == SelectedRackNumber.Racknumber)).ToList();
                     Console.WriteLine();
                     return new ObservableCollection<Chassis>(table);
                 }
@@ -249,6 +265,7 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<ModelDetail>();
+
                     var table = conn.Table<ModelDetail>().ToList();
                     if (SelectedManufacturer?.ManufKey != null)
                         table = conn.Table<ModelDetail>().Where(a => a.ManufKey == SelectedManufacturer.ManufKey).ToList();

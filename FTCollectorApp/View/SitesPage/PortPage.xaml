@@ -8,18 +8,26 @@
                 <ScrollView>
 
                     <StackLayout Padding="20">
-                        <Label Text="Port" FontSize="Large" />
-                        <local:Dropdown ItemsSource="{Binding PortKeyList}" SelectedItem="{Binding PortKeyList.PortKey}"/>
+                        <Label Text="Port" FontSize="Large" HorizontalOptions="Center" Padding="30" />
+                        
+                        <Label Text="Ports" />
+                        <local:Dropdown ItemsSource="{Binding PortKeyList}" 
+                                        SelectedItem="{Binding SelectedPortKey}"/>
                         <Label Text="Rack" />
-                        <local:Dropdown SelectedItem="{Binding Port.RackCount}"/>
+                        <local:Dropdown ItemsSource="{Binding RackRailShelfs}" 
+                                                ItemDisplayBinding="{Binding Racknumber}" 
+                                                SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}" />
                         <Label Text="Chassis" />
-                        <local:Dropdown />
+                        <local:Dropdown ItemsSource="{Binding ChassisList}" 
+                                                ItemDisplayBinding="{Binding ChassisKey}" 
+                                                SelectedItem="{Binding  SelectedChassisKey, Mode=TwoWay}"/>
                         <Label Text="Blade" />
-                        <local:Dropdown x:Name="pBlade" SelectedIndexChanged="OnIndexChanged"/>                        
+                        <local:Dropdown ItemsSource="{Binding BladeList}" 
+                                                ItemDisplayBinding="{Binding key}" 
+                                                SelectedItem="{Binding selectedBladSlotTray, Mode=TwoWay}"/>                        
 
-                        <local:Dropdown x:Name="pPortNumber" SelectedIndexChanged="OnIndexChanged"/>
                         <Label Text="Transmit / Receive" />
-                        <local:Dropdown >
+                        <local:Dropdown SelectedItem="{Binding SelectedTXRXOption, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>Transmit</x:String>
                                 <x:String>Receive</x:String>
@@ -28,13 +36,42 @@
                             </Picker.Items>
                         </local:Dropdown>
                         <Label Text="Port Number" />
-                        <local:BorderEntry Text="{Binding txtLabel}" />
-                        <Label Text="Port type" />
-                        <local:Dropdown x:Name="pPortType" >
+                        <local:Dropdown SelectedItem="{Binding SelectedPortNumber, Mode=TwoWay}">
+                            <Picker.Items>
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                                <x:String>7</x:String>
+                                <x:String>8</x:String>
+                                <x:String>9</x:String>
+                                <x:String>10</x:String>
+                                <x:String>11</x:String>
+                                <x:String>12</x:String>
+                                <x:String>13</x:String>
+                                <x:String>14</x:String>
+                                <x:String>15</x:String>
+                                <x:String>16</x:String>
+                                <x:String>17</x:String>
+                                <x:String>18</x:String>
+                                <x:String>19</x:String>
+                                <x:String>20</x:String>
+                            </Picker.Items>
                         </local:Dropdown>
 
-                        <Button Text="Save and Continue" Clicked="btnSaveContinue"/>
-                        <Button Text="Done Port" Clicked="btnExit"/>
+                        <Label Text="Label" />
+                        <local:BorderEntry Text="{Binding PortLabel,Mode=TwoWay}" />
+                         
+                        <Label Text="Port type" />
+                        <local:Dropdown ItemsSource="{Binding PortTypeList}"
+                                        SelectedItem="{Binding SelectedPortType, Mode=TwoWay}"
+                                        ItemDisplayBinding="{Binding TextType}"
+                                        />
+                        <Button Text="Save and Continue" Command="{Binding SaveCommand}" />
+                        <Button Text="Finished with Blades" Command="{Binding FinishSaveCommand}" />
+                        
                     </StackLayout>
 
                 </ScrollView>
