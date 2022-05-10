@@ -11,7 +11,8 @@ using FTCollectorApp.View.SitesPage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
 using FTCollectorApp.Service;
-
+using Newtonsoft.Json;
+using FTCollectorApp.View;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -38,11 +39,33 @@ namespace FTCollectorApp.ViewModel
                 {
                     var KVPair = keyvaluepair();
                     string result = await CloudDBService.PostDuctSave(KVPair); // async upload to AWS table
-                    if (result.Equals("OK"))
+                    try
                     {
-                        Console.WriteLine();
-                        var num = int.Parse(SelectedDirectionCnt) + 1;
-                        SelectedDirectionCnt = num.ToString();
+                        var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
+                        Console.WriteLine(contentResponse);
+                        if (contentResponse.sts.Equals("0"))
+                        {
+                            Console.WriteLine();
+                            var num = int.Parse(SelectedDirectionCnt) + 1;
+                            SelectedDirectionCnt = num.ToString();
+                            await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert("Update Success with key ="+ contentResponse.d.ToString(), "Success"));
+                        }
+                        else if (contentResponse.sts.Equals("4"))
+                        {
+                            Console.WriteLine();
+
+                            await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert(contentResponse.d.ToString(), "Fail"));
+                        }
+                        else if (contentResponse.sts.Equals("5"))
+                        {
+                            Console.WriteLine();
+
+                            await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert(contentResponse.d.ToString(), "Warning"));
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert(e.ToString(),"FAIL"));
                     }
                 });
             SaveBackCommand = new Command(
@@ -197,19 +220,19 @@ namespace FTCollectorApp.ViewModel
         string selectedDirectionCnt = "1";
 
         [ObservableProperty]
-        string isPlugged;
+        bool isPlugged = false;
 
         [ObservableProperty]
-        string isOpen;
+        bool isOpen = false;
 
         [ObservableProperty]
-        string hasPullTape;
+        int hasPullTape = 0;
 
         [ObservableProperty]
-        string hasInnerDuct;
+        bool hasInnerDuct = false;
 
         [ObservableProperty]
-        string hasTraceWire;
+        bool hasTraceWire = false;
 
         [ObservableProperty]
         string percentOpen;
@@ -249,8 +272,8 @@ namespace FTCollectorApp.ViewModel
 
 
                 new KeyValuePair<string, string>("openpercent", PercentOpen ??= "100"),  // 11
-                new KeyValuePair<string, string>("has_trace_wire", HasTraceWire ??= "0"),  // 12
-                new KeyValuePair<string, string>("has_pull_tape", HasPullTape ??= "0"),  // 12
+                new KeyValuePair<string, string>("has_trace_wire", HasTraceWire ?"1" : "0"),  // 12
+                new KeyValuePair<string, string>("has_pull_tape", HasPullTape.ToString()),  // 12
             };
 
 

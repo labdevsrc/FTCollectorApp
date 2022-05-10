@@ -15,6 +15,7 @@ using FTCollectorApp.View.SitesPage;
 using Newtonsoft.Json;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.View;
+using System.Threading.Tasks;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -54,13 +55,10 @@ namespace FTCollectorApp.ViewModel
         ModelDetail selectedModelDetail;
 
         [ObservableProperty]
-        RackType selectedRackType;
+        bool isDisplayed = false;
 
         [ObservableProperty]
-        bool isDisplayed;
-
-        [ObservableProperty]
-        bool isShow;
+        bool isShow = false;
 
         [ObservableProperty]
         string comment;
@@ -136,23 +134,28 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        [ObservableProperty]
+        bool isBusy;
 
-        public ObservableCollection<RackNumber> RackRailShelfs
+
+
+        public  ObservableCollection<RackNumber> RackRailShelfs
         {
             get
             {
+
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<RackNumber>();
+                    Console.WriteLine();
                     var table = conn.Table<RackNumber>().Where(a => a.SiteId == Session.tag_number).ToList();
                     Console.WriteLine();
                     return new ObservableCollection<RackNumber>(table);
                 }
+
             }
         }
 
-
-        ObservableCollection<ModelDetail> _modelDetailList;
         public ObservableCollection<ModelDetail> ModelDetailList
         {
             get
@@ -173,8 +176,7 @@ namespace FTCollectorApp.ViewModel
                         if (col.ModelCode2 == "")
                             col.ModelCode2 = col.ModelCode1;
                     }
-                    _modelDetailList = new ObservableCollection<ModelDetail>(table);
-                    return _modelDetailList;
+                    return new ObservableCollection<ModelDetail>(table);
                 }
             }
         }
@@ -203,17 +205,24 @@ namespace FTCollectorApp.ViewModel
         public ICommand PortPageCommand { get; set; }
         public ICommand PortConnectionCommand { get; set; }
         public ICommand BladePageCommand { get; set; }
+
+        public ICommand UpdateChassisCommand { get; set; }
         public ActiveDeviceViewModel()
         {
-            ToggleWebViewCommand = new Command(() => isDisplayed = !isDisplayed);
-            ToggleIPEntriesCommand = new Command(() => isShow = !isShow);
+            ToggleWebViewCommand = new Command(() => IsDisplayed = !IsDisplayed);
+            ToggleIPEntriesCommand = new Command(() => IsShow = !IsShow);
             SaveContinueCommand = new Command(() => ExecuteSaveContinueCommand());
             FinishActiveDeviceCommand = new Command(() => ExecuteFinishActiveDeviceCommand());
             PortPageCommand = new Command(() => ExecutePortPageCommand());
             PortConnectionCommand = new Command(() => ExecutePortConnectionCommand());
             BladePageCommand = new Command(() => ExecuteBladePageCommand());
+            UpdateChassisCommand = new Command(() => ExecuteUpdateChassisCommand());
         }
 
+        private void ExecuteUpdateChassisCommand()
+        {
+            throw new NotImplementedException();
+        }
 
         List<KeyValuePair<string, string>> keyvaluepair()
         {

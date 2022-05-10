@@ -19,7 +19,7 @@
                                                 SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}" />
                         <Label Text="Chassis" />
                         <local:Dropdown ItemsSource="{Binding ChassisList}" 
-                                                ItemDisplayBinding="{Binding ChassisKey}" 
+                                                ItemDisplayBinding="{Binding Model}" 
                                                 SelectedItem="{Binding  SelectedChassisKey, Mode=TwoWay}"/>
                         <Label Text="Blade" />
                         <local:Dropdown ItemsSource="{Binding BladeList}" 

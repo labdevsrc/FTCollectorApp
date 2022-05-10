@@ -13,7 +13,7 @@ using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
-    public class PortViewModel: ObservableObject
+    public partial class PortViewModel: ObservableObject
     {
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(BladeList))]
@@ -153,7 +153,7 @@ namespace FTCollectorApp.ViewModel
             SaveCommand = new Command(async () => ExecuteSaveCommand());
             FinishCommand = new Command(async () => ExecuteFinishCommand());
             RefreshPortsKeyListCommand = new Command(() => ExecuteRefreshPortsKeyListCommand());
-            Session.tag_number = "51322";
+
         }
         private async void ExecuteFinishCommand()
         {

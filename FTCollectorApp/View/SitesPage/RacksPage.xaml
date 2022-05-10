@@ -33,32 +33,62 @@
                     </Grid>
 
                     <Label Text="Enter rack number" />
-                        <local:Dropdown x:Name="pRackNum" SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}">
-                            <Picker.Items>
-                                <x:String>1</x:String>
-                                <x:String>2</x:String>
-                                <x:String>3</x:String>
-                                <x:String>4</x:String>
-                                <x:String>5</x:String>
-                                <x:String>6</x:String>
-                                <x:String>7</x:String>
-                                <x:String>8</x:String>
-                                <x:String>9</x:String>
-                                <x:String>10</x:String>                                
-                            </Picker.Items>
-                        </local:Dropdown>
-                        <Label Text="Type"/>
-                    <Picker  ItemsSource="{Binding RackTypeList}" ItemDisplayBinding="{Binding RackMaterialDesc}" x:Name="pType"
+                    <local:Dropdown x:Name="pRackNum" SelectedItem="{Binding SelectedRackNumber, Mode=TwoWay}">
+                        <Picker.Items>
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                            <x:String>3</x:String>
+                            <x:String>4</x:String>
+                            <x:String>5</x:String>
+                            <x:String>6</x:String>
+                            <x:String>7</x:String>
+                            <x:String>8</x:String>
+                            <x:String>9</x:String>
+                            <x:String>10</x:String>                                
+                        </Picker.Items>
+                    </local:Dropdown>
+                    
+                    <Label Text="Type"/>
+                    <local:Dropdown  ItemsSource="{Binding RackTypeList}" ItemDisplayBinding="{Binding RackMaterialDesc}" x:Name="pType"
                              SelectedItem="{Binding SelectedRackType, Mode=TwoWay}"
                              HorizontalOptions="FillAndExpand" />
-                    <Label Text="Front Back "/>
-                        <Picker x:Name="pFrontBack"  SelectedItem="{Binding SelectedFrontBack, Mode=TwoWay,Converter={StaticResource FBConverter}}" 
+                    <Grid RowDefinitions="*,*" ColumnDefinitions="*,0.5*,*,*" >
+                        <Label Text="Front Back "/>
+                        <Switch x:Name="switch1" Grid.Column="1"  IsToggled="{Binding IsBack, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="2" >
+                                <Label.Text>
+                                    <Binding Source="{x:Reference switch1 }" Path="IsToggled">
+                                        <Binding.Converter>
+                                            <local:BoolToObjectConverter  x:TypeArguments="x:String"
+                                                         TrueObject="Back"
+                                                         FalseObject="Front" />
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Label.Text>
+                            </Label>
+                        
+                        
+                        <Label Text="Orientation" Grid.Row="1"/>
+                        <Switch x:Name="switch2" Grid.Column="1" Grid.Row="1" IsToggled="{Binding IsVertical, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label  Grid.Row="1" Grid.Column="2" >
+                                <Label.Text>
+                                    <Binding Source="{x:Reference switch2 }" Path="IsToggled">
+                                        <Binding.Converter>
+                                            <local:BoolToObjectConverter  x:TypeArguments="x:String"
+                                                         TrueObject="Vertical"
+                                                         FalseObject="Horizontal" />
+                                        </Binding.Converter>
+                                    </Binding>
+                                </Label.Text>
+                            </Label>
+                    </Grid>
+                    <!--<Picker x:Name="pFrontBack"  SelectedItem="{Binding SelectedFrontBack, Mode=TwoWay,Converter={StaticResource FBConverter}}" 
                              HorizontalOptions="FillAndExpand" >
                             <Picker.Items>
                                 <x:String>Front</x:String>
                                 <x:String>Back</x:String>
                             </Picker.Items>
-                        </Picker>
+                    </Picker>
 
                     <Label Text="Orientation"/>
                         <Picker  x:Name="pOrientation" HorizontalOptions="FillAndExpand" 
@@ -67,9 +97,9 @@
                                 <x:String>Horizontal</x:String>
                                 <x:String>Vertical</x:String>
                             </Picker.Items>
-                        </Picker>
+                        </Picker>-->
                     <Label Text="Manufacturer"/>
-                    <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
+                    <local:Dropdown  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
                              SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
                              HorizontalOptions="FillAndExpand" />
                     <Label Text="Model"/>

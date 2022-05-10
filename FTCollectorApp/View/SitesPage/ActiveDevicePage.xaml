@@ -39,13 +39,14 @@
                         <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer"
                                  HorizontalOptions="FillAndExpand" 
                                  SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"/>
-                        <WebView x:Name="webview" HeightRequest="500" WidthRequest="400" 
-                                 IsVisible="{Binding IsDisplayed}"/>
-                        <Button x:Name="btnPictShow" Text="See pic"  Clicked="SeePic" Command="{Binding ToggleWebViewCommand}" />
-                        <Label Text="Model"/>
-                        <local:Dropdown ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelNumber}"
-                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"/>
 
+                        <Label Text="Model"/>
+                        <Picker ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelNumber}"
+                            x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"/>
+                        <Button Text="See pic"  Command="{Binding ToggleWebViewCommand}" />
+                        <WebView x:Name="webview" HeightRequest="500" WidthRequest="400" 
+                                 Source="{Binding SelectedModelDetail.PictUrl}"
+                                 IsVisible="{Binding IsDisplayed}"/>
                         <local:BorderColorEntry Text="{Binding SelectedModelDetail.ModelDescription }"/>
 
                         <Label Text="Serial Number"/>
@@ -102,12 +103,12 @@
                         <Label Text="Notes and Comment "/>
                         <local:BorderEntry x:Name="sComment" Text="{Binding Comment}"/>
 
-                        <Button x:Name="btnShow"  Text="Click here to addd IP Address +" FontSize="Medium" BorderColor="Transparent" 
-                                BackgroundColor="Transparent" Scale="0.5" Clicked="btnAddIP" Command="{Binding ToggleIPEntriesCommand}"/>
+                        <Button x:Name="btnShow"  Text="Click here to addd IP Address +" BorderColor="Transparent" 
+                                BackgroundColor="Transparent" Command="{Binding ToggleIPEntriesCommand}"/>
 
                         <Grid x:Name="ipAddressEntries"  RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" 
                               ColumnDefinitions="1.5*,0.1*,1.5*,0.1*,1.5*,0.1*,1.5*,0.1*" 
-                              IsVisible="false" >
+                              IsVisible="{Binding IsShow, Mode=TwoWay}" >
                             <Label Text="IP Address" Grid.ColumnSpan="2" />
                             <local:BorderEntry x:Name="IP1" Text="{Binding IP1,Mode=TwoWay}" Grid.Row="1"/>
                             <Label Text="." Grid.Column="1" Grid.Row="1"/>
@@ -153,7 +154,7 @@
                             <Label Text="VLAN" Grid.Row="12" Grid.ColumnSpan="8"  />
                             <local:BorderEntry Text="{Binding VLAN, Mode=TwoWay}" Grid.Row="13" Grid.ColumnSpan="8" />
 
-                            <Button Text="Update Chassis" Clicked="btnUpdateChassis" Grid.Row="14" Grid.ColumnSpan="8"/>
+                            <Button Text="Update Chassis" Command="{Binding UpdateChassisCommand}" Grid.Row="14" Grid.ColumnSpan="8"/>
 
                         </Grid>
 

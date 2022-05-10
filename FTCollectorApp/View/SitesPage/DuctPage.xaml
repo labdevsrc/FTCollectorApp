@@ -80,25 +80,27 @@
                              HorizontalOptions="FillAndExpand"/>
 
 
-                        <Grid RowDefinitions="0.3*,0.5*,0.3*,0.5*" ColumnDefinitions="*,*,*">
-                        <Label Text="Duct Plug" />
-                            <local:Dropdown x:Name="isPlugged" Grid.Row="1" SelectedItem="{Binding IsPlugged, Mode=TwoWay }">
+                    <Grid RowDefinitions="0.3*,0.5*,0.3*,0.5*" ColumnDefinitions="*,*,*">
+                        <Label Text="Duct Plug" VerticalOptions="Center"  />
+                        <Switch IsToggled="{Binding IsPlugged, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1"/>
+                            <!--<local:Dropdown x:Name="isPlugged" Grid.Row="1" SelectedItem="{Binding IsPlugged, Mode=TwoWay }">
                                 <Picker.Items>
                                     <x:String>Y</x:String>
                                     <x:String>N</x:String>
                                 </Picker.Items>
-                        </local:Dropdown>
+                            </local:Dropdown>-->
 
-                        <Label Text="IsOpen or filled" Grid.Column="1"/>
-                            <local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding IsOpen, Mode=TwoWay}">
+                        <Label Text="IsOpen or filled" Grid.Row="1" VerticalOptions="Center" />
+                            <Switch IsToggled="{Binding IsOpen, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="1"/>
+                            <!--<local:Dropdown x:Name="isOpen" Grid.Row="1" Grid.Column="1" SelectedItem="{Binding IsOpen, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>Y</x:String>
                                 <x:String>N</x:String>
                             </Picker.Items>                                
-                        </local:Dropdown>
+                        </local:Dropdown>-->
 
                         <Label Text="HasPullTape" Grid.Column="2"/>
-                            <local:Dropdown x:Name="hasPullTape" Grid.Row="1" Grid.Column="2" SelectedItem="{Binding HasPullTape, Mode=TwoWay}">
+                            <local:Dropdown x:Name="hasPullTape" Grid.Row="1" Grid.Column="2"  SelectedIndex="{Binding HasPullTape, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>None</x:String>
                                 <x:String>Jet Line</x:String>
@@ -107,21 +109,25 @@
                             </Picker.Items>
                         </local:Dropdown>
 
-                        <Label Text="Has Inner Duct" Grid.Row="2"  />
-                            <local:Dropdown x:Name="hasInnerDuct" Grid.Row="3" SelectedItem="{Binding HasInnerDuct, Mode=TwoWay}">
+                        <Label Text="Has Inner Duct" Grid.Row="3"  VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding HasInnerDuct, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="3"/>
+
+                        <!--<local:Dropdown x:Name="hasInnerDuct" Grid.Row="3" Grid.Column="1" SelectedItem="{Binding HasInnerDuct, Mode=TwoWay}">
                             <Picker.Items>
                             <x:String>Y</x:String>
                             <x:String>N</x:String>
                         </Picker.Items>
-                        </local:Dropdown>
+                        </local:Dropdown>-->
 
-                        <Label Text="Has Trace Wire" Grid.Row="2"   Grid.Column="1" />
-                            <local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" SelectedItem="{Binding HasTraceWire, Mode=TwoWay}">
+                        <Label Text="Has Trace Wire" Grid.Row="2"  VerticalOptions="Center"/>
+                        <Switch IsToggled="{Binding HasTraceWire, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Start" Grid.Column="1" Grid.Row="2"/>
+
+                            <!--<local:Dropdown x:Name="hasTraceWire" Grid.Row="3"  Grid.Column="1" SelectedItem="{Binding HasTraceWire, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>Y</x:String>
                                 <x:String>N</x:String>
                             </Picker.Items>
-                        </local:Dropdown>
+                        </local:Dropdown>-->
 
                         <Label Text="% Open" Grid.Row="2"   Grid.Column="2" />
                             <local:Dropdown x:Name="percentOpen" Grid.Row="3"  Grid.Column="2" SelectedItem="{Binding PercentOpen, Mode=TwoWay}" >

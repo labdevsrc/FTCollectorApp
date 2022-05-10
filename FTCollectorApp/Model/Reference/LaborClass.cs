@@ -8,8 +8,8 @@ namespace FTCollectorApp.Model.Reference
     {
         [PrimaryKey,AutoIncrement]
         public int id { get; set; }
-        public string  text { get; set; }
-        public string LaborClassId { get; set; }
-        public string abbreviation { get; set; }
+        public string?  text { get; set; }
+        public string? LaborClassId { get; set; }
+        public string? abbreviation { get; set; }
     }
 }

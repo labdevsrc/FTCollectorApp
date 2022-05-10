@@ -177,8 +177,8 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<PortType>();
                     conn.InsertAll(portType);
 
-                    conn.CreateTable<Port>();
-                    conn.DeleteAll<Port>();
+                    conn.CreateTable<Ports>();
+                    conn.DeleteAll<Ports>();
                     conn.InsertAll(portTable);
 
                     conn.CreateTable<DuctInstallType>();

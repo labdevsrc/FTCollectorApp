@@ -999,7 +999,7 @@ namespace FTCollectorApp.Service
                         var isi = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"[PostDuctTrace] Response from  OK = 200 , content :" + isi);
                         Session.Result = "DuctSaveOK";
-                        return "OK";
+                        return isi;
                     }
                 }
                 catch (Exception e)
@@ -1043,7 +1043,7 @@ namespace FTCollectorApp.Service
 
             }
             Session.Result = "DuctSaveFAIL";
-            return "Fail to update";
+            return "FAIL";
         }
 
 

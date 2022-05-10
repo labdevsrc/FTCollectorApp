@@ -54,15 +54,20 @@ namespace FTCollectorApp.ViewModel
 
         }
 
+        void InsertRackNumber()
+        {
+
+        }
+
 
         [ObservableProperty]
         string selectedRackNumber = "1";
 
         [ObservableProperty]
-        string selectedOrientation;
+        bool isVertical = false;
 
         [ObservableProperty]
-        string selectedFrontBack;
+        bool isBack = false;
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(ModelDetailList))]
@@ -102,7 +107,11 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<RackNumber>();
+                    var table1 = conn.Table<RackNumber>().ToList();
+                    Console.WriteLine();
+                    Console.WriteLine();
                     var table = conn.Table<RackNumber>().Where(a => (a.SiteId == Session.tag_number) && (a.OWNER_CD == Session.ownerCD)).ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<RackNumber>(table);
                 }
             }
@@ -154,12 +163,16 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        const string AWS_SYNCED = "aws_synced";
+        const string AWS_NOTSYNCED = "aws_notsynced";
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
 
             var keyValues = new List<KeyValuePair<string, string>>{
 
                 // Session params
+                //new KeyValuePair<string, string>("key", MAX_key),
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD),
@@ -168,10 +181,51 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("jobkey", Session.jobkey),
                 new KeyValuePair<string, string>("tag",Session.tag_number),
                 new KeyValuePair<string, string>("sitekey",Session.site_key),
-                new KeyValuePair<string, string>("front_back","F"),
+                new KeyValuePair<string, string>("front_back", IsBack ? "B" : "F" ),
                 new KeyValuePair<string, string>("type", SelectedRackType?.RackTypeKey==null ?"0":SelectedRackType.RackTypeKey),
                 new KeyValuePair<string, string>("racknumber", SelectedRackNumber ??= "0"),
-                new KeyValuePair<string, string>("orientation", SelectedOrientation ??= "0"),
+                new KeyValuePair<string, string>("orientation", IsVertical ?"V":"H"),
+
+                new KeyValuePair<string, string>("xpos", XPos ??= ""),
+                new KeyValuePair<string, string>("ypos", YPos ??= ""),
+                new KeyValuePair<string, string>("manufacturer_key", SelectedManufacturer?.ManufKey==null ?"0": SelectedManufacturer.ManufKey),
+                new KeyValuePair<string, string>("manufacturer", SelectedManufacturer?.ManufName == null ?"0": SelectedManufacturer.ManufName),
+                new KeyValuePair<string, string>("model_key", SelectedModelDetail?.ModelKey==null ?"0":SelectedModelDetail.ModelKey ),
+                new KeyValuePair<string, string>("model", SelectedModelDetail?.ModelDescription==null ?"0":SelectedModelDetail.ModelDescription ),
+
+                new KeyValuePair<string, string>("height", SelectedModelDetail.height ??= "0"),
+                new KeyValuePair<string, string>("width", SelectedModelDetail.width ??= "0"),
+                new KeyValuePair<string, string>("depth", SelectedModelDetail.depth ??= "0"),
+                //new KeyValuePair<string, string>("SYNC_STS", tag ),
+
+            };
+
+            Console.WriteLine();
+
+            return keyValues;
+
+        }
+
+        // This is for SQLite
+        List<KeyValuePair<string, string>> keyvaluepair(string MAX_key, string tag)
+        {
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+
+                // Session params
+                new KeyValuePair<string, string>("key", MAX_key),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD),
+                new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("owner_key", Session.ownerkey),
+                new KeyValuePair<string, string>("jobkey", Session.jobkey),
+                new KeyValuePair<string, string>("tag",Session.tag_number),
+                new KeyValuePair<string, string>("sitekey",Session.site_key),
+                new KeyValuePair<string, string>("front_back",IsBack? "B" : "F"),
+                new KeyValuePair<string, string>("type", SelectedRackType?.RackTypeKey==null ?"0":SelectedRackType.RackTypeKey),
+                new KeyValuePair<string, string>("racknumber", SelectedRackNumber ??= "0"),
+                new KeyValuePair<string, string>("orientation", IsVertical ?"V":"H"),
 
                 new KeyValuePair<string, string>("xpos", XPos ??= ""),
                 new KeyValuePair<string, string>("ypos", YPos ??= ""),
@@ -182,7 +236,9 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("height", SelectedModelDetail.height ??= "0"),
                 new KeyValuePair<string, string>("width", SelectedModelDetail.width ??= "0"),
-                new KeyValuePair<string, string>("depth", SelectedModelDetail.depth ??= "0")
+                new KeyValuePair<string, string>("depth", SelectedModelDetail.depth ??= "0"),
+                new KeyValuePair<string, string>("SYNC_STS", tag ),
+
             };
 
             Console.WriteLine();
@@ -196,7 +252,36 @@ namespace FTCollectorApp.ViewModel
         public ICommand RefreshRackKeyListCommand { get; set; }
         private async Task ExecuteSaveandBackCommand()
         {
+            IsBusy = true;
+            await GetRackRailShelfDatas(); // Update  RackRailShelfs property with rack_rail_shelf AWS table
+            IsBusy = false;
+
             await Application.Current.MainPage.Navigation.PopAsync();
+        }
+
+
+        void InsertSQLite() {
+
+
+            var KVPair = keyvaluepair();
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<RackData>();
+                conn.Insert(KVPair);
+            }
+        }
+
+        async Task GetRackRailShelfDatas()
+        {
+            var rackDatas = await CloudDBService.GetRackNumber();  // get from rack_rail_shelf table
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<RackNumber>();
+                conn.DeleteAll<RackNumber>();
+                conn.InsertAll(rackDatas);
+            }
+
         }
 
         private async Task ExecuteSaveCommand()
@@ -218,21 +303,17 @@ namespace FTCollectorApp.ViewModel
 
                     var num = int.Parse(SelectedRackNumber) + 1;
                     SelectedRackNumber = num.ToString();
-
+                    //InsertSQLite(AWS_SYNCED);
+                    IsBusy = true;
+                    await GetRackRailShelfDatas(); // Update  RackRailShelfs property with rack_rail_shelf AWS table
+                    IsBusy = false;
                     await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Racks Updated Successfully", "Success"));
 
-                    
-                    SelectedOrientation = string.Empty;
-                    SelectedFrontBack = string.Empty;
-                    SelectedManufacturer.ManufName = string.Empty;
-                    SelectedModelDetail.ModelNumber = string.Empty;
-
-                    XPos = string.Empty;
-                    YPos = string.Empty;
                 }
                 else if (result.Trim().Equals("0"))
                 {
                     Console.WriteLine();
+                    //InsertSQLite(AWS_NOTSYNCED);
                     await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Racks Updated Fail", "Fail"));
                 }
             }
