@@ -33,7 +33,7 @@
                     <local:Dropdown  ItemsSource="{Binding TravelDirectionList}" 
                                      ItemDisplayBinding="{Binding CompassDirDesc}" 
                                      SelectedItem="{Binding SelectedDirection, Mode=TwoWay}"
-                             Title="{Binding SelectedDuctKey.Direction}" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnIndexChanged"/>
+                             Title="{Binding SelectedDuctKey.Direction}" HorizontalOptions="FillAndExpand" />
                         
                     <Label Text="Direction Count" />
                         <local:Dropdown2 Title="{Binding SelectedDuctKey.DirCnt}" HorizontalOptions="FillAndExpand" 

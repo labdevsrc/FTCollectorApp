@@ -107,9 +107,7 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<RackNumber>();
-                    var table1 = conn.Table<RackNumber>().ToList();
-                    Console.WriteLine();
-                    Console.WriteLine();
+
                     var table = conn.Table<RackNumber>().Where(a => (a.SiteId == Session.tag_number) && (a.OWNER_CD == Session.ownerCD)).ToList();
                     Console.WriteLine();
                     return new ObservableCollection<RackNumber>(table);
@@ -260,30 +258,63 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        void InsertSQLite() {
-
-
-            var KVPair = keyvaluepair();
-
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-            {
-                conn.CreateTable<RackData>();
-                conn.Insert(KVPair);
-            }
-        }
-
         async Task GetRackRailShelfDatas()
         {
             var rackDatas = await CloudDBService.GetRackNumber();  // get from rack_rail_shelf table
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<RackNumber>();
-                conn.DeleteAll<RackNumber>();
+                conn.DeleteAll<RackNumber>(); // becarefull, this will erase all local data
                 conn.InsertAll(rackDatas);
             }
 
         }
 
+        /// <summary>
+        /// This function for update SQLite offline
+        /// </summary>
+        /// <param name="Synced"></param>
+        private void InsertToSQLite(bool Synced)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<RackNumber>();
+                var tableRack = conn.Table<RackNumber>().ToList();
+
+
+                try
+                {
+                    foreach (var col in tableRack)
+                    {
+                        if (col.RackNumKey != null)
+                            col.temp = int.Parse(col.RackNumKey);
+                        else
+                        {
+                            col.RackNumKey = "0";
+                            col.temp = 0;
+                        }
+                    }
+
+                    var maxRackKey = tableRack.Max(x => x.temp);
+                    maxRackKey += 1; // increment
+                    Console.WriteLine();
+
+                    // create new instance 
+                    RackNumber rn = new RackNumber();
+                    rn.RackNumKey = maxRackKey.ToString();
+                    rn.Racknumber = SelectedRackNumber ??= "0";
+                    rn.SiteId = Session.tag_number;
+                    rn.SyncStatus = Synced ? RackNumber.AWS_SYNCED : RackNumber.AWS_NOTSYNCED;
+
+                    // Insert to RackNumber Table
+                    conn.Insert(rn);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
         private async Task ExecuteSaveCommand()
         {
             if (SelectedRackNumber == null)
@@ -303,9 +334,10 @@ namespace FTCollectorApp.ViewModel
 
                     var num = int.Parse(SelectedRackNumber) + 1;
                     SelectedRackNumber = num.ToString();
-                    //InsertSQLite(AWS_SYNCED);
+
                     IsBusy = true;
-                    await GetRackRailShelfDatas(); // Update  RackRailShelfs property with rack_rail_shelf AWS table
+                    //await GetRackRailShelfDatas(); // Update  RackRailShelfs property with rack_rail_shelf AWS table
+                    InsertToSQLite(true);
                     IsBusy = false;
                     await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Racks Updated Successfully", "Success"));
 
@@ -313,12 +345,14 @@ namespace FTCollectorApp.ViewModel
                 else if (result.Trim().Equals("0"))
                 {
                     Console.WriteLine();
-                    //InsertSQLite(AWS_NOTSYNCED);
+                    InsertToSQLite(false);
                     await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Racks Updated Fail", "Fail"));
                 }
+
             }
             catch(Exception e)
             {
+                InsertToSQLite(false);
                 Console.WriteLine(e.ToString());
             }
         }

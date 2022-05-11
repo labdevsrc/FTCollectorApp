@@ -16,5 +16,6 @@ namespace FTCollectorApp.Model.Reference
         public string TagNumber { get; set; }
         public string rack_number { get; set; }
         public string Model { get; set; }
+        public int temp { get; set; }
     }
 }

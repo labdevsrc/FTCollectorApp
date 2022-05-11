@@ -19,7 +19,9 @@ namespace FTCollectorApp.ViewModel
         // Racks Page - start
         public DropDownViewModel()
         {
-            ShowDuctPageCommand = new Command(async _ => await ExecuteNavigateToDuctPageCommand());
+            ShowDuctPageCommand = new Command(async () => ExecuteNavigateToDuctPageCommand());
+            ShowRackPageCommand = new Command(async () => ExecuteNavigateToRackPageCommand());
+            ShowActiveDevicePageCommand = new Command(async () => ExecuteNavigateToActiveDevicePageCommand());
             SendResultCommand = new Command(resultPage => ExecuteGetResultCommand(ResultPage));
 
         }
@@ -27,15 +29,23 @@ namespace FTCollectorApp.ViewModel
         ///
         public ICommand SendResultCommand { get; }
         public ICommand ShowDuctPageCommand { get; }
-        private Task ExecuteNavigateToDuctPageCommand()
+        private async Task ExecuteNavigateToDuctPageCommand()
         {
-            var gotoDuctPage = new DuctPage()
-            {
-                SendResultCommand = SendResultCommand
-            };
-            Console.WriteLine();
-            return Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
+            await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
         }
+
+        public ICommand ShowRackPageCommand { get; }
+        private async Task ExecuteNavigateToRackPageCommand()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new RacksPage());
+        }
+
+        public ICommand ShowActiveDevicePageCommand { get; }
+        private async Task ExecuteNavigateToActiveDevicePageCommand()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new ActiveDevicePage());
+        }
+
 
         //public string ResultPage;
         private string _resultPage;

@@ -224,6 +224,79 @@ namespace FTCollectorApp.ViewModel
             throw new NotImplementedException();
         }
 
+        private void InsertToSQLite()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation)) {
+                /*conn.CreateTable<RackNumber>();
+                var tableRack = conn.Table<RackNumber>().ToList();
+                try
+                {
+                    foreach (var col in tableRack)
+                    {
+                        if (col.RackNumKey != null)
+                            col.temp = int.Parse(col.RackNumKey);
+                        else
+                        {
+                            col.RackNumKey = "0";
+                            col.temp = 0;
+                        }
+                    }
+
+
+                    Console.WriteLine();
+                    var maxRackKey = tableRack.Max(x => x.temp);
+
+
+                    RackNumber rn = new RackNumber();
+                    rn.RackNumKey = maxRackKey.ToString();
+                    rn.Racknumber = SelectedRackNumber?.Racknumber == null ? "0" : SelectedRackNumber.Racknumber;
+                    rn.SiteId = Session.tag_number;
+                    conn.Insert(rn);
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }*/
+
+                conn.CreateTable<Chassis>();
+                var tableChassis = conn.Table<Chassis>().ToList();
+                try
+                {
+
+                    foreach (var col in tableChassis)
+                    {
+                        if (col.ChassisKey != null)
+                            col.temp = int.Parse(col.ChassisKey);
+                        else
+                        {
+                            col.ChassisKey = "0";
+                            col.temp = 0;
+                        }
+                    }
+
+                    Console.WriteLine();
+                    var maxChassisKey = tableChassis.Max(x => x.temp);
+                    maxChassisKey += 1; // increment
+
+                    Chassis chas = new Chassis();
+                    chas.ChassisKey = maxChassisKey.ToString();
+                    chas.ChassisNum = SelectedActDevNumber ??= "0";
+                    chas.rack_number = SelectedRackNumber?.Racknumber == null ? "0" : SelectedRackNumber.Racknumber;
+                    chas.TagNumber = Session.tag_number;
+                    conn.Insert(chas);
+
+                    Console.WriteLine();
+
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+        }
+
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -287,6 +360,7 @@ namespace FTCollectorApp.ViewModel
         private async void ExecuteSaveContinueCommand()
         {
             var KVPair = keyvaluepair();
+            InsertToSQLite();
             var result = await CloudDBService.PostActiveDevice(KVPair);
 
             if (result.Length > 30)

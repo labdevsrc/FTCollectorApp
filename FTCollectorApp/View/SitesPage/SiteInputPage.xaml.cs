@@ -353,6 +353,7 @@ namespace FTCollectorApp.View.SitesPage
             {
                 Console.WriteLine();
                 Session.site_key = Sites.Where(a => (a.TagNumber == entryTagNum.Text)).Select(b => b.SiteKey).First();
+
                 Console.WriteLine();
                 TagNumberExisted = true;
             }

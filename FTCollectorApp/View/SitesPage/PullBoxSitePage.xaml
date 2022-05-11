@@ -101,11 +101,11 @@
                         <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
                             x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>
 
-                        <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Clicked="btnRecDucts_Clicked"/>
+                        <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecDucts" Command="{Binding ShowDuctPageCommand}"/>
                         <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="btnFiber_Clicked"/>
                         <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="btnTracer_Clicked"/>
-                        <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Clicked="btnRecRacks_Clicked"/>
-                        <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnActive" Clicked="btnActive_Clicked"/>
+                        <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Command="{Binding ShowRackPageCommand}" />
+                        <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnActive" Command="{Binding ShowActiveDevicePageCommand}"/>
                         <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="OnClicked"/>
                     </StackLayout>
 

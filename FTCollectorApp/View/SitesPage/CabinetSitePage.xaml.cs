@@ -44,10 +44,7 @@ namespace FTCollectorApp.View.SitesPage
 
         private Task ExecuteNavigatetoRackCommand(string v)
         {
-            var pages = new DuctPage()
-            {
-                SendResultCommand = ResultCommand
-            };
+
             return Navigation.PushAsync(new RacksPage());
         }
 

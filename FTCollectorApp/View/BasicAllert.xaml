@@ -3,6 +3,7 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
              x:Class="FTCollectorApp.View.BasicAllert">
 
         <StackLayout
@@ -14,7 +15,8 @@
         <Label Text="{Binding MessageTxt, Mode=TwoWay}"  FontSize="Medium"
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand" TextColor="Black"/>
-            <Button Text="OK" Clicked="OnOK"/>
-        </StackLayout>
+            <Button Text="OK" Clicked="OnOK" VerticalOptions="End" />
+        <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+    </StackLayout>
 
 </pages:PopupPage>

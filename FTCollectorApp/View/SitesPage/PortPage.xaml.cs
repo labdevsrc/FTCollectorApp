@@ -14,7 +14,10 @@ namespace FTCollectorApp.View.SitesPage
     {
         public PortPage()
         {
+            
+            
             InitializeComponent();
+
         }
 
         private void OnIndexChanged(object sender, EventArgs e)

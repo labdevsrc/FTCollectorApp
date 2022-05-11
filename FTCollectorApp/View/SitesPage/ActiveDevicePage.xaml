@@ -44,7 +44,7 @@
                         <Picker ItemsSource="{Binding ModelDetailList}" ItemDisplayBinding="{Binding ModelNumber}"
                             x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"/>
                         <Button Text="See pic"  Command="{Binding ToggleWebViewCommand}" />
-                        <WebView x:Name="webview" HeightRequest="500" WidthRequest="400" 
+                        <WebView x:Name="webview" HeightRequest="500" WidthRequest="400" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                                  Source="{Binding SelectedModelDetail.PictUrl}"
                                  IsVisible="{Binding IsDisplayed}"/>
                         <local:BorderColorEntry Text="{Binding SelectedModelDetail.ModelDescription }"/>

@@ -13,14 +13,37 @@ namespace FTCollectorApp.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BasicAllert 
     {
-        public BasicAllert(string strMessage, string strTitle )
+        public BasicAllert(string strMessage, string strTitle)
         {
             messageTxt = strMessage;
             titlePopUp = strTitle;
             InitializeComponent();
             BindingContext = this;
+        }
+
+        public BasicAllert(string strMessage, string strTitle, bool OK )
+        {
+            messageTxt = strMessage;
+            titlePopUp = strTitle;
+            InitializeComponent();
+            BindingContext = this;
+            SelectedOK = OK;
 
         }
+
+        bool selectedOK = false;
+        public bool SelectedOK
+        {
+            get => selectedOK;
+            set
+            {
+                if (selectedOK == value) return;
+                selectedOK = value;
+                OnPropertyChanged(nameof(SelectedOK));
+                Console.WriteLine();
+            }
+        }
+
 
         string messageTxt;
         public string MessageTxt
@@ -49,9 +72,10 @@ namespace FTCollectorApp.View
             }
         }
 
-        private void OnOK(object sender, EventArgs e)
+        private async void OnOK(object sender, EventArgs e)
         {
-            PopupNavigation.Instance.PopAsync(true);
+            SelectedOK = true;
+            await PopupNavigation.Instance.PopAsync(true);
         }
     }
 }

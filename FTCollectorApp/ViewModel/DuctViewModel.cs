@@ -37,6 +37,12 @@ namespace FTCollectorApp.ViewModel
             SaveCommand = new Command(
                 execute: async () =>
                 {
+                    //Check direction_count
+                    if(int.Parse(SelectedDirectionCnt) <= Session.MAX_DIR_CNT)
+                    {
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Direction Count already used", "Warning"));
+                        return;
+                    }
                     var KVPair = keyvaluepair();
                     string result = await CloudDBService.PostDuctSave(KVPair); // async upload to AWS table
                     try
@@ -47,25 +53,26 @@ namespace FTCollectorApp.ViewModel
                         {
                             Console.WriteLine();
                             var num = int.Parse(SelectedDirectionCnt) + 1;
+                            Session.MAX_DIR_CNT += 1;
                             SelectedDirectionCnt = num.ToString();
-                            await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert("Update Success with key ="+ contentResponse.d.ToString(), "Success"));
+                            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Success with key ="+ contentResponse.d.ToString(), "Success"));
                         }
                         else if (contentResponse.sts.Equals("4"))
                         {
                             Console.WriteLine();
 
-                            await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert(contentResponse.d.ToString(), "Fail"));
+                            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(contentResponse.d.ToString(), "Fail"));
                         }
                         else if (contentResponse.sts.Equals("5"))
                         {
                             Console.WriteLine();
 
-                            await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert(contentResponse.d.ToString(), "Warning"));
+                            await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(contentResponse.d.ToString(), "Warning"));
                         }
                     }
                     catch(Exception e)
                     {
-                        await Application.Current.MainPage.Navigation.PushAsync(new BasicAllert(e.ToString(),"FAIL"));
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(e.ToString(),"FAIL"));
                     }
                 });
             SaveBackCommand = new Command(
@@ -147,6 +154,14 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<ConduitsGroup>();
                     var table = conn.Table<ConduitsGroup>().Where(a=>(a.HosTagNumber == Session.tag_number)&&(a.OwnerKey ==  Session.ownerkey)).ToList();
+                    var temp = 0;
+                    foreach (var col in table)
+                    {
+                        int iTmp = int.Parse(col.DirCnt);
+                        if (iTmp > temp)
+                            temp = iTmp;                        
+                    }
+                    Session.MAX_DIR_CNT = temp;
                     return new ObservableCollection<ConduitsGroup>(table);
                 }
             }

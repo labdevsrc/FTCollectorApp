@@ -30,7 +30,6 @@ namespace FTCollectorApp.ViewModel
             RefreshBladeKeyListCommand = new Command(() => ExecuteRefreshBladeKeyListCommand());
             ShowPortPageCommand = new Command(async () => ExecuteShowPortPageCommand());
             ShowPortConnPageCommand = new Command(async () => ExecuteShowPortConnPageCommand());
-            Session.tag_number = "51322";
         }
         
         [ObservableProperty]

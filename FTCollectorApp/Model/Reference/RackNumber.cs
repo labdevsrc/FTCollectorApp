@@ -6,8 +6,8 @@ namespace FTCollectorApp.Model.Reference
 {
     public class RackNumber
     {
-        const string AWS_NOTSYNCED = "aws_notsynced";
-
+        public const string AWS_NOTSYNCED = "aws_notsynced";
+        public const string  AWS_SYNCED = "aws_synced";
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }
         public string RackNumKey { get; set; }
@@ -15,6 +15,7 @@ namespace FTCollectorApp.Model.Reference
         public string Racknumber { get; set; }
         public string SiteId { get; set; }
         public string RackType { get; set; }
+        public int temp { get; set; }
 
         public string SyncStatus { get; set; } = AWS_NOTSYNCED;
     }
