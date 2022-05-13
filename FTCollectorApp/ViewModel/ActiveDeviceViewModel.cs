@@ -217,7 +217,12 @@ namespace FTCollectorApp.ViewModel
             PortConnectionCommand = new Command(() => ExecutePortConnectionCommand());
             BladePageCommand = new Command(() => ExecuteBladePageCommand());
             UpdateChassisCommand = new Command(() => ExecuteUpdateChassisCommand());
+            SendDialogResultCommand = new Command( result => ExecuteSendDialogResultCommand(result as BasicAllertResult));
         }
+
+
+        [ObservableProperty]
+        BasicAllertResult result;
 
         private void ExecuteUpdateChassisCommand()
         {
@@ -297,7 +302,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        List<KeyValuePair<string, string>> keyvaluepair()
+        List<KeyValuePair<string, string>> keyvaluepair(bool Update)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
@@ -332,11 +337,9 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("slotblade", SelectedSlotBladeTray ??= "0"),
                 new KeyValuePair<string, string>("position", SelectedPosition ??= "0"),
                 new KeyValuePair<string, string>("rack_number", SelectedRackNumber?.Racknumber is null ? "0" : SelectedRackNumber.Racknumber),
-                //new KeyValuePair<string, string>("rack_key", SelectedRackNumber?.RackNumKey is null ? "0" : SelectedRackNumber.RackNumKey), // no need already in backend file
-
+                new KeyValuePair<string, string>("actsts", Update ? "1" : "0"),
 
             };
-
 
             return keyValues;
 
@@ -357,10 +360,42 @@ namespace FTCollectorApp.ViewModel
             return ipaddress;
         }
 
+        [ObservableProperty]
+        BasicAllertResult dialogResult;
+
+        public ICommand SendDialogResultCommand { get; set; }
+
+        private async void ExecuteSendDialogResultCommand(BasicAllertResult resultDialog)
+        {
+            Console.WriteLine();
+            DialogResult = resultDialog;
+            if (resultDialog.OK)
+            {
+                var KVPair = keyvaluepair(true); // update existed chassis
+                var result = await CloudDBService.PostActiveDevice(KVPair);
+                if (result.Length > 30)
+                {
+                    var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
+
+                    if (contentResponse.sts.Equals("3"))
+                    {
+                        InsertToSQLite();
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
+                    }
+
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Cancel Update Existed");
+            }
+        }
+
         private async void ExecuteSaveContinueCommand()
         {
-            var KVPair = keyvaluepair();
-            InsertToSQLite();
+            var KVPair = keyvaluepair(false); // insert new chassis
+
             var result = await CloudDBService.PostActiveDevice(KVPair);
 
             if (result.Length > 30)
@@ -374,16 +409,26 @@ namespace FTCollectorApp.ViewModel
                     //Console.WriteLine($"status : {0}", contentResponse.sts);
                     //Console.WriteLine($"cnumber : {0}", contentResponse.cnumber);
 
-                    if (contentResponse.sts.Equals("0"))
+                    if (contentResponse.sts.Equals("1"))
                     {
-                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
-                    }
-                    else if (contentResponse.sts.Equals("1"))
-                    {
-                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Duplicated Active Dev Number", "Warning"));
+                        var allerdiag = new BasicAllert("Chasis already Existed. Update ?", "Warning")
+                        {
+                            GetDialogResultCommand = SendDialogResultCommand
+                        };
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(allerdiag);
                     }
                     else if (contentResponse.sts.Equals("2"))
                     {
+                        var allerdiag = new BasicAllert("This Active Device Num already Existed. Update ?", "Warning")
+                        {
+                            GetDialogResultCommand = SendDialogResultCommand
+                        };
+
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(allerdiag);
+                    }
+                    else if (contentResponse.sts.Equals("0"))
+                    {
+                        InsertToSQLite();
                         await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
                     }
                 }

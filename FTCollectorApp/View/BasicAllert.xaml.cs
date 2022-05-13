@@ -7,18 +7,25 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Rg.Plugins.Popup.Services;
+using System.Windows.Input;
+using FTCollectorApp.Model.Reference;
 
 namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BasicAllert 
     {
+        public ICommand GetDialogResultCommand { get; set; }
+
+        BasicAllertResult Result = new BasicAllertResult() ;
         public BasicAllert(string strMessage, string strTitle)
         {
             messageTxt = strMessage;
             titlePopUp = strTitle;
             InitializeComponent();
             BindingContext = this;
+
+            Result.OK = false;
         }
 
         public BasicAllert(string strMessage, string strTitle, bool OK )
@@ -27,11 +34,11 @@ namespace FTCollectorApp.View
             titlePopUp = strTitle;
             InitializeComponent();
             BindingContext = this;
-            SelectedOK = OK;
+            Result.OK = OK;
 
         }
 
-        bool selectedOK = false;
+        /*bool selectedOK = false;
         public bool SelectedOK
         {
             get => selectedOK;
@@ -42,7 +49,19 @@ namespace FTCollectorApp.View
                 OnPropertyChanged(nameof(SelectedOK));
                 Console.WriteLine();
             }
-        }
+        }*/
+
+        /*public BasicAllertResult AllertResult
+        {
+            get => allertResult;
+            set
+            {
+                if (allertResult == value)
+                    return;
+                allertResult = value;
+                OnPropertyChanged(nameof(BasicAllertResult));
+            }
+        }*/
 
 
         string messageTxt;
@@ -74,7 +93,20 @@ namespace FTCollectorApp.View
 
         private async void OnOK(object sender, EventArgs e)
         {
-            SelectedOK = true;
+            Console.WriteLine();
+            Result.OK = true;
+            Console.WriteLine();
+            GetDialogResultCommand?.Execute(Result);
+            
+            await PopupNavigation.Instance.PopAsync(true);
+        }
+
+        private async void OnCancel(object sender, EventArgs e)
+        {
+            Result.OK = false;
+            Console.WriteLine();
+            GetDialogResultCommand?.Execute(Result);
+
             await PopupNavigation.Instance.PopAsync(true);
         }
     }

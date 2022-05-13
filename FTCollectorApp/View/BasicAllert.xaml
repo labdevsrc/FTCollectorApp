@@ -8,15 +8,19 @@
 
         <StackLayout
                 Margin="20"
-                Padding="30"
+                Padding="20"
                 BackgroundColor="White"
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
         <Label Text="{Binding MessageTxt, Mode=TwoWay}"  FontSize="Medium"
+               Padding="20"
                     VerticalOptions="CenterAndExpand" 
-                    HorizontalOptions="CenterAndExpand" TextColor="Black"/>
+                    HorizontalOptions="Start" TextColor="Black"/>
+
+        <Grid  ColumnDefinitions="*,*" >
             <Button Text="OK" Clicked="OnOK" VerticalOptions="End" />
-        <ActivityIndicator VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>
+            <Button Text="Cancel" Clicked="OnCancel" VerticalOptions="End" Grid.Column="1"/>
+        </Grid>
     </StackLayout>
 
 </pages:PopupPage>

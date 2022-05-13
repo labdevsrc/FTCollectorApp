@@ -798,7 +798,7 @@ namespace FTCollectorApp.Service
                     response = await client.PostAsync(Constants.SaveActiveDevice, content);
                     if (response.IsSuccessStatusCode)
                     {
-
+                        Console.WriteLine();
 
                         var isi = await response.Content.ReadAsStringAsync();
                         //var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);

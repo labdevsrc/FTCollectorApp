@@ -193,10 +193,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("stage", Session.stage),
                 new KeyValuePair<string, string>("chasis_number", SelectedChassisKey?.ChassisKey == null ? "0": SelectedChassisKey.ChassisKey)
             };
-
-
             return keyValues;
-
         }
 
         public ObservableCollection<ChassisType> ChassisTypeList
