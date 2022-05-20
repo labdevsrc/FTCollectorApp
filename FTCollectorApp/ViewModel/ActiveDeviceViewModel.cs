@@ -218,51 +218,41 @@ namespace FTCollectorApp.ViewModel
             BladePageCommand = new Command(() => ExecuteBladePageCommand());
             UpdateChassisCommand = new Command(() => ExecuteUpdateChassisCommand());
             SendDialogResultCommand = new Command( result => ExecuteSendDialogResultCommand(result as BasicAllertResult));
+            Session.RowId = "0"; // reset RowId chassis table
         }
 
 
         [ObservableProperty]
         BasicAllertResult result;
 
-        private void ExecuteUpdateChassisCommand()
+        private async void ExecuteUpdateChassisCommand()
         {
-            throw new NotImplementedException();
+            if (Session.RowId == "0")
+            {
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Please record an active device first", "Warning"));
+                return;
+            }
+            
+            var KVPair = keyvaluepairIpAddr(); // update existed chassis
+            var result = await CloudDBService.UpdateIPAddress(KVPair, null);
+            if (result.Length > 30)
+            {
+                var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
+
+                if (contentResponse.sts.Equals("1")) // update done
+                {
+
+                    Console.WriteLine();
+                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
+                }
+
+                Console.WriteLine();
+            }
         }
 
         private void InsertToSQLite()
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation)) {
-                /*conn.CreateTable<RackNumber>();
-                var tableRack = conn.Table<RackNumber>().ToList();
-                try
-                {
-                    foreach (var col in tableRack)
-                    {
-                        if (col.RackNumKey != null)
-                            col.temp = int.Parse(col.RackNumKey);
-                        else
-                        {
-                            col.RackNumKey = "0";
-                            col.temp = 0;
-                        }
-                    }
-
-
-                    Console.WriteLine();
-                    var maxRackKey = tableRack.Max(x => x.temp);
-
-
-                    RackNumber rn = new RackNumber();
-                    rn.RackNumKey = maxRackKey.ToString();
-                    rn.Racknumber = SelectedRackNumber?.Racknumber == null ? "0" : SelectedRackNumber.Racknumber;
-                    rn.SiteId = Session.tag_number;
-                    conn.Insert(rn);
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }*/
 
                 conn.CreateTable<Chassis>();
                 var tableChassis = conn.Table<Chassis>().ToList();
@@ -289,6 +279,8 @@ namespace FTCollectorApp.ViewModel
                     chas.ChassisNum = SelectedActDevNumber ??= "0";
                     chas.rack_number = SelectedRackNumber?.Racknumber == null ? "0" : SelectedRackNumber.Racknumber;
                     chas.TagNumber = Session.tag_number;
+                    chas.Model = SelectedModelDetail?.ModelNumber == null ? "0": SelectedModelDetail.ModelNumber;
+                    chas.ModelKey = SelectedModelDetail?.ModelKey == null ? "0" : SelectedModelDetail.ModelKey;
                     conn.Insert(chas);
 
                     Console.WriteLine();
@@ -301,6 +293,52 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        private async Task<string> UpdateSQLite()
+        {
+            int DeletedCnt = 0, InsertedCnt = 0;
+            IsBusy = true;
+            var contentChassis = await CloudDBService.GetChassis();
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+
+                conn.CreateTable<Chassis>();
+                DeletedCnt = conn.DeleteAll<Chassis>();
+                InsertedCnt = conn.InsertAll(contentChassis);
+                
+            }
+
+            IsBusy = false;
+            string returnVal = string.Empty;
+            if (DeletedCnt > InsertedCnt || InsertedCnt > DeletedCnt)
+                returnVal = "SQLite No Change";
+            else
+                returnVal = DeletedCnt > InsertedCnt ? String.Format("Removed SQLite {0} Item(s)", DeletedCnt - InsertedCnt) : String.Format("New SQLite {0} Item(s)", InsertedCnt - DeletedCnt);
+            return returnVal;
+        }
+
+        List<KeyValuePair<string, string>> keyvaluepairIpAddr()
+        {
+
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("rowid", Session.RowId),
+
+                new KeyValuePair<string, string>("ipaddr", IsIPAddressValid(IP1 + "." + IP2 + "." + IP3 + "." + IP4)),
+                new KeyValuePair<string, string>("subnet", IsIPAddressValid(Subnet1 + "." + Subnet2 + "." + Subnet3 + "." + Subnet4)),
+                new KeyValuePair<string, string>("protocol", Protocol ??= "0"),
+                new KeyValuePair<string, string>("vidioproto", VideoProtocol ??= "0"),
+                new KeyValuePair<string, string>("vlan", VLAN ??= "0"),
+
+                new KeyValuePair<string, string>("gateway", IsIPAddressValid(GWIP1 + "." + GWIP2 + "." + GWIP3 + "." + GWIP4)),
+                new KeyValuePair<string, string>("multicastip", IsIPAddressValid(MCast1 + "." + MCast2 + "." + MCast3 + "." + MCast4)),
+
+            };
+
+            return keyValues;
+
+        }
 
         List<KeyValuePair<string, string>> keyvaluepair(bool Update)
         {
@@ -377,10 +415,13 @@ namespace FTCollectorApp.ViewModel
                 {
                     var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(result);
 
-                    if (contentResponse.sts.Equals("3"))
+                    if (contentResponse.sts.Equals("3")) // update done
                     {
-                        InsertToSQLite();
-                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
+                        var itemUpdate = await UpdateSQLite();
+                        Console.WriteLine();
+                        var num = int.Parse(SelectedActDevNumber) + 1;
+                        SelectedActDevNumber = num.ToString();
+                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(String.Format("Update Succesfully. SQLite {0}", itemUpdate), "Success"));
                     }
 
                     Console.WriteLine();
@@ -394,6 +435,12 @@ namespace FTCollectorApp.ViewModel
 
         private async void ExecuteSaveContinueCommand()
         {
+            if(SelectedModelDetail == null )
+            {
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Model is empty.\n Please Select One", "Warning"));
+                return;
+            }
+
             var KVPair = keyvaluepair(false); // insert new chassis
 
             var result = await CloudDBService.PostActiveDevice(KVPair);
@@ -409,7 +456,7 @@ namespace FTCollectorApp.ViewModel
                     //Console.WriteLine($"status : {0}", contentResponse.sts);
                     //Console.WriteLine($"cnumber : {0}", contentResponse.cnumber);
 
-                    if (contentResponse.sts.Equals("1"))
+                    if (contentResponse.sts.Equals("0"))
                     {
                         var allerdiag = new BasicAllert("Chasis already Existed. Update ?", "Warning")
                         {
@@ -417,18 +464,12 @@ namespace FTCollectorApp.ViewModel
                         };
                         await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(allerdiag);
                     }
-                    else if (contentResponse.sts.Equals("2"))
+                    else if (contentResponse.sts.Equals("1"))
                     {
-                        var allerdiag = new BasicAllert("This Active Device Num already Existed. Update ?", "Warning")
-                        {
-                            GetDialogResultCommand = SendDialogResultCommand
-                        };
-
-                        await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(allerdiag);
-                    }
-                    else if (contentResponse.sts.Equals("0"))
-                    {
+                        Session.RowId = contentResponse.cnumber;
                         InsertToSQLite();
+                        var num = int.Parse(SelectedActDevNumber) + 1;
+                        SelectedActDevNumber = num.ToString();
                         await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Update Succesfully", "Success"));
                     }
                 }
@@ -439,8 +480,7 @@ namespace FTCollectorApp.ViewModel
 
 
 
-                var num = int.Parse(SelectedActDevNumber) + 1;
-                SelectedActDevNumber = num.ToString();
+
             }
         }
 

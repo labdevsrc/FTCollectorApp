@@ -13,7 +13,7 @@ using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class PortViewModel: ObservableObject
+    public partial class PortViewModel : ObservableObject
     {
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(BladeList))]
@@ -29,8 +29,24 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string selectedOrientation;
 
-        [ObservableProperty]
+        //[ObservableProperty]
         string selectedTXRXOption;
+        public string SelectedTXRXOption
+        {
+            get => selectedTXRXOption;
+            set
+            {
+                if (value == selectedTXRXOption)
+                    return;
+                else if (value == "Transmit")
+                    selectedTXRXOption = "T";
+                else if (value == "Full Duplex")
+                    selectedTXRXOption = "F";
+                else
+                    selectedTXRXOption = "0";
+                OnPropertyChanged(nameof(SelectedTXRXOption));
+            }
+        }
 
         [ObservableProperty]
         string selectedBlade;
@@ -38,8 +54,19 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(ChassisList))]
-        [AlsoNotifyChangeFor(nameof(BladeList))]
         RackNumber selectedRackNumber;  // harus class !!, onpropertychanged dependency tidak bisa untuk string
+        /*public RackNumber SelectedRackNumber {
+            get => selectedRackNumber;
+            set
+            {
+                if (selectedRackNumber != value)
+                    return; 
+                selectedRackNumber = value;
+                Console.WriteLine();
+                OnPropertyChanged(nameof(SelectedRackNumber));
+            }
+        }*/
+
 
         [ObservableProperty]
         string selectedPortNumber = "1";
@@ -51,7 +78,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
                 new KeyValuePair<string, string>("tag", Session.tag_number),  // 2
-                new KeyValuePair<string, string>("chassisid", SelectedBladSlotTray?.orientation  == null ? "0": SelectedBladSlotTray.orientation),  // 3
+                new KeyValuePair<string, string>("chassisid", SelectedChassisKey?.ChassisKey  == null ? "0": SelectedChassisKey.ChassisKey),  // 3
                 new KeyValuePair<string, string>("bladeid", SelectedBladSlotTray?.key  == null ? "0": SelectedBladSlotTray.key),  // 4
                 new KeyValuePair<string, string>("transmit", SelectedTXRXOption ??="0"),  // 4
                 new KeyValuePair<string, string>("labelid", PortLabel ??= "0"),  // 4
@@ -91,9 +118,29 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     conn.CreateTable<Chassis>();
                     var table = conn.Table<Chassis>().Where(a => a.TagNumber == Session.tag_number).ToList();
-                    if (SelectedRackNumber != null)
-                        table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number) && (a.rack_number == SelectedRackNumber.Racknumber)).ToList();
-                    Console.WriteLine();
+                    foreach(var col in table)
+                    {
+                        //if(col?.Model == null)
+                        if (string.IsNullOrEmpty(col?.Model))
+                        {
+                            col.Model = "Unknwon"; // because DisplayBindingItem ={Binding Model}, make sure no Model = null 
+                            Console.WriteLine();
+                        }
+                    }
+
+                    try
+                    {
+
+                        if (SelectedRackNumber != null)
+                        {
+                            table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number) && (a.rack_number == SelectedRackNumber.Racknumber)).ToList();
+                            Console.WriteLine();
+                        }
+                        Console.WriteLine();
+                    }
+                    catch(Exception e) {
+                        Console.WriteLine(e.ToString());
+                    }
                     return new ObservableCollection<Chassis>(table);
                 }
             }
@@ -107,9 +154,24 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<SlotBladeTray>();
                     var table = conn.Table<SlotBladeTray>().Where(a => a.site == Session.tag_number).ToList();
-                    if (SelectedChassisKey != null)
-                        table = conn.Table<SlotBladeTray>().Where(a => (a.site == Session.tag_number) && (a.rack_key == SelectedRackNumber.RackNumKey) && (a.chassis_key == SelectedChassisKey.ChassisKey)).ToList();
+                    foreach (var col in table)
+                    {
+                        if (string.IsNullOrEmpty(col.key))
+                            col.key = "0"; // because DisplayBindingItem ={Binding key}, make sure no Model = null 
+                    }
                     Console.WriteLine();
+                    try
+                    {
+                        if (SelectedChassisKey != null)
+                        {
+                            table = conn.Table<SlotBladeTray>().Where(a => (a.site == Session.tag_number) && (a.rack_key == SelectedRackNumber.RackNumKey) && (a.chassis_key == SelectedChassisKey.ChassisKey)).ToList();
+                            Console.WriteLine();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                     return new ObservableCollection<SlotBladeTray>(table);
                 }
             }
@@ -124,6 +186,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<PortType>();
                     var table = conn.Table<PortType>().ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<PortType>(table);
                 }
             }
@@ -146,14 +209,14 @@ namespace FTCollectorApp.ViewModel
         public ICommand SaveCommand { get; set; }
         public ICommand FinishCommand { get; set; }
         public ICommand RefreshPortsKeyListCommand { get; set; }
-
+        public ICommand RefreshBladeListCommand { get; set; }
 
         public PortViewModel()
         {
             SaveCommand = new Command(async () => ExecuteSaveCommand());
             FinishCommand = new Command(async () => ExecuteFinishCommand());
             RefreshPortsKeyListCommand = new Command(() => ExecuteRefreshPortsKeyListCommand());
-
+            RefreshBladeListCommand = new Command(() => ExecuteRefreshBladeListCommand());
         }
         private async void ExecuteFinishCommand()
         {
@@ -183,6 +246,29 @@ namespace FTCollectorApp.ViewModel
             IsBusy = false;
             Console.WriteLine();
         }
+
+
+        private async void ExecuteRefreshBladeListCommand()
+        {
+            Console.WriteLine();
+            IsBusy = true;
+            var contentSlotBladeTray = await CloudDBService.GetBladeTableKey(); // async download from AWS table
+            if (contentSlotBladeTray.ToString().Length > 20)
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<SlotBladeTray>();
+                    conn.DeleteAll<SlotBladeTray>();
+                    conn.InsertAll(contentSlotBladeTray);
+                }
+
+                Console.WriteLine();
+                OnPropertyChanged(nameof(BladeList)); // update Ports dropdown list
+            }
+            IsBusy = false;
+            Console.WriteLine();
+        }
+
 
         private async void ExecuteSaveCommand()
         {

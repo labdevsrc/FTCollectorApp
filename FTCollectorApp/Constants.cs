@@ -30,9 +30,9 @@ namespace FTCollectorApp
         public const string SaveSheathMark = "ajaxSaveSheathmark.php";
         public const string ajaxSaveSlotBTray = "ajaxSaveblade.php";
 
-        public const string ajaxSavePorts = "ajaxsavePorts.php";
-        public const string ajaxSavePort = "ajaxsavePort.php";
-
+        public const string ajaxSavePorts = "ajaxSavePorts.php";
+        public const string ajaxSavePort = "ajaxSavePortConnection.php";
+        public const string ajaxUpdateIpAddr = "ajaxUpdateipaddr.php";
 
         //////////////////// AWS S3 params - start ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";

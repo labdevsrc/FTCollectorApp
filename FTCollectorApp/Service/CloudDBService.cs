@@ -353,7 +353,36 @@ namespace FTCollectorApp.Service
             return "No Internet Connection";
         }
 
+        public async static Task<string> UpdateIPAddress(List<KeyValuePair<string, string>> keyValues, String Url)
+        {
+            try
+            {
+                HttpContent content = new FormUrlEncodedContent(keyValues);
 
+                HttpResponseMessage response = null;
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    response = await client.PostAsync(Constants.ajaxUpdateIpAddr, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        var isi = await response.Content.ReadAsStringAsync();
+                        //var contentResponse = JsonConvert.DeserializeObject<ResponseRes>(isi);
+                        //Console.WriteLine($"[PostActiveDevice] Response from  OK = 200 , content :" + isi);
+                        //Console.WriteLine($"status : {0}", contentResponse?.sts);
+                        //Console.WriteLine($"cnumber : {0}", contentResponse?.cnumber);
+                        return isi;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+            }
+            return "FAIL";
+        }
 
 
         public static async Task SaveCrewdata(string OWNER_CD, string name1, string name2, string name3, string name4, string name5, string name6, string diem1, string diem2, string diem3, string diem4, string diem5, string diem6, string driver11, string driver12, string driver13, string driver14, string driver15, string driver16)

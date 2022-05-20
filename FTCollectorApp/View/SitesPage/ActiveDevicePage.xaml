@@ -106,7 +106,7 @@
                         <Button x:Name="btnShow"  Text="Click here to addd IP Address +" BorderColor="Transparent" 
                                 BackgroundColor="Transparent" Command="{Binding ToggleIPEntriesCommand}"/>
 
-                        <Grid x:Name="ipAddressEntries"  RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" 
+                        <Grid x:Name="ipAddressEntries"  RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*" 
                               ColumnDefinitions="1.5*,0.1*,1.5*,0.1*,1.5*,0.1*,1.5*,0.1*" 
                               IsVisible="{Binding IsShow, Mode=TwoWay}" >
                             <Label Text="IP Address" Grid.ColumnSpan="2" />

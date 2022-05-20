@@ -35,7 +35,7 @@
 
                     <Label Text="Chassis*" Grid.Column="1" />
                     <local:Dropdown ItemsSource="{Binding ChassisList}" 
-                                                ItemDisplayBinding="{Binding ChassisKey}" 
+                                                ItemDisplayBinding="{Binding Model}" 
                                                 SelectedItem="{Binding  SelectedChassisKey, Mode=TwoWay}"
                                                 Grid.Column="1" Grid.Row="1"/>
 

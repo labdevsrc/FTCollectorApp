@@ -7,8 +7,33 @@
             <Label Text="Port Connection" FontSize="Large"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
-            <Label Text="ort Connections" />
+            <Label Text="Port Connections" />
             <local:Dropdown ItemsSource="{Binding PortConnectionList}" />
+            <Grid RowDefinitions="*0.1,*0.2,*0.1,*0.2,*0.1,*0.2,*0.1,*0.2,*0.1,*0.2" ColumnDefinitions="*,*">
+                <Label Text="From Rack" />
+                <local:Dropdown Grid.Row="1" ItemsSource="{Binding RackRailShelfs}"
+                                ItemDisplayBinding="{Binding Rackumber}"
+                                SelectedItem="{Binding SelectedFromRack, Mode=TwoWay}" />
+
+                <Label Text="To Rack" Grid.Column="1"/>
+                <local:Dropdown Grid.Column="1" Grid.Row="1"
+                    ItemsSource="{Binding RackRailShelfs}"
+                                ItemDisplayBinding="{Binding Rackumber}"
+                                SelectedItem="{Binding SelectedToRack, Mode=TwoWay}" />
+
+                <Label Text="From Chassis" Grid.Row="3"/>
+                <local:Dropdown Grid.Row="4" ItemsSource="{Binding FromChassisList}"
+                                ItemDisplayBinding="{Binding Model}"
+                                SelectedItem="{Binding SelectedFromChassis, Mode=TwoWay}" />
+
+                <Label Text="To Chassis" Grid.Row="3" Grid.Column="1"/>
+                <local:Dropdown Grid.Row="4" Grid.Column="1" 
+                    ItemsSource="{Binding ToChassisList}"
+                                ItemDisplayBinding="{Binding Rackumber}"
+                                SelectedItem="{Binding SelectedToChassis, Mode=TwoWay}" />
+
+
+            </Grid>
             
         </StackLayout>
     </ContentPage.Content>

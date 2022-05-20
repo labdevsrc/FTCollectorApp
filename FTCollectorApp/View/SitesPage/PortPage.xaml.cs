@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,26 +14,10 @@ namespace FTCollectorApp.View.SitesPage
     public partial class PortPage : ContentPage
     {
         public PortPage()
-        {
-            
-            
+        {                     
             InitializeComponent();
-
+            BindingContext = new PortViewModel();
         }
 
-        private void OnIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnSaveContinue(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnExit(object sender, EventArgs e)
-        {
-
-        }
     }
 }

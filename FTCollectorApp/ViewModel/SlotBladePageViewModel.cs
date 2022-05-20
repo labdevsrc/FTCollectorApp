@@ -13,6 +13,7 @@ using Xamarin.Forms;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.Service;
 using FTCollectorApp.View;
+using System.Linq;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -56,8 +57,60 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine();
         }
 
+        private int InsertToSQLite()
+        {
+            int InsertedRows = 0;
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<SlotBladeTray>();
+                var tableBlade = conn.Table<SlotBladeTray>().ToList();
+                try
+                {
+
+                    foreach (var col in tableBlade)
+                    {
+                        if (col.key != null)
+                            col.temp = int.Parse(col.key);
+                        else
+                        {
+                            col.key = "0";
+                            col.temp = 0;
+                        }
+                    }
+
+                    Console.WriteLine();
+                    var maxBladeKey = tableBlade.Max(x => x.temp);
+                    maxBladeKey += 1; // increment
+
+                    SlotBladeTray slotblade = new SlotBladeTray();
+                    slotblade.key = maxBladeKey.ToString();
+                    slotblade.slot_or_blade_number = SelectedBladeNum ??= "0";
+                    slotblade.rack_key = SelectedRackNumber?.Racknumber == null ? "0" : SelectedRackNumber.Racknumber;
+                    slotblade.chassis_key = SelectedChassisKey?.ChassisKey == null ? "0" : SelectedChassisKey.ChassisKey;
+                    slotblade.model_key = SelectedModelDetail?.ModelKey == null ? "0" : SelectedModelDetail.ModelKey;
+                    slotblade.site = Session.tag_number;
+                    InsertedRows = conn.Insert(slotblade);
+
+                    Console.WriteLine();
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            return InsertedRows;
+        }
+
+
         private async Task ExecuteSaveCommand()
         {
+            if (SelectedModelDetail == null)
+            {
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Model is empty.\n Please Select One", "Warning"));
+                return;
+            }
             var KVPair = keyvaluepair();
             var result = await CloudDBService.PostBladeSave(KVPair);
 
@@ -69,15 +122,12 @@ namespace FTCollectorApp.ViewModel
                 var num = int.Parse(SelectedBladeNum) + 1;
                 SelectedBladeNum = num.ToString();
 
-                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Blade Updated Successfully", "Success"));
+                var InsertedRow = InsertToSQLite();
 
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<SlotBladeTray>();
-                    conn.Insert(KVPair);
-                    OnPropertyChanged(nameof(SlotBladeTrayTables));
-                    Console.WriteLine();
-                }
+
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert(string.Format("Blade Updated Successfully\nSQLite Insert {0}", InsertedRow), "Success"));
+
+
             }
             else //"0" or fail
             {
@@ -86,43 +136,12 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        public void AddtoSQLite()
-        {
-
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-            {
-                var KVPair = keyvaluepair();
-                conn.CreateTable<SlotBladeTray>();
-                conn.Insert(KVPair);
-                OnPropertyChanged(nameof(SlotBladeTrayTables));
-                /*SQLiteCommand insertSQL = new SQLiteCommand("INSERT INTO SlotBladeTray (key, owner_key, rack_key, chassis_key, OWNER_CD, " +
-                "site, slot_or_blade_number, front_back, orientation) VALUES (?,?,?,?,?,?,?,?,?)", conn);
-                insertSQL.Parameters.Add(slotbtray.key);
-                insertSQL.Parameters.Add(slotbtray.owner_key);
-                insertSQL.Parameters.Add(slotbtray.rack_key);
-                insertSQL.Parameters.Add(slotbtray.chassis_key);
-                insertSQL.Parameters.Add(slotbtray.OWNER_CD);
-                insertSQL.Parameters.Add(slotbtray.site);
-                insertSQL.Parameters.Add(slotbtray.slot_or_blade_number);
-                insertSQL.Parameters.Add(slotbtray.front_back);
-                insertSQL.Parameters.Add(slotbtray.orientation);
-
-                try
-                {
-                    insertSQL.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }*/
-            }
-        }
 
         private async Task ExecuteFinishSaveCommand()
         {
             var KVPair = keyvaluepair();
             var result = await CloudDBService.PostBladeSave(KVPair);
-            if (result.Equals("OK"))
+            //if (result.Equals("OK"))
             {
                 Console.WriteLine();
                 Application.Current.MainPage.Navigation.PopAsync();
@@ -245,10 +264,22 @@ namespace FTCollectorApp.ViewModel
                     Console.WriteLine();
                     conn.CreateTable<Chassis>();
                     var table = conn.Table<Chassis>().Where(a => a.TagNumber == Session.tag_number).ToList();
-                    if (SelectedRackNumber != null)
-                        table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number) && (a.rack_number == SelectedRackNumber.Racknumber)).ToList();
-                    Console.WriteLine();
-                    return new ObservableCollection<Chassis>(table);
+                    try
+                    {
+                        if (SelectedRackNumber != null)
+                            table = conn.Table<Chassis>().Where(a => (a.TagNumber == Session.tag_number) && (a.rack_number == SelectedRackNumber.Racknumber)).ToList();
+                        Console.WriteLine();
+                        return new ObservableCollection<Chassis>(table);
+                    }
+                    catch(Exception e)
+                    {
+                        e.ToString();
+                        Console.WriteLine();
+
+                        return new ObservableCollection<Chassis>(table);
+
+                    }
+
                 }
             }
         }

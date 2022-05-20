@@ -322,6 +322,11 @@ namespace FTCollectorApp.ViewModel
                 await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Rack Number  must be non-zero", "Warning"));
                 return;
             }
+            if (SelectedModelDetail == null)
+            {
+                await Rg.Plugins.Popup.Services.PopupNavigation.Instance.PushAsync(new BasicAllert("Model is empty.\n Please Select One", "Warning"));
+                return;
+            }
             try
             {
 

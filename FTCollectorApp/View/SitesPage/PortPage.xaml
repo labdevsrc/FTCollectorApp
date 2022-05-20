@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:fa="clr-namespace:FontAwesome"
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.PortPage">
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -21,11 +23,17 @@
                         <local:Dropdown ItemsSource="{Binding ChassisList}" 
                                                 ItemDisplayBinding="{Binding Model}" 
                                                 SelectedItem="{Binding  SelectedChassisKey, Mode=TwoWay}"/>
+                        <Label Text="{Binding ChassisList.ChassisNum}" />
                         <Label Text="Blade" />
-                        <local:Dropdown ItemsSource="{Binding BladeList}" 
+                        <Grid ColumnDefinitions="0.7*,0.1*" >
+                            <local:Dropdown ItemsSource="{Binding BladeList}" 
                                                 ItemDisplayBinding="{Binding key}" 
-                                                SelectedItem="{Binding selectedBladSlotTray, Mode=TwoWay}"/>                        
-
+                                                SelectedItem="{Binding SelectedBladSlotTray, Mode=TwoWay}"/>
+                            <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
+                                FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshRackKeyListCommand}"
+                                />
+                        </Grid>
+                        <Label Text="{Binding SlotBladeTray.slot_or_blade_number}" />
                         <Label Text="Transmit / Receive" />
                         <local:Dropdown SelectedItem="{Binding SelectedTXRXOption, Mode=TwoWay}">
                             <Picker.Items>
@@ -70,7 +78,7 @@
                                         ItemDisplayBinding="{Binding TextType}"
                                         />
                         <Button Text="Save and Continue" Command="{Binding SaveCommand}" />
-                        <Button Text="Finished with Blades" Command="{Binding FinishSaveCommand}" />
+                        <Button Text="Finished with Blades" Command="{Binding FinishCommand}" />
                         
                     </StackLayout>
 

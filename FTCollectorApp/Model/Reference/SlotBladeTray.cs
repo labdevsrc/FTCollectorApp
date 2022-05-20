@@ -19,5 +19,6 @@ namespace FTCollectorApp.Model.Reference
         public string orientation { get; set; }
         public string manufacturer_key { get; set; }
         public string model_key { get; set; }
+        public int temp { get; set; }
     }
 }
