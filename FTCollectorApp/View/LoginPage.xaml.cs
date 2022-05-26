@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FTCollectorApp.View.SitesPage
+namespace FTCollectorApp.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PortConnection : ContentPage
+    public partial class LoginPage : ContentPage
     {
-        public PortConnection()
+        public LoginPage()
         {
             InitializeComponent();
-            BindingContext = new PortConnectionViewModel();
+            BindingContext = new LoginViewModel();
         }
     }
 }

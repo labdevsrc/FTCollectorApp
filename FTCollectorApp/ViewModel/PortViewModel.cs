@@ -31,20 +31,23 @@ namespace FTCollectorApp.ViewModel
 
         //[ObservableProperty]
         string selectedTXRXOption;
+        string TXRXOption;
         public string SelectedTXRXOption
         {
             get => selectedTXRXOption;
             set
             {
-                if (value == selectedTXRXOption)
-                    return;
-                else if (value == "Transmit")
-                    selectedTXRXOption = "T";
+                SetProperty(ref selectedTXRXOption, value);
+                
+                if (value == "Transmit")
+                    TXRXOption = "T";
+                else if (value == "Receive")
+                    TXRXOption = "R";
                 else if (value == "Full Duplex")
-                    selectedTXRXOption = "F";
+                    TXRXOption = "F";
                 else
-                    selectedTXRXOption = "0";
-                OnPropertyChanged(nameof(SelectedTXRXOption));
+                    TXRXOption = "U";
+
             }
         }
 
@@ -74,18 +77,22 @@ namespace FTCollectorApp.ViewModel
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
-                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
-                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
-                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
-                new KeyValuePair<string, string>("tag", Session.tag_number),  // 2
+                new KeyValuePair<string, string>("tag", Session.tag_number),
                 new KeyValuePair<string, string>("chassisid", SelectedChassisKey?.ChassisKey  == null ? "0": SelectedChassisKey.ChassisKey),  // 3
-                new KeyValuePair<string, string>("bladeid", SelectedBladSlotTray?.key  == null ? "0": SelectedBladSlotTray.key),  // 4
-                new KeyValuePair<string, string>("transmit", SelectedTXRXOption ??="0"),  // 4
+                new KeyValuePair<string, string>("bladeid", SelectedBladSlotTray?.key  == null ? "0": SelectedBladSlotTray.key),  // 
+                new KeyValuePair<string, string>("transmit", TXRXOption ??="0"),  // 
+                new KeyValuePair<string, string>("portid", SelectedPortNumber ??= "0"),  // 
+                new KeyValuePair<string, string>("ptype",  SelectedPortType?.CodeKey == null ? "0": SelectedPortType.CodeKey),  // 5
+                new KeyValuePair<string, string>("rack_number",  SelectedRackNumber?.Racknumber == null ? "0": SelectedRackNumber.Racknumber),  // 5
+                new KeyValuePair<string, string>("rack_key",  SelectedRackNumber?.RackNumKey == null ? "0": SelectedRackNumber.RackNumKey),  // 5
+
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
+
+                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
+
                 new KeyValuePair<string, string>("labelid", PortLabel ??= "0"),  // 4
 
-                new KeyValuePair<string, string>("portid", SelectedPortNumber ??= "0"),  // 4
-                new KeyValuePair<string, string>("ptype",  SelectedPortType?.TextType == null ? "0": SelectedPortType.TextType),  // 5
-                new KeyValuePair<string, string>("rackid",  SelectedRackNumber?.Racknumber == null ? "0": SelectedRackNumber.Racknumber),  // 5
 
             };
 

@@ -30,7 +30,7 @@
                                                 ItemDisplayBinding="{Binding key}" 
                                                 SelectedItem="{Binding SelectedBladSlotTray, Mode=TwoWay}"/>
                             <Button Grid.Column="1" Text="{x:Static fa:FontAwesomeIcons.List}"
-                                FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshRackKeyListCommand}"
+                                FontFamily="{StaticResource FontAwesomeSolid}" Command="{Binding RefreshBladeListCommand}"
                                 />
                         </Grid>
                         <Label Text="{Binding SlotBladeTray.slot_or_blade_number}" />

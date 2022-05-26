@@ -1008,6 +1008,39 @@ namespace FTCollectorApp.Service
             return "FAIL";
         }
 
+        public static async Task<string> PostSavePortConnection(List<KeyValuePair<string, string>> keyValues)
+        {
+
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostSavePortConn Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    response = await client.PostAsync(Constants.ajaxSavePort, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostSavePortConn]Response from  OK = 200 , content :" + isi);
+                        Session.Result = "PortConnOK";
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "PortConnOKFAIL";
+                    return e.ToString();
+                }
+            }
+            return "FAIL";
+        }
+
+
         public static async Task<string> PostDuctSave(List<KeyValuePair<string, string>> keyValues)
         {
 

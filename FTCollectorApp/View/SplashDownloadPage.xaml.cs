@@ -43,7 +43,8 @@ namespace FTCollectorApp.View
                     if (answer)
                         await DownloadTables();
                     else
-                        Navigation.PushAsync(new MainPage());
+                        Navigation.PushAsync(new LoginPage());
+                        //Navigation.PushAsync(new MainPage());
                 }
             }
             else
@@ -394,7 +395,8 @@ namespace FTCollectorApp.View
 
         private void LoginClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new MainPage());
+            Navigation.PushAsync(new LoginPage());
+            //Navigation.PushAsync(new MainPage());
         }
 
         private void RetryClicked(object sender, EventArgs e)
