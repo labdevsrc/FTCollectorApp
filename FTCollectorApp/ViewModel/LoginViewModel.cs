@@ -1,28 +1,33 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+
 using System.Text;
 using SQLite;
-using System.Windows.Input;
+
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using FTCollectorApp.View;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace FTCollectorApp.ViewModel
 {
     public partial class LoginViewModel : ObservableObject
     {
-
+        //[ObservableProperty]
+        
         string emailText;
         public string EmailText{
             get=> emailText;
             set
             {
                 SetProperty(ref emailText, value );
-                CheckEmailCommand.Execute(emailText);
+                CheckEntriesCommand?.Execute(null);
+                //LoginCommand.CanExecute(null);
             }
         }
 
@@ -34,7 +39,9 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref passwordText, value);
-                CheckPasswordCommand.Execute(passwordText);
+                CheckEntriesCommand?.Execute(null);
+                //LoginCommand.CanExecute(null);
+
             }
         }
 
@@ -46,15 +53,13 @@ namespace FTCollectorApp.ViewModel
 
         ObservableCollection<User> Users;
 
-        public ICommand CheckEmailCommand { get; set; }
-        public ICommand CheckPasswordCommand { get; set; }
+        public ICommand CheckEntriesCommand { get; set; }
         public ICommand LoginCommand { get; set; }
 
         public LoginViewModel()
         {
-            CheckEmailCommand = new Command<string>((param) => ExecuteCheckEmailCommand(param));
-            CheckPasswordCommand = new Command<string>((param) => ExecuteCheckPasswordCommand(param));
-            LoginCommand = new Command(async () => ExecuteLoginCommand());
+            CheckEntriesCommand = new Command(ExecuteCheckEntriesCommand);
+            LoginCommand = new Command(() => ExecuteLoginCommand());
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 //Type classname = object1.GetType();
@@ -68,13 +73,14 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        private void ExecuteCheckPasswordCommand(string param)
+        public void ExecuteCheckEntriesCommand()
         {
             try
             {
-                FirstName = Users.Where(a => (a.email == EmailText) && (a.password == param)).Select(a => a.first_name).First();
-                LastName = Users.Where(a => (a.email == EmailText) && (a.password == param)).Select(a => a.last_name).First();
+                FirstName = Users.Where(a => (a.email == EmailText) && (a.password == PasswordText)).Select(a => a.first_name).First();
+                LastName = Users.Where(a => (a.email == EmailText) && (a.password == PasswordText)).Select(a => a.last_name).First();
                 Console.WriteLine(FirstName + " " + LastName);
+
             }
             catch (Exception exception)
             {
@@ -82,35 +88,25 @@ namespace FTCollectorApp.ViewModel
                 LastName = "";
 
                 Console.WriteLine(exception.ToString());
+
+                
             }
+
             OnPropertyChanged(nameof(FirstName)); // update FirstName entry
             OnPropertyChanged(nameof(LastName)); // update LastName entry
-            Console.WriteLine();
 
         }
 
-        private void ExecuteCheckEmailCommand(string param)
+        private async void ExecuteLoginCommand()
         {
-            try
+            if (string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
             {
-                FirstName = Users.Where(a => (a.email == param) && (a.password == PasswordText)).Select(a => a.first_name).First();
-                LastName = Users.Where(a => (a.email == param) && (a.password == PasswordText)).Select(a => a.last_name).First();
-                Console.WriteLine(FirstName + " " + LastName);
+                Application.Current.MainPage.DisplayAlert("Error", "Email or Password is wrong", "TRY AGAIN");
+                Console.WriteLine();
+                return;
             }
-            catch (Exception exception)
-            {
-                FirstName = "";
-                LastName = "";
 
-                Console.WriteLine(exception.ToString());
-            }
-            OnPropertyChanged(nameof(FirstName));
-            OnPropertyChanged(nameof(LastName));
             Console.WriteLine();
-
-        }
-        private async Task ExecuteLoginCommand()
-        {
             Session.uid = Users.Where(a => (a.email == EmailText) && (a.password == PasswordText)).Select(a => a.UserKey).First(); // populate uid to Static-class (session) property uid  
             Session.crew_leader = $"{FirstName} {LastName}";
             await Application.Current.MainPage.Navigation.PushAsync(new VerifyJobPage());

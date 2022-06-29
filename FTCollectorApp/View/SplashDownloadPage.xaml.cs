@@ -166,7 +166,8 @@ namespace FTCollectorApp.View
                 var contentslotBladeTray = await CloudDBService.GetBladeTableKey(); //slotbladetray
 
                 var portType = await CloudDBService.GetCodePortType(); //code_port_type
-                var portTable = await CloudDBService.GetPortTable(); //code_port_type
+                var portTable = await CloudDBService.GetPortTable(); //port table
+                var codeLocatePoint = await CloudDBService.GetLocatePoint(); //code_locate_point
 
                 txtLoading.Text = "Site...";
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
@@ -174,6 +175,16 @@ namespace FTCollectorApp.View
                 txtLoading.Text = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
+                    conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
+                    conn.InsertAll(contentSite);
+
+                    txtLoading.Text = "code tables ...";
+
+                    conn.CreateTable<CodeLocatePoint>();
+                    conn.DeleteAll<CodeLocatePoint>();
+                    conn.InsertAll(codeLocatePoint);
+
                     conn.CreateTable<PortType>();
                     conn.DeleteAll<PortType>();
                     conn.InsertAll(portType);
@@ -354,9 +365,7 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<DuctInstallType>();
                     conn.InsertAll(codeDuctInstallType);
 
-                    conn.CreateTable<Site>();
-                    conn.DeleteAll<Site>();
-                    conn.InsertAll(contentSite);
+
 
                     conn.CreateTable<ConduitsGroup>();
                     conn.DeleteAll<ConduitsGroup>();

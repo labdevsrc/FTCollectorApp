@@ -43,6 +43,10 @@ namespace FTCollectorApp.Model
         public static int SITE_PAGE_COUNT { get; set; }
         public static string Result { get; set; }
         public static string RowId { get; set; }
+
+        // tracing params at page Duct Trace
+        public static string duct_from { get; set; }
+        public static string site_from { get; set; }
         public static int MAX_DIR_CNT { get; set; } = 0;
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input

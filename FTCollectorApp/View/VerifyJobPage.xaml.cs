@@ -20,6 +20,7 @@ using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.Service;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.Utils;
+using FTCollectorApp.ViewModel;
 //using Acr.UserDialogs;
 
 namespace FTCollectorApp.View
@@ -39,11 +40,11 @@ namespace FTCollectorApp.View
         {
             InitializeComponent();
 
-            BindingContext = this;
+            BindingContext = new VerifyJobViewModel();
         }
 
 
-        protected override async void OnAppearing()
+        /*protected override async void OnAppearing()
         {
             base.OnAppearing();
 
@@ -113,21 +114,6 @@ namespace FTCollectorApp.View
                 
             }
 
-            /*await LocationService.GetLocation();
-
-            if (LocationService.Coords == null)
-            {
-                bool answer = await DisplayAlert("Alert", "Would you like to enable Device GPS?", "Yes", "No");
-                if (answer)
-                    if (Device.RuntimePlatform == global::Xamarin.Forms.Device.Android)
-                    {
-                        var test = DependencyService.Get<ISettingsService>();
-                        test.OpenSettings();
-                    }
-            }*/
-
-
-
 
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
 
@@ -155,7 +141,8 @@ namespace FTCollectorApp.View
             }
         }
 
-        private void jobOwnersPicker_SelectedIndexChanged(object sender, EventArgs e)
+
+        /*private void jobOwnersPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
 
             // get selected owner Name
@@ -171,7 +158,7 @@ namespace FTCollectorApp.View
 
                 Application.Current.Properties["JobOwner"] = jobOwnersPicker.SelectedIndex;
             }
-        }
+        }*/
 
         protected override void OnDisappearing()
         {
@@ -179,7 +166,7 @@ namespace FTCollectorApp.View
             base.OnDisappearing();
         }
 
-        private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
+        /*private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedOwner = jobOwnersPicker.SelectedIndex;
             if (selectedOwner == -1)
@@ -264,7 +251,7 @@ namespace FTCollectorApp.View
         private async void btnGPSSetting_Clicked(object sender, EventArgs e)
         {
             await PopupNavigation.Instance.PushAsync(new GpsDevicePopUpView()); // for Rg.plugin popup
-        }
+        }*/
 
         private void btnFindMe(object sender, EventArgs e)
         {

@@ -600,7 +600,10 @@ namespace FTCollectorApp.Service
            GetDropDownParamsAsync<IEnumerable<PortType>>("code_port_type");
         public static Task<IEnumerable<Ports>> GetPortTable() =>
            GetDropDownParamsAsync<IEnumerable<Ports>>("port_table");
-        
+
+        public static Task<IEnumerable<CodeLocatePoint>> GetLocatePoint() =>
+           GetDropDownParamsAsync<IEnumerable<CodeLocatePoint>>("code_locate_point");
+
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
@@ -937,7 +940,35 @@ namespace FTCollectorApp.Service
         }
         public static async Task<string> PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
         {
-            return "Under Contruction";
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostDuctTrace Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    //response = await client.PostAsync(Constants.ajaxSaveTraceWire, content);
+
+                    response = await client.PostAsync(Constants.ajaxSaveDuctTrace, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostDuctTrace]Response from  OK = 200 , content :" + isi);
+                        Session.Result = "PostDuctTraceOK";
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "PostDuctTraceFAIL";
+                    return e.ToString();
+                }
+            }
+            return "FAIL";
         }
 
         public static async Task<string> PostPortsSave(List<KeyValuePair<string, string>> keyValues)
@@ -973,7 +1004,7 @@ namespace FTCollectorApp.Service
             return "FAIL";
         }
 
-        
+
 
         public static async Task<string> PostBladeSave(List<KeyValuePair<string, string>> keyValues)
         {
@@ -1007,7 +1038,70 @@ namespace FTCollectorApp.Service
             }
             return "FAIL";
         }
+        public static async Task<string> Insert_gps_point(List<KeyValuePair<string, string>> keyValues)
+        {
 
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"Insert_gps_point Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+
+                try
+                {
+                    response = await client.PostAsync(Constants.ajaxSaveTraceWire, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[Insert_gps_point] Response from  OK = 200 , content :" + isi);
+
+                        return "OK";
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+            return "Fail to update";
+
+        }
         public static async Task<string> PostSavePortConnection(List<KeyValuePair<string, string>> keyValues)
         {
 

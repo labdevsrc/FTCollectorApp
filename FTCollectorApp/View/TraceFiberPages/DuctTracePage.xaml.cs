@@ -21,7 +21,7 @@ namespace FTCollectorApp.View.TraceFiberPages
 
     public partial class DuctTracePage : ContentPage
     {
-        public ObservableCollection<AFiberCable> aFiberCableList
+        /*public ObservableCollection<AFiberCable> aFiberCableList
         {
             get
             {
@@ -108,7 +108,7 @@ namespace FTCollectorApp.View.TraceFiberPages
         /// 
         /// </summary>
         ObservableCollection<ConduitsGroup> ConduitsGroupListTable;
-        ObservableCollection<ColorCode> ColorHextList;
+        ObservableCollection<ColorCode> ColorHextList;*/
         public DuctTracePage()
         {
             InitializeComponent();
@@ -116,7 +116,7 @@ namespace FTCollectorApp.View.TraceFiberPages
             // the reason why put ConduitsGroupListTable instead of each subclass ex DuctConduitDatas, etc
             // to reduce code noise
 
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            /*using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<ConduitsGroup>();
                 var table1 = conn.Table<ConduitsGroup>().ToList();
@@ -125,12 +125,12 @@ namespace FTCollectorApp.View.TraceFiberPages
                 conn.CreateTable<ColorCode>();
                 var table2 = conn.Table<ColorCode>().ToList();
                 ColorHextList = new ObservableCollection<ColorCode>(table2);
-            }
+            }*/
 
-            BindingContext = this;
+            BindingContext = new DuctTraceViewModel();
         }
 
-        protected override void OnAppearing()
+        /*protected override void OnAppearing()
         {
             base.OnAppearing();
         }
@@ -239,6 +239,6 @@ namespace FTCollectorApp.View.TraceFiberPages
         {
             var KVPair = keyvaluepair();
             await CloudDBService.PostDuctTrace(KVPair);
-        }
+        }*/
     }
 }

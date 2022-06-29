@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             x:Class="FTCollectorApp.View.TraceFiberPages.EndTracePage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Grid RowDefinitions="0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*" ColumnDefinitions="*,*" >
+                <Label Text="Site In" />
+                <Label Text="Site type" Grid.Column="1" />
+                <local:Dropdown Grid.Row="1" 
+                        ItemsSource="{Binding ConduitSiteTag}" ItemDisplayBinding="{Binding HosTagNumber}"
+                        SelectedItem="{Binding SelectedTagNum}" />
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="2" x:Name="txtSiteType" 
+                                            Text="{Binding SelectedTagNum.HostType}"  IsEnabled="False"/>
+                
+                <Label Text="Site name"  Grid.Row="3" Grid.ColumnSpan="2"/>
+                <local:BorderColorEntry  Grid.Row="4" Grid.ColumnSpan="2" x:Name="txtSiteName" 
+                                Text="{Binding SelectedTagNum.HostType}" IsEnabled="False"/>
+
+                <Label Text="Which Duct? *" Grid.Row="5" />
+                <Label Text="Usage" Grid.Column="1" Grid.Row="5" />
+                <local:Dropdown Grid.Column="0" Grid.Row="6" x:Name="pWDuct" 
+                                 ItemsSource="{Binding DuctConduitDatas}" 
+                                 ItemDisplayBinding="{Binding WhichDucts}"
+                            
+                                 />
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="6" x:Name="txtUsage" IsEnabled="False"/>
+
+                <Label Text="Color" Grid.Column="0" Grid.Row="7" />
+                <Label Text="Size" Grid.Column="1" Grid.Row="7" />
+                <local:BorderEntry Grid.Column="0" Grid.Row="8" x:Name="txtColor" IsEnabled="False"/>
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="8" x:Name="txtSize" IsEnabled="False"/>
+
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

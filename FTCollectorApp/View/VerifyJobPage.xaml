@@ -12,7 +12,7 @@
         </StackLayout>
     </NavigationPage.TitleView>-->
     <ContentPage.ToolbarItems>
-        <ToolbarItem  Clicked="btnGPSSetting_Clicked"  Text="GPS"
+        <ToolbarItem Command ="{Binding GPSSettingCommand}" Text="GPS"
                  Order="Primary"
                  Priority="0" />
         <ToolbarItem  Clicked="btnFindMe"  Text="FindMe"
@@ -25,48 +25,39 @@
                 <Grid Padding="20" RowDefinitions="2*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,0.5*,*,*"
                      ColumnDefinitions="*,*,*" 
                       >
-            <!--<Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>-->
-            <!--<Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>                
-                </Grid.ColumnDefinitions>-->
+
             <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Verify Job" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
             <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
-            <!--<local:Dropdown Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" ItemSelected="jobOwnersPicker_ItemSelected"/>-->
-            <!--<local:Dropdown Grid.Row="2" Grid.Column="2" x:Name="jobNumbersPicker" ItemSelected="jobNumbersPicker_ItemSelected"/>-->
+            <local:Dropdown Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                ItemsSource="{Binding JobsByOwner}" ItemDisplayBinding="{Binding OwnerName}" 
+                            SelectedItem="{Binding SelectedJobOwner, Mode=TwoWay}" />
+            <local:Dropdown Grid.Row="2" Grid.Column="2" 
+                ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
+                            SelectedItem="{Binding SelectedJob, Mode=TwoWay}" />
+
+                    <!-- obsolete 
             <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" >
             </Picker>
 
             <Picker Grid.Row="2" Grid.Column="2"  x:Name="jobNumbersPicker" Title="Select JobNum" SelectedIndexChanged ="jobNumbersPicker_SelectedIndexChanged"  >
                     <Picker.SelectedIndex>0</Picker.SelectedIndex>
-            </Picker>
+            </Picker>-->
             <Label Grid.Row="3" Grid.ColumnSpan="2" Text="Job Location *"/>
-            <local:BorderColorEntry Text="" x:Name="jobLocation"    Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>
+            <!--<local:BorderColorEntry Text="" x:Name="jobLocation"    Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>-->
+            <local:BorderColorEntry Text="{Binding SelectedJob.JobLocation}"   Grid.Row="4" Grid.ColumnSpan="3" IsEnabled="False"/>
             <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Contact Name *"/>
-            <local:BorderColorEntry x:Name="contactName" Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="False"/>
+            <local:BorderColorEntry Text="{Binding SelectedJob.ContactName}"   Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="False"/>
+                    <!--<local:BorderColorEntry x:Name="contactName" Grid.Row="6" Grid.ColumnSpan="3" IsEnabled="False"/>-->
             <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Customer Name *"/>
-                <local:BorderColorEntry x:Name="custName" Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="False"/>
+            <local:BorderColorEntry x:Name="custName" Text="{Binding SelectedJob.CustomerName}"   Grid.Row="8" Grid.ColumnSpan="3" IsEnabled="False"/>
+            
             <Label Grid.Row="9" Grid.ColumnSpan="2" Text="Phone *"/>
-                <local:BorderColorEntry Text=""  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
+            <local:BorderColorEntry Text="{Binding SelectedJob.CustomerPhone}"  x:Name="custPhoneNum" Grid.Row="10" Grid.ColumnSpan="3" IsEnabled="True"/>
+            
             <Button x:Name="submit"  Grid.Row="12" Grid.ColumnSpan="3"  Text="Verify and Continue" HorizontalOptions="EndAndExpand" BackgroundColor="{StaticResource blueColor}"
-                Clicked="submit_Clicked"
-                >
-                <Button.Triggers>
+                Command="{Binding ContinueCommand}">
+                <!--<Button.Triggers>
                     <DataTrigger TargetType="Button"
                     Binding="{Binding Source={x:Reference jobLocation},
                                     Path=Text.Length}"
@@ -75,7 +66,7 @@
                         <Setter Property="BackgroundColor" Value="Gray"/>
 
                     </DataTrigger>
-                </Button.Triggers>
+                </Button.Triggers>-->
             </Button>
                 <!--<ActivityIndicator VerticalOptions="Center" IsVisible="{Binding isBusy}" IsRunning="{Binding isBusy}"/>-->
         </Grid>
