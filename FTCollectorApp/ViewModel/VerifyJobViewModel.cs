@@ -38,8 +38,8 @@ namespace FTCollectorApp.ViewModel
                     Session.ownerCD = QueryOwnerJobNumber.Select(a => a.OWNER_CD).First();
                     Session.countycode = QueryOwnerJobNumber.Select(a => a.CountyCode).First();
                     Session.JobShowAll = QueryOwnerJobNumber.Select(a => a.ShowAll).First();
-                    Session.jobnum = value.OwnerName;
-                    Session.OwnerName = value.JobNumber;
+                    Session.jobnum = value.JobNumber;
+                    Session.OwnerName = value.OwnerName;
 
                     // Put to property location
                     Application.Current.Properties[JobNumberKey] = value.JobNumber;

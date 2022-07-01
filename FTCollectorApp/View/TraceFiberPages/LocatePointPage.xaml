@@ -13,16 +13,18 @@
                 HorizontalOptions="CenterAndExpand" />
 
             <Label Text="Accuraccy" />
-            <local:BorderColorEntry Text="{Binding Accuracy}" IsEnabled="False"/>
+            <local:BorderColorEntry Text="{Binding GPSAccuracy, Mode=TwoWay}" IsEnabled="False"/>
             <Grid ColumnDefinitions="*,*" RowDefinitions="0.2*,0.5*">
                 <Label Text="Point Number" />
-                <local:BorderColorEntry Grid.Row="1" Text="{Binding PointNumber}" IsEnabled="False"/>
+                <local:BorderColorEntry Grid.Row="1" Text="{Binding CurLocPoint}" IsEnabled="False"/>
                 <Label Text="Site Type" Grid.Column="1"/>
                 <local:Dropdown Grid.Column="1" Grid.Row="1" 
-                                ItemsSource="{Binding CodeLocatePoint}" />
+                                ItemsSource="{Binding LocatePointType}" 
+                                ItemDisplayBinding="{Binding description}"
+                                SelectedItem="{Binding SelectedSiteType, Mode=TwoWay}"/>
             </Grid>
             <Label Text="Comment" />
-            <Editor HeightRequest="300" Keyboard="Plain" AutoSize="TextChanges" MaxLength="250" 
+            <Editor HeightRequest="300" Keyboard="Plain" AutoSize="TextChanges" MaxLength="300" 
                     Text="{Binding CommentText, Mode=TwoWay}"
                     />
             <!--<local:BorderEntry

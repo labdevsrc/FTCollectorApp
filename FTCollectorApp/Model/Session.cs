@@ -47,6 +47,16 @@ namespace FTCollectorApp.Model
         // tracing params at page Duct Trace
         public static string duct_from { get; set; }
         public static string site_from { get; set; }
+
+        public static string TraceCable1Idx { get; set; }
+        public static string TraceCable2Idx { get; set; }
+
+        public static string TraceCable3Idx { get; set; }
+        public static string TraceCable4Idx { get; set; }
+        public static string GpsPointMaxIdx { get; set; }
+
+
+
         public static int MAX_DIR_CNT { get; set; } = 0;
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input

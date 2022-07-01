@@ -1052,7 +1052,7 @@ namespace FTCollectorApp.Service
 
                 try
                 {
-                    response = await client.PostAsync(Constants.ajaxSaveTraceWire, content);
+                    response = await client.PostAsync(Constants.ajaxSaveGPSPoint, content);
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();

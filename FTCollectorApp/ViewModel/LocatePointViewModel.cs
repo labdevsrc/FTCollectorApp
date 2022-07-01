@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
+using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.View.Utils;
+using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -14,8 +17,6 @@ namespace FTCollectorApp.ViewModel
 {
     public partial class LocatePointViewModel : ObservableObject
     {
-        [ObservableProperty]
-        string selectedCodeLocatePoint;
 
         string accuracy;
         public string GPSAccuracy
@@ -27,14 +28,17 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        [ObservableProperty]
-        string comment;
 
         [ObservableProperty]
         string commentText;
 
+        [ObservableProperty]
+        CodeLocatePoint selectedSiteType;
+
         Location location;
 
+        [ObservableProperty]
+        string curLocPoint = Session.GpsPointMaxIdx;
 
         public ICommand RecordCommand { get; set; }
         public ICommand OpenGPSOffsetPopupCommand { get; set; }
@@ -61,22 +65,37 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new KeyValuePair<string, string>("jobnum", Session.jobnum),
-                new KeyValuePair<string, string>("locate_point_number", Session.uid.ToString()),
-                new KeyValuePair<string, string>("longitude", Session.RowId),
-
+                new KeyValuePair<string, string>("locate_point_number", Session.GpsPointMaxIdx),
+                new KeyValuePair<string, string>("longitude", Session.longitude2),
                 new KeyValuePair<string, string>("lattitude", Session.lattitude2),
                 new KeyValuePair<string, string>("altitude", Session.altitude),
-                new KeyValuePair<string, string>("tag_from", ""),
-                new KeyValuePair<string, string>("duct_from", ""),
-                new KeyValuePair<string, string>("tag_to", ""),
+                new KeyValuePair<string, string>("lattitude_offset", Session.lattitude_offset),
+                new KeyValuePair<string, string>("longitude_offset", Session.longitude_offset),
+                new KeyValuePair<string, string>("comment", CommentText),
 
-                new KeyValuePair<string, string>("duct_to", ""),
-                new KeyValuePair<string, string>("user_id", ""),
+                new KeyValuePair<string, string>("site_type", SelectedSiteType?.IdLocatePoint is null ? "0" :SelectedSiteType.IdLocatePoint),
+
 
             };
 
             return keyValues;
 
+        }
+        public ObservableCollection<CodeLocatePoint> LocatePointType
+        {
+            get
+            {
+
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<CodeLocatePoint>();
+                    Console.WriteLine();
+                    var table = conn.Table<CodeLocatePoint>().ToList();
+                    Console.WriteLine();
+                    return new ObservableCollection<CodeLocatePoint>(table);
+                }
+
+            }
         }
 
         private async void ExecuteRecordCommand()
