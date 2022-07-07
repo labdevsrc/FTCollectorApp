@@ -28,8 +28,10 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         AFiberCable selectedCable3;
 
+
         [ObservableProperty]
         AFiberCable selectedCable4;
+
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
@@ -62,6 +64,7 @@ namespace FTCollectorApp.ViewModel
         ObservableCollection<ConduitsGroup> ConduitsGroupListTable;
         ObservableCollection<ColorCode> ColorHextList;
 
+
         public ICommand SaveAndContinueCommand { get; set; }
         public ICommand RemoveCable1Command { get; set; }
 
@@ -86,30 +89,52 @@ namespace FTCollectorApp.ViewModel
                 conn.CreateTable<ColorCode>();
                 var table2 = conn.Table<ColorCode>().ToList();
                 ColorHextList = new ObservableCollection<ColorCode>(table2);
+
+
             }
+
+            SelectedCable1 = new AFiberCable { CableIdDesc ="", FiberSegmentIdx = "0" };
+            SelectedCable2 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            SelectedCable3 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            SelectedCable4 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            SelectedDuct = new ConduitsGroup();
+            SelectedTagNum = new ConduitsGroup();
+
         }
 
         private void ExecuteRemoveCable1Command()
         {
-            SelectedCable1 = null;
+            SelectedCable1.CableIdDesc = "";
+            SelectedCable1.CableType = "";
+            SelectedCable1.AFRKey = "0";
+            Console.WriteLine();
             SheathMark1 = "";
         }
 
         private void ExecuteRemoveCable2Command()
         {
-            SelectedCable2 = null;
+            SelectedCable2.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            SelectedCable2.CableType = "";
+            SelectedCable2.AFRKey = "0";
+            Console.WriteLine();
             SheathMark2 = "";
         }
 
         private void ExecuteRemoveCable3Command()
         {
-            SelectedCable3 = null;
+            SelectedCable3.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            SelectedCable3.CableType = "";
+            SelectedCable3.AFRKey = "0";
+            Console.WriteLine();
             SheathMark3 = "";
         }
 
         private void ExecuteRemoveCable4Command()
         {
-            SelectedCable4 = null;
+            SelectedCable4.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            SelectedCable4.CableType = "";
+            SelectedCable4.AFRKey = "0";
+            Console.WriteLine();
             SheathMark4 = "";
         }
 
@@ -255,22 +280,79 @@ namespace FTCollectorApp.ViewModel
 
         private async void ExecuteSaveAndContinueCommand()
         {
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostDuctTrace(KVPair);
-            Console.WriteLine(result);
-            if (result.Length > 30)
+
+            if (string.IsNullOrEmpty(SelectedCable1.CableIdDesc) 
+                && string.IsNullOrEmpty(SelectedCable2.CableIdDesc)
+                && string.IsNullOrEmpty(SelectedCable3.CableIdDesc)
+                && string.IsNullOrEmpty(SelectedCable4.CableIdDesc)
+                )
             {
-                var contentResponse = JsonConvert.DeserializeObject<ResponseKeyList>(result);
-
-                Session.TraceCable1Idx = contentResponse?.key1 is null ? "0" : contentResponse?.key1;
-                Session.TraceCable2Idx = contentResponse?.key2 is null ? "0" : contentResponse?.key2;
-                Session.TraceCable3Idx = contentResponse?.key3 is null ? "0" : contentResponse?.key3;
-                Session.TraceCable4Idx = contentResponse?.key4 is null ? "0" : contentResponse?.key4;
-                Session.GpsPointMaxIdx = contentResponse?.locatepointkey is null ? "0" : contentResponse?.locatepointkey;
-
-                Console.WriteLine();
+                await Application.Current.MainPage.DisplayAlert("Warning", "Cable 1 or 2 or 3 or 4 shouldn't be empty","OK");
+                return;
             }
+
+            //cek tag number or beginning site
+            if (string.IsNullOrEmpty(SelectedTagNum.HosTagNumber))
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Tag number shouldn't be empty", "OK");
+                return;
+            }
+
+            //cek which duct is empty or not
+            if (string.IsNullOrEmpty(SelectedDuct.WhichDucts))
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Which Duct shouldn't be empty", "OK");
+                return;
+            }
+
+            // put to key map before convert to json
+            var KVPair = keyvaluepair();
+
+
+            try
+            {
+                // JSON convert and send to AWS 
+                var result = await CloudDBService.PostDuctTrace(KVPair);
+
+                Console.WriteLine(result);
+
+                if (result.Length > 30)
+                {
+
+                        var contentResponse = JsonConvert.DeserializeObject<ResponseKeyList>(result);
+                        Console.WriteLine();
+
+                        SelectedCable1.FiberSegmentIdx = contentResponse?.key1 is null ? "0": contentResponse.key1;
+                        Console.WriteLine(SelectedCable1.FiberSegmentIdx);
+                        SelectedCable2.FiberSegmentIdx = contentResponse?.key2 is null ? "0" : contentResponse.key2;
+                        Console.WriteLine(SelectedCable2.FiberSegmentIdx);
+                        SelectedCable3.FiberSegmentIdx = contentResponse?.key3 is null ? "0" : contentResponse.key3;
+                        Console.WriteLine(SelectedCable3.FiberSegmentIdx);
+                        SelectedCable4.FiberSegmentIdx = contentResponse?.key4 is null ? "0" : contentResponse.key4;
+                        Console.WriteLine(SelectedCable4.FiberSegmentIdx);
+
+                        Session.GpsPointMaxIdx = contentResponse?.locatepointkey is null ? "0" : contentResponse.locatepointkey;
+                        
+
+                        // backup to session
+                        // asumption : internet available all the time
+                        // if not, Session.Cable1.FiberSegmentIdx = null
+                        Console.WriteLine();
+                        Session.Cable1 = SelectedCable1;
+                        Session.Cable2 = SelectedCable2;
+                        Session.Cable3 = SelectedCable3;
+                        Session.Cable4 = SelectedCable4;
+                        Session.FromDuct = SelectedDuct;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
+
             await Application.Current.MainPage.Navigation.PushAsync(new LocatePointPage());
-        }
+        }                                                                   
     }
 }

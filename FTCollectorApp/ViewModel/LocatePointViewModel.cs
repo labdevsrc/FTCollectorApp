@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -37,14 +38,30 @@ namespace FTCollectorApp.ViewModel
 
         Location location;
 
-        [ObservableProperty]
-        string curLocPoint = Session.GpsPointMaxIdx;
+
+        string curLocPoint;
+        public string CurLocPoint
+        {
+            get {
+                Console.WriteLine(LocPointNumber);
+                return LocPointNumber.ToString();
+            } 
+            set
+            {
+                Console.WriteLine();
+                SetProperty(ref curLocPoint, value);
+            }
+        }
+
 
         public ICommand RecordCommand { get; set; }
         public ICommand OpenGPSOffsetPopupCommand { get; set; }
 
         public ICommand FinishCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
+
+        GpsPoint? maxGPSpoint;
+        int LocPointNumber = 0;
         public LocatePointViewModel()
         {
 
@@ -56,16 +73,40 @@ namespace FTCollectorApp.ViewModel
             FinishCommand = new Command(() => ExecuteFinishCommand());
             OpenGPSOffsetPopupCommand = new Command(() => ExecuteOpenGPSOffsetPopupCommand());
             RecordCommand = new Command(() => ExecuteRecordCommand());
+
+            // get max value in gps_point table
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<GpsPoint>();
+                maxGPSpoint = conn.Table<GpsPoint>().First();
+
+                // compare with from gps_point MAX(id)
+                if (int.Parse(maxGPSpoint?.MaxId) != int.Parse(Session.GpsPointMaxIdx))
+                    maxGPSpoint.MaxId = Session.GpsPointMaxIdx;
+
+                LocPointNumber = int.Parse(Session.GpsPointMaxIdx) + 1;
+                Console.WriteLine(maxGPSpoint.MaxId);
+            }
+
         }
+
+
         List<KeyValuePair<string, string>> keyvaluepairLocate()
         {
-
+            maxGPSpoint.MaxId = (int.Parse(maxGPSpoint?.MaxId) + 1).ToString();
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new KeyValuePair<string, string>("jobnum", Session.jobnum),
-                new KeyValuePair<string, string>("locate_point_number", Session.GpsPointMaxIdx),
+                new KeyValuePair<string, string>("locate_point_number", maxGPSpoint.MaxId),
+                new KeyValuePair<string, string>("tag_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
+                new KeyValuePair<string, string>("tag_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
+                new KeyValuePair<string, string>("duct_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
+                new KeyValuePair<string, string>("duct_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
+                new KeyValuePair<string, string>("cable_id1", Session.Cable1.AFRKey),
+                new KeyValuePair<string, string>("cable_type", Session.Cable1.CableType),
+                new KeyValuePair<string, string>("lattitude", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude", Session.longitude2),
                 new KeyValuePair<string, string>("lattitude", Session.lattitude2),
                 new KeyValuePair<string, string>("altitude", Session.altitude),
@@ -105,6 +146,8 @@ namespace FTCollectorApp.ViewModel
             Session.altitude = location.Altitude.ToString();
             Session.accuracy = location.Accuracy.ToString();
 
+
+
             var KVPair = keyvaluepairLocate(); // update existed chassis
             var result = await CloudDBService.Insert_gps_point(KVPair);
         }
@@ -121,7 +164,8 @@ namespace FTCollectorApp.ViewModel
         }
         public async void ExecuteCaptureCommand()
         {
-            //await Application.Current.MainPage.Navigation.PopAsync();
+            LocPointNumber++;
+            OnPropertyChanged(nameof(CurLocPoint)); // update Point number count
             await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
         }
     }

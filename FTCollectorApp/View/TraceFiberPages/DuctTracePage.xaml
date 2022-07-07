@@ -92,7 +92,7 @@
                     <Label Text="UoM" Grid.Column="1" />
                     <local:Dropdown2 Grid.Row="1"
                                      ItemsSource="{Binding DuctInstallList}" ItemDisplayBinding="{Binding DuctInstallDesc}"
-                                     SelectedItem="{Binding selectedDuctInstall}"
+                                     SelectedItem="{Binding SelectedDuctInstall}"
                                      />
                     <local:Dropdown2 Grid.Column="1" Grid.Row="1"
                                      ItemsSource="{Binding UnitOfMeasures}" ItemDisplayBinding="{Binding UOMUnit}"

@@ -169,6 +169,8 @@ namespace FTCollectorApp.View
                 var portTable = await CloudDBService.GetPortTable(); //port table
                 var codeLocatePoint = await CloudDBService.GetLocatePoint(); //code_locate_point
 
+                var max_gps_point = await CloudDBService.GetMaxGpsPoint(); //gps_point
+
                 txtLoading.Text = "Site...";
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
                 //Thread.Sleep(5000);
@@ -180,6 +182,10 @@ namespace FTCollectorApp.View
                     conn.InsertAll(contentSite);
 
                     txtLoading.Text = "code tables ...";
+
+                    conn.CreateTable<GpsPoint>();
+                    conn.DeleteAll<GpsPoint>();
+                    conn.InsertAll(max_gps_point);
 
                     conn.CreateTable<CodeLocatePoint>();
                     conn.DeleteAll<CodeLocatePoint>();

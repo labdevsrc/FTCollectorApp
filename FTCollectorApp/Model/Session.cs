@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.Model.Reference;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -53,10 +54,14 @@ namespace FTCollectorApp.Model
 
         public static string TraceCable3Idx { get; set; }
         public static string TraceCable4Idx { get; set; }
-        public static string GpsPointMaxIdx { get; set; }
+        public static string? GpsPointMaxIdx { get; set; }
 
 
-
+        public static AFiberCable? Cable1 { get; set; }
+        public static AFiberCable? Cable2 { get; set; }
+        public static AFiberCable? Cable3 { get; set; }
+        public static AFiberCable? Cable4 { get; set; }
+        public static ConduitsGroup? FromDuct { get; set; }
         public static int MAX_DIR_CNT { get; set; } = 0;
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input

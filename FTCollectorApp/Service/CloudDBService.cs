@@ -604,6 +604,9 @@ namespace FTCollectorApp.Service
         public static Task<IEnumerable<CodeLocatePoint>> GetLocatePoint() =>
            GetDropDownParamsAsync<IEnumerable<CodeLocatePoint>>("code_locate_point");
 
+        public static Task<IEnumerable<GpsPoint>> GetMaxGpsPoint() =>
+            GetDropDownParamsAsync<IEnumerable<GpsPoint>>("gps_point");
+        
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{
