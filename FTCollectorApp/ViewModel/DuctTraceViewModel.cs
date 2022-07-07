@@ -93,47 +93,51 @@ namespace FTCollectorApp.ViewModel
 
             }
 
-            SelectedCable1 = new AFiberCable { CableIdDesc ="", FiberSegmentIdx = "0" };
+            /*SelectedCable1 = new AFiberCable { CableIdDesc ="", FiberSegmentIdx = "0" };
             SelectedCable2 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
             SelectedCable3 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
             SelectedCable4 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
             SelectedDuct = new ConduitsGroup();
-            SelectedTagNum = new ConduitsGroup();
+            SelectedTagNum = new ConduitsGroup();*/
 
         }
 
         private void ExecuteRemoveCable1Command()
         {
-            SelectedCable1.CableIdDesc = "";
-            SelectedCable1.CableType = "";
-            SelectedCable1.AFRKey = "0";
+            //SelectedCable1.CableIdDesc = "";
+            //SelectedCable1.CableType = "";
+            //SelectedCable1.AFRKey = "0";
+            SelectedCable1 = null;
             Console.WriteLine();
             SheathMark1 = "";
         }
 
         private void ExecuteRemoveCable2Command()
         {
-            SelectedCable2.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            SelectedCable2.CableType = "";
-            SelectedCable2.AFRKey = "0";
+            //SelectedCable2.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            //SelectedCable2.CableType = "";
+            //SelectedCable2.AFRKey = "0";
+            SelectedCable2 = null;
             Console.WriteLine();
             SheathMark2 = "";
         }
 
         private void ExecuteRemoveCable3Command()
         {
-            SelectedCable3.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            SelectedCable3.CableType = "";
-            SelectedCable3.AFRKey = "0";
+            //SelectedCable3.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            //SelectedCable3.CableType = "";
+            //SelectedCable3.AFRKey = "0";
             Console.WriteLine();
+            SelectedCable3 = null;
             SheathMark3 = "";
         }
 
         private void ExecuteRemoveCable4Command()
         {
-            SelectedCable4.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            SelectedCable4.CableType = "";
-            SelectedCable4.AFRKey = "0";
+            //SelectedCable4.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
+            //SelectedCable4.CableType = "";
+            //SelectedCable4.AFRKey = "0";
+            SelectedCable4 = null;
             Console.WriteLine();
             SheathMark4 = "";
         }
@@ -321,28 +325,33 @@ namespace FTCollectorApp.ViewModel
 
                         var contentResponse = JsonConvert.DeserializeObject<ResponseKeyList>(result);
                         Console.WriteLine();
-
-                        SelectedCable1.FiberSegmentIdx = contentResponse?.key1 is null ? "0": contentResponse.key1;
-                        Console.WriteLine(SelectedCable1.FiberSegmentIdx);
-                        SelectedCable2.FiberSegmentIdx = contentResponse?.key2 is null ? "0" : contentResponse.key2;
+                        if (SelectedCable1 != null)
+                        {
+                            SelectedCable1.FiberSegmentIdx = contentResponse?.key1 is null ? "0" : contentResponse.key1;
+                            Session.Cable1 = SelectedCable1;
+                            Console.WriteLine(SelectedCable1.FiberSegmentIdx);
+                        }
+                        if (SelectedCable2 != null)
+                        {
+                            SelectedCable2.FiberSegmentIdx = contentResponse?.key2 is null ? "0" : contentResponse.key2;
+                        Session.Cable2 = SelectedCable2;
                         Console.WriteLine(SelectedCable2.FiberSegmentIdx);
-                        SelectedCable3.FiberSegmentIdx = contentResponse?.key3 is null ? "0" : contentResponse.key3;
+                        }
+                        if (SelectedCable3 != null)
+                        {
+                            SelectedCable3.FiberSegmentIdx = contentResponse?.key3 is null ? "0" : contentResponse.key3;
+                        Session.Cable3= SelectedCable3;
                         Console.WriteLine(SelectedCable3.FiberSegmentIdx);
-                        SelectedCable4.FiberSegmentIdx = contentResponse?.key4 is null ? "0" : contentResponse.key4;
+                        }
+                        if (SelectedCable4 != null)
+                        {
+                            SelectedCable4.FiberSegmentIdx = contentResponse?.key4 is null ? "0" : contentResponse.key4;
+                        Session.Cable4 = SelectedCable4;
                         Console.WriteLine(SelectedCable4.FiberSegmentIdx);
+                        }
 
                         Session.GpsPointMaxIdx = contentResponse?.locatepointkey is null ? "0" : contentResponse.locatepointkey;
-                        
 
-                        // backup to session
-                        // asumption : internet available all the time
-                        // if not, Session.Cable1.FiberSegmentIdx = null
-                        Console.WriteLine();
-                        Session.Cable1 = SelectedCable1;
-                        Session.Cable2 = SelectedCable2;
-                        Session.Cable3 = SelectedCable3;
-                        Session.Cable4 = SelectedCable4;
-                        Session.FromDuct = SelectedDuct;
                 }
             }
             catch (Exception e)

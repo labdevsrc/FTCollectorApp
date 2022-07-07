@@ -145,8 +145,8 @@ namespace FTCollectorApp.ViewModel
 
                 //await Navigation.PushAsync(new SiteInputPage());
                 //await Navigation.PushAsync(new EquipmenReturnPage());
-                //await Application.Current.MainPage.Navigation.PushAsync(new BeginWorkPage());
-                await Application.Current.MainPage.Navigation.PushAsync(new DuctTracePage());
+                await Application.Current.MainPage.Navigation.PushAsync(new BeginWorkPage());
+                //await Application.Current.MainPage.Navigation.PushAsync(new DuctTracePage());
             }
             catch
             {
