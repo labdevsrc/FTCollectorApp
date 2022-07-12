@@ -97,8 +97,8 @@ namespace FTCollectorApp.Service
 
                 // xSaveJobEvents.php Line 73 : $longitude=$_POST['longitude2'];
                 // xSaveJobEvents.php Line 74 : $latitude =$_POST['lattitude2'];
-                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
-                new KeyValuePair<string, string>("longitude2", Session.longitude2),
+                new KeyValuePair<string, string>("lattitude2", Session.live_lattitude),
+                new KeyValuePair<string, string>("longitude2", Session.live_lattitude),
                 new KeyValuePair<string, string>("odometer", Session.event_type),
                 new KeyValuePair<string, string>("evtype", Session.event_type),
                 new KeyValuePair<string, string>("odometer", param2.ToString()), // only for sending odometer 
@@ -255,6 +255,111 @@ namespace FTCollectorApp.Service
             return keyValues;
         }
 
+        
+        public static async Task<string> UpdateSite(string tagnum, string typecode)
+        {
+
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+                //new KeyValuePair<string, string>("jobnum",Session.jobnum),
+                new KeyValuePair<string, string>("jno",Session.jobnum),
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("tag",tagnum),
+                new KeyValuePair<string, string>("typecode",typecode),
+                new KeyValuePair<string, string>("plansheet","0"),
+                new KeyValuePair<string, string>("psitem","0"),
+
+
+                //new KeyValuePair<string, string>("gps_sts", Session.gps_sts),                
+                //new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
+                //new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
+                new KeyValuePair<string, string>("gps_offset_latitude", Session.lattitude_offset),
+                new KeyValuePair<string, string>("gps_offset_longitude", Session.longitude_offset),
+
+                new KeyValuePair<string, string>("gps_offset_bearing", Session.gps_offset_bearing),
+                new KeyValuePair<string, string>("gps_offset_distance", Session.gps_offset_distance),
+                new KeyValuePair<string, string>("altitude", Session.altitude),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy),
+
+                new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
+                new KeyValuePair<string, string>("longitude2", Session.longitude2),
+                new KeyValuePair<string, string>("altitude", Session.altitude),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy),
+
+                //new KeyValuePair<string, string>("evtype", Session.event_type),
+                
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // created_on
+                new KeyValuePair<string, string>("owner", Session.ownerkey), //
+                new KeyValuePair<string, string>("user", Session.uid.ToString()),
+                new KeyValuePair<string, string>("stage", Session.stage),
+                new KeyValuePair<string, string>("gpstime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
+                new KeyValuePair<string, string>("ownerCD", Session.ownerCD),
+                new KeyValuePair<string, string>("ownerkey", Session.ownerkey),
+                new KeyValuePair<string, string>("jobkey", Session.jobkey),
+
+                new KeyValuePair<string, string>("usercounty", Session.countycode),
+                new KeyValuePair<string, string>("ajaxname", Constants.CreateSiteTableUrl),
+
+
+            };
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    response = await client.PostAsync(Constants.CreateSiteTableUrl, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[CloudService.PostSiteAsync] Response from  OK = 200 , content :" + isi);
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    return e.ToString();
+                }
+            }
+            else
+            {
+                // Put to Pending Sync
+                var app = Application.Current as App;
+                app.TaskCount += 1;
+                keyValues.Add(new KeyValuePair<string, string>("Status", "Pending"));
+
+
+                // Serialize 
+                var test = new Dictionary<string, List<KeyValuePair<string, string>>>();
+                test.Add($"Task-{app.TaskCount}", keyValues);
+
+
+                // To serialize the hashtable and its key/value pairs,
+                // you must first open a stream for writing.
+                // In this case, use a file stream.
+                using (FileStream fs = new FileStream(App.InternalStorageLocation, FileMode.Append, FileAccess.Write))
+                {
+                    // Construct a BinaryFormatter and use it to serialize the data to the stream.
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(fs, test);
+                    }
+                    catch (SerializationException e)
+                    {
+                        Console.WriteLine("Failed to serialize. Reason: " + e.Message);
+                        throw;
+                    }
+                }
+
+
+            }
+            return "No Internet Connection";
+        }
+
 
         public static async Task<string> PostCreateSiteAsync(string tagnum, string typecode)
         {
@@ -273,6 +378,13 @@ namespace FTCollectorApp.Service
                 //new KeyValuePair<string, string>("gps_sts", Session.gps_sts),                
                 //new KeyValuePair<string, string>("manual_latti", Session.manual_latti),
                 //new KeyValuePair<string, string>("manual_longi", Session.manual_longi),
+                new KeyValuePair<string, string>("gps_offset_latitude", Session.lattitude_offset),
+                new KeyValuePair<string, string>("gps_offset_longitude", Session.longitude_offset),
+
+                new KeyValuePair<string, string>("gps_offset_bearing", Session.gps_offset_bearing),
+                new KeyValuePair<string, string>("gps_offset_distance", Session.gps_offset_distance),
+                new KeyValuePair<string, string>("altitude", Session.altitude),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy),
 
                 new KeyValuePair<string, string>("lattitude2", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude2", Session.longitude2),
@@ -309,7 +421,7 @@ namespace FTCollectorApp.Service
                     {
                         var isi = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"[CloudService.PostSiteAsync] Response from  OK = 200 , content :" + isi);
-                        return "OK";
+                        return isi;
                     }
                 }
                 catch (Exception e)

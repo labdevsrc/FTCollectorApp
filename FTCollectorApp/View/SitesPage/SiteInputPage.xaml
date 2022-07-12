@@ -33,14 +33,14 @@
                 <Label Text="Minor Site Type*" HorizontalOptions="Start"/>
                 <Picker  x:Name="minorTypePicker" SelectedIndexChanged="minorTypeP_SelectedIdxChanged" ItemDisplayBinding="{Binding MinorType}" />
                 <Label Text="Enter PC tag" HorizontalOptions="Start"/>
-                <local:BorderEntry Placeholder="tag number" x:Name="entryTagNum" TextChanged="entryTagNum_TextChanged" />
+                <local:BorderEntry Placeholder="tag number" Text="{Binding TagNumber, Mode=TwoWay}" x:Name="entryTagNum" TextChanged="entryTagNum_TextChanged" />
                 <Label Text="Re-Enter PC tag" HorizontalOptions="Start"/>
-                <local:BorderEntry Placeholder="tag number" Text="" x:Name="entryTagNum2" TextChanged="entryTagNum2_TextChanged" />
-                <Label x:Name="stsReEnter"  Text="" HorizontalOptions="Start"/>
-                <Label Text="Stage" HorizontalOptions="Start"/>
-                <local:BorderColorEntry x:Name="stagePicker" IsReadOnly="True"/>
-                <Label Text="Accuracy" HorizontalOptions="Start"/>
-                <local:BorderColorEntry x:Name="entryAccuracy" IsReadOnly="True"/>
+                <local:BorderEntry Placeholder="tag number" Text="{Binding ReEnterTagNumber, Mode=TwoWay}" x:Name="entryTagNum2" TextChanged="entryTagNum2_TextChanged" />
+                <Label x:Name="stsReEnter"  Text="{Binding ReEnterStatus, Mode=TwoWay}" HorizontalOptions="Start"/>
+                <Label Text="Stage" HorizontalOptions="Start"  />
+                <local:BorderColorEntry x:Name="stagePicker" IsReadOnly="True" Text="{Binding Stage}"/>
+                <Label Text="Accuracy" HorizontalOptions="Start" />
+                <local:BorderColorEntry x:Name="entryAccuracy" IsReadOnly="True" Text="{Binding Accuracy, Mode=TwoWay}"/>
                 <Label Text="Station Number" />
                 <local:BorderColorEntry x:Name="staNumber" IsReadOnly="True"/>
                 <Label Text="Plan Sheet" />

@@ -29,7 +29,8 @@ namespace FTCollectorApp.View
 
         private void btnSite_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SiteInputPage());
+            Navigation.PushAsync(new CreateSite());
+            //Navigation.PushAsync(new SiteInputPage());
         }
 
         private void OpenTraceMenu(object sender, EventArgs e)

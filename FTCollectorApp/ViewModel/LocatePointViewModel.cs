@@ -62,6 +62,7 @@ namespace FTCollectorApp.ViewModel
 
         GpsPoint? maxGPSpoint;
         int LocPointNumber = 0;
+        bool GPSMode_NoOffset = true;
         public LocatePointViewModel()
         {
 
@@ -88,30 +89,41 @@ namespace FTCollectorApp.ViewModel
                 Console.WriteLine(maxGPSpoint.MaxId);
             }
 
+            Session.lattitude_offset = string.Empty;
+            Session.longitude_offset = string.Empty;
+            Session.gps_offset_bearing = string.Empty;
+            Session.gps_offset_distance = string.Empty;
         }
 
 
         List<KeyValuePair<string, string>> keyvaluepairLocate()
         {
-            maxGPSpoint.MaxId = (int.Parse(maxGPSpoint?.MaxId) + 1).ToString();
+            Session.GpsPointMaxIdx = (int.Parse(maxGPSpoint?.MaxId) + 1).ToString();
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                 new KeyValuePair<string, string>("jobnum", Session.jobnum),
-                new KeyValuePair<string, string>("locate_point_number", maxGPSpoint.MaxId),
+                new KeyValuePair<string, string>("ownerkey", Session.ownerkey),
+                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD),
+
+                new KeyValuePair<string, string>("locate_point_number", Session.GpsPointMaxIdx),
                 new KeyValuePair<string, string>("tag_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
                 new KeyValuePair<string, string>("tag_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
                 new KeyValuePair<string, string>("duct_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
-                new KeyValuePair<string, string>("duct_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
+                new KeyValuePair<string, string>("duct_from_key", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
                 new KeyValuePair<string, string>("cable_id1", Session.Cable1.AFRKey),
                 new KeyValuePair<string, string>("cable_type", Session.Cable1.CableType),
+
                 new KeyValuePair<string, string>("lattitude", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude", Session.longitude2),
-                new KeyValuePair<string, string>("lattitude", Session.lattitude2),
-                new KeyValuePair<string, string>("altitude", Session.altitude),
-                new KeyValuePair<string, string>("lattitude_offset", Session.lattitude_offset),
-                new KeyValuePair<string, string>("longitude_offset", Session.longitude_offset),
+
+                new KeyValuePair<string, string>("gps_offset_latitude", Session.lattitude_offset),
+                new KeyValuePair<string, string>("gps_offset_longitude", Session.longitude_offset),
+
+                new KeyValuePair<string, string>("gps_offset_bearing", Session.gps_offset_bearing),
+                new KeyValuePair<string, string>("gps_offset_distance", Session.gps_offset_distance),
+
                 new KeyValuePair<string, string>("comment", CommentText),
 
                 new KeyValuePair<string, string>("site_type", SelectedSiteType?.IdLocatePoint is null ? "0" :SelectedSiteType.IdLocatePoint),
@@ -141,20 +153,57 @@ namespace FTCollectorApp.ViewModel
 
         private async void ExecuteRecordCommand()
         {
-            Session.lattitude2 = location.Latitude.ToString();
-            Session.longitude2 = location.Longitude.ToString();
-            Session.altitude = location.Altitude.ToString();
-            Session.accuracy = location.Accuracy.ToString();
 
+            
+            if (GPSMode_NoOffset) // normal gps record 
+            {
+                Session.lattitude2 = location.Latitude.ToString();
+                Session.longitude2 = location.Longitude.ToString();
+                Session.altitude = location.Altitude.ToString();
+                Session.accuracy = location.Accuracy.ToString();
 
+                Session.lattitude_offset = string.Empty;
+                Session.longitude_offset = string.Empty;
+            }
+            else // offset gps record 
+            {
+                
+                Session.lattitude_offset = location.Latitude.ToString();
+                Session.longitude_offset = location.Longitude.ToString();
+                Session.altitude = location.Altitude.ToString();
+                Session.accuracy = location.Accuracy.ToString();
+            }
 
             var KVPair = keyvaluepairLocate(); // update existed chassis
             var result = await CloudDBService.Insert_gps_point(KVPair);
+
+            if (result.Equals("OK"))
+            {
+                LocPointNumber++;
+                OnPropertyChanged(nameof(CurLocPoint)); // update Point number count
+            }
+
         }
 
         private async void ExecuteOpenGPSOffsetPopupCommand()
         {
+            // OffsetGPSPopUp output 
+            // Computed new coord 
+            // - Session.lattitude2
+            // - Session.longitude2
+            // bearing, distance value
+            // - Session.gps_offset_bearing
+            // - Session.gps_offset_distance
+
+            GPSMode_NoOffset = true;
             await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new OffsetGPSPopUp());
+            // if offset bearing and offset distance is not empty, offset mode true
+            if (!string.IsNullOrEmpty(Session.gps_offset_bearing) && !string.IsNullOrEmpty(Session.gps_offset_distance))
+            {
+                Session.lattitude_offset = string.Empty;
+                Session.longitude_offset = string.Empty;
+                GPSMode_NoOffset = false;
+            }
         }
 
         public async void ExecuteFinishCommand()
@@ -164,8 +213,7 @@ namespace FTCollectorApp.ViewModel
         }
         public async void ExecuteCaptureCommand()
         {
-            LocPointNumber++;
-            OnPropertyChanged(nameof(CurLocPoint)); // update Point number count
+
             await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
         }
     }

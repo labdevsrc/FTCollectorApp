@@ -1,4 +1,9 @@
-﻿
+﻿/////////
+/// WARNING !  This code-behind MainAge.xaml.cs is obsolete
+/// Already replace with LoginViewModel.cs
+///////////////////////
+
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -16,6 +16,10 @@ namespace FTCollectorApp.Model
         public static string gps_sts { get; set; }
         public static string manual_latti { get; set; }
         public static string manual_longi { get; set; }
+
+        public static string live_lattitude { get; set; }
+        public static string live_longitude { get; set; }
+
         public static string lattitude2 { get; set; }
         public static string longitude2 { get; set; }
         public static string altitude { get; set; }
@@ -38,6 +42,10 @@ namespace FTCollectorApp.Model
         public static string lattitude_offset { get; set; }
         public static string longitude_offset { get; set; }
 
+        public static string gps_offset_bearing { get; set; }
+        public static string gps_offset_distance { get; set; }
+
+
         public static string tag_number { get; set; }
         public static string site_key { get; set; }
         public static string site_type_key { get; set; }
@@ -49,11 +57,6 @@ namespace FTCollectorApp.Model
         public static string duct_from { get; set; }
         public static string site_from { get; set; }
 
-        public static string TraceCable1Idx { get; set; }
-        public static string TraceCable2Idx { get; set; }
-
-        public static string TraceCable3Idx { get; set; }
-        public static string TraceCable4Idx { get; set; }
         public static string? GpsPointMaxIdx { get; set; }
 
 

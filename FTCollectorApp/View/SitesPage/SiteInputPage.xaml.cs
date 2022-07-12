@@ -66,7 +66,7 @@ namespace FTCollectorApp.View.SitesPage
 
         private bool TagNumberMatch = false;
         private bool TagNumberExisted = false;
-
+        bool GPSMode_NoOffset = true;
 
         public SiteInputPage()
         {
@@ -74,6 +74,7 @@ namespace FTCollectorApp.View.SitesPage
             BindingContext = this;
         }
 
+        GPSTimer timer;
 
         protected override async void OnAppearing()
         {
@@ -160,10 +161,39 @@ namespace FTCollectorApp.View.SitesPage
                 stagePicker.Text = "As Built";
             else if (Session.stage.Equals("R"))
                 stagePicker.Text = "Repair";
-            Device.StartTimer(TimeSpan.FromSeconds(5), () => OnTimerTick());
+
+
+            //Device.StartTimer(TimeSpan.FromSeconds(10), () => OnTimerTick());
+
+            if (timer == null)
+            {
+                timer = new GPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
+                timer.Start();
+            }
 
 
         }
+        async void OnGPSTimerStart()
+        {
+            try
+            {
+                await LocationService.GetLocation();
+                entryAccuracy.Text = $"{LocationService.Coords.Accuracy}";
+                Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+                //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+                //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
+            }
+            catch
+            {
+                entryAccuracy.Text = "No GPS";
+            }
+
+        }
+
         bool OnTimerTick()
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -173,8 +203,10 @@ namespace FTCollectorApp.View.SitesPage
                     await LocationService.GetLocation();
                     entryAccuracy.Text = $"{LocationService.Coords.Accuracy}";
                     Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
-                    Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-                    Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                    //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                    //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                    Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                    Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
                     Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
                     //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
                 }
@@ -189,7 +221,8 @@ namespace FTCollectorApp.View.SitesPage
         protected override void OnDisappearing()
         {
             // need to stop timer here
-
+            if (timer != null)
+                timer.Stop();
 
             base.OnDisappearing();
         }
@@ -244,43 +277,65 @@ namespace FTCollectorApp.View.SitesPage
             string result = String.Empty;
             if (TagNumberMatch)
             {
-                if(TagNumberExisted)
+                if (GPSMode_NoOffset) // normal gps record 
                 {
+                    Session.lattitude2 = Session.live_lattitude;
+                    Session.longitude2 = Session.live_longitude;
+
+                    Session.lattitude_offset = string.Empty;
+                    Session.longitude_offset = string.Empty;
+                }
+                else // offset gps record 
+                {
+
+                    Session.lattitude_offset = Session.live_lattitude;
+                    Session.longitude_offset = Session.live_longitude;
+
+                }
+
+
+                result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                if (result.Equals("DUPLICATED"))
+                {
+                    Session.Result = "CreateSiteOK";
                     var OkAnswer = await DisplayAlert("Please Confirm", "Update existed Tag Number ? ", "OK", "Cancel");
                     if (OkAnswer)
                     {
-                        result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
+                        result = await CloudDBService.UpdateSite(entryTagNum.Text, codekey);
                         Session.Result = "CreateSiteOK";
                     }
                     else
                         return;
+
                 }
-                else // create new tag
+                else if (result.Equals("DONE"))
                 {
-                    result = await CloudDBService.PostCreateSiteAsync(entryTagNum.Text, codekey);
-                    if (result.Equals("OK"))
+                    var OkAnswer = await DisplayAlert("DONE", "Create Site Succes", "Goto " + selectedMajorType, "Create Again");
+                    if (OkAnswer)
                     {
-                        Session.Result = "CreateSiteOK";
+                        if (selectedMajorType.Equals("Building"))
+                        {
+                            await Navigation.PushAsync(new BuildingSitePage(selectedMinorType, entryTagNum.Text));
+                        }
+                        else if (selectedMajorType.Equals("Cabinet"))
+                        {
+                            await Navigation.PushAsync(new CabinetSitePage(selectedMinorType, entryTagNum.Text));
+                        }
+                        else if (selectedMajorType.Equals("Pull Box"))
+                        {
+                            await Navigation.PushAsync(new PullBoxSitePage(selectedMinorType, entryTagNum.Text));
+                        }
+                        else if (selectedMajorType.Equals("Structure"))
+                        {
+                            await Navigation.PushAsync(new StructureSitePage(selectedMinorType, entryTagNum.Text));
+                        }
                     }
                 }
+                else
+                {
+                    await DisplayAlert("Unknown Response from Site Table", result, "TRY AGAIN");
+                }
 
-
-                if (selectedMajorType.Equals("Building"))
-                {
-                    await Navigation.PushAsync(new BuildingSitePage(selectedMinorType, entryTagNum.Text));
-                }
-                else if (selectedMajorType.Equals("Cabinet"))
-                {
-                    await Navigation.PushAsync(new CabinetSitePage(selectedMinorType, entryTagNum.Text));
-                }
-                else if (selectedMajorType.Equals("Pull Box"))
-                {
-                    await Navigation.PushAsync(new PullBoxSitePage(selectedMinorType, entryTagNum.Text));
-                }
-                else if (selectedMajorType.Equals("Structure"))
-                {
-                    await Navigation.PushAsync(new StructureSitePage(selectedMinorType, entryTagNum.Text));
-                }
             }
             else
             {
@@ -290,6 +345,24 @@ namespace FTCollectorApp.View.SitesPage
 
         private async void btnGPSOffset_Clicked(object sender, EventArgs e)
         {
+            // OffsetGPSPopUp output 
+            // Computed new coord 
+            // - Session.lattitude2
+            // - Session.longitude2
+            // bearing, distance value
+            // - Session.gps_offset_bearing
+            // - Session.gps_offset_distance
+
+            GPSMode_NoOffset = true;
+            await PopupNavigation.PushAsync(new OffsetGPSPopUp());
+            // if offset bearing and offset distance is not empty, offset mode true
+            if (!string.IsNullOrEmpty(Session.gps_offset_bearing) && !string.IsNullOrEmpty(Session.gps_offset_distance))
+            {
+                Session.lattitude_offset = string.Empty;
+                Session.longitude_offset = string.Empty;
+                GPSMode_NoOffset = false;
+            }
+
             await PopupNavigation.Instance.PushAsync(new OffsetGPSPopUp());
         }
 

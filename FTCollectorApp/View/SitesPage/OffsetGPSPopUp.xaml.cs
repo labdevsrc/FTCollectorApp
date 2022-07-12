@@ -28,16 +28,30 @@ namespace FTCollectorApp.View.SitesPage
 
         private async void btnSave_Clicked(object sender, EventArgs e)
         {
-            Position pos1 = new Position();
-            pos1.Latitude = double.Parse(Session.lattitude2);
-            pos1.Longitude = double.Parse(Session.longitude2);
+            // live coords is offset_coords
+            Session.lattitude_offset = Session.live_lattitude;
+            Session.longitude_offset = Session.live_longitude;
 
+            // put bearing and distance as AWS table params
+            Session.gps_offset_bearing = entryBearing.Text;
+            Session.gps_offset_distance = entryDistance.Text;
+
+            Position pos1 = new Position();
+            pos1.Latitude = double.Parse(Session.lattitude_offset);
+            pos1.Longitude = double.Parse(Session.longitude_offset);
+
+
+
+            // compute actual coords based on bearing and distance 
+            
             Haversine hv = new Haversine();
             Position newPos = new Position();
             newPos = hv.NewCoordsCalc(pos1, double.Parse(entryBearing.Text), int.Parse(entryDistance.Text),
                 DistanceType.Kilometers);
-            Session.lattitude_offset = newPos.Latitude.ToString();
-            Session.longitude_offset = newPos.Longitude.ToString();
+
+            // Session.lattitude, Session.longitude : computed coords with Haversine formula
+            Session.lattitude2 = newPos.Latitude.ToString();
+            Session.longitude2 = newPos.Longitude.ToString();
 
             await PopupNavigation.Instance.PopAsync(true);
         }
