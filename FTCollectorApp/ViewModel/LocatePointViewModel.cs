@@ -62,6 +62,7 @@ namespace FTCollectorApp.ViewModel
 
         GpsPoint? maxGPSpoint;
         int LocPointNumber = 0;
+        ReadGPSTimer RdGpstimer;
 
         public LocatePointViewModel()
         {
@@ -93,8 +94,36 @@ namespace FTCollectorApp.ViewModel
             Session.longitude_offset = string.Empty;
             Session.gps_offset_bearing = string.Empty;
             Session.gps_offset_distance = string.Empty;
+
+            if (RdGpstimer == null)
+            {
+                RdGpstimer = new ReadGPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
+                RdGpstimer.Start();
+            }
+
+
         }
 
+        async void OnGPSTimerStart()
+        {
+            try
+            {
+                await LocationService.GetLocation();
+
+                Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+                //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+                Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+                Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+                //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
 
         List<KeyValuePair<string, string>> keyvaluepairLocate()
         {

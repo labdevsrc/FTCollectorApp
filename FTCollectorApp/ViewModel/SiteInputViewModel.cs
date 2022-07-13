@@ -83,7 +83,7 @@ namespace FTCollectorApp.ViewModel
         public ICommand DisplayGPSOption { get; set; }
 
         bool GPSMode_NoOffset = true;
-        GPSTimer timer;
+        ReadGPSTimer timer;
         string codekey;
 
 
@@ -106,7 +106,7 @@ namespace FTCollectorApp.ViewModel
 
             if (timer == null)
             {
-                timer = new GPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
+                timer = new ReadGPSTimer(TimeSpan.FromSeconds(5), OnGPSTimerStart);
                 timer.Start();
             }
 
