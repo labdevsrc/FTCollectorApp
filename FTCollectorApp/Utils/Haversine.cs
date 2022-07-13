@@ -44,13 +44,25 @@ namespace FTCollectorApp.Utils
             return d;
         }
 
+        double toRadians(double degree)
+        {
+            return Math.PI * degree / 180.0;
+        }
+
+        double toDegree(double rad)
+        {
+            return 180.0 * rad / Math.PI;
+        }
+
         public Position NewCoordsCalc(Position pos1, double bearing, int d, DistanceType type)
         {
-            double R = (type == DistanceType.Miles) ? 3960 : 6371;
+            double R = (type == DistanceType.Miles) ? 3960e3 : 6371e3;
             Position newP;
-            newP.Latitude = Math.Asin(Math.Sin(pos1.Latitude) * Math.Cos(d / R) + Math.Sin(bearing) * Math.Sin(d / R) * Math.Cos(bearing));
-            newP.Longitude = pos1.Longitude + Math.Atan2(Math.Sin(bearing) * Math.Sin(d / R) * Math.Cos(pos1.Latitude), 
-                Math.Cos(d / R) - Math.Sin(pos1.Latitude) * Math.Sin(newP.Latitude)); 
+            var temp = Math.Asin(Math.Sin(toRadians(pos1.Latitude)) * Math.Cos(d / R) + Math.Cos(toRadians(pos1.Latitude)) * Math.Sin(d / R) * Math.Cos(toRadians(bearing)));
+            newP.Latitude = toDegree(temp);
+            newP.Longitude = pos1.Longitude + toDegree(Math.Atan2(Math.Sin(toRadians(bearing)) * Math.Sin(d / R) * Math.Cos(toRadians(pos1.Latitude)),
+                Math.Cos(d / R) - Math.Sin(toRadians(pos1.Latitude)) * Math.Sin(toRadians(newP.Latitude))));
+            Console.WriteLine();
             return newP;
         }
         /// <summary>

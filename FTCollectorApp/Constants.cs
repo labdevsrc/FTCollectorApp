@@ -40,6 +40,8 @@ namespace FTCollectorApp
 
 
         public const string ajaxSaveGPSPoint = "ajaxSaveGPSPoint.php";
+        public const string UpdateSite = "Updatesite.php";
+
         //////////////////// AWS S3 params - start ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";
 

@@ -311,11 +311,11 @@ namespace FTCollectorApp.Service
             {
                 try
                 {
-                    response = await client.PostAsync(Constants.CreateSiteTableUrl, content);
+                    response = await client.PostAsync(Constants.UpdateSite, content);
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"[CloudService.PostSiteAsync] Response from  OK = 200 , content :" + isi);
+                        Console.WriteLine($"[CloudService.UpdateSite] Response from  OK = 200 , content :" + isi);
                         return isi;
                     }
                 }

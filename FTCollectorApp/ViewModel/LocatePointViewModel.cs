@@ -62,7 +62,7 @@ namespace FTCollectorApp.ViewModel
 
         GpsPoint? maxGPSpoint;
         int LocPointNumber = 0;
-        bool GPSMode_NoOffset = true;
+
         public LocatePointViewModel()
         {
 
@@ -153,25 +153,21 @@ namespace FTCollectorApp.ViewModel
 
         private async void ExecuteRecordCommand()
         {
-
-            
-            if (GPSMode_NoOffset) // normal gps record 
+            Console.WriteLine();
+            if (string.IsNullOrEmpty(Session.gps_offset_bearing) && string.IsNullOrEmpty(Session.gps_offset_distance))
             {
+                Console.WriteLine();
                 Session.lattitude2 = location.Latitude.ToString();
                 Session.longitude2 = location.Longitude.ToString();
-                Session.altitude = location.Altitude.ToString();
-                Session.accuracy = location.Accuracy.ToString();
 
                 Session.lattitude_offset = string.Empty;
                 Session.longitude_offset = string.Empty;
             }
             else // offset gps record 
             {
-                
+                Console.WriteLine();
                 Session.lattitude_offset = location.Latitude.ToString();
                 Session.longitude_offset = location.Longitude.ToString();
-                Session.altitude = location.Altitude.ToString();
-                Session.accuracy = location.Accuracy.ToString();
             }
 
             var KVPair = keyvaluepairLocate(); // update existed chassis
@@ -179,8 +175,11 @@ namespace FTCollectorApp.ViewModel
 
             if (result.Equals("OK"))
             {
+
                 LocPointNumber++;
                 OnPropertyChanged(nameof(CurLocPoint)); // update Point number count
+                await Application.Current.MainPage.DisplayAlert("DONE", "Gps point inserted", "OK");
+
             }
 
         }
@@ -195,15 +194,9 @@ namespace FTCollectorApp.ViewModel
             // - Session.gps_offset_bearing
             // - Session.gps_offset_distance
 
-            GPSMode_NoOffset = true;
+
             await Rg.Plugins.Popup.Services.PopupNavigation.PushAsync(new OffsetGPSPopUp());
-            // if offset bearing and offset distance is not empty, offset mode true
-            if (!string.IsNullOrEmpty(Session.gps_offset_bearing) && !string.IsNullOrEmpty(Session.gps_offset_distance))
-            {
-                Session.lattitude_offset = string.Empty;
-                Session.longitude_offset = string.Empty;
-                GPSMode_NoOffset = false;
-            }
+
         }
 
         public async void ExecuteFinishCommand()

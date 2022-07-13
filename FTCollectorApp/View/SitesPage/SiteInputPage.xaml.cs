@@ -1,4 +1,7 @@
-﻿using FTCollectorApp.Model;
+﻿//// This XAML and code-behind is  obsolete already
+///  replaced by CreateSite.xaml and SiteInputPageViewModel.cs
+
+using FTCollectorApp.Model;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
 using FTCollectorApp.View.Utils;

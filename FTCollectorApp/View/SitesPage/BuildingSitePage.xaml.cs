@@ -41,12 +41,6 @@ namespace FTCollectorApp.View.SitesPage
             //BindingContext = new BuildingSiteViewModel();
 
             MajorMinorType = $"Building - {minorType}";
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-            {
-                conn.CreateTable<CodeSiteType>();
-                var CodeSiteTable = conn.Table<CodeSiteType>().ToList();
-                SiteType = CodeSiteTable.Where(a => a.MajorType == "Building" && a.MinorType == minorType).Select(g=>g.CodeKey).First().ToString();
-            }
 
             for (int i = 0; i < 100; i++)
             {
@@ -268,7 +262,7 @@ namespace FTCollectorApp.View.SitesPage
 
                 new KeyValuePair<string, string>("tag",TagNumber), //8
                 new KeyValuePair<string, string>("site2", entrySiteName.Text),  /// site_id
-                new KeyValuePair<string, string>("type2", SiteType),  /// code_site_type.key
+                new KeyValuePair<string, string>("type2", Session.site_type_key),  /// code_site_type.key
                 new KeyValuePair<string, string>("sitname2", entrySiteName.Text),
 
 

@@ -198,43 +198,6 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        /*public ObservableCollection<CodeSiteType> CodeMajorSiteTypes
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<CodeSiteType>();
-                    var table = conn.Table<CodeSiteType>().GroupBy(b => b.MajorType).Select(g => g.First()).ToList();
-                   
-                    foreach (var col in table)
-                    {
-                        col.MinorType = HttpUtility.HtmlDecode(col.MinorType); // should use for escape char "
-                    }
-                    return new ObservableCollection<CodeSiteType>(table);
-                }
-            }
-        }
-
-        public ObservableCollection<CodeSiteType> CodeSiteTypes
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<CodeSiteType>();
-                    var table = conn.Table<CodeSiteType>().ToList();
-                    if (SelectedMajorType != null)
-                        table = conn.Table<CodeSiteType>().Where(a => a.MajorType == SelectedMajorType.MajorType).OrderBy(d => d.MinorType).ToList();
-                    foreach (var col in table)
-                    {
-                        col.MinorType = HttpUtility.HtmlDecode(col.MinorType); // should use for escape char "
-                    }
-                    return new ObservableCollection<CodeSiteType>(table);
-                }
-            }
-        }*/
-
 
         async void ExecuteDisplayGPSOption()
         {
@@ -243,8 +206,6 @@ namespace FTCollectorApp.ViewModel
         
         [ObservableProperty]
         bool isTagNumberMatch = false;
-
-        private bool isTagNumberExisted = false;
 
         private async void ExecuteRecordCommand()
         {
@@ -279,7 +240,6 @@ namespace FTCollectorApp.ViewModel
                 if (result.Equals("DUPLICATED"))
                 {
                     Session.Result = "CreateSiteOK";
-                    isTagNumberExisted = true;
 
                     var OkAnswer = await Application.Current.MainPage.DisplayAlert("Please Confirm", "Update existed Tag Number ? ", "OK", "Cancel");
                     if (OkAnswer)
@@ -292,10 +252,12 @@ namespace FTCollectorApp.ViewModel
                         return;
 
                 }
-                else if (result.Equals("DONE"))
+                
+                
+                if (result.Equals("CREATE_DONE") || result.Equals("UPDATE_DONE"))
                 {
                     // get answer from popup 
-                    var OkAnswer = await Application.Current.MainPage.DisplayAlert("DONE", "Create Site Succes", "Goto " + SelectedMajorType, "Create Again");
+                    var OkAnswer = await Application.Current.MainPage.DisplayAlert("DONE", result.Equals("CREATE_DONE") ? "Create Site Success" : "Update Site Success", "Goto " + SelectedMajorType, "Create Again");
                     if (OkAnswer)
                     {
                         // stop timer gps
@@ -304,19 +266,19 @@ namespace FTCollectorApp.ViewModel
                         // move to next page
                         if (SelectedMajorType.Equals("Building"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new BuildingSitePage(SelectedMajorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new BuildingSitePage(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Cabinet"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new CabinetSitePage(SelectedMajorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new CabinetSitePage(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Pull Box"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new PullBoxSitePage(SelectedMajorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new PullBoxSitePage(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Structure"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new StructureSitePage(SelectedMajorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new StructureSitePage(SelectedMinorType, TagNumber));
                         }
                     }
                 }
