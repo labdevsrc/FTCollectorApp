@@ -230,6 +230,7 @@ namespace FTCollectorApp.ViewModel
 
         public async void ExecuteFinishCommand()
         {
+            RdGpstimer.Stop();
             await Application.Current.MainPage.Navigation.PopAsync();
 
         }
