@@ -70,9 +70,6 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        KeyValuePair<string, List<string>> temp = new KeyValuePair<string, List<string>>(
-            "loc_point_record", 
-            );
 
         List<KeyValuePair<string, string>> keyvaluepair()
         {
