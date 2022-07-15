@@ -8,7 +8,7 @@
                 <Label Text="Site In" />
                 <Label Text="Site type" Grid.Column="1" />
                 <local:Dropdown Grid.Row="1" 
-                        ItemsSource="{Binding ConduitSiteTag}" ItemDisplayBinding="{Binding HosTagNumber}"
+                        ItemsSource="{Binding SiteInList}" ItemDisplayBinding="{Binding HosTagNumber}"
                         SelectedItem="{Binding SelectedTagNum}" />
                 <local:BorderColorEntry Grid.Column="1" Grid.Row="2" x:Name="txtSiteType" 
                                             Text="{Binding SelectedTagNum.HostType}"  IsEnabled="False"/>
@@ -22,16 +22,23 @@
                 <local:Dropdown Grid.Column="0" Grid.Row="6" x:Name="pWDuct" 
                                  ItemsSource="{Binding DuctConduitDatas}" 
                                  ItemDisplayBinding="{Binding WhichDucts}"
-                            
+                                 SelectedItem="{Binding SelectedDuct}"                            
                                  />
-                <local:BorderColorEntry Grid.Column="1" Grid.Row="6" x:Name="txtUsage" IsEnabled="False"/>
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="6" Text="{Binding SelectedDuct.DuctUsage}" IsEnabled="False"/>
 
                 <Label Text="Color" Grid.Column="0" Grid.Row="7" />
                 <Label Text="Size" Grid.Column="1" Grid.Row="7" />
-                <local:BorderEntry Grid.Column="0" Grid.Row="8" x:Name="txtColor" IsEnabled="False"/>
-                <local:BorderColorEntry Grid.Column="1" Grid.Row="8" x:Name="txtSize" IsEnabled="False"/>
+                <local:BorderEntry Grid.Column="0" Grid.Row="8" Text="{Binding SelectedDuct.DuctColor}" IsEnabled="False"/>
+                <local:BorderColorEntry Grid.Column="1" Grid.Row="8" Text="{Binding SelectedDuct.DuctSize}" IsEnabled="False"/>
 
+                
+                
             </Grid>
+
+            <Button Text="Complete Fiber Trace section" Command="{Binding CompleteFiberCommand}" />
+            <Button Text="Suspend" Command="{Binding SuspendCommand}" />
+            <Button Text="Broken Trace Wire" Command="{Binding BrokenTraceWireCommand}" />
+            <Button Text="Delete This Trace" Command="{Binding DeleteTraceCommand}" />            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

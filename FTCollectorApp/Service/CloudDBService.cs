@@ -1053,6 +1053,41 @@ namespace FTCollectorApp.Service
             }
             return "Fail to update";
         }
+
+        
+        public static async Task<string> PostEndDuctTrace(List<KeyValuePair<string, string>> keyValues)
+        {
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostEndDuctTrace Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    //response = await client.PostAsync(Constants.ajaxSaveTraceWire, content);
+
+                    response = await client.PostAsync(Constants.ajaxSaveEndDuctTrace, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostEndDuctTrace]Response from  OK = 200 , content :" + isi);
+                        Session.Result = "PostEndDuctTraceOK";
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "PostEndDuctTraceFAIL";
+                    return e.ToString();
+                }
+            }
+            return "FAIL";
+        }
+
         public static async Task<string> PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
         {
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST

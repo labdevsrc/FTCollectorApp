@@ -87,8 +87,12 @@ namespace FTCollectorApp.ViewModel
                     maxGPSpoint.MaxId = Session.GpsPointMaxIdx;
 
                 LocPointNumber = int.Parse(Session.GpsPointMaxIdx) + 1;
+
                 Console.WriteLine(maxGPSpoint.MaxId);
             }
+
+            Session.LocpointnumberStart = LocPointNumber.ToString(); // preserve for End Trace page
+
 
             Session.lattitude_offset = string.Empty;
             Session.longitude_offset = string.Empty;
@@ -127,7 +131,7 @@ namespace FTCollectorApp.ViewModel
 
         List<KeyValuePair<string, string>> keyvaluepairLocate()
         {
-            Session.GpsPointMaxIdx = (int.Parse(maxGPSpoint?.MaxId) + 1).ToString();
+            //Session.GpsPointMaxIdx = (int.Parse(maxGPSpoint?.MaxId) + 1).ToString();
 
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
@@ -136,16 +140,18 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("ownerkey", Session.ownerkey),
                 new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD),
 
-                new KeyValuePair<string, string>("locate_point_number", Session.GpsPointMaxIdx),
+                new KeyValuePair<string, string>("locate_point_number", LocPointNumber.ToString()),
                 new KeyValuePair<string, string>("tag_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
                 new KeyValuePair<string, string>("tag_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
-                new KeyValuePair<string, string>("duct_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
+                new KeyValuePair<string, string>("duct_from", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
                 new KeyValuePair<string, string>("duct_from_key", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
                 new KeyValuePair<string, string>("cable_id1", Session.Cable1.AFRKey),
                 new KeyValuePair<string, string>("cable_type", Session.Cable1.CableType),
 
                 new KeyValuePair<string, string>("lattitude", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude", Session.longitude2),
+                new KeyValuePair<string, string>("altitude", Session.altitude),
+                new KeyValuePair<string, string>("accuracy", Session.accuracy),
 
                 new KeyValuePair<string, string>("gps_offset_latitude", Session.lattitude_offset),
                 new KeyValuePair<string, string>("gps_offset_longitude", Session.longitude_offset),
@@ -186,8 +192,8 @@ namespace FTCollectorApp.ViewModel
             if (string.IsNullOrEmpty(Session.gps_offset_bearing) && string.IsNullOrEmpty(Session.gps_offset_distance))
             {
                 Console.WriteLine();
-                Session.lattitude2 = location.Latitude.ToString();
-                Session.longitude2 = location.Longitude.ToString();
+                Session.lattitude2 = Session.live_lattitude;
+                Session.longitude2 = Session.live_longitude;
 
                 Session.lattitude_offset = string.Empty;
                 Session.longitude_offset = string.Empty;
@@ -195,8 +201,8 @@ namespace FTCollectorApp.ViewModel
             else // offset gps record 
             {
                 Console.WriteLine();
-                Session.lattitude_offset = location.Latitude.ToString();
-                Session.longitude_offset = location.Longitude.ToString();
+                Session.lattitude_offset = Session.live_lattitude;
+                Session.longitude_offset = Session.live_longitude;
             }
 
             var KVPair = keyvaluepairLocate(); // update existed chassis
@@ -204,6 +210,9 @@ namespace FTCollectorApp.ViewModel
 
             if (result.Equals("OK"))
             {
+
+                Session.LocpointnumberEnd = LocPointNumber.ToString();
+                Session.GpsPointMaxIdx = LocPointNumber.ToString();
 
                 LocPointNumber++;
                 OnPropertyChanged(nameof(CurLocPoint)); // update Point number count

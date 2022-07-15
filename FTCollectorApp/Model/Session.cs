@@ -58,13 +58,14 @@ namespace FTCollectorApp.Model
         public static string site_from { get; set; }
 
         public static string? GpsPointMaxIdx { get; set; }
-
-
+        public static string? LocpointnumberEnd { get; set; }
+        public static string? LocpointnumberStart { get; set; }
         public static AFiberCable? Cable1 { get; set; }
         public static AFiberCable? Cable2 { get; set; }
         public static AFiberCable? Cable3 { get; set; }
         public static AFiberCable? Cable4 { get; set; }
         public static ConduitsGroup? FromDuct { get; set; }
+        public static ConduitsGroup? ToDuct { get; set; }
         public static int MAX_DIR_CNT { get; set; } = 0;
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input

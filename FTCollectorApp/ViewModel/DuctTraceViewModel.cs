@@ -37,8 +37,17 @@ namespace FTCollectorApp.ViewModel
         [AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
         ConduitsGroup selectedTagNum;
 
-        [ObservableProperty]
         ConduitsGroup selectedDuct;
+        public ConduitsGroup SelectedDuct
+        {
+            get => selectedDuct;
+            set
+            {
+                SetProperty(ref selectedDuct, value);
+                // backup selected duct 
+                Session.FromDuct = value;
+            }
+        }
 
         [ObservableProperty]
         DuctInstallType selectedDuctInstall;
@@ -247,7 +256,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
                 new KeyValuePair<string, string>("from_site", SelectedTagNum?.HosTagNumber is null ?"0" : SelectedTagNum.HosTagNumber  ),
                 new KeyValuePair<string, string>("from_site_key", SelectedTagNum?.HostSiteKey is null ?"0" : SelectedTagNum.HostSiteKey  ),
-                new KeyValuePair<string, string>("from_site_duct", SelectedDuct?.HosTagNumber is null ?"0" : SelectedDuct.HosTagNumber  ),  // 2
+                new KeyValuePair<string, string>("from_site_duct", SelectedDuct?.ConduitKey is null ?"0" : SelectedDuct.ConduitKey  ),  // 2
                 new KeyValuePair<string, string>("from_site_duct_key", SelectedDuct?.ConduitKey is null ?"0" : SelectedDuct.ConduitKey  ),  // 2
                 new KeyValuePair<string, string>("install_method", SelectedDuctInstall?.DuctInstallKey is null ? "0":SelectedDuctInstall.DuctInstallKey),  // 7
                 new KeyValuePair<string, string>("uom", selectedUOM?.UOMKey is null ? "0":selectedUOM.UOMKey),  // 7
@@ -351,6 +360,8 @@ namespace FTCollectorApp.ViewModel
                         }
 
                         Session.GpsPointMaxIdx = contentResponse?.locatepointkey is null ? "0" : contentResponse.locatepointkey;
+
+
 
                 }
             }
