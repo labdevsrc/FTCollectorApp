@@ -171,6 +171,8 @@ namespace FTCollectorApp.View
 
                 var max_gps_point = await CloudDBService.GetMaxGpsPoint(); //gps_point
 
+                var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
+
                 txtLoading.Text = "Site...";
                 var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
                 //Thread.Sleep(5000);
@@ -183,9 +185,14 @@ namespace FTCollectorApp.View
 
                     txtLoading.Text = "code tables ...";
 
+                    conn.CreateTable<SuspendedTrace>();
+                    conn.DeleteAll<SuspendedTrace>();
+                    conn.InsertAll(suspList);
+
                     conn.CreateTable<GpsPoint>();
                     conn.DeleteAll<GpsPoint>();
                     conn.InsertAll(max_gps_point);
+
 
                     conn.CreateTable<CodeLocatePoint>();
                     conn.DeleteAll<CodeLocatePoint>();

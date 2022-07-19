@@ -111,7 +111,6 @@ namespace FTCollectorApp.ViewModel
                 temp.Add(new TwoColor { ClrKey = "12", ClrName = "Aqua", ClrHex = "#00FFFF" });
                 temp.Add(new TwoColor { ClrKey = "2", ClrName = "Orange", ClrHex = "#FFA500" });
                 return new ObservableCollection<TwoColor>(temp);
-
             }
         }
 

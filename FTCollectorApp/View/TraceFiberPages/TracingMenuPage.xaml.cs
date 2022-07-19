@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTCollectorApp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace FTCollectorApp.View.TraceFiberPages
         public TracingMenuPage()
         {
             InitializeComponent();
+            BindingContext = new TracingMenuViewModel();
         }
 
         private void btnResume_Clicked(object sender, EventArgs e)

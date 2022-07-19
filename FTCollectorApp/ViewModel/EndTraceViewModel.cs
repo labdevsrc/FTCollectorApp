@@ -12,6 +12,7 @@ using Xamarin.Forms;
 using System.Windows.Input;
 using FTCollectorApp.Service;
 using Newtonsoft.Json;
+using FTCollectorApp.View;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -21,15 +22,56 @@ namespace FTCollectorApp.ViewModel
         [AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
         ConduitsGroup selectedTagNum;
 
+        string[] colorFiberHex = { "#0000FF", "#FFA500", "#008000", "#A52A2A", "#708090", "#FFFFFF", "#FF0000","#00000", "#FFFF00", "#963D7F", "#FF00FF", "#00FFFF" };
+        string[] colorFiber = { "Blue", "Orange", "Green", "Brown", "Slate", "White", "Red", "Black", "Yellow", "Violet", "Rose", "Aqua" };
+
+        [ObservableProperty]
+        bool isEntriesDiplayed = true;
+
+        [ObservableProperty]
+        bool isSearching = false;
+
+
+
+        string searchTag;
+        public string SearchTag
+        {
+            get => searchTag;
+            set
+            {
+                IsSearching = true;
+
+                SetProperty(ref (searchTag), value);
+                OnPropertyChanged(nameof(SiteInListView));
+            }
+        }
+
         ConduitsGroup selectedDuct;
         public ConduitsGroup SelectedDuct
         {
-            get => selectedDuct;
+            get=> selectedDuct;
+
             set
             {
-                SetProperty(ref selectedDuct, value);
+                if (SelectedTagNum.HosTagNumber.Equals("New"))
+                    IsEntriesDiplayed = false;
+                else
+                    IsEntriesDiplayed = true;
+                OnPropertyChanged(nameof(IsEntriesDiplayed));
                 // backup selected duct 
+                Console.WriteLine();
+                if (value?.DuctColor != null)
+                {
+                    if (int.Parse(value.DuctColor) > 0)
+                    {
+                        value.ColorName = colorFiber[int.Parse(value.DuctColor) - 1];
+                        value.ColorHex = colorFiberHex[int.Parse(value.DuctColor) - 1];
+                    }
+                }
+                Console.WriteLine( );
                 Session.ToDuct = value;
+                SetProperty(ref selectedDuct, value);
+
             }
         }
 
@@ -65,9 +107,6 @@ namespace FTCollectorApp.ViewModel
             SuspendCommand = new Command(ExecuteSuspendCommand);
             BrokenTraceWireCommand = new Command(ExecuteBrokenTraceWireCommand);
             DeleteTraceCommand = new Command(ExecuteDeleteTraceCommand);
-
-
-
         }
 
 
@@ -88,28 +127,9 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("tag_to", Session.ToDuct?.HosTagNumber is null ? "0" :Session.ToDuct.HosTagNumber ),
                 new KeyValuePair<string, string>("tag_to_key", Session.ToDuct?.HostSiteKey is null ? "0" :Session.ToDuct.HostSiteKey ),
                 new KeyValuePair<string, string>("duct_to", Session.ToDuct?.ConduitKey is null ? "0" :Session.ToDuct.ConduitKey ),
-                new KeyValuePair<string, string>("duct_to_key", Session.ToDuct?.ConduitKey is null ? "0" :Session.ToDuct.ConduitKey ),
 
-                new KeyValuePair<string, string>("tag_from", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
-                new KeyValuePair<string, string>("tag_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
-                //new KeyValuePair<string, string>("cable_id1", Session.Cable1.AFRKey),
-                //new KeyValuePair<string, string>("cable_type", Session.Cable1.CableType),
-
-                //new KeyValuePair<string, string>("lattitude", Session.lattitude2),
-                //new KeyValuePair<string, string>("longitude", Session.longitude2),
-                //new KeyValuePair<string, string>("altitude", Session.altitude),
-                //new KeyValuePair<string, string>("accuracy", Session.accuracy),
-
-                //new KeyValuePair<string, string>("gps_offset_latitude", Session.lattitude_offset),
-                //new KeyValuePair<string, string>("gps_offset_longitude", Session.longitude_offset),
-
-                //new KeyValuePair<string, string>("gps_offset_bearing", Session.gps_offset_bearing),
-                //new KeyValuePair<string, string>("gps_offset_distance", Session.gps_offset_distance),
-
-                //new KeyValuePair<string, string>("comment", CommentText),
-
-                //new KeyValuePair<string, string>("site_type", SelectedSiteType?.IdLocatePoint is null ? "0" :SelectedSiteType.IdLocatePoint),
-
+                new KeyValuePair<string, string>("from_site", Session.FromDuct?.HosTagNumber is null ? "0" :Session.FromDuct.HosTagNumber ),
+                new KeyValuePair<string, string>("from_site_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
 
             };
 
@@ -117,8 +137,14 @@ namespace FTCollectorApp.ViewModel
 
         }
 
+
         async void ExecuteSuspendCommand()
         {
+            Application.Current.Properties[Constants.SavedFromDuctTagNumber] = Session.FromDuct.HosTagNumber;
+            Application.Current.Properties[Constants.SavedFromDuctTagNumberKey] = Session.FromDuct.ConduitKey;
+            Application.Current.Properties[Constants.SavedToDuctTagNumber] = Session.ToDuct.HosTagNumber;
+            Application.Current.Properties[Constants.SavedToDuctTagNumberKey] = Session.ToDuct.ConduitKey;
+            await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
             // ToDo
         }
 
@@ -179,7 +205,10 @@ namespace FTCollectorApp.ViewModel
 
                     Session.GpsPointMaxIdx = contentResponse?.locatepointkey is null ? "0" : contentResponse.locatepointkey;
 
-
+                    Application.Current.Properties[Constants.SavedFromDuctTagNumber] = "";
+                    Application.Current.Properties[Constants.SavedFromDuctTagNumberKey] = "";
+                    Application.Current.Properties[Constants.SavedToDuctTagNumber] = "";
+                    Application.Current.Properties[Constants.SavedToDuctTagNumberKey] = "";
 
                 }
             }
@@ -187,7 +216,6 @@ namespace FTCollectorApp.ViewModel
             {
                 Console.WriteLine(e);
             }
-
         }
 
 
@@ -200,8 +228,10 @@ namespace FTCollectorApp.ViewModel
                     var table = ConduitsGroupListTable.ToList();
                     if (SelectedTagNum?.HosTagNumber != null)
                         table = ConduitsGroupListTable.Where(b => b.HosTagNumber == SelectedTagNum.HosTagNumber).ToList();
+
                     foreach (var col in table)
                     {
+
                         col.DuctSize = HttpUtility.HtmlDecode(col.DuctSize);
                         col.WhichDucts = col.Direction + " " + col.DirCnt;
                     }
@@ -230,6 +260,26 @@ namespace FTCollectorApp.ViewModel
 
                     Console.WriteLine();
                     return new ObservableCollection<ConduitsGroup>(temp);
+                }
+            }
+        }
+
+        public ObservableCollection<ConduitsGroup> SiteInListView
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+
+                    var table = ConduitsGroupListTable.GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
+                    if (SearchTag != null)
+                    {
+                        Console.WriteLine();
+                        table = ConduitsGroupListTable.Where(i => i.HosTagNumber.ToLower().Contains(SearchTag.ToLower())).ToList();
+                        //GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<ConduitsGroup>(table);
                 }
             }
         }

@@ -294,10 +294,10 @@ namespace FTCollectorApp.ViewModel
         private async void ExecuteSaveAndContinueCommand()
         {
 
-            if (string.IsNullOrEmpty(SelectedCable1.CableIdDesc) 
-                && string.IsNullOrEmpty(SelectedCable2.CableIdDesc)
-                && string.IsNullOrEmpty(SelectedCable3.CableIdDesc)
-                && string.IsNullOrEmpty(SelectedCable4.CableIdDesc)
+            if (string.IsNullOrEmpty(SelectedCable1?.CableIdDesc) 
+                && string.IsNullOrEmpty(SelectedCable2?.CableIdDesc)
+                && string.IsNullOrEmpty(SelectedCable3?.CableIdDesc)
+                && string.IsNullOrEmpty(SelectedCable4?.CableIdDesc)
                 )
             {
                 await Application.Current.MainPage.DisplayAlert("Warning", "Cable 1 or 2 or 3 or 4 shouldn't be empty","OK");

@@ -26,7 +26,9 @@ namespace FTCollectorApp.Model.Reference
         public string OwnerKey { get; set; }
         public string InUsePercent { get; set; }
         public string HostSiteKey { get; set; }
-
+        public string ColorHex { get; set; }
+        public string ColorName { get; set; }
+        
     }
     
 }

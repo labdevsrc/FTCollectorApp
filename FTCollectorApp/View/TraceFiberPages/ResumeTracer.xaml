@@ -8,15 +8,14 @@
             <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" />
             <Label Padding="0,20,0,20" Text="TagNumber" />
             <local:Dropdown x:Name="pTagNumber" ItemsSource="{Binding BeginningSiteList }" 
-                            ItemDisplayBinding="{Binding HostTagNuumber}" SelectedIndexChanged="OnIndexChanged"/>
-            <Label Padding="0,20,0,20" Text="TagNumber" />
-            <local:BorderEntry x:Name="txtDuctName"/>
+                            ItemDisplayBinding="{Binding HosTagNumber}" SelectedItem="{Binding SelectedTagNum}"/>
+            <Label Padding="0,20,0,20" Text="Duct" />
+            <local:BorderEntry Text="" />
             <Label Padding="0,20,0,20" Text="Fiber Cable" />
-            <local:BorderEntry x:Name="fiberCable"/>
-
-
-            <Button Padding="10" Text="Resume Tracing" Clicked="btnStartTracing_Clicked"/>
-            <Button Padding="10" x:Name="btnStart" Text="View Suspended fiber tracig activity" Clicked="btnResume_Clicked"/>
+            <local:BorderEntry Text="" />
+ 
+            <Button Padding="10" Text="Resume Tracing" Command="{Binding ResumeCommand}"/>
+            <Button Padding="10" Text="View Suspended fiber tracig activity" Command="{Binding ViewSuspendedCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

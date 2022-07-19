@@ -718,7 +718,8 @@ namespace FTCollectorApp.Service
 
         public static Task<IEnumerable<GpsPoint>> GetMaxGpsPoint() =>
             GetDropDownParamsAsync<IEnumerable<GpsPoint>>("gps_point");
-        
+        public static Task<IEnumerable<GpsPoint>>  GetSuspendedTrace() =>
+           GetDropDownParamsAsync<IEnumerable<GpsPoint>>("suspend_trace");
         async static Task<T> GetDropDownParamsAsync<T>(string type)
         {
             var keyValues = new List<KeyValuePair<string, string>>{

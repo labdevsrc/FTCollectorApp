@@ -3,42 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.TraceFiberPages.EndTracePage">
     <ContentPage.Content>
-        <StackLayout>
-            <Grid RowDefinitions="0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*" ColumnDefinitions="*,*" >
-                <Label Text="Site In" />
-                <Label Text="Site type" Grid.Column="1" />
-                <local:Dropdown Grid.Row="1" 
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+            <StackLayout Padding="20">
+                <Label Text="End Trace" FontSize="Large" HorizontalOptions="Center" Padding="20" />
+                <Grid RowDefinitions="0.2*,0.5*" ColumnDefinitions="*,*">
+                    <Label Text="Site In" />
+                    <local:Dropdown Grid.Row="1" 
                         ItemsSource="{Binding SiteInList}" ItemDisplayBinding="{Binding HosTagNumber}"
                         SelectedItem="{Binding SelectedTagNum}" />
-                <local:BorderColorEntry Grid.Column="1" Grid.Row="2" x:Name="txtSiteType" 
+                </Grid>
+                <Label Text="Site In" />
+                <Entry x:Name="searchbar" Text="{Binding SearchTag, Mode=TwoWay}" AbsoluteLayout.LayoutBounds="15,70,285,38" AbsoluteLayout.LayoutFlags="None"/>
+                <Picker ItemsSource="{Binding SiteInListView}" ItemDisplayBinding="{Binding HosTagNumber}"
+                      IsVisible="{Binding IsSearching, Mode=TwoWay}" AbsoluteLayout.LayoutBounds="20,110,269,160" AbsoluteLayout.LayoutFlags="None"/>
+
+
+                <Grid RowDefinitions="0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*" ColumnDefinitions="*,*" IsVisible="{Binding IsEntriesDiplayed, Mode=TwoWay}">
+                    <Label Text="Site type" />
+                    <local:BorderColorEntry Grid.Row="1" x:Name="txtSiteType" 
                                             Text="{Binding SelectedTagNum.HostType}"  IsEnabled="False"/>
-                
-                <Label Text="Site name"  Grid.Row="3" Grid.ColumnSpan="2"/>
-                <local:BorderColorEntry  Grid.Row="4" Grid.ColumnSpan="2" x:Name="txtSiteName" 
+
+                    <Label Text="Site name"  Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <local:BorderColorEntry  Grid.Row="3" Grid.ColumnSpan="2" x:Name="txtSiteName" 
                                 Text="{Binding SelectedTagNum.HostType}" IsEnabled="False"/>
 
-                <Label Text="Which Duct? *" Grid.Row="5" />
-                <Label Text="Usage" Grid.Column="1" Grid.Row="5" />
-                <local:Dropdown Grid.Column="0" Grid.Row="6" x:Name="pWDuct" 
+                    <Label Text="Which Duct? *" Grid.Row="4" />
+                    <Label Text="Usage" Grid.Column="1" Grid.Row="4" />
+                    <local:Dropdown Grid.Column="0" Grid.Row="5" x:Name="pWDuct" 
                                  ItemsSource="{Binding DuctConduitDatas}" 
                                  ItemDisplayBinding="{Binding WhichDucts}"
                                  SelectedItem="{Binding SelectedDuct}"                            
                                  />
-                <local:BorderColorEntry Grid.Column="1" Grid.Row="6" Text="{Binding SelectedDuct.DuctUsage}" IsEnabled="False"/>
+                    <local:BorderColorEntry Grid.Column="1" Grid.Row="5" Text="{Binding SelectedDuct.DuctUsage}" IsEnabled="False"/>
 
-                <Label Text="Color" Grid.Column="0" Grid.Row="7" />
-                <Label Text="Size" Grid.Column="1" Grid.Row="7" />
-                <local:BorderEntry Grid.Column="0" Grid.Row="8" Text="{Binding SelectedDuct.DuctColor}" IsEnabled="False"/>
-                <local:BorderColorEntry Grid.Column="1" Grid.Row="8" Text="{Binding SelectedDuct.DuctSize}" IsEnabled="False"/>
+                    <Label Text="Color" Grid.Column="0" Grid.Row="6" />
+                    <Label Text="Size" Grid.Column="1" Grid.Row="6" />
+                    <local:BorderEntry Grid.Column="0" Grid.Row="7" Text="{Binding SelectedDuct.ColorName}" 
+                                            BackgroundColor="{Binding SelectedDuct.ColorHex}" IsEnabled="False"/>
+                    <local:BorderColorEntry Grid.Column="1" Grid.Row="7" Text="{Binding SelectedDuct.DuctSize}" IsEnabled="False"/>
 
-                
-                
-            </Grid>
 
-            <Button Text="Complete Fiber Trace section" Command="{Binding CompleteFiberCommand}" />
-            <Button Text="Suspend" Command="{Binding SuspendCommand}" />
-            <Button Text="Broken Trace Wire" Command="{Binding BrokenTraceWireCommand}" />
-            <Button Text="Delete This Trace" Command="{Binding DeleteTraceCommand}" />            
-        </StackLayout>
+
+                </Grid>
+
+                <Button Text="Complete Fiber Trace section" Command="{Binding CompleteFiberCommand}" />
+                <Button Text="Suspend" Command="{Binding SuspendCommand}" />
+                <Button Text="Broken Trace Wire" Command="{Binding BrokenTraceWireCommand}" />
+                <Button Text="Delete This Trace" Command="{Binding DeleteTraceCommand}" />
+            </StackLayout>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

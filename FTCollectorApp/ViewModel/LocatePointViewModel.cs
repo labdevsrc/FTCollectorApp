@@ -3,6 +3,7 @@ using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.View.SitesPage;
+using FTCollectorApp.View.TraceFiberPages;
 using FTCollectorApp.View.Utils;
 using SQLite;
 using System;
@@ -241,7 +242,7 @@ namespace FTCollectorApp.ViewModel
         {
             RdGpstimer.Stop();
             //await Application.Current.MainPage.Navigation.PopAsync();
-            await Application.Current.MainPage.Navigation.PushAsync(new EndTraceViewModel);
+            await Application.Current.MainPage.Navigation.PushAsync(new EndTracePage());
 
         }
         public async void ExecuteCaptureCommand()

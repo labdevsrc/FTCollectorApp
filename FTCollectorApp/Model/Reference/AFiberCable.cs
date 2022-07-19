@@ -19,7 +19,8 @@ namespace FTCollectorApp.Model.Reference
         public string Model { get; set; }
         public string SMCount { get; set; }
         public string MMCount { get; set; }
-        public string FiberSegmentIdx { get; set; }
+        public string FiberSegmentIdx { get; set; } // for Tracer Page
+
 
     }
 }
