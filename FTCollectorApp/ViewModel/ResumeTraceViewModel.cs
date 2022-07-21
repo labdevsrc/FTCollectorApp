@@ -20,11 +20,11 @@ namespace FTCollectorApp.ViewModel
 
         string from_duct_tag;
         string from_duct_key;
-
+        public ObservableCollection<SuspendedTrace> SspTraceList;
         public ResumeTraceViewModel()
         {
 
-            if (Application.Current.Properties.ContainsKey(Constants.SavedFromDuctTagNumber))
+            /*if (Application.Current.Properties.ContainsKey(Constants.SavedFromDuctTagNumber))
             {
                 from_duct_tag = (string) Application.Current.Properties[Constants.SavedFromDuctTagNumber];
             }
@@ -32,7 +32,7 @@ namespace FTCollectorApp.ViewModel
             if (Application.Current.Properties.ContainsKey(Constants.SavedFromDuctTagNumberKey))
             {
                 from_duct_key = (string) Application.Current.Properties[Constants.SavedFromDuctTagNumberKey];
-            }
+            }*/
 
 
         }
@@ -60,9 +60,19 @@ namespace FTCollectorApp.ViewModel
         }
 
         [ICommand]
-        void ViewSuspended()
+        async void ViewSuspended()
         {
-            // get suspended list from AWS
+            var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<SuspendedTrace>();
+                conn.DeleteAll<SuspendedTrace>();
+                conn.InsertAll(suspList);
+                var table = conn.Table<SuspendedTrace>().ToList();
+                SspTraceList = new ObservableCollection<SuspendedTrace>(table);
+            }
+
         }
     }
 }

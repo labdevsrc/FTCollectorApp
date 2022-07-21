@@ -16,6 +16,32 @@
  
             <Button Padding="10" Text="Resume Tracing" Command="{Binding ResumeCommand}"/>
             <Button Padding="10" Text="View Suspended fiber tracig activity" Command="{Binding ViewSuspendedCommand}"/>
+            <Grid ColumnDefinitions="*,*,*, *">
+                <Label Text="Site" />
+                <Label Text="S.Key" />
+                <Label Text="Duct" />
+                <Label Text="Action" />                
+            </Grid>
+            <ListView ItemsSource="{Binding SspTraceList}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10" >
+                                <Grid ColumnDefinitions="*,*,*,*">
+                                    <Label  Text="{Binding FromDuctSite}"/>
+                                    <Label Grid.Column="1" Text="{Binding FromDuctSiteKey}"/>
+                                    <Label Grid.Column="2" Text="{Binding FromDuctKey}"/>
+                                    <Button Text="GET" Command="{Binding GetDataCommand}" />
+                                </Grid>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+                
+                
+            </ListView>
+        
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

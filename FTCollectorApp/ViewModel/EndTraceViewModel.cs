@@ -28,23 +28,53 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isEntriesDiplayed = true;
 
+        // flag for Hide or show listview 
         [ObservableProperty]
         bool isSearching = false;
 
 
+        // selected tag num in listview
+        ConduitsGroup selectedSiteIn;
+        public ConduitsGroup SelectedSiteIn
+        {
+            get
+            {
+                Console.WriteLine(  );
 
+                return selectedSiteIn;
+            }
+            set 
+            {
+                Console.WriteLine();
+                SetProperty(ref (selectedSiteIn), value);
+                SearchTag = value.HosTagNumber;
+                OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchTag));
+            }
+
+        }
+
+
+        // search bar object
         string searchTag;
         public string SearchTag
         {
-            get => searchTag;
+            get
+            {
+                Console.WriteLine();
+                return searchTag;
+            }
             set
             {
-                IsSearching = true;
-
+                IsSearching = string.IsNullOrEmpty(value) ? false:true;
+                IsEntriesDiplayed = true;
                 SetProperty(ref (searchTag), value);
+
                 OnPropertyChanged(nameof(SiteInListView));
+                Console.WriteLine(  );
             }
         }
+
 
         ConduitsGroup selectedDuct;
         public ConduitsGroup SelectedDuct
@@ -53,13 +83,7 @@ namespace FTCollectorApp.ViewModel
 
             set
             {
-                if (SelectedTagNum.HosTagNumber.Equals("New"))
-                    IsEntriesDiplayed = false;
-                else
-                    IsEntriesDiplayed = true;
-                OnPropertyChanged(nameof(IsEntriesDiplayed));
-                // backup selected duct 
-                Console.WriteLine();
+
                 if (value?.DuctColor != null)
                 {
                     if (int.Parse(value.DuctColor) > 0)
@@ -68,7 +92,8 @@ namespace FTCollectorApp.ViewModel
                         value.ColorHex = colorFiberHex[int.Parse(value.DuctColor) - 1];
                     }
                 }
-                Console.WriteLine( );
+                Console.WriteLine();
+                
                 Session.ToDuct = value;
                 SetProperty(ref selectedDuct, value);
 
@@ -85,15 +110,20 @@ namespace FTCollectorApp.ViewModel
         public ICommand SuspendCommand { get; set; }
         public ICommand BrokenTraceWireCommand { get; set; }
         public ICommand DeleteTraceCommand { get; set; }
+        public ICommand CreateNewCommand { get; set; }
 
-
-
+        
 
 
         public EndTraceViewModel()
         {
+
+
+
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
+
+
                 conn.CreateTable<ConduitsGroup>();
                 var table1 = conn.Table<ConduitsGroup>().ToList();
                 ConduitsGroupListTable = new ObservableCollection<ConduitsGroup>(table1);
@@ -107,6 +137,16 @@ namespace FTCollectorApp.ViewModel
             SuspendCommand = new Command(ExecuteSuspendCommand);
             BrokenTraceWireCommand = new Command(ExecuteBrokenTraceWireCommand);
             DeleteTraceCommand = new Command(ExecuteDeleteTraceCommand);
+            CreateNewCommand = new Command(ExecuteCreateNewCommand);
+        }
+
+        void ExecuteCreateNewCommand()
+        {
+            IsEntriesDiplayed = false;
+            IsSearching = false;
+
+            OnPropertyChanged(nameof(SelectedSiteIn));
+            Console.WriteLine();
         }
 
 
@@ -140,10 +180,10 @@ namespace FTCollectorApp.ViewModel
 
         async void ExecuteSuspendCommand()
         {
-            Application.Current.Properties[Constants.SavedFromDuctTagNumber] = Session.FromDuct.HosTagNumber;
-            Application.Current.Properties[Constants.SavedFromDuctTagNumberKey] = Session.FromDuct.ConduitKey;
-            Application.Current.Properties[Constants.SavedToDuctTagNumber] = Session.ToDuct.HosTagNumber;
-            Application.Current.Properties[Constants.SavedToDuctTagNumberKey] = Session.ToDuct.ConduitKey;
+            Application.Current.Properties[Constants.SavedFromDuctTagNumber] = Session.FromDuct?.HosTagNumber;
+            Application.Current.Properties[Constants.SavedFromDuctTagNumberKey] = Session.FromDuct?.ConduitKey;
+            //Application.Current.Properties[Constants.SavedToDuctTagNumber] = Session.ToDuct?.HosTagNumber;
+            //Application.Current.Properties[Constants.SavedToDuctTagNumberKey] = Session.ToDuct?.ConduitKey;
             await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
             // ToDo
         }
@@ -226,8 +266,8 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     var table = ConduitsGroupListTable.ToList();
-                    if (SelectedTagNum?.HosTagNumber != null)
-                        table = ConduitsGroupListTable.Where(b => b.HosTagNumber == SelectedTagNum.HosTagNumber).ToList();
+                    if (SelectedSiteIn?.HosTagNumber != null)
+                        table = ConduitsGroupListTable.Where(b => b.HosTagNumber == SelectedSiteIn.HosTagNumber).ToList();
 
                     foreach (var col in table)
                     {
@@ -275,8 +315,8 @@ namespace FTCollectorApp.ViewModel
                     if (SearchTag != null)
                     {
                         Console.WriteLine();
-                        table = ConduitsGroupListTable.Where(i => i.HosTagNumber.ToLower().Contains(SearchTag.ToLower())).ToList();
-                        //GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
+                        table = ConduitsGroupListTable.Where(i => i.HosTagNumber.ToLower().Contains(SearchTag.ToLower())).
+                            GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
                     }
                     Console.WriteLine();
                     return new ObservableCollection<ConduitsGroup>(table);

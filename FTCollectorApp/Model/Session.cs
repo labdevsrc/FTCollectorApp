@@ -1,4 +1,5 @@
-﻿using FTCollectorApp.Model.Reference;
+﻿using FTCollectorApp.Model.AWS;
+using FTCollectorApp.Model.Reference;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -66,6 +67,9 @@ namespace FTCollectorApp.Model
         public static AFiberCable? Cable4 { get; set; }
         public static ConduitsGroup? FromDuct { get; set; }
         public static ConduitsGroup? ToDuct { get; set; }
+
+        public static List<UnSyncTaskList?> TaskPendingList { get; set; }
+
         public static int MAX_DIR_CNT { get; set; } = 0;
         // 1: site input
         // 2 : Building/Cabinet/Pole/ input

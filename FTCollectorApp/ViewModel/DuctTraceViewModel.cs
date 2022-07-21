@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
+using FTCollectorApp.Model.AWS;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.View;
@@ -17,8 +18,12 @@ using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class DuctTraceViewModel: ObservableObject
+    public partial class DuctTraceViewModel : ObservableObject
     {
+        string[] colorFiberHex = { "#0000FF", "#FFA500", "#008000", "#A52A2A", "#708090", "#FFFFFF", "#FF0000", "#00000", "#FFFF00", "#963D7F", "#FF00FF", "#00FFFF" };
+        string[] colorFiber = { "Blue", "Orange", "Green", "Brown", "Slate", "White", "Red", "Black", "Yellow", "Violet", "Rose", "Aqua" };
+
+
         [ObservableProperty]
         AFiberCable selectedCable1;
 
@@ -33,19 +38,64 @@ namespace FTCollectorApp.ViewModel
         AFiberCable selectedCable4;
 
 
-        [ObservableProperty]
-        [AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
+        //[ObservableProperty]
+        //[AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
+        //[AlsoNotifyChangeFor(nameof(SearchTag))]
         ConduitsGroup selectedTagNum;
+        public ConduitsGroup SelectedTagNum {
+            get => selectedTagNum;
+            set
+            {
+                SetProperty(ref (selectedTagNum), value);
+                SearchTag = value.HosTagNumber;
+                OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchTag));
+            }
+        }
+
+
+        [ObservableProperty]
+        bool isSearching = false;
+
+        string searchTag;
+        public string SearchTag
+        {
+            get
+            {
+                Console.WriteLine();
+                return searchTag;
+            }
+            set
+            {
+                IsSearching = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchTag), value);
+                OnPropertyChanged(nameof(SiteInListView));
+                Console.WriteLine();
+            }
+        }
 
         ConduitsGroup selectedDuct;
         public ConduitsGroup SelectedDuct
         {
-            get => selectedDuct;
+            get=> selectedDuct;
+
             set
             {
+
+                if (value?.DuctColor != null)
+                {
+                    if (int.Parse(value.DuctColor) > 0)
+                    {
+                        value.ColorName = colorFiber[int.Parse(value.DuctColor) - 1];
+                        value.ColorHex = colorFiberHex[int.Parse(value.DuctColor) - 1];
+                    }
+                }
+                Console.WriteLine();
+                
+                Session.ToDuct = value;
                 SetProperty(ref selectedDuct, value);
-                // backup selected duct 
-                Session.FromDuct = value;
+
             }
         }
 
@@ -75,6 +125,7 @@ namespace FTCollectorApp.ViewModel
 
 
         public ICommand SaveAndContinueCommand { get; set; }
+        public ICommand SaveLocallyAndContinueCommand { get; set; }
         public ICommand RemoveCable1Command { get; set; }
 
         public ICommand RemoveCable2Command { get; set; }
@@ -83,6 +134,7 @@ namespace FTCollectorApp.ViewModel
         public DuctTraceViewModel()
         {
             SaveAndContinueCommand = new Command(ExecuteSaveAndContinueCommand);
+            SaveLocallyAndContinueCommand = new Command(ExecuteSaveLocally);
             RemoveCable1Command = new Command(ExecuteRemoveCable1Command);
             RemoveCable2Command = new Command(ExecuteRemoveCable2Command);
             RemoveCable3Command = new Command(ExecuteRemoveCable3Command);
@@ -109,6 +161,11 @@ namespace FTCollectorApp.ViewModel
             SelectedDuct = new ConduitsGroup();
             SelectedTagNum = new ConduitsGroup();*/
 
+        }
+
+        void ExecuteSaveLocally()
+        {
+            Insert2SQLite();
         }
 
         private void ExecuteRemoveCable1Command()
@@ -243,8 +300,28 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        public ObservableCollection<ConduitsGroup> SiteInListView
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
 
-        List<KeyValuePair<string, string>> keyvaluepair()
+                    var table = ConduitsGroupListTable.GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
+                    if (SearchTag != null)
+                    {
+                        Console.WriteLine();
+                        table = ConduitsGroupListTable.Where(i => i.HosTagNumber.ToLower().Contains(SearchTag.ToLower())).
+                            GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<ConduitsGroup>(table);
+                }
+            }
+        }
+
+
+        List<KeyValuePair<string, string>> mainKVpair()
         {
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
@@ -261,15 +338,48 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("install_method", SelectedDuctInstall?.DuctInstallKey is null ? "0":SelectedDuctInstall.DuctInstallKey),  // 7
                 new KeyValuePair<string, string>("uom", selectedUOM?.UOMKey is null ? "0":selectedUOM.UOMKey),  // 7
                 new KeyValuePair<string, string>("stage", Session.stage),  // 7
+
+
+                new KeyValuePair<string, string>("from_site_duct_direction", SelectedDuct?.Direction is null ? "":SelectedDuct.Direction),
+                new KeyValuePair<string, string>("from_site_duct_direction_count", SelectedDuct?.DirCnt is null ? "":SelectedDuct.DirCnt),
+
+
+                /*new KeyValuePair<string, string>("sheath_mark1", SheathMark1),
+                new KeyValuePair<string, string>("sheath_mark2", SheathMark2),
+                new KeyValuePair<string, string>("sheath_mark3", SheathMark3),
+                new KeyValuePair<string, string>("sheath_mark4", SheathMark4),
+                new KeyValuePair<string, string>("cable_id1", SelectedCable1?.CableIdDesc is null ? "":SelectedCable1.CableIdDesc),
+                new KeyValuePair<string, string>("cable_id2", SelectedCable2?.CableIdDesc is null ? "":SelectedCable2.CableIdDesc),
+                new KeyValuePair<string, string>("cable_id3", SelectedCable3?.CableIdDesc is null ? "":SelectedCable3.CableIdDesc),
+                new KeyValuePair<string, string>("cable_id4", SelectedCable4?.CableIdDesc is null ? "":SelectedCable4.CableIdDesc),
+
+                new KeyValuePair<string, string>("cable_type1", SelectedCable1?.CableType is null ? "":SelectedCable1.CableType),
+                new KeyValuePair<string, string>("cable_type2", SelectedCable2?.CableType is null ? "":SelectedCable2.CableType),
+                new KeyValuePair<string, string>("cable_type3", SelectedCable3?.CableType is null ? "":SelectedCable3.CableType),
+                new KeyValuePair<string, string>("cable_type4", SelectedCable4?.CableType is null ? "":SelectedCable4.CableType),
+
+                new KeyValuePair<string, string>("cable_id1_key", SelectedCable1?.AFRKey is null ? "":SelectedCable1.AFRKey),
+                new KeyValuePair<string, string>("cable_id2_key", SelectedCable2?.AFRKey is null ? "":SelectedCable2.AFRKey),
+                new KeyValuePair<string, string>("cable_id3_key", SelectedCable3?.AFRKey is null ? "":SelectedCable3.AFRKey),
+                new KeyValuePair<string, string>("cable_id4_key", SelectedCable4?.AFRKey is null ? "":SelectedCable4.AFRKey),*/
+
+
+            };
+            return keyValues;
+
+        }
+
+        List<KeyValuePair<string, string>> allKVPair()
+        {
+
+            var allKVpair = mainKVpair();
+
+            var keyValues = new List<KeyValuePair<string, string>>{
+
                 new KeyValuePair<string, string>("sheath_mark1", SheathMark1),
                 new KeyValuePair<string, string>("sheath_mark2", SheathMark2),
                 new KeyValuePair<string, string>("sheath_mark3", SheathMark3),
                 new KeyValuePair<string, string>("sheath_mark4", SheathMark4),
-
-                new KeyValuePair<string, string>("cable_type", Session.jobkey), // 
-                new KeyValuePair<string, string>("from_site_duct_direction", SelectedDuct?.Direction is null ? "":SelectedDuct.Direction),
-                new KeyValuePair<string, string>("from_site_duct_direction_count", SelectedDuct?.DirCnt is null ? "":SelectedDuct.DirCnt),
-
                 new KeyValuePair<string, string>("cable_id1", SelectedCable1?.CableIdDesc is null ? "":SelectedCable1.CableIdDesc),
                 new KeyValuePair<string, string>("cable_id2", SelectedCable2?.CableIdDesc is null ? "":SelectedCable2.CableIdDesc),
                 new KeyValuePair<string, string>("cable_id3", SelectedCable3?.CableIdDesc is null ? "":SelectedCable3.CableIdDesc),
@@ -284,11 +394,164 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("cable_id2_key", SelectedCable2?.AFRKey is null ? "":SelectedCable2.AFRKey),
                 new KeyValuePair<string, string>("cable_id3_key", SelectedCable3?.AFRKey is null ? "":SelectedCable3.AFRKey),
                 new KeyValuePair<string, string>("cable_id4_key", SelectedCable4?.AFRKey is null ? "":SelectedCable4.AFRKey),
-
-
             };
-            return keyValues;
 
+            allKVpair.AddRange(keyValues);
+
+            return allKVpair;
+        }
+
+        void Insert2SQLite()
+        {
+            var a_fiber_segment_table = new List<a_fiber_segment>();
+
+            // put to local SQLite
+            Console.WriteLine();
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                try
+                {
+                    conn.CreateTable<a_fiber_segment>();
+
+
+                    var a_fiber_segmentKV = mainKVpair();
+
+                    // Insert 1 row with Cable1
+                    if (SelectedCable1 != null)
+                    {
+
+                        var test = new a_fiber_segment
+                        {
+                            owner_key = Session.ownerkey,
+                            OWNER_CD = Session.ownerCD,
+                            job = Session.jobnum,
+                            job_key = Session.jobkey,
+                            from_site= SelectedTagNum?.HosTagNumber is null ?"0" : SelectedTagNum.HosTagNumber ,
+                            from_site_key= SelectedTagNum?.HostSiteKey is null ?"0" : SelectedTagNum.HostSiteKey,
+                            from_site_duct= SelectedDuct?.ConduitKey is null ?"0" : SelectedDuct.ConduitKey ,
+                            from_site_duct_key = SelectedDuct?.ConduitKey is null ?"0" : SelectedDuct.ConduitKey,
+                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0":SelectedDuctInstall.DuctInstallKey,
+                            uom= selectedUOM?.UOMKey is null ? "0":selectedUOM.UOMKey,
+                            stage = Session.stage,
+                            AWSid2 = 1,
+                            sheath_out = SheathMark1,
+                            cable_id = SelectedCable1?.CableIdDesc is null ? "" : SelectedCable1.CableIdDesc,
+                            cable_type = SelectedCable1?.CableType is null ? "" : SelectedCable1.CableType,
+                            SyncStatus= "NOTSYNC"
+                        };
+
+
+                        conn.Insert(test);
+                    }
+                    Console.WriteLine();
+
+                    // Insert 1 row with Cable2
+                    if (SelectedCable2 != null)
+                    {
+                        var test = new a_fiber_segment
+                        {
+                            owner_key = Session.ownerkey,
+                            OWNER_CD = Session.ownerCD,
+                            job = Session.jobnum,
+                            job_key = Session.jobkey,
+                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
+                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
+                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
+                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
+                            stage = Session.stage,
+                            AWSid2 = 2,
+                            sheath_out = SheathMark2,
+                            cable_id = SelectedCable2?.CableIdDesc is null ? "" : SelectedCable2.CableIdDesc,
+                            cable_type = SelectedCable2?.CableType is null ? "" : SelectedCable2.CableType,
+                            SyncStatus = "NOTSYNC"
+                        };
+                        conn.Insert(test);
+                    }
+                    Console.WriteLine();
+                    // Insert 1 row with Cable3
+                    if (SelectedCable3 != null)
+                    {
+                        var test = new a_fiber_segment
+                        {
+                            owner_key = Session.ownerkey,
+                            OWNER_CD = Session.ownerCD,
+                            job = Session.jobnum,
+                            job_key = Session.jobkey,
+                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
+                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
+                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
+                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
+                            stage = Session.stage,
+                            AWSid2 = 3,
+                            sheath_out = SheathMark3,
+                            cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc,
+                            cable_type = SelectedCable3?.CableType is null ? "" : SelectedCable3.CableType,
+                            SyncStatus = "NOTSYNC"
+                        };
+                        conn.Insert(test);
+                    }
+
+                    // Insert 1 row with Cable3
+                    if (SelectedCable4 != null)
+                    {
+                        var test = new a_fiber_segment
+                        {
+                            owner_key = Session.ownerkey,
+                            OWNER_CD = Session.ownerCD,
+                            job = Session.jobnum,
+                            job_key = Session.jobkey,
+                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
+                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
+                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
+                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
+                            stage = Session.stage,
+                            AWSid2 = 4,
+                            sheath_out = SheathMark4,
+                            cable_id = SelectedCable4?.CableIdDesc is null ? "" : SelectedCable4.CableIdDesc,
+                            cable_type = SelectedCable4?.CableType is null ? "" : SelectedCable4.CableType,
+                            SyncStatus = "NOTSYNC"
+                        };
+                        conn.Insert(test);
+                    }
+
+                    a_fiber_segment_table = conn.Table<a_fiber_segment>().ToList();
+
+                    Console.WriteLine();
+
+                    var currTask = new UnSyncTaskList
+                    {
+                        startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        targetTable = "a_fiber_segment",
+                        ajaxTarget = Constants.ajaxSaveDuctTrace,
+                        taskName = "INSERT_AFIBERSEGMENT",
+                        status = "UNSYNC",
+                        rowCount = conn.Table<a_fiber_segment>().Count().ToString()
+                    };
+
+
+
+                    Console.WriteLine();
+
+                    // update pending tasklist 
+                    conn.CreateTable<UnSyncTaskList>();
+                    conn.Insert(currTask);
+
+                    // Add to session
+                    Session.TaskPendingList?.Add(currTask);
+
+                    Console.WriteLine(a_fiber_segment_table);
+                }catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
         }
 
         private async void ExecuteSaveAndContinueCommand()
@@ -319,11 +582,12 @@ namespace FTCollectorApp.ViewModel
             }
 
             // put to key map before convert to json
-            var KVPair = keyvaluepair();
+            var KVPair = allKVPair();
 
 
             try
             {
+
                 // JSON convert and send to AWS 
                 var result = await CloudDBService.PostDuctTrace(KVPair);
 

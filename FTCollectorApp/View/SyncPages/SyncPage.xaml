@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FTCollectorApp.View.SyncPages.SyncPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView ItemsSource="{Binding TaskList}" 
+                      SelectedItem="{Binding SelectedTask}" 
+                      >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="SEND" Command="{Binding SendCommand}"/>
+                                <MenuItem Text="REMOVE" Command="{Binding RemoveCommand}" />
+                            </ViewCell.ContextActions>
+                            <StackLayout Padding="10" >
+                                
+                                <Label Text="{Binding targetTable}"  FontSize="Medium"/>
+                                <Label Text="{Binding status}"  FontSize="Medium" />
+                                <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+                                <Label  Text="{Binding startTime, StringFormat='TaskStart @ {0}'}" />
+                                <Label Grid.Column="1"  Text="{Binding endTime, StringFormat='TaskEnd @ {0}'}"  />
+                                </Grid>
+
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+                
+                
+                
+                
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

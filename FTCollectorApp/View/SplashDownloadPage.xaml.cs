@@ -2,6 +2,7 @@
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
+using FTCollectorApp.View.SyncPages;
 using Plugin.Connectivity;
 using SQLite;
 using System;
@@ -431,8 +432,9 @@ namespace FTCollectorApp.View
             // close, exit apps
             // var closer = DependencyService.Get<ICloseApps>();
             // closer?.closeApplication();
-            Navigation.PushAsync(new PendingSendPage());
-            
+            //Navigation.PushAsync(new PendingSendPage());
+            Navigation.PushAsync(new SyncPage());
+
         }
 
         private void Button_Clicked(object sender, EventArgs e)
