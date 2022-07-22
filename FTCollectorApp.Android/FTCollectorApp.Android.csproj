@@ -45,6 +45,8 @@
     <AndroidApkSignerAdditionalArguments>
     </AndroidApkSignerAdditionalArguments>
     <AndroidSigningKeyPass>ftapps123</AndroidSigningKeyPass>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidUseAapt2>false</AndroidUseAapt2>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +70,7 @@
     </AndroidApkSignerAdditionalArguments>
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidLinkSkip>FTCollectorApp</AndroidLinkSkip>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
