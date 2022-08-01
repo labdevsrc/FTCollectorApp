@@ -43,8 +43,8 @@ namespace FTCollectorApp.View.SitesPage
                 DotDistrict.Add(i.ToString());
             }
 
-            YesNo.Add("N");
-            YesNo.Add("Y");
+            YesNo.Add("No");
+            YesNo.Add("Yes");
 
             TagNumber = tagNumber;
             Session.tag_number = TagNumber;

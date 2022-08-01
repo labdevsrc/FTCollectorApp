@@ -8,13 +8,22 @@
         <StackLayout VerticalOptions="FillAndExpand" Margin="10">
             <StackLayout VerticalOptions="CenterAndExpand" Margin="10">
                 <Image Source="logo.png" HorizontalOptions="Center"/>
-                <StackLayout IsVisible="{Binding IsBusy}" Padding="12"
+                <StackLayout IsVisible="{Binding IsBusy, Mode=TwoWay}" Padding="12"
                  AbsoluteLayout.LayoutFlags="PositionProportional"
                  AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
-                    <ActivityIndicator IsRunning="{Binding IsBusy}"  Color="Orange" />
-                    <Label x:Name ="txtLoading" Text="Downloading..." HorizontalOptions="Center" TextColor="Black"/>
+                    <ActivityIndicator IsRunning="{Binding IsBusy, Mode=TwoWay}"  Color="Orange" />
+                    <Label x:Name="txtLoading" Text="{Binding LoadingText}" HorizontalOptions="Center" TextColor="Black"/>
                 </StackLayout>
-                <Button Text="Login" IsVisible="{Binding IsBusy}" HorizontalOptions="Center" Clicked="LoginClicked">
+
+                <Button Text="Login" Command="{Binding LoginCommand}" IsVisible="{Binding IsDisplayButton, Mode=TwoWay}" 
+                        HorizontalOptions="Center" />
+                <Button Text="Retry Download"   Command="{Binding DownloadTablesCommand}" 
+                        IsVisible="{Binding IsDisplayButton, Mode=TwoWay}"  HorizontalOptions="Center" BackgroundColor="Green" />
+                <Button Text="Pending Upload Page"  Command="{Binding DisplayPendingTaskCommand}"  
+                        IsVisible="{Binding IsDisplayButton, Mode=TwoWay}"  HorizontalOptions="Center"/>
+                <!--<Button Text="Just For Test"  Command="{Binding TestCommand}"  
+                        IsVisible="{Binding IsDisplayButton, Mode=TwoWay}"  HorizontalOptions="Center"/>                
+                <Button Clicked="LoginClicked" Text="Login" Command="{Binding LoginCommand}"  HorizontalOptions="Center" >
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                     Binding="{Binding IsBusy}"
@@ -23,7 +32,7 @@
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-                <Button Text="Retry Download" HorizontalOptions="Center" BackgroundColor="Green" Clicked="RetryClicked">
+                <Button Clicked="RetryClicked" Text="Retry Download"   Command="{Binding DownloadTablesCommand}" HorizontalOptions="Center" BackgroundColor="Green" >
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                     Binding="{Binding IsBusy}"
@@ -31,8 +40,8 @@
                             <Setter Property="IsVisible" Value="False" />
                         </DataTrigger>
                     </Button.Triggers>
-                </Button>
-                <Button Text="Pending Upload Page" HorizontalOptions="Center" Clicked="PendingUploadClicked">
+                </Button> 
+                <Button Clicked="PendingUploadClicked" Text="Pending Upload Page"  Command="{Binding DisplayPendingTaskCommand}" HorizontalOptions="Center">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button"
                     Binding="{Binding IsBusy}"
@@ -40,9 +49,9 @@
                             <Setter Property="IsVisible" Value="False" />
                         </DataTrigger>
                     </Button.Triggers>
-                </Button>
+                </Button>-->
             </StackLayout>
-            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0721"/>
+            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0801"/>
         </StackLayout>
         
     </ContentPage.Content>

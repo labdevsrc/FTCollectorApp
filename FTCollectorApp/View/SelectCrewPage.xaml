@@ -15,6 +15,8 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    
+    
     <StackLayout Padding="10" >
         <Grid Padding="20">
             <Grid.RowDefinitions>
@@ -47,8 +49,8 @@
             <Label Grid.Row="3"  Grid.Column="1" FontSize="20" Text="Labor Class"/>
             <Label Grid.Row="3"  Grid.Column="2" FontSize="20" Text="Driver"/>
 
-            <local:Dropdown Grid.Row="4" Grid.Column="0" x:Name="employeePicker1" Title="Select emp" ></local:Dropdown>
-                <local:Dropdown  Grid.Row="4" Grid.Column="1" x:Name="laborPicke1r" Title="Select labor" >
+            <Picker Grid.Row="4" Grid.Column="0" x:Name="employeePicker1" Title="Select Employee" FontSize="Small" TextColor="Black"></Picker>
+            <Picker  Grid.Row="4" Grid.Column="1" x:Name="laborPicke1r" Title="Select labor" FontSize="Medium" TextColor="Black" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -56,17 +58,17 @@
                     <x:String>RCDD</x:String>
                     <x:String>Designer</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
-            <local:Dropdown  Grid.Row="4" Grid.Column="2"  x:Name="driverPicker1" Title="Select driver"  >
+            <Picker  Grid.Row="4" Grid.Column="2"  x:Name="driverPicker1" Title="Select driver" FontSize="Medium" TextColor="Black"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
-            <local:Dropdown Grid.Row="5" Grid.Column="0" x:Name="employeePicker2" Title="Select emp" ></local:Dropdown>
-                <local:Dropdown Grid.Row="5" Grid.Column="1" x:Name="laborPicker2" Title="Select labor" >
+            <Picker Grid.Row="5" Grid.Column="0" x:Name="employeePicker2" Title="Select Employee" FontSize="Small" TextColor="Black"></Picker>
+            <Picker Grid.Row="5" Grid.Column="1" x:Name="laborPicker2" Title="Select labor" FontSize="Medium" TextColor="Black" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -74,16 +76,16 @@
                     <x:String>RCDD</x:String>
                     <x:String>Designer</x:String>
                 </Picker.Items>
-            </local:Dropdown>
-            <local:Dropdown Grid.Row="5" Grid.Column="2"  x:Name="driverPicker2" Title="Select driver"  >
+            </Picker>
+            <Picker Grid.Row="5" Grid.Column="2"  x:Name="driverPicker2" Title="Select driver" FontSize="Medium" TextColor="Black"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
-            <local:Dropdown Grid.Row="6" Grid.Column="0" x:Name="employeePicker3" Title="Select emp" ></local:Dropdown>
-            <local:Dropdown Grid.Row="6" Grid.Column="1" x:Name="laborPicker3" Title="Select labor" >
+            <Picker Grid.Row="6" Grid.Column="0" x:Name="employeePicker3" Title="Select Employee" FontSize="Small" TextColor="Black" ></Picker>
+            <Picker Grid.Row="6" Grid.Column="1" x:Name="laborPicker3" Title="Select labor" FontSize="Medium" TextColor="Black">
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -91,16 +93,16 @@
                     <x:String>RCDD</x:String>
                     <x:String>Designer</x:String>
                 </Picker.Items>
-            </local:Dropdown>
-            <local:Dropdown Grid.Row="6" Grid.Column="2"  x:Name="driverPicker3" Title="Select driver">
+            </Picker>
+            <Picker Grid.Row="6" Grid.Column="2"  x:Name="driverPicker3" Title="Select driver" FontSize="Medium" TextColor="Black" >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
-            <local:Dropdown Grid.Row="7" Grid.Column="0" x:Name="employeePicker4" Title="Select emp" ></local:Dropdown>
-            <local:Dropdown Grid.Row="7" Grid.Column="1" x:Name="laborPicker4" Title="Select labor" >
+            <Picker Grid.Row="7" Grid.Column="0" x:Name="employeePicker4" Title="Select Employee" FontSize="Small" TextColor="Black" ></Picker>
+            <Picker Grid.Row="7" Grid.Column="1" x:Name="laborPicker4" Title="Select labor" FontSize="Medium" TextColor="Black" >
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -108,16 +110,16 @@
                     <x:String>RCDD</x:String>
                     <x:String>Designer</x:String>
                 </Picker.Items>
-            </local:Dropdown>
-            <local:Dropdown Grid.Row="7" Grid.Column="2"  x:Name="driverPicker4" Title="Select driver"  >
+            </Picker>
+            <Picker Grid.Row="7" Grid.Column="2"  x:Name="driverPicker4" Title="Select driver" FontSize="Medium" TextColor="Black"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
-            <local:Dropdown Grid.Row="8" Grid.Column="0" x:Name="employeePicker5" Title="Select emp" ></local:Dropdown>
-            <local:Dropdown Grid.Row="8" Grid.Column="1" x:Name="laborPicker5" Title="Select labor" >
+            <Picker Grid.Row="8" Grid.Column="0" x:Name="employeePicker5" Title="Select Employee" FontSize="Small" TextColor="Black" ></Picker>
+            <Picker Grid.Row="8" Grid.Column="1" x:Name="laborPicker5" Title="Select labor" FontSize="Medium" TextColor="Black">
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -125,16 +127,16 @@
                     <x:String>RCDD</x:String>
                     <x:String>Designer</x:String>
                 </Picker.Items>
-            </local:Dropdown>
-            <local:Dropdown Grid.Row="8" Grid.Column="2"  x:Name="driverPicker5" Title="Select driver"  >
+            </Picker>
+            <Picker Grid.Row="8" Grid.Column="2"  x:Name="driverPicker5" Title="Select driver" FontSize="Medium" TextColor="Black"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
-            <local:Dropdown Grid.Row="9" Grid.Column="0" x:Name="employeePicker6" Title="Select emp" ></local:Dropdown>
-            <local:Dropdown Grid.Row="9" Grid.Column="1" x:Name="laborPicker6" Title="Select labor" >
+            <Picker Grid.Row="9" Grid.Column="0" x:Name="employeePicker6" Title="Select Employee" FontSize="Small" TextColor="Black"  ></Picker>
+            <Picker Grid.Row="9" Grid.Column="1" x:Name="laborPicker6" Title="Select labor" FontSize="Medium" TextColor="Black">
                 <Picker.Items>
                     <x:String>Installer</x:String>
                     <x:String>Technician</x:String>
@@ -142,13 +144,13 @@
                     <x:String>RCDD</x:String>
                     <x:String>Designer</x:String>
                 </Picker.Items>
-            </local:Dropdown>
-            <local:Dropdown Grid.Row="9" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" >
+            </Picker>
+            <Picker Grid.Row="9" Grid.Column="2"  x:Name="driverPicker6" Title="Select driver" FontSize="Medium" TextColor="Black"  >
                 <Picker.Items>
                     <x:String>Driver</x:String>
                     <x:String>Passenger</x:String>
                 </Picker.Items>
-            </local:Dropdown>
+            </Picker>
 
 
         </Grid>

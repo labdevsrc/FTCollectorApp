@@ -101,7 +101,7 @@ namespace FTCollectorApp.ViewModel
         {
             if (string.IsNullOrEmpty(FirstName) && string.IsNullOrEmpty(LastName))
             {
-                Application.Current.MainPage.DisplayAlert("Error", "Email or Password is wrong", "TRY AGAIN");
+                await Application.Current.MainPage.DisplayAlert("Error", "Email or Password is wrong", "TRY AGAIN");
                 Console.WriteLine();
                 return;
             }

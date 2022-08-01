@@ -45,8 +45,11 @@
     <AndroidApkSignerAdditionalArguments>
     </AndroidApkSignerAdditionalArguments>
     <AndroidSigningKeyPass>ftapps123</AndroidSigningKeyPass>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidUseAapt2>false</AndroidUseAapt2>
+    <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <MandroidI18n />
+    <AndroidLinkSkip>
+    </AndroidLinkSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -152,7 +155,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" />
+      <UserProperties XamarinHotReloadWrongLinkerErrorInfoBarFTCollectorAppAndroidHideInfoBar="True" XamarinHotReloadDebuggerTimeoutExceptionFTCollectorAppAndroidHideInfoBar="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

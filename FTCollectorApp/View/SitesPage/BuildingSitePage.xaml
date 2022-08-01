@@ -41,7 +41,7 @@
                             <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Has Power disconnect"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pickerLaneClosure" />
-                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pickerDotDisctrict"/>
+                            <Picker Grid.Row="1" Grid.Column="1" x:Name="pickerDotDisctrict"/>
                             <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pickerHasPowerDisconnect"/>
                             <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>
                             <Label Grid.Row="2" Grid.Column="1" Text="3rd party comms"/>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using CommunityToolkit.Mvvm.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Rg.Plugins.Popup.Pages;
@@ -24,10 +24,24 @@ namespace FTCollectorApp.View
         public string HourMins;
 
         string crewname;
+        public string CrewName
+        {
+            get => crewname;
+            set
+            {
+                if (crewname == null) return;
+                crewname = value;
+                OnPropertyChanged(nameof(CrewName));
+
+            }
+        }
+
+
         public StartTimePopupView(string cname)
         {
             InitializeComponent();
             crewname = cname;
+            BindingContext = this; 
             //_countCrew = countCrew;
         }
 
@@ -65,6 +79,16 @@ namespace FTCollectorApp.View
         {
             var perDiemIdx = pickPerDiem.SelectedIndex.ToString();
             Session.event_type = Session.ClockIn;
+
+            await LocationService.GetLocation();
+
+            Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
+            //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+            //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+            Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
+            Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+            Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
+            //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
 
             try
             {

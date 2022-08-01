@@ -23,7 +23,7 @@
 
             <Style TargetType="Picker" >
                 <Setter Property="TitleColor" Value="Blue" />
-                <Setter Property="TextColor" Value="Aquamarine" />
+                <Setter Property="TextColor" Value="Black" />
             </Style>
 
             <Color x:Key="blueColor">#1E90FF</Color>

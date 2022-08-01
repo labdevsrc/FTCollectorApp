@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
@@ -102,8 +103,8 @@ namespace FTCollectorApp.ViewModel
         private const string JobOwnerKey = "JobOwner";
         private const string JobNumberKey = "JobNumber";
 
-        public Command GPSSettingCommand { get; set; }
-        public Command ContinueCommand { get; set; }
+        public ICommand GPSSettingCommand { get; set; }
+        public ICommand ContinueCommand { get; set; }
         public VerifyJobViewModel()
         {
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))

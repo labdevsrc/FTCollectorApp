@@ -158,7 +158,7 @@ namespace FTCollectorApp.View
 
                 Application.Current.Properties["JobOwner"] = jobOwnersPicker.SelectedIndex;
             }
-        }*/
+        }
 
         protected override void OnDisappearing()
         {
@@ -166,7 +166,7 @@ namespace FTCollectorApp.View
             base.OnDisappearing();
         }
 
-        /*private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
+        private void jobNumbersPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedOwner = jobOwnersPicker.SelectedIndex;
             if (selectedOwner == -1)

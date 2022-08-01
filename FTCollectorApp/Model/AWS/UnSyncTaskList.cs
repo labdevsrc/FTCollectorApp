@@ -9,12 +9,16 @@ namespace FTCollectorApp.Model.AWS
     {
         [PrimaryKey, AutoIncrement]
         public int id { get; set; }
-        public string startTime { get; set; }
-        public string endTime { get; set; }
-        public string targetTable { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public string SyncedTime { get; set; }
+        public string TargetTable { get; set; }
         public string rowCount { get; set; }
         public string ajaxTarget { get; set; }
         public string taskName { get; set; }
-        public string status { get; set; } = "UNSYNC";
+        public string Status { get; set; } = "UNSYNC";
+        public string TableID { get; set; }
+        public string TaskIdList { get; set; }
+        //public List<int> TaskIdList { get; set; }
     }
 }

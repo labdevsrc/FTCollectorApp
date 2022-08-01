@@ -42,7 +42,7 @@ namespace FTCollectorApp
         public const string ajaxSaveGPSPoint = "ajaxSaveGPSPoint.php";
         public const string UpdateSite = "Updatesite.php";
 
-
+        public static string TaskCount = "task_count";
         public static string SavedFromDuctTagNumber = "from_duct_tag";
         public static string SavedFromDuctTagNumberKey = "from_duct_tag_key";
         public static string SavedToDuctTagNumber = "to_duct_tag";

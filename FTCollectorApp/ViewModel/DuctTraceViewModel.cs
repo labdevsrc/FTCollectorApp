@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.AWS;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.View;
+using FTCollectorApp.View.SyncPages;
 using FTCollectorApp.View.TraceFiberPages;
 using Newtonsoft.Json;
 using SQLite;
@@ -167,6 +169,13 @@ namespace FTCollectorApp.ViewModel
         {
             Insert2SQLite();
         }
+
+        [ICommand]
+        async void DisplayTask()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new SyncPage());
+        }
+
 
         private void ExecuteRemoveCable1Command()
         {
@@ -401,54 +410,115 @@ namespace FTCollectorApp.ViewModel
             return allKVpair;
         }
 
+
+
         void Insert2SQLite()
         {
             var a_fiber_segment_table = new List<a_fiber_segment>();
+            int maxId = 1;
+            string listTaskID = string.Empty;
 
             // put to local SQLite
             Console.WriteLine();
+
+            if (Application.Current.Properties.ContainsKey(Constants.TaskCount))
+                maxId = (int) Application.Current.Properties[Constants.TaskCount];
+
+
+
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 try
                 {
+                    // create a_fiber_segment if not exist yet
                     conn.CreateTable<a_fiber_segment>();
+                    var table = conn.Table<a_fiber_segment>().Select(a => a.id).ToList();
+                    var currTask = new UnSyncTaskList
+                    {
+                        StartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        EndTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        TargetTable = "a_fiber_segment",
+                        ajaxTarget = Constants.ajaxSaveDuctTrace,
+                        taskName = "INSERT_AFIBERSEGMENT",
+                        Status = "UNSYNC",
+                        rowCount = conn.Table<a_fiber_segment>().Count().ToString()
+                    };
 
 
-                    var a_fiber_segmentKV = mainKVpair();
+                    foreach (var col in table)
+                    {                        
+                        if (col > maxId)
+                            maxId = col;
+                    }
+                    Console.WriteLine("maxId :" + maxId);
+
+                    //var a_fiber_segmentKV = mainKVpair();
+
+                    var A_Fiber_Segment = new a_fiber_segment
+                    {
+                        owner_key = Session.ownerkey,
+                        OWNER_CD = Session.ownerCD,
+                        job = Session.jobnum,
+                        job_key = Session.jobkey,
+                        from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
+                        from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
+                        from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                        from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                        install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
+                        uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
+                        stage = Session.stage,
+                        created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        created_by = Session.uid,
+                        SyncStatus = "NOTSYNC"
+                    };
+
+
 
                     // Insert 1 row with Cable1
                     if (SelectedCable1 != null)
                     {
 
-                        var test = new a_fiber_segment
+                        /*var test = new a_fiber_segment
                         {
                             owner_key = Session.ownerkey,
                             OWNER_CD = Session.ownerCD,
                             job = Session.jobnum,
                             job_key = Session.jobkey,
-                            from_site= SelectedTagNum?.HosTagNumber is null ?"0" : SelectedTagNum.HosTagNumber ,
-                            from_site_key= SelectedTagNum?.HostSiteKey is null ?"0" : SelectedTagNum.HostSiteKey,
-                            from_site_duct= SelectedDuct?.ConduitKey is null ?"0" : SelectedDuct.ConduitKey ,
-                            from_site_duct_key = SelectedDuct?.ConduitKey is null ?"0" : SelectedDuct.ConduitKey,
-                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0":SelectedDuctInstall.DuctInstallKey,
-                            uom= selectedUOM?.UOMKey is null ? "0":selectedUOM.UOMKey,
+                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
+                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
+                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
+                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
+                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
                             stage = Session.stage,
-                            AWSid2 = 1,
+                            AWSid2 = maxId++,
                             sheath_out = SheathMark1,
                             cable_id = SelectedCable1?.CableIdDesc is null ? "" : SelectedCable1.CableIdDesc,
+                            cable_id_key = SelectedCable1?.AFRKey is null ? "" : SelectedCable1.AFRKey,
                             cable_type = SelectedCable1?.CableType is null ? "" : SelectedCable1.CableType,
-                            SyncStatus= "NOTSYNC"
-                        };
+                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                            created_by = Session.uid,
+                            SyncStatus = "NOTSYNC"
+                        };*/
+                        A_Fiber_Segment.AWSid2 = maxId++;
+                        A_Fiber_Segment.sheath_out = SheathMark1;
+                        A_Fiber_Segment.cable_id = SelectedCable1?.CableIdDesc is null ? "" : SelectedCable1.CableIdDesc;
+                        A_Fiber_Segment.cable_id_key = SelectedCable1?.AFRKey is null ? "" : SelectedCable1.AFRKey;
+                        A_Fiber_Segment.cable_type = SelectedCable1?.CableType is null ? "" : SelectedCable1.CableType;
 
+                        conn.Insert(A_Fiber_Segment);
+                        listTaskID = maxId.ToString();
+                        //currTask.TaskIdList.Add(maxId);
 
-                        conn.Insert(test);
+                        Application.Current.Properties[Constants.TaskCount] = maxId;
+
                     }
                     Console.WriteLine();
 
                     // Insert 1 row with Cable2
                     if (SelectedCable2 != null)
                     {
-                        var test = new a_fiber_segment
+                        /*var test = new a_fiber_segment
                         {
                             owner_key = Session.ownerkey,
                             OWNER_CD = Session.ownerCD,
@@ -461,19 +531,36 @@ namespace FTCollectorApp.ViewModel
                             install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
                             uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
                             stage = Session.stage,
-                            AWSid2 = 2,
+                            AWSid2 = maxId++,
                             sheath_out = SheathMark2,
                             cable_id = SelectedCable2?.CableIdDesc is null ? "" : SelectedCable2.CableIdDesc,
+                            cable_id_key = SelectedCable2?.AFRKey is null ? "" : SelectedCable2.AFRKey,
                             cable_type = SelectedCable2?.CableType is null ? "" : SelectedCable2.CableType,
+                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                            created_by = Session.uid,
                             SyncStatus = "NOTSYNC"
-                        };
-                        conn.Insert(test);
+                        };*/
+
+                        A_Fiber_Segment.AWSid2 = maxId++;
+                        A_Fiber_Segment.sheath_out = SheathMark2;
+                        A_Fiber_Segment.cable_id = SelectedCable2?.CableIdDesc is null ? "" : SelectedCable2.CableIdDesc;
+                        A_Fiber_Segment.cable_id_key = SelectedCable2?.AFRKey is null ? "" : SelectedCable2.AFRKey;
+                        A_Fiber_Segment.cable_type = SelectedCable2?.CableType is null ? "" : SelectedCable2.CableType;
+
+                        conn.Insert(A_Fiber_Segment);
+
+                        if(string.IsNullOrEmpty(listTaskID))
+                            listTaskID = maxId.ToString();
+                        else
+                            listTaskID = listTaskID + "," + maxId.ToString();
+                        //currTask.TaskIdList.Add(maxId);
+                        Application.Current.Properties[Constants.TaskCount] = maxId;
                     }
                     Console.WriteLine();
                     // Insert 1 row with Cable3
                     if (SelectedCable3 != null)
                     {
-                        var test = new a_fiber_segment
+                        /*var test = new a_fiber_segment
                         {
                             owner_key = Session.ownerkey,
                             OWNER_CD = Session.ownerCD,
@@ -486,19 +573,34 @@ namespace FTCollectorApp.ViewModel
                             install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
                             uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
                             stage = Session.stage,
-                            AWSid2 = 3,
+                            AWSid2 = maxId++,
                             sheath_out = SheathMark3,
                             cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc,
+                            cable_id_key = SelectedCable3?.AFRKey is null ? "" : SelectedCable3.AFRKey,
                             cable_type = SelectedCable3?.CableType is null ? "" : SelectedCable3.CableType,
+                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                            created_by = Session.uid,
                             SyncStatus = "NOTSYNC"
-                        };
-                        conn.Insert(test);
+                        };*/
+                        A_Fiber_Segment.AWSid2 = maxId++;
+                        A_Fiber_Segment.sheath_out = SheathMark3;
+                        A_Fiber_Segment.cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc;
+                        A_Fiber_Segment.cable_id_key = SelectedCable3?.AFRKey is null ? "" : SelectedCable3.AFRKey;
+                        A_Fiber_Segment.cable_type = SelectedCable3?.CableType is null ? "" : SelectedCable3.CableType;
+
+                        conn.Insert(A_Fiber_Segment);
+                        //currTask.TaskIdList.Add(maxId);
+                        if (string.IsNullOrEmpty(listTaskID))
+                            listTaskID = maxId.ToString();
+                        else
+                            listTaskID = listTaskID + "," + maxId.ToString();
+                        Application.Current.Properties[Constants.TaskCount] = maxId;
                     }
 
                     // Insert 1 row with Cable3
                     if (SelectedCable4 != null)
                     {
-                        var test = new a_fiber_segment
+                        /*var test = new a_fiber_segment
                         {
                             owner_key = Session.ownerkey,
                             OWNER_CD = Session.ownerCD,
@@ -510,32 +612,37 @@ namespace FTCollectorApp.ViewModel
                             from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
                             install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
                             uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
-                            stage = Session.stage,
-                            AWSid2 = 4,
+                            AWSid2 = maxId++,
                             sheath_out = SheathMark4,
                             cable_id = SelectedCable4?.CableIdDesc is null ? "" : SelectedCable4.CableIdDesc,
+                            cable_id_key = SelectedCable4?.AFRKey is null ? "" : SelectedCable4.AFRKey,
                             cable_type = SelectedCable4?.CableType is null ? "" : SelectedCable4.CableType,
+                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                            created_by = Session.uid,
                             SyncStatus = "NOTSYNC"
                         };
-                        conn.Insert(test);
+                        conn.Insert(test);*/
+                        A_Fiber_Segment.AWSid2 = maxId++;
+                        A_Fiber_Segment.sheath_out = SheathMark3;
+                        A_Fiber_Segment.cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc;
+                        A_Fiber_Segment.cable_id_key = SelectedCable3?.AFRKey is null ? "" : SelectedCable3.AFRKey;
+                        A_Fiber_Segment.cable_type = SelectedCable3?.CableType is null ? "" : SelectedCable3.CableType;
+
+                        conn.Insert(A_Fiber_Segment);
+
+                        //currTask.TaskIdList.Add(maxId);
+                        if (string.IsNullOrEmpty(listTaskID))
+                            listTaskID = maxId.ToString();
+                        else
+                            listTaskID = listTaskID + "," + maxId.ToString();
+                        Application.Current.Properties[Constants.TaskCount] = maxId;
                     }
 
+
+                    currTask.TaskIdList = listTaskID; // text concatenate
+                    currTask.TableID = maxId.ToString();
+
                     a_fiber_segment_table = conn.Table<a_fiber_segment>().ToList();
-
-                    Console.WriteLine();
-
-                    var currTask = new UnSyncTaskList
-                    {
-                        startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        targetTable = "a_fiber_segment",
-                        ajaxTarget = Constants.ajaxSaveDuctTrace,
-                        taskName = "INSERT_AFIBERSEGMENT",
-                        status = "UNSYNC",
-                        rowCount = conn.Table<a_fiber_segment>().Count().ToString()
-                    };
-
-
 
                     Console.WriteLine();
 
@@ -546,7 +653,11 @@ namespace FTCollectorApp.ViewModel
                     // Add to session
                     Session.TaskPendingList?.Add(currTask);
 
-                    Console.WriteLine(a_fiber_segment_table);
+                    foreach (var list in a_fiber_segment_table)
+                    {
+                        Console.WriteLine(list?.ToString());
+                    }
+                    
                 }catch(Exception e)
                 {
                     Console.WriteLine(e);

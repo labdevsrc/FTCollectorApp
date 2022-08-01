@@ -117,7 +117,8 @@
                     </Grid>
 
                     <Button Text="Save and Start Tracing" Command="{Binding SaveAndContinueCommand}"/>
-                <Button Text="Save Locally " IsEnabled="false" Command="{Binding SaveLocallyAndContinueCommand}"/>
+                <Button Text="Save Locally "  Command="{Binding SaveLocallyAndContinueCommand}"/>
+                <Button Text="Show Pending List " Command="{Binding DisplayTaskCommand}"/>
 
             </StackLayout>
             </ScrollView>

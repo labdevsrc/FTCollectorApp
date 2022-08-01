@@ -14,6 +14,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using FTCollectorApp.Model.Reference;
+using System.Collections.ObjectModel;
 
 namespace FTCollectorApp.Service
 {
@@ -1285,6 +1286,36 @@ namespace FTCollectorApp.Service
             return "FAIL";
         }
 
+        public static async Task<string> Post_a_fiber_segment(ObservableCollection<KeyValuePair<string, string>> keyValues)
+        {
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"Post_a_fiber_segment Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    response = await client.PostAsync("a_fiber_segment_save.php", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[Post_a_fiber_segment]Response from  OK = 200 , content :" + isi);
+                        Session.Result = "PortConnOK";
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "PortConnOKFAIL";
+                    return e.ToString();
+                }
+            }
+            return "FAIL";
+        }
 
         public static async Task<string> PostDuctSave(List<KeyValuePair<string, string>> keyValues)
         {

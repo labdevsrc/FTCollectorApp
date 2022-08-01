@@ -1,83 +1,142 @@
-﻿using FTCollectorApp.Model;
-using FTCollectorApp.ViewModel;
-using Plugin.Connectivity;
-using SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Xamarin.Essentials;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using FTCollectorApp.Model;
+using FTCollectorApp.Model.AWS;
+using FTCollectorApp.Model.Reference;
+using FTCollectorApp.Service;
+using FTCollectorApp.View;
+using FTCollectorApp.View.SyncPages;
+using SQLite;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-//using Acr.UserDialogs;
 
-namespace FTCollectorApp.View
+namespace FTCollectorApp.ViewModel
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SplashDownloadPage : ContentPage
+    public partial class SplashDownloadViewModel : ObservableObject
     {
 
-
-        public SplashDownloadPage()
+        public SplashDownloadViewModel()
         {
-            InitializeComponent();
-            BindingContext = new SplashDownloadViewModel();
-            Session.Result = "InitializingDownload";
 
+            LoginCommand = new Command(() => LoginCommandExecute());
+            DisplayPendingTaskCommand = new Command(async () => DisplayPendingTaskCommandExecute());
+            DownloadTablesCommand = new Command(async () => DownloadTablesCommandExecute());
+            DisplayAllertCommand = new Command(async () => DisplayWarning());
+            TestCommand = new Command(async () => Test());
+            
+            //DisplayAllertCommand?.Execute(null);
         }
 
-        /*protected override async void OnAppearing()
+
+        public ICommand LoginCommand { get; set; }
+        public ICommand DisplayPendingTaskCommand { get; set; }
+        public ICommand DownloadTablesCommand {get;set;}
+
+        public ICommand DisplayAllertCommand { get; set; }
+
+        public ICommand TestCommand { get; set; }
+
+
+        async void Test()
         {
-            base.OnAppearing();
-            CrossConnectivity.Current.ConnectivityChanged += OnConnectivityHandler;
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            IsBusy = true;
+            IsDisplayButton = false;
+            LoadingText = "Test Download Site...";
+            var contentSite = await CloudDBService.GetSite();
+
+            Thread.Sleep(3000);
+            LoadingText = "Download done! Populating SQLite...";
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
-                if (!IsBusy)  // blocks overlap display allert when accidentally, user move to other application
-                {
-                    bool answer = await DisplayAlert("Welcome", "Press DOWNLOAD for downloading require tables. Or choose LOGIN for LOGIN directly ", "DOWNLOAD", "LOGIN");
-                    if (answer)
-                        await DownloadTables();
-                    else
-                        Navigation.PushAsync(new LoginPage());
-                        //Navigation.PushAsync(new MainPage());
-                }
+
+
+                LoadingText = "Insert code tables ...";
+
+                conn.CreateTable<Site>();
+                conn.DeleteAll<Site>();
+                conn.InsertAll(contentSite);
+            }
+
+            IsBusy = false;
+            IsDisplayButton = true;
+        }
+
+       async void DisplayWarning()
+        {
+            Console.WriteLine();
+            bool answer = await Application.Current.MainPage.DisplayAlert("Welcome", "Press DOWNLOAD for downloading require tables. Or choose LOGIN for LOGIN directly ", "DOWNLOAD", "LOGIN");
+            if (answer)
+            {
+                Console.WriteLine(  );
+                DownloadTablesCommand?.Execute(null);
             }
             else
             {
-                await DisplayAlert("Warning", "No Internet Available. Turn it ON now then retry", "Close");
+                Console.WriteLine();
+                await Application.Current.MainPage.Navigation.PushAsync(new LoginPage());
             }
 
         }
 
-        private async void OnConnectivityHandler(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
+
+        async void LoginCommandExecute()
         {
-            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            Console.WriteLine();
+            await Application.Current.MainPage.Navigation.PushAsync(new LoginPage());
+        }
+
+
+        async void DisplayPendingTaskCommandExecute()
+        {
+            Console.WriteLine();
+            await Application.Current.MainPage.Navigation.PushAsync(new SyncPage());
+        }
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(IsDisplayButton))]
+        bool isBusy = false;
+
+
+        bool isDisplayButton = true;
+        public bool IsDisplayButton {
+            get => isDisplayButton;
+            set
             {
-                await DownloadTables();
+
+                SetProperty(ref isDisplayButton, !IsBusy);
+                Console.WriteLine();
             }
         }
 
-       async Task DownloadTables()
+
+        [ObservableProperty]
+        string loadingText;
+
+       async void DownloadTablesCommandExecute()
         {
-            IsBusy = true;
-            txtLoading.Text = "Downloading...";
+
+         IsBusy = true;
+            LoadingText = "Downloading...";
             try
             {
-                txtLoading.Text = "Downloading end_user table";
+                LoadingText = "Site...";
+                var contentSite = await CloudDBService.GetSite();
+
+                LoadingText = "Downloading end_user table";
                 var contentUser = await CloudDBService.GetEndUserFromAWSMySQLTable();
-                txtLoading.Text = "Downloading Job table";
+                LoadingText = "Downloading Job table";
                 var contentJob = await CloudDBService.GetJobFromAWSMySQLTable();
                 var contentCodeSiteType = await CloudDBService.GetCodeSiteTypeFromAWSMySQLTable();
-                txtLoading.Text = "Downloading Site table";
+                LoadingText = "Downloading Site table";
                 //var contentSite = await CloudDBService.GetSite();
                 //var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
 
                 var contentCrewDefault = await CloudDBService.GetCrewDefaultFromAWSMySQLTable();
 
-                txtLoading.Text = "Downloading manufacturer table";
+                LoadingText = "Downloading manufacturer table";
                 var contentManuf = await CloudDBService.GetManufacturerTable(); //manufacturer_list 
                 var contentJobSumittal = await CloudDBService.GetJobSubmittalTable(); //job_submittal
                 var contentKeyType = await CloudDBService.GetKeyTypeTable(); // keytype
@@ -86,19 +145,19 @@ namespace FTCollectorApp.View
 
 
                 var unitOfmeasure = await CloudDBService.GetUOM(); //unit_of_measurement
-                txtLoading.Text = "Downloading code_material table";
+                LoadingText = "Downloading code_material table";
                 var contentMaterialCode = await CloudDBService.GetMaterialCodeTable(); // material
                 var contentMounting = await CloudDBService.GetMountingTable(); // mounting
 
-                txtLoading.Text = "Downloading roadway table";
+                LoadingText = "Downloading roadway table";
                 var contentRoadway = await CloudDBService.GetRoadway();  // roadway
                 //var contentOwnRoadway = await CloudDBService.GetOwnerRoadway();  // owner_roadway, this will be joined to roadway
                 var contentElectCircuit = await CloudDBService.GetElectricCircuit(); //intersection
-                txtLoading.Text = "Downloading intersection table";
+                LoadingText = "Downloading intersection table";
                 var contentIntersection = await CloudDBService.GetIntersection(); //electric
 
                 var contentDirection = await CloudDBService.GetDirection(); //direction
-                txtLoading.Text = "Downloading code_duct_size table";
+                LoadingText = "Downloading code_duct_size table";
                 var contentDuctSize = await CloudDBService.GetDuctSize(); //dsize
                 var contentDuctType = await CloudDBService.GetDuctType(); //ducttype
                 var contentGroupType = await CloudDBService.GetGroupType(); //grouptype
@@ -108,23 +167,23 @@ namespace FTCollectorApp.View
                 var contentModelDetail = await CloudDBService.GetModelDetail(); //model
                 var contentRackNumber = await CloudDBService.GetRackNumber();
                 var contentRackType = await CloudDBService.GetRackType(); //racktype
-                txtLoading.Text = "Downloading code_fiber_sheath_type table";
+                LoadingText = "Downloading code_fiber_sheath_type table";
                 var contentSheath = await CloudDBService.GetSheath(); // sheath
                 var contentReelId = await CloudDBService.GetReelId(); // reelid
                 var contentOrientation = await CloudDBService.GetOrientation();  // sbto
                 var contentChassis = await CloudDBService.GetChassis();  // sbto
 
-                txtLoading.Text = "Downloading a_fiber_cable table";
+                LoadingText = "Downloading a_fiber_cable table";
                 var contentAFCable = await CloudDBService.GetAFCable();  // frcable
-                txtLoading.Text = "Downloading a_fiber_reel table";
+                LoadingText = "Downloading a_fiber_reel table";
                 var contentCabStructure = await CloudDBService.GetCableStructure(); //cable_structure
 
                 //var contentSide = await CloudDBService.GetSide(); //side
                 var contentTraceWareTag = await CloudDBService.GetTraceWareTag(); // tracewaretag
-                txtLoading.Text = "Downloading owner table";
-                var contentOwner    = await CloudDBService.GetOwners(); //owners
-                txtLoading.Text = "Downloading owner conduits";
-                var contentConduit   = await CloudDBService.GetConduits(); // conduits
+                LoadingText = "Downloading owner table";
+                var contentOwner = await CloudDBService.GetOwners(); //owners
+                LoadingText = "Downloading owner conduits";
+                var contentConduit = await CloudDBService.GetConduits(); // conduits
 
                 var ductInstallType = await CloudDBService.GetDuctInstallType(); // installtype
                 var fiberInstallType = await CloudDBService.GetFiberInstallType(); // installtype
@@ -132,14 +191,14 @@ namespace FTCollectorApp.View
 
                 var contentDimension = await CloudDBService.GetDimensions();   // dimesnsions
                 var contentFilterSize = await CloudDBService.GetFilterSize(); //fltrsizes
-                txtLoading.Text = "Downloading  code_filter_type table";
+                LoadingText = "Downloading  code_filter_type table";
                 var contentFilterType = await CloudDBService.GetFilterType(); //fltrsizes
                 var contentSpliceType = await CloudDBService.GetSpliceType();//splicetype
-                var contentLaborClass  = await CloudDBService.GetLaborClass();// laborclass
+                var contentLaborClass = await CloudDBService.GetLaborClass();// laborclass
 
 
                 var contentTravellen = await CloudDBService.GetCompassDir(); // travellen
-                txtLoading.Text = "Downloading code_site_type table";
+                LoadingText = "Downloading code_site_type table";
                 var contentBuildingType = await CloudDBService.GetBuildingType(); //bClassification
                 var contentCableType = await CloudDBService.GetCableType(); //code_cable_type
 
@@ -158,17 +217,15 @@ namespace FTCollectorApp.View
 
                 var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
 
-                txtLoading.Text = "Site...";
-                var contentSite = await CloudDBService.GetSiteFromAWSMySQLTable();
+
                 //Thread.Sleep(5000);
-                txtLoading.Text = "Download done! Populating SQLite...";
+                LoadingText = "Download done! Populating SQLite...";
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
-                    conn.CreateTable<Site>();
-                    conn.DeleteAll<Site>();
-                    conn.InsertAll(contentSite);
+                    conn.CreateTable<UnSyncTaskList>();
 
-                    txtLoading.Text = "code tables ...";
+
+                    LoadingText = "Insert code tables ...";
 
                     conn.CreateTable<SuspendedTrace>();
                     conn.DeleteAll<SuspendedTrace>();
@@ -378,14 +435,23 @@ namespace FTCollectorApp.View
                     conn.DeleteAll<SlotBladeTray>();
                     conn.InsertAll(contentslotBladeTray);
 
+
+
+
+                    conn.CreateTable<Site>();
+                    conn.DeleteAll<Site>();
+                    conn.InsertAll(contentSite);
+
                 }
-                txtLoading.Text = "Populating Local SQLite done!";
+                LoadingText = "Populating Local SQLite done!";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                bool answer = await DisplayAlert("Warning", "Error during download database","RETRY", "CLOSE");
-                if (answer)
-                    DownloadTables();
+                Console.WriteLine("Exception " + e.ToString());
+                bool answer = 
+                await Application.Current.MainPage.DisplayAlert("Warning", "Error during download database", "RETRY", "CLOSE");
+                //if (answer)
+                //    DownloadTablesT();
 
                 Console.WriteLine(e.ToString());
 
@@ -393,33 +459,12 @@ namespace FTCollectorApp.View
 
 
 
-            txtLoading.Text = "SQLite Dumping...";
+            LoadingText = "SQLite Dumping...";
 
 
             IsBusy = false;
         }
 
-
-        private void LoginClicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new LoginPage());
-            //Navigation.PushAsync(new MainPage());
-        }
-
-        private void RetryClicked(object sender, EventArgs e)
-        {
-            DownloadTables();
-        }
-
-        private void PendingUploadClicked(object sender, EventArgs e)
-        {
-            // close, exit apps
-            // var closer = DependencyService.Get<ICloseApps>();
-            // closer?.closeApplication();
-            //Navigation.PushAsync(new PendingSendPage());
-            Navigation.PushAsync(new SyncPage());
-
-        }*/
-
     }
+
 }

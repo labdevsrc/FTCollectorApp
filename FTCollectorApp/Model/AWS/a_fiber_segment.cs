@@ -17,6 +17,7 @@ namespace FTCollectorApp.Model.AWS
         public string OWNER_CD { get; set; }
 
         public string cable_id { get; set; }
+        public string cable_id_key { get; set; }
         public string stage { get; set; }
         public string cable_type { get; set; }
         public string install_method { get; set; }
@@ -41,6 +42,8 @@ namespace FTCollectorApp.Model.AWS
         public string cable_length { get; set; }
         public string geo_length { get; set; }
         public string uom { get; set; }
+        public string created_on { get; set; }
+        public int created_by { get; set; }
         public string SyncStatus { get; set; }
     }
 }

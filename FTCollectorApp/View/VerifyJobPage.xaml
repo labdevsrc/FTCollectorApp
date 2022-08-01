@@ -29,12 +29,12 @@
             <Label Grid.Row="0" Grid.ColumnSpan="3" FontSize="40" Text="Verify Job" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"/>
             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
             <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
-            <local:Dropdown Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+            <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                 ItemsSource="{Binding JobsByOwner}" ItemDisplayBinding="{Binding OwnerName}" 
-                            SelectedItem="{Binding SelectedJobOwner, Mode=TwoWay}" />
-            <local:Dropdown Grid.Row="2" Grid.Column="2" 
+                            SelectedItem="{Binding SelectedJobOwner, Mode=TwoWay}" TextColor="Black" />
+            <Picker Grid.Row="2" Grid.Column="2" 
                 ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
-                            SelectedItem="{Binding SelectedJob, Mode=TwoWay}" />
+                            SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />
 
                     <!-- obsolete 
             <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="jobOwnersPicker" Title="Select Owner" SelectedIndexChanged="jobOwnersPicker_SelectedIndexChanged" >
