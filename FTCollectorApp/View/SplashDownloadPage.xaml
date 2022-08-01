@@ -19,9 +19,9 @@
                         HorizontalOptions="Center" />
                 <Button Text="Retry Download"   Command="{Binding DownloadTablesCommand}" 
                         IsVisible="{Binding IsDisplayButton, Mode=TwoWay}"  HorizontalOptions="Center" BackgroundColor="Green" />
-                <Button Text="Pending Upload Page"  Command="{Binding DisplayPendingTaskCommand}"  
+                <!--<Button Text="Pending Upload Page"  Command="{Binding DisplayPendingTaskCommand}"  
                         IsVisible="{Binding IsDisplayButton, Mode=TwoWay}"  HorizontalOptions="Center"/>
-                <!--<Button Text="Just For Test"  Command="{Binding TestCommand}"  
+                <Button Text="Just For Test"  Command="{Binding TestCommand}"  
                         IsVisible="{Binding IsDisplayButton, Mode=TwoWay}"  HorizontalOptions="Center"/>                
                 <Button Clicked="LoginClicked" Text="Login" Command="{Binding LoginCommand}"  HorizontalOptions="Center" >
                     <Button.Triggers>

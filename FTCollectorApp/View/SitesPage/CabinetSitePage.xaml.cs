@@ -26,6 +26,7 @@ namespace FTCollectorApp.View.SitesPage
         string MajorMinorType;
         string TagNumber;
         List<string> DotDistrict = new List<string>();
+        List<string> RackCount = new List<string>();
         List<string> YesNo = new List<string>();
 
 
@@ -94,6 +95,11 @@ namespace FTCollectorApp.View.SitesPage
                 DotDistrict.Add(i.ToString());
             }
 
+            for (int i = 1; i < 20; i++)
+            {
+                RackCount.Add(i.ToString());
+            }
+
             YesNo.Add("No");
             YesNo.Add("Yes");
 
@@ -102,7 +108,7 @@ namespace FTCollectorApp.View.SitesPage
             entryTagNum.Text = tagNumber;
             pickerDotDisctrict.ItemsSource = DotDistrict;
             pickerElectSiteKey.ItemsSource = DotDistrict;
-            pRackCount.ItemsSource = DotDistrict;
+            pRackCount.ItemsSource = RackCount;
             pickerHasPowerDisconnect.ItemsSource = YesNo;
             picker3rdpComms.ItemsSource = YesNo;
             pickerLaneClosure.ItemsSource = YesNo;

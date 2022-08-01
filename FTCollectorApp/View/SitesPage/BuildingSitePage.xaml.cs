@@ -29,7 +29,7 @@ namespace FTCollectorApp.View.SitesPage
         string TagNumber;
         List<string> DotDistrict = new List<string>();
         List<string> YesNo = new List<string>();
-
+        List<string> RackCount = new List<string>();
 
         string Notes, SiteType;
         string InstalledAt, Manufactured;
@@ -59,7 +59,7 @@ namespace FTCollectorApp.View.SitesPage
             pickerElectSiteKey.ItemsSource = DotDistrict;
             picker3rdpComms.ItemsSource = YesNo;
 
-            pRackCount.ItemsSource = DotDistrict;
+            pRackCount.ItemsSource = RackCount;
             pKeyCode.ItemsSource = DotDistrict;
 
             pHaveSunShield.ItemsSource = YesNo;
