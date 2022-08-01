@@ -23,9 +23,9 @@
                     <x:String>Half day per diem</x:String>
                 </Picker.Items>
             </Picker>
-            <Grid ColumnDefinitions="*,*,*,*">
-                <Button x:Name="btnSave" Grid.Column="2" Text="Save" Clicked="btnSave_Clicked"/>
-                <Button x:Name="btnClose" Grid.Column="3" Text="Close" />
+            <Grid ColumnDefinitions="*,*,*">
+                <Button x:Name="btnSave" Grid.Column="1" Text="Save" Clicked="btnSave_Clicked"/>
+                <Button x:Name="btnClose" Grid.Column="2" Text="Close" />
             </Grid>
         </StackLayout>
     </ContentPage.Content>

@@ -319,6 +319,7 @@ namespace FTCollectorApp.View.SitesPage
 
                 new KeyValuePair<string, string>("tag",TagNumber), //8
                 new KeyValuePair<string, string>("site2", entrySiteName.Text),  /// site_id
+                new KeyValuePair<string, string>("owner_tag_number", ownerTagNumber.Text),  /// site_id
                 new KeyValuePair<string, string>("type2", Session.site_type_key),  /// code_site_type.key
                 new KeyValuePair<string, string>("sitname2", entrySiteName.Text),
 
