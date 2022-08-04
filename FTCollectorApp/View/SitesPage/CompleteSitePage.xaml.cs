@@ -49,6 +49,8 @@ namespace FTCollectorApp.View.SitesPage
             ///////////////////////// S3 Bucket  Upload ////////////////////////////
 
             var fileTransferUtility = new TransferUtility(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.USEast2);
+
+            //$fname=$owner."_".$tag."_".$user."_".$page."_".$longitude."_".$lattitude."_".date('Y-m-d-H-i-s').".png";
             try
             {
                 await fileTransferUtility.UploadAsync(App.SignatureFileLocation, Constants.BUCKET_NAME);

@@ -219,14 +219,73 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+
+
+
+
+        /// START - Property, bindable object for Roadway, intersection
+
+        [ObservableProperty]
+        bool isSearchingRoadway = false;
+
+        [ObservableProperty]
+        InterSectionRoad selectedIntersection;
+
+
+        Roadway selectedRoadway;
+        public Roadway SelectedRoadway
+        {
+            get => selectedRoadway;
+            set
+            {
+                SetProperty(ref (selectedRoadway), value);
+                SearchRoadway = value.RoadwayName;
+                OnPropertyChanged(nameof(IntersectionList));
+                OnPropertyChanged(nameof(SearchManufacturer));
+            }
+        }
+
+        string searchRoadway;
+        public string SearchRoadway
+        {
+            get => searchRoadway;
+            set
+            {
+                IsSearchingRoadway = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchRoadway), value);
+                OnPropertyChanged(nameof(IntersectionList));
+                Console.WriteLine();
+            }
+        }
+
+        public ObservableCollection<Roadway> RoadwayList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    Console.WriteLine();
+                    conn.CreateTable<Roadway>();
+                    var rwTable = conn.Table<Roadway>().ToList();
+                    var table = rwTable.Where(a => a.RoadOwnerKey == Session.ownerkey).ToList();
+                    Console.WriteLine();
+                    return new ObservableCollection<Roadway>(table);
+                }
+            }
+        }
+
         public ObservableCollection<InterSectionRoad> IntersectionList
         {
             get
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
+                    Console.WriteLine();
                     conn.CreateTable<InterSectionRoad>();
-                    var data = conn.Table<InterSectionRoad>().Where(b => b.major_roadway == SelectedRoadway.RoadwayKey || b.minor_roadway == SelectedRoadway.RoadwayKey)
+                    var data = conn.Table<InterSectionRoad>().ToList();
+                    if(SelectedRoadway != null)
+                        data = conn.Table<InterSectionRoad>().Where(b => b.major_roadway == SelectedRoadway.RoadwayKey || b.minor_roadway == SelectedRoadway.RoadwayKey)
                         .GroupBy(b => b.IntersectionName).Select(g => g.First()).ToList();
                     Console.WriteLine();
                     //var data = conn.Table<InterSectionRoad>().Where(a => a.OWNER_CD == Session.ownerCD).GroupBy(b => b.IntersectionName).Select(g => g.First()).ToList();
@@ -234,20 +293,6 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
-        public ObservableCollection<Roadway> RoadwayList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<Roadway>();
-                    var rwTable = conn.Table<Roadway>().ToList();
-                    var table = rwTable.Where(a => a.RoadOwnerKey == Session.ownerkey).ToList();
-                    return new ObservableCollection<Roadway>(table);
-                }
-            }
-        }
-
         /// Building Site Page, Structure Site Page, 
         /// 
 
@@ -446,13 +491,6 @@ namespace FTCollectorApp.ViewModel
 
         [ObservableProperty]
         BuildingType selectedBuilding;
-
-        [ObservableProperty]
-        [AlsoNotifyChangeFor(nameof(IntersectionList))]
-        Roadway selectedRoadway;
-
-        [ObservableProperty]
-        InterSectionRoad selectedIntersection;
 
         [ObservableProperty]
         CompassDirection selectedTravelDirection;

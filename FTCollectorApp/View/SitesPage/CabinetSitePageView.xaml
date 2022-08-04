@@ -59,6 +59,26 @@
                         <Picker ItemsSource="{Binding IntersectionList}" 
                                 ItemDisplayBinding="{Binding IntersectionName}" 
                                 SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>-->
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
+                            <Label Text="Choose a roadway"/>
+                        <Label Grid.Column="1" IsVisible="{Binding IsSearchingRoadway}" />
+                            <Entry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
+                            <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
+                          BackgroundColor="LightGray" IsVisible="{Binding IsSearchingRoadway}" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextCell Text="{Binding RoadwayName}"  />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <Label Grid.Column="1" Text="Choose an intersection"/>
+                            <Picker Grid.Column="1" Grid.Row="1" Title="Select model" ItemsSource="{Binding IntersectionList}" 
+                                ItemDisplayBinding="{Binding IntersectionName}"
+                                     SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"
+                                 HorizontalOptions="FillAndExpand" />
+                        </Grid>                        
+                        
+                        
                         <Label Text="Direction of Travel"/>
                         <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" 
                                 SelectedItem="{Binding SelectedTravelDirection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>
@@ -87,12 +107,14 @@
                         </Grid>-->
 
 
+
+
                     <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
 
                         <Label Text="Manufacturer"/>
-                        <Label Grid.Column="1"  Text="--Select--" IsVisible="{Binding IsSearching}" />
+                        <Label Grid.Column="1" IsVisible="{Binding IsSearching}" />
                         <Entry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
-                        <ListView Grid.Column="1" Grid.Row="1" Grid.RowSpan="5" ItemsSource="{Binding ManufacturerList}" SelectedItem="{Binding SelectedManuf, Mode=TwoWay}"                     
+                        <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding ManufacturerList}" SelectedItem="{Binding SelectedManuf, Mode=TwoWay}"                     
                       BackgroundColor="LightGray" IsVisible="{Binding IsSearching}" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -100,8 +122,8 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         </ListView>
-                        <Label Grid.Column="0" Grid.Row="4" Text="Model"/>
-                        <Picker Grid.Column="0" Grid.Row="5" Title="select model" ItemsSource="{Binding ModelDetailList}" 
+                        <Label Grid.Column="1" Text="Model"/>
+                        <Picker Grid.Column="1" Grid.Row="1" Title="Select model" ItemsSource="{Binding ModelDetailList}" 
                             ItemDisplayBinding="{Binding ModelNumber}"
                                  SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
                              HorizontalOptions="FillAndExpand" />
@@ -149,7 +171,7 @@
                             <Label Grid.Row="4" Grid.Column="2" Text="Bucket Truck"/>
                             <local:Dropdown Grid.Row="5" Grid.Column="0" x:Name="pDirectionTravel"/>
                             <local:Dropdown Grid.Row="5" Grid.Column="1" x:Name="pIsSiteClearZone" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsSiteClearZone}"/>
-                            <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IisBucketTruck}"/>
+                            <local:Dropdown Grid.Row="5" Grid.Column="2" x:Name="pBucketTruck" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsBucketTruck}"/>
                         </Grid>
 
                         <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
