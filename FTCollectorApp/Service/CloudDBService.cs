@@ -361,6 +361,59 @@ namespace FTCollectorApp.Service
             return "No Internet Connection";
         }
 
+        public async static Task<string> PostCompleteSite(List<KeyValuePair<string, string>> keyValues)
+        {
+            try
+            {
+                HttpContent content = new FormUrlEncodedContent(keyValues);
+
+                HttpResponseMessage response = null;
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    response = await client.PostAsync(Constants.ajaxEquipmentCheckIn, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        var isi = await response.Content.ReadAsStringAsync();
+                        return isi;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+            }
+            return "FAIL";
+        }
+
+        public async static Task<string> PostEquipmentCheckIn(List<KeyValuePair<string, string>> keyValues)
+        {
+            try
+            {
+                HttpContent content = new FormUrlEncodedContent(keyValues);
+
+                HttpResponseMessage response = null;
+
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    response = await client.PostAsync(Constants.ajaxEquipmentCheckIn, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        var isi = await response.Content.ReadAsStringAsync();
+                        return isi;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+            }
+            return "FAIL";
+        }
 
         public static async Task<string> PostCreateSiteAsync(string tagnum, string typecode)
         {

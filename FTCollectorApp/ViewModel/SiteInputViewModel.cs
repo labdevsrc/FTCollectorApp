@@ -270,7 +270,7 @@ namespace FTCollectorApp.ViewModel
                         }
                         else if (SelectedMajorType.Equals("Cabinet"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new CabinetSitePage(SelectedMinorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new CabinetSitePageView(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Pull Box"))
                         {

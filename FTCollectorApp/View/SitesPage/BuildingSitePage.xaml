@@ -12,6 +12,8 @@
         <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
                  Order="Primary"
                  Priority="0" />
+        <ToolbarItem  Text="Complete" Order="Primary" Clicked="btnComplete"
+                 Priority="0" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -62,7 +64,7 @@
                         <Label Text="Direction of Travel"/>
                         <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Orientation"/>
-                        <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
+                        <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
                             x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>
                         <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
                             <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
@@ -74,15 +76,15 @@
                         </Grid>
                         
                         <Label Text="Material"/>
-                        <local:Dropdown  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
+                        <Picker  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
                             x:Name="pMaterial" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Mounting"/>
                         <Picker ItemsSource="{Binding MountingTypeList}" ItemDisplayBinding="{Binding MountingType}" x:Name="pMounting" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Filter Type"/>
-                        <local:Dropdown ItemsSource="{Binding FilterTypeList}" ItemDisplayBinding="{Binding FilterTypeDesc}"
+                        <Picker ItemsSource="{Binding FilterTypeList}" ItemDisplayBinding="{Binding FilterTypeDesc}"
                             x:Name="pFilterType" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Filter Size"/>
-                        <local:Dropdown  ItemsSource="{Binding FilterSizeList}" ItemDisplayBinding="{Binding data}"
+                        <Picker  ItemsSource="{Binding FilterSizeList}" ItemDisplayBinding="{Binding data}"
                             x:Name="pFilterSize" HorizontalOptions="FillAndExpand"/>
                         <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*">
                             <Label Grid.Row="0" Grid.Column="0"  Text="# Of Racks"/>
@@ -121,7 +123,7 @@
                         <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnFiber" Clicked="btnFiber_Clicked"/>
                         <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer" Clicked="btnTracer_Clicked"/>
                         <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnConnectDevice" Clicked="btnConnectDevice_Clicked"/>
-                        <Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnComplete" Clicked="btnComplete_Clicked"/>
+                        <Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnCompleteTrace" Clicked="btnCompleteTrace_Clicked"/>
                         <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Command="{Binding ShowRackPageCommand}" />
                         <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnActive" Command="{Binding ShowActiveDevicePageCommand}"/>
                         <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Clicked="btnSave_Clicked"/>                        

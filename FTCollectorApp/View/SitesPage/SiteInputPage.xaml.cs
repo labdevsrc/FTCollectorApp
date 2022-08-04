@@ -323,6 +323,7 @@ namespace FTCollectorApp.View.SitesPage
                         else if (selectedMajorType.Equals("Cabinet"))
                         {
                             await Navigation.PushAsync(new CabinetSitePage(selectedMinorType, entryTagNum.Text));
+                            //await Navigation.PushAsync(new CabinetSitePageView(selectedMinorType, entryTagNum.Text));
                         }
                         else if (selectedMajorType.Equals("Pull Box"))
                         {

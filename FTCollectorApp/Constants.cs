@@ -39,6 +39,9 @@ namespace FTCollectorApp
         public const string ajaxSaveDuctTrace = "ajaxSaveDuctTrace.php";
         public const string ajaxSaveEndDuctTrace = "ajaxSaveEndDuctTrace.php";
 
+        public const string ajaxEquipmentCheckIn = "ajaxEquipmentcheckin.php";
+        public const string ajaxSignature = "saveImagee.php";
+
         public const string ajaxSaveGPSPoint = "ajaxSaveGPSPoint.php";
         public const string UpdateSite = "Updatesite.php";
 
@@ -48,6 +51,8 @@ namespace FTCollectorApp
         public static string SavedToDuctTagNumber = "to_duct_tag";
         public static string SavedToDuctTagNumberKey = "to_duct_tag_key";
         public static string LastSavedBeginningDuctKey = "duct_in_duct_trace";
+
+
 
         //////////////////// AWS S3 params - start ////////////////////////////////
         public const string COGNITO_POOL_ID = "us-east-2:5ad27ed4-59be-49f6-b103-3edb3e4d20c5";

@@ -3,6 +3,7 @@ using FTCollectorApp.Model;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
 using FTCollectorApp.View;
+using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.View.TraceFiberPages;
 using SQLite;
 using System;
@@ -146,6 +147,7 @@ namespace FTCollectorApp.ViewModel
 
                 //await Navigation.PushAsync(new SiteInputPage());
                 //await Navigation.PushAsync(new EquipmenReturnPage());
+                //await Application.Current.MainPage.Navigation.PushAsync(new SiteInputPage());
                 await Application.Current.MainPage.Navigation.PushAsync(new BeginWorkPage());
                 //await Application.Current.MainPage.Navigation.PushAsync(new DuctTracePage());
             }

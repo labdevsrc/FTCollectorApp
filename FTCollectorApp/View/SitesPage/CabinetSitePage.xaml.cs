@@ -251,10 +251,11 @@ namespace FTCollectorApp.View.SitesPage
                 TravelDirSelected = selected.ITSFM;
             }
 
+            // found defect
             if (pOrientation.SelectedIndex != -1)
             {
-                var selected = pOrientation.SelectedItem as Orientation;
-                OrientationSelected = selected.OrientationHV;
+                var selected = pOrientation.SelectedItem as CompassDirection;
+                OrientationSelected = selected.ITSFM;
             }
 
             ///////////////////////////////////////////////////////////////////

@@ -51,7 +51,7 @@
                     </Button.Triggers>
                 </Button>-->
             </StackLayout>
-            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0801"/>
+            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0804"/>
         </StackLayout>
         
     </ContentPage.Content>

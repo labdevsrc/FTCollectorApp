@@ -144,14 +144,20 @@ namespace FTCollectorApp.View.SitesPage
 
         }
 
-        private void btnComplete_Clicked(object sender, EventArgs e)
+        private void btnTracer_Clicked(object sender, EventArgs e)
         {
 
         }
 
-        private void btnTracer_Clicked(object sender, EventArgs e)
+
+        private void btnCompleteTrace_Clicked(object sender, EventArgs e)
         {
 
+        }
+
+        async void btnComplete(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CompleteSitePage());
         }
 
         string buildingClassiKeySelected, IntersectionSelected, RoadwaySelected, TravelDirSelected, MaterialCodeKeySelected;
@@ -209,8 +215,8 @@ namespace FTCollectorApp.View.SitesPage
 
             if (pOrientation.SelectedIndex != -1)
             {
-                var selected = pOrientation.SelectedItem as Orientation;
-                OrientationSelected = selected.OrientationHV;
+                var selected = pOrientation.SelectedItem as CompassDirection;
+                OrientationSelected = selected.ITSFM;
             }
 
             ///////////////////////////////////////////////////////////////////

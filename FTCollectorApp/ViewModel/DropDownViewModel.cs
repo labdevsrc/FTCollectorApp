@@ -197,6 +197,8 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+
+
         public ObservableCollection<Roadway> RoadwayList
         {
             get

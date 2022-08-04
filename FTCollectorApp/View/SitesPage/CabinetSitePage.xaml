@@ -57,13 +57,14 @@
                         <Label Text="Direction of Travel"/>
                         <Picker  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}" x:Name="pDirTravel" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Orientation"/>
-                        <local:Dropdown  ItemsSource="{Binding OrientationList}" ItemDisplayBinding="{Binding OrientationDetail}"
+                        <local:Dropdown  ItemsSource="{Binding TravelDirectionList}" ItemDisplayBinding="{Binding CompassDirDesc}"
                             x:Name="pOrientation" HorizontalOptions="FillAndExpand"/>
+
 
                         <Label Text="Manufacturer"/>
                         <Picker  ItemsSource="{Binding ManufacturerList}" ItemDisplayBinding="{Binding ManufName}" x:Name="pManufacturer" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Model"/>
-                        <local:Dropdown ItemDisplayBinding="{Binding ModelNumber}"
+                        <Picker ItemDisplayBinding="{Binding ModelNumber}"
                             x:Name="pModel" HorizontalOptions="FillAndExpand" SelectedIndexChanged="OnChangeModel"/>
 
                         <local:BorderColorEntry x:Name="modelDescription" />
@@ -79,7 +80,7 @@
                         </Grid>
 
                         <Label Text="Material"/>
-                        <local:Dropdown  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
+                        <Picker  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
                             x:Name="pMaterial" HorizontalOptions="FillAndExpand"/>
                         <Label Text="Mounting"/>
                         <Picker ItemsSource="{Binding MountingTypeList}" ItemDisplayBinding="{Binding MountingType}" x:Name="pMounting" HorizontalOptions="FillAndExpand"/>
