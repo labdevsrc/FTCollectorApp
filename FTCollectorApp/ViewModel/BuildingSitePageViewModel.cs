@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
@@ -18,7 +19,7 @@ using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class CabinetSitePageViewModel : ObservableObject
+    public partial class BuildingSitePageViewModel : ObservableObject
     {
         [ObservableProperty]
         string siteType;
@@ -86,10 +87,12 @@ namespace FTCollectorApp.ViewModel
         string selectedRackCount;
 
         bool isKeyTypeDisplay;
-        public bool IsKeyTypeDisplay{
-            get =>isKeyTypeDisplay;
-            set{
-                if(IsHasKey.Equals("Yes"))
+        public bool IsKeyTypeDisplay
+        {
+            get => isKeyTypeDisplay;
+            set
+            {
+                if (IsHasKey.Equals("Yes"))
                     SetProperty(ref isKeyTypeDisplay, true);
                 else
                     SetProperty(ref isKeyTypeDisplay, false);
@@ -122,7 +125,7 @@ namespace FTCollectorApp.ViewModel
                 var yesno = new List<string>();
                 yesno.Add("Yes");
                 yesno.Add("No");
-                    Console.WriteLine();
+                Console.WriteLine();
                 return new ObservableCollection<string>(yesno);
             }
         }
@@ -134,7 +137,7 @@ namespace FTCollectorApp.ViewModel
                 List<string> iterable1to10 = new List<string>();
                 for (int i = 1; i < 20; i++)
                 {
-                    RackCount.Add(i.ToString());
+                    iterable1to10.Add(i.ToString());
                 }
                 Console.WriteLine();
                 return new ObservableCollection<string>(iterable1to10);
@@ -142,40 +145,37 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        public CabinetSitePageViewModel(string siteType, string tagNumber)
+        public BuildingSitePageViewModel(string siteType, string tagNumber)
         {
             Console.WriteLine();
             ShowDuctPageCommand = new Command(async () => ExecuteNavigateToDuctPageCommand());
             ShowRackPageCommand = new Command(async () => ExecuteNavigateToRackPageCommand());
             ShowActiveDevicePageCommand = new Command(async () => ExecuteNavigateToActiveDevicePageCommand());
             SendResultCommand = new Command(resultPage => ExecuteGetResultCommand(ResultPage));
-            CaptureCommand = new Command(ExecuteCaptureCommand);
-            SaveContinueCommand = new Command(ExecuteSaveContinueCommand);
-            CompleteSiteCommand = new Command(ExecuteCompleteSiteCommand);
             Console.WriteLine();
             SiteType = siteType;
             TagNumber = tagNumber;
 
         }
-        public ICommand CompleteSiteCommand { get; set; }
-        public ICommand SaveContinueCommand { get; set; }
-        public ICommand CaptureCommand { get; set; }
+
+
+
         ////////////
         ///
-        public ICommand SendResultCommand { get; set; }
-        public ICommand ShowDuctPageCommand { get; set; }
+        public ICommand SendResultCommand { get; }
+        public ICommand ShowDuctPageCommand { get; }
         private async Task ExecuteNavigateToDuctPageCommand()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
         }
 
-        public ICommand ShowRackPageCommand { get; set; }
+        public ICommand ShowRackPageCommand { get; }
         private async Task ExecuteNavigateToRackPageCommand()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new RacksPage());
         }
 
-        public ICommand ShowActiveDevicePageCommand { get; set; }
+        public ICommand ShowActiveDevicePageCommand { get; }
         private async Task ExecuteNavigateToActiveDevicePageCommand()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new ActiveDevicePage());
@@ -213,6 +213,34 @@ namespace FTCollectorApp.ViewModel
                 }
             }
         }
+
+        /// <summary>
+        /// MaterialCodeList,  MountingTypeList
+        /// </summary>
+
+        [ObservableProperty]
+        MaterialCode selectedMatCode;
+
+        [ObservableProperty]
+        Mounting selectedMounting;
+
+        public ObservableCollection<MaterialCode> MaterialCodeList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<MaterialCode>();
+                    var table = conn.Table<MaterialCode>().ToList();
+                    foreach (var col in table)
+                    {
+                        col.CodeDescription = HttpUtility.HtmlDecode(col.CodeDescription); // should use for escape char "
+                    }
+                    Console.WriteLine();
+                    return new ObservableCollection<MaterialCode>(table);
+                }
+            }
+        }
         public ObservableCollection<Mounting> MountingTypeList
         {
             get
@@ -221,6 +249,7 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<Mounting>();
                     var mountingTable = conn.Table<Mounting>().ToList();
+                    Console.WriteLine();
                     return new ObservableCollection<Mounting>(mountingTable);
                 }
             }
@@ -325,30 +354,14 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+
+
+        /// start
         [ObservableProperty]
-        MaterialCode selectedMatCode;
+        FilterType selectedFilterType;
 
         [ObservableProperty]
-        Mounting selectedMounting;
-
-        public ObservableCollection<MaterialCode> MaterialCodeList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<MaterialCode>();
-                    var table = conn.Table<MaterialCode>().ToList();
-                    foreach (var col in table)
-                    {
-                        col.CodeDescription = HttpUtility.HtmlDecode(col.CodeDescription); // should use for escape char "
-                    }
-                    return new ObservableCollection<MaterialCode>(table);
-                }
-            }
-        }
-
-
+        FilterSize selectedFilterSize;
         public ObservableCollection<FilterType> FilterTypeList
         {
             get
@@ -361,6 +374,7 @@ namespace FTCollectorApp.ViewModel
                     {
                         col.FilterTypeDesc = HttpUtility.HtmlDecode(col.FilterTypeDesc); // should use for escape char "
                     }
+                    Console.WriteLine();
                     return new ObservableCollection<FilterType>(table);
                 }
             }
@@ -378,24 +392,12 @@ namespace FTCollectorApp.ViewModel
                     {
                         col.data = HttpUtility.HtmlDecode(col.data); // should use for escape char "
                     }
+                    Console.WriteLine();
                     return new ObservableCollection<FilterSize>(table);
                 }
             }
         }
-
-        public ObservableCollection<Tracewaretag> TracewiretagList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<Tracewaretag>();
-                    var rwTable = conn.Table<Tracewaretag>().ToList();
-                    var table = rwTable.Where(a => a.SiteOwnerKey == Session.ownerkey).ToList();
-                    return new ObservableCollection<Tracewaretag>(table);
-                }
-            }
-        }
+        ///--end
 
         public ObservableCollection<Orientation> OrientationList
         {
@@ -411,7 +413,7 @@ namespace FTCollectorApp.ViewModel
         }
 
         //Properties, Bindable object for manufacturer dropdown list - start
-        [ObservableProperty]
+        /*[ObservableProperty]
         bool isSearching = false;
 
         [ObservableProperty]
@@ -495,7 +497,7 @@ namespace FTCollectorApp.ViewModel
                     return new ObservableCollection<ModelDetail>(table);
                 }
             }
-        }
+        }*/
 
         //Properties, Bindable object for manufacturer dropdown list - end
 
@@ -630,8 +632,8 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-
-        async void ExecuteSaveContinueCommand()
+        [ICommand]
+        async void SaveContinue()
         {
             Console.WriteLine();
             var KVPair = keyvaluepair();
@@ -645,16 +647,19 @@ namespace FTCollectorApp.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
 
             }
+            //btnRecDucts.IsEnabled = true;
+            //btnRecRacks.IsEnabled = true;
 
         }
 
-        
-        async void ExecuteCompleteSiteCommand()
+        [ICommand]
+        async void CompleteSite()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new CompleteSitePage());
         }
 
-        async void ExecuteCaptureCommand()
+        [ICommand]
+        async void Capture()
         {
 
             await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());

@@ -45,7 +45,7 @@ namespace FTCollectorApp.View
         {
             var speaker = DependencyService.Get<ITextToSpeech>();
             speaker?.Speak("New Site");
-            Navigation.PushAsync(new SiteInputPage());
+            Navigation.PushAsync(new CreateSite());
         }
 
         public ICommand ResultCommand { get; set; }

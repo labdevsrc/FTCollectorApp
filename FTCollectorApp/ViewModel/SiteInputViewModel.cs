@@ -266,7 +266,7 @@ namespace FTCollectorApp.ViewModel
                         // move to next page
                         if (SelectedMajorType.Equals("Building"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new BuildingSitePage(SelectedMinorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new BuildingSitePageView(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Cabinet"))
                         {

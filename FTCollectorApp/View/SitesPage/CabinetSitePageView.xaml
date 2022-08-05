@@ -7,6 +7,7 @@
         <ToolbarItem  Command="{Binding CaptureCommand}" IconImageSource="cam_white.png" 
                  Order="Primary"
                  Priority="0" />
+        <ToolbarItem  Text="Complete" Command="{Binding CompleteSiteCommand}" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <!--<AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">-->
@@ -52,17 +53,11 @@
                         <Label Text="Building Classification"/>
                         <Picker ItemsSource="{Binding BuildingTypeList}" ItemDisplayBinding="{Binding TYPE_DESC}" 
                                 SelectedItem="{Binding SelectedBuilding, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
-                    <!--<Label Text="Choose a roadway"/>
-                        <Picker ItemsSource="{Binding RoadwayList}" ItemDisplayBinding="{Binding RoadwayName}"  
-                                SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
-                        <Label Text="Choose an intersection"/>
-                        <Picker ItemsSource="{Binding IntersectionList}" 
-                                ItemDisplayBinding="{Binding IntersectionName}" 
-                                SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"   HorizontalOptions="FillAndExpand"/>-->
+
                         <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
                             <Label Text="Choose a roadway"/>
                         <Label Grid.Column="1" IsVisible="{Binding IsSearchingRoadway}" />
-                            <Entry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
+                        <local:BorderEntry Grid.Row="1" Text="{Binding SearchRoadway, Mode=TwoWay}" Placeholder="type roadway" PlaceholderColor="aqua"/>
                             <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding RoadwayList}" SelectedItem="{Binding SelectedRoadway, Mode=TwoWay}"                     
                           BackgroundColor="LightGray" IsVisible="{Binding IsSearchingRoadway}" >
                                 <ListView.ItemTemplate>
@@ -72,7 +67,7 @@
                                 </ListView.ItemTemplate>
                             </ListView>
                             <Label Grid.Column="1" Text="Choose an intersection"/>
-                            <Picker Grid.Column="1" Grid.Row="1" Title="Select model" ItemsSource="{Binding IntersectionList}" 
+                            <Picker Grid.Column="1" Grid.Row="1" Title="Select Intersection" ItemsSource="{Binding IntersectionList}" 
                                 ItemDisplayBinding="{Binding IntersectionName}"
                                      SelectedItem="{Binding SelectedIntersection, Mode=TwoWay}"
                                  HorizontalOptions="FillAndExpand" />
@@ -87,33 +82,31 @@
                                 SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
 
 
-                    <!--<Label Text="Material"/>
+                    <Label Text="Material"/>
                         <Picker  ItemsSource="{Binding MaterialCodeList}" ItemDisplayBinding="{Binding CodeDescription}"
                                  SelectedItem="{Binding SelectedMatCode,Mode=TwoWay}"
-                            x:Name="pMaterial" HorizontalOptions="FillAndExpand"/>
-                        <Label Text="Mounting"/>
-                        <Picker ItemsSource="{Binding MountingTypeList}" 
-                                ItemDisplayBinding="{Binding MountingType}" 
-                                SelectedItem="{Binding SelectedMountType, Mode=TwoWay}"
-                                HorizontalOptions="FillAndExpand"/>
+                            HorizontalOptions="FillAndExpand"/>
+                    <Label Text="Mounting"/>
+                    <Picker ItemsSource="{Binding MountingTypeList}" 
+                            ItemDisplayBinding="{Binding MountingType}" 
+                            SelectedItem="{Binding SelectedMounting, Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand"/>
 
-                        <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*">
-                            <Label Grid.Row="0" Grid.Column="0"  Text="# Of Racks"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="key code"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="0" x:Name="pRackCount" 
-                                            ItemsSource="{Binding RackCount}" SelectedItem="{Binding SelectedRackCount, Mode=TwoWay}"/>
-                            <local:Dropdown Grid.Row="1" Grid.Column="1" x:Name="pKeyCode"
-                                            ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedKeyCode, Mode=TwoWay}"/>
-                        </Grid>-->
-
-
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*" ColumnDefinitions="*,*">
+                        <Label Grid.Row="0" Grid.Column="0"  Text="# Of Racks"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="key code"/>
+                        <local:Dropdown Grid.Row="1" Grid.Column="0" 
+                                        ItemsSource="{Binding RackCount}" SelectedItem="{Binding SelectedRackCount, Mode=TwoWay}"/>
+                        <local:Dropdown Grid.Row="1" Grid.Column="1"
+                                        ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedKeyCode, Mode=TwoWay}"/>
+                    </Grid>
 
 
                     <Grid ColumnDefinitions="*,*" RowDefinitions="0.1*,0.2*,0.2*,0.2*,0.2*,0.2*">
 
                         <Label Text="Manufacturer"/>
                         <Label Grid.Column="1" IsVisible="{Binding IsSearching}" />
-                        <Entry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
+                        <local:BorderEntry Grid.Row="1" Text="{Binding SearchManufacturer, Mode=TwoWay}" Placeholder="type manufacturer" PlaceholderColor="aqua"/>
                         <ListView  Grid.Row="2" Grid.RowSpan="4" ItemsSource="{Binding ManufacturerList}" SelectedItem="{Binding SelectedManuf, Mode=TwoWay}"                     
                       BackgroundColor="LightGray" IsVisible="{Binding IsSearching}" >
                         <ListView.ItemTemplate>
@@ -179,9 +172,9 @@
                         <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer"/>
                         <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnConnectDevice"/>
                         <Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnComplete" />
-                        <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnRecRacks" Command="{Binding ShowRackPageCommand}" />
-                        <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnActive" Command="{Binding ShowActiveDevicePageCommand}"/>
-                        <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" x:Name="btnSave" Command="{Binding SaveContinueCommand}"/>
+                        <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
+                        <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
+                        <Button Text="Save and Continue" HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>
                     </StackLayout>
 
                 </ScrollView>

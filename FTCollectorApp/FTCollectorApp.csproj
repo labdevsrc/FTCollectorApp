@@ -13,18 +13,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModel\BdSitePageViewModel.cs" />
+    <Compile Remove="ViewModel\BuildingSiteViewModel.cs" />
     <Compile Remove="ViewModel\FOCViewModel.cs" />
     <Compile Remove="ViewModel\MapViewModel.cs" />
     <Compile Remove="View\ChooseColorPopUp.xaml.cs" />
+    <Compile Remove="View\SitesPage\CabinetSitePage.xaml.cs" />
     <Compile Remove="View\SitesPage\Fiber\FiberOpticCable.xaml.cs" />
     <Compile Remove="View\SitesPage\Fiber\MMColorCodePopUp.xaml.cs" />
+    <Compile Remove="View\SitesPage\SiteInputPage.xaml.cs" />
     <Compile Remove="View\StartTimePopUpViewNew.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="View\ChooseColorPopUp.xaml" />
+    <EmbeddedResource Remove="View\SitesPage\CabinetSitePage.xaml" />
     <EmbeddedResource Remove="View\SitesPage\Fiber\FiberOpticCable.xaml" />
     <EmbeddedResource Remove="View\SitesPage\Fiber\MMColorCodePopUp.xaml" />
+    <EmbeddedResource Remove="View\SitesPage\SiteInputPage.xaml" />
     <EmbeddedResource Remove="View\StartTimePopUpViewNew.xaml" />
   </ItemGroup>
 
@@ -112,7 +118,7 @@
     <EmbeddedResource Update="View\PendingSendPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\SitesPage\CabinetSitePage.xaml">
+    <EmbeddedResource Update="View\SitesPage\BuildingSitePageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\CabinetSitePageView.xaml">
@@ -155,9 +161,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\RecordInnerDuct.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\SitesPage\SiteInputPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\SlotBladePage.xaml">
@@ -210,9 +213,6 @@
   <ItemGroup>
     <Compile Update="View\SitesPage\DuctColorCodePopUp.xaml.cs">
       <DependentUpon>DuctColorCodePopUp.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="View\SitesPage\SiteInputPage.xaml.cs">
-      <DependentUpon>SiteInputPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>
