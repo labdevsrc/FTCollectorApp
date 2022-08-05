@@ -32,7 +32,8 @@ namespace FTCollectorApp.ViewModel
             set
             {
                 SetProperty(ref tagNumber, value);
-                if(!string.IsNullOrEmpty(ReEnterTagNumber))
+                Session.tag_number = value;
+                if (!string.IsNullOrEmpty(ReEnterTagNumber))
                     CheckTagNumberCommand?.Execute(null); // when reentertag changed, do checktagnumber 
             }
         }
@@ -88,6 +89,7 @@ namespace FTCollectorApp.ViewModel
 
 
         ObservableCollection<CodeSiteType> CodeSiteTypeList;
+
 
         public SiteInputViewModel()
         {
@@ -209,13 +211,56 @@ namespace FTCollectorApp.ViewModel
 
         private async void ExecuteRecordCommand()
         {
+            // get current tag_number's site_type
             string result = String.Empty;
             Console.WriteLine();
             codekey = CodeSiteTypeList.Where(a => (a.MajorType == SelectedMajorType) && (a.MinorType == SelectedMinorType)).Select(a => a.CodeKey).First();
             Session.site_type_key = codekey;
-            Console.WriteLine();
             Console.WriteLine($"key {codekey}, MajorType {SelectedMajorType}, MinorType {SelectedMinorType}");
-            Console.WriteLine();
+
+            // get current tag_number's key
+            ObservableCollection<Site> Sites;
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<Site>();
+                var table = conn.Table<Site>().ToList();
+                int maxSiteKey = 0;
+                bool siteKeyTableExisted = false;
+                foreach (var col in table)
+                {
+                    if (col.SiteKey != null)
+                    {
+                        if (int.Parse(col.SiteKey) > maxSiteKey)
+                            maxSiteKey = int.Parse(col.SiteKey);
+                    }
+                    // check if entered Site is already existed in Local SQLite
+                    if (col.SiteName.Equals(Session.tag_number))
+                    {
+                        Session.site_key = col.SiteKey;
+                        siteKeyTableExisted = true;
+                    }
+                }
+
+                if (!siteKeyTableExisted)
+                {
+                    Session.site_key = (maxSiteKey+1).ToString();
+                    conn.Insert(new Site
+                    {
+                        SiteKey = (maxSiteKey + 1).ToString(),
+                        SiteName = Session.tag_number,
+                        TagNumber = Session.tag_number,
+                        SiteId = Session.tag_number,
+                        OwnerKey = Session.ownerkey,
+                        SiteTypeKey = Session.site_type_key
+                    });
+                    Console.WriteLine();
+                }
+
+            }
+
+
+
+
             if (IsTagNumberMatch)
             {
                 OnPropertyChanged(nameof(ReEnterStatus)); // notify the status to display "Match"

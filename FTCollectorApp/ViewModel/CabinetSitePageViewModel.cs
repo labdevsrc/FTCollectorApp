@@ -134,7 +134,7 @@ namespace FTCollectorApp.ViewModel
                 List<string> iterable1to10 = new List<string>();
                 for (int i = 1; i < 20; i++)
                 {
-                    RackCount.Add(i.ToString());
+                    iterable1to10.Add(i.ToString());
                 }
                 Console.WriteLine();
                 return new ObservableCollection<string>(iterable1to10);
