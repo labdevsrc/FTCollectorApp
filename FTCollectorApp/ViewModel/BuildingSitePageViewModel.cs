@@ -531,6 +531,14 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string installedAt;
 
+        [ObservableProperty]
+        string height;
+        [ObservableProperty]
+        string depth;
+        [ObservableProperty]
+        string width;
+
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             /*url: 'ajaxSavecabinet.php',      
@@ -583,20 +591,20 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("comm", Is3rdComms.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
-                new KeyValuePair<string, string>("udsowner", ""),
+                new KeyValuePair<string, string>("udsowner", UDSOwner),
 
                 new KeyValuePair<string, string>("rs2", "L"),
 
-                //new KeyValuePair<string, string>("height2", entryHeight.Text),
-                //new KeyValuePair<string, string>("depth2", entryDepth.Text),
-                //new KeyValuePair<string, string>("width2", entryWidth.Text),
+                new KeyValuePair<string, string>("height2", Height),
+                new KeyValuePair<string, string>("depth2", Depth),
+                new KeyValuePair<string, string>("width2", Width),
                 new KeyValuePair<string, string>("CLEAR_ZONE_IND2", IsSiteClearZone.Equals("Yes") ? "1":"0"),
 
                 new KeyValuePair<string, string>("intersect2", SelectedIntersection?.IntersectionKey is null ? "": SelectedIntersection.IntersectionKey),
                 new KeyValuePair<string, string>("material2", SelectedMatCode?.MaterialKey is null ? "":SelectedMatCode.MaterialKey),
                 new KeyValuePair<string, string>("mounting2", SelectedMounting?.MountingKey is null ? "":SelectedMounting.MountingKey),
-                new KeyValuePair<string, string>("offilter2", ""),//FilterTypeSelected),
-                new KeyValuePair<string, string>("fltrsize2", ""),//FilterSizeKeySelected),
+                new KeyValuePair<string, string>("offilter2", SelectedFilterType?.FilterTypeKey is null ? "": SelectedFilterType.FilterTypeKey ),//FilterTypeSelected),
+                new KeyValuePair<string, string>("fltrsize2", SelectedFilterSize?.FtSizeKey  is null ? "": SelectedFilterSize.FtSizeKey  ),//FilterSizeKeySelected),
                 new KeyValuePair<string, string>("sunshield2", IsHaveSunShield.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description

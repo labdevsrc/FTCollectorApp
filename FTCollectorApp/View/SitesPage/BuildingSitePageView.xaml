@@ -92,6 +92,16 @@
                             SelectedItem="{Binding SelectedMounting, Mode=TwoWay}"
                             HorizontalOptions="FillAndExpand"/>
 
+                    <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
+                        <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding Height, Mode=OneWay}"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding Depth, Mode=OneWay}"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding Width, Mode=OneWay}"/>
+                    </Grid>
+
+                    <Label Text="Filter Type"/>
                     <Picker ItemsSource="{Binding FilterTypeList}" ItemDisplayBinding="{Binding FilterTypeDesc}"
                             SelectedItem="{Binding SelectedFilterType, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
                     <Label Text="Filter Size"/>
@@ -111,9 +121,9 @@
                     <local:BorderEntry Text="{Binding SerialNumber,Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
 
                     <Label Text="Enter manufactured" />
-                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding Manufactured}"/>
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding Manufactured, Mode=TwoWay}"/>
                     <Label Text="Installed at" />
-                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding InstalledAt}"/>
+                    <DatePicker HorizontalOptions="FillAndExpand" Date="{Binding InstalledAt, Mode=TwoWay}"/>
 
                     <Label Text="Enter notes and comments"/>
                     <Editor Text="{Binding Notes,Mode=TwoWay}" Placeholder="Enter notes here" 

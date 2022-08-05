@@ -125,16 +125,14 @@
 
                     <local:BorderColorEntry Text="{Binding SelectedModelDetail.ModelDescription}"/> 
                     <Grid Padding="0,5,10,5" RowDefinitions="0.5*,*" ColumnDefinitions="*,*,*">
-                            <Label Grid.Row="0" Grid.Column="0"  Text="Enter Height"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="Enter Depth"/>
-                            <Label Grid.Row="0" Grid.Column="2" Text="Enter Width"/>
+                            <Label Grid.Row="0" Grid.Column="0"  Text="Height"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Depth"/>
+                            <Label Grid.Row="0" Grid.Column="2" Text="Width"/>
                         <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding SelectedModelDetail.height}"/>
                         <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding SelectedModelDetail.depth}"/>
                         <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding SelectedModelDetail.width}"/>
                     </Grid>
 
-                    <Label Text="Material"/>
-                    <Label Text="Mounting"/>
                     <Label Text="Enter serial number" />
                     <local:BorderEntry Text="{Binding SerialNumber,Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
 

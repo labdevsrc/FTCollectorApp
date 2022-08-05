@@ -349,54 +349,6 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        public ObservableCollection<FilterType> FilterTypeList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<FilterType>();
-                    var table = conn.Table<FilterType>().ToList();
-                    foreach (var col in table)
-                    {
-                        col.FilterTypeDesc = HttpUtility.HtmlDecode(col.FilterTypeDesc); // should use for escape char "
-                    }
-                    return new ObservableCollection<FilterType>(table);
-                }
-            }
-        }
-
-        public ObservableCollection<FilterSize> FilterSizeList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<FilterSize>();
-                    var table = conn.Table<FilterSize>().ToList();
-                    foreach (var col in table)
-                    {
-                        col.data = HttpUtility.HtmlDecode(col.data); // should use for escape char "
-                    }
-                    return new ObservableCollection<FilterSize>(table);
-                }
-            }
-        }
-
-        public ObservableCollection<Tracewaretag> TracewiretagList
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-                    conn.CreateTable<Tracewaretag>();
-                    var rwTable = conn.Table<Tracewaretag>().ToList();
-                    var table = rwTable.Where(a => a.SiteOwnerKey == Session.ownerkey).ToList();
-                    return new ObservableCollection<Tracewaretag>(table);
-                }
-            }
-        }
-
         public ObservableCollection<Orientation> OrientationList
         {
             get
@@ -581,7 +533,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("comm", Is3rdComms.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
-                new KeyValuePair<string, string>("udsowner", ""),
+                new KeyValuePair<string, string>("udsowner", UDSOwner),
 
                 new KeyValuePair<string, string>("rs2", "L"),
 
