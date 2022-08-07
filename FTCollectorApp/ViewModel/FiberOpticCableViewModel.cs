@@ -58,8 +58,26 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string newCableName;
 
-        [ObservableProperty]
+        //[ObservableProperty]
+        //[AlsoNotifyChangeFor(nameof(CableTypeList))]
+        //[AlsoNotifyChangeFor(nameof(NewFiber))]
+
+
         AFiberCable selectedFiberCable;
+        public AFiberCable SelectedFiberCable
+        {
+            get => selectedFiberCable;
+            set
+            {
+                SetProperty(ref selectedFiberCable, value);
+                if (value.CableIdDesc != null) {
+                    if (value.CableIdDesc.Equals("New")){
+                        NewFiber = true; OnPropertyChanged(nameof(NewFiber));
+                        // add other TODO when New fiber cable selected
+                    }
+                }
+            }
+        }
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(ModelDetailList))]
@@ -130,6 +148,8 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        [ObservableProperty]
+        bool newFiber;
 
         public ObservableCollection<AFiberCable> aFiberCableList
         {
@@ -210,6 +230,8 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<CableType>();
                     var table = conn.Table<CableType>().ToList();
+                    if(SelectedFiberCable != null)
+                        table = conn.Table<CableType>().Where(a => a.CodeCableKey == SelectedFiberCable.CableIdDesc  .CableType).ToList();
                     return new ObservableCollection<CableType>(table);
                 }
             }

@@ -30,13 +30,13 @@
 
                 </local:BorderEntry>
 
-                <Label Text="Cable Type" HorizontalOptions="Start" />
-
-            <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand"
-                            SelectedItem="{Binding SelectedCableType, Mode=TwoWay, FallbackValue=''}"
-                            ItemsSource="{Binding CableTypeList}" 
-                            ItemDisplayBinding="{Binding CodeCableDesc}"/>
-            <Label Text="Manufacturer" HorizontalOptions="Start" />
+             <Label Text="Cable Type" HorizontalOptions="Start" />
+             <!--<local:BorderColorEntry Text="{Binding SelectedFiberCable.CableIdDesc}" />-->
+                <local:Dropdown x:Name="pCableType" HorizontalOptions="FillAndExpand" Title="{Binding SelectedFiberCable.CableIdDesc}"
+                        SelectedItem="{Binding SelectedCableType, Mode=TwoWay, FallbackValue=''}"
+                        ItemsSource="{Binding CableTypeList}" 
+                        ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
+                <Label Text="Manufacturer" HorizontalOptions="Start" />
             <local:Dropdown x:Name="pManufacturer" HorizontalOptions="FillAndExpand"
                             ItemsSource="{Binding ManufacturerList} " 
                             SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay, FallbackValue=''}"

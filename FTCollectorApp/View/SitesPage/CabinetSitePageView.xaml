@@ -128,9 +128,9 @@
                             <Label Grid.Row="0" Grid.Column="0"  Text="Height"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Depth"/>
                             <Label Grid.Row="0" Grid.Column="2" Text="Width"/>
-                        <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding SelectedModelDetail.height}"/>
-                        <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding SelectedModelDetail.depth}"/>
-                        <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding SelectedModelDetail.width}"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="0" Text="{Binding SelectedModelDetail.height}" IsEnabled="False"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="1" Text="{Binding SelectedModelDetail.depth}" IsEnabled="False"/>
+                        <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding SelectedModelDetail.width}" IsEnabled="False"/>
                     </Grid>
 
                     <Label Text="Enter serial number" />

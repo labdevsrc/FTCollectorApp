@@ -19,6 +19,8 @@ namespace FTCollectorApp.Model.Reference
         public string Model { get; set; }
         public string SMCount { get; set; }
         public string MMCount { get; set; }
+        public string SheathType { get; set; }
+        public string buffer_count { get; set; }
         public string FiberSegmentIdx { get; set; } // for Tracer Page
 
 

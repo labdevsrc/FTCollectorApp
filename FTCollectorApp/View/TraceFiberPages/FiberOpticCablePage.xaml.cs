@@ -25,11 +25,6 @@ namespace FTCollectorApp.View.TraceFiberPages
             BindingContext = new FiberOpticCableViewModel();
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
- 
-        }
 
     }
 }

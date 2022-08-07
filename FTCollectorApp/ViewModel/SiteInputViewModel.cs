@@ -218,45 +218,7 @@ namespace FTCollectorApp.ViewModel
             Session.site_type_key = codekey;
             Console.WriteLine($"key {codekey}, MajorType {SelectedMajorType}, MinorType {SelectedMinorType}");
 
-            // get current tag_number's key
-            ObservableCollection<Site> Sites;
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-            {
-                conn.CreateTable<Site>();
-                var table = conn.Table<Site>().ToList();
-                int maxSiteKey = 0;
-                bool siteKeyTableExisted = false;
-                foreach (var col in table)
-                {
-                    if (col.SiteKey != null)
-                    {
-                        if (int.Parse(col.SiteKey) > maxSiteKey)
-                            maxSiteKey = int.Parse(col.SiteKey);
-                    }
-                    // check if entered Site is already existed in Local SQLite
-                    if (col.SiteName.Equals(Session.tag_number))
-                    {
-                        Session.site_key = col.SiteKey;
-                        siteKeyTableExisted = true;
-                    }
-                }
 
-                if (!siteKeyTableExisted)
-                {
-                    Session.site_key = (maxSiteKey+1).ToString();
-                    conn.Insert(new Site
-                    {
-                        SiteKey = (maxSiteKey + 1).ToString(),
-                        SiteName = Session.tag_number,
-                        TagNumber = Session.tag_number,
-                        SiteId = Session.tag_number,
-                        OwnerKey = Session.ownerkey,
-                        SiteTypeKey = Session.site_type_key
-                    });
-                    Console.WriteLine();
-                }
-
-            }
 
 
 
@@ -280,6 +242,65 @@ namespace FTCollectorApp.ViewModel
                     Session.longitude_offset = Session.live_longitude;
                 }
 
+                // get current tag_number's key
+
+                using (SQLiteConnection conn3 = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn3.CreateTable<Site>();
+                    var table = conn3.Table<Site>().ToList();
+                    int maxSiteKey = 0;
+                    bool siteKeyTableExisted = false;
+                    Console.WriteLine();
+                    Site contentSite = new Site();
+                    try
+                    {
+                        foreach (var col in table)
+                        {
+                            if (col.SiteKey != null)
+                            {
+                                if (int.Parse(col.SiteKey) > maxSiteKey)
+                                    maxSiteKey = int.Parse(col.SiteKey);
+                            
+                                // check if entered Site is already existed in Local SQLite
+                                if (col.TagNumber.Equals(Session.tag_number))
+                                {
+                                    Session.site_key = col.SiteKey;
+                                    siteKeyTableExisted = true;
+                                    contentSite.id = col.id;
+                                    contentSite.LATITUDE = Session.live_lattitude;
+                                    contentSite.LONGITUDE = Session.live_longitude;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
+                    if (!siteKeyTableExisted)
+                    {
+                        Session.site_key = (maxSiteKey + 1).ToString();
+                        conn3.Insert(new Site
+                        {
+                            SiteKey = (maxSiteKey + 1).ToString(),
+                            SiteName = Session.tag_number,
+                            TagNumber = Session.tag_number,
+                            SiteId = Session.tag_number,
+                            OwnerKey = Session.ownerkey,
+                            SiteTypeKey = Session.site_type_key,
+                            LATITUDE = Session.live_lattitude,
+                            LONGITUDE = Session.live_longitude,
+                        });
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        conn3.Update(contentSite);
+                        Console.WriteLine();
+                    }
+
+                }
 
                 result = await CloudDBService.PostCreateSiteAsync(TagNumber, codekey);
                 if (result.Equals("DUPLICATED"))
@@ -319,6 +340,7 @@ namespace FTCollectorApp.ViewModel
                         }
                         else if (SelectedMajorType.Equals("Pull Box"))
                         {
+                            Console.WriteLine();
                             await Application.Current.MainPage.Navigation.PushAsync(new PullBoxSitePage(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Structure"))
