@@ -13,6 +13,7 @@ using FTCollectorApp.Model;
 using FTCollectorApp.Service;
 using Newtonsoft.Json;
 using FTCollectorApp.View;
+using FTCollectorApp.Model.SiteSession;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -82,6 +83,14 @@ namespace FTCollectorApp.ViewModel
                     await Application.Current.MainPage.Navigation.PopAsync();
 
                 });
+
+            RemoveDuctItemCommand = new Command(
+                execute: async () =>
+                {
+                    Console.WriteLine();
+                    //await Application.Current.MainPage.Navigation.PopAsync();
+
+                });
             RefreshDuctKeyListCommand = new Command(
                 execute: async () =>
                 {
@@ -106,10 +115,19 @@ namespace FTCollectorApp.ViewModel
                 });
             DefaultHostTagNumber = Session.tag_number;
 
+
+            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+            {
+                conn.CreateTable<DuctSession>();
+            }
+
         }
         public ICommand SaveCommand { get; set; }
         public ICommand SaveBackCommand { get; set; }
         public ICommand RefreshDuctKeyListCommand { get; set; }
+
+        public ICommand RemoveDuctItemCommand { get; set; }
+
         void RefreshCanExecutes()
         {
             (SaveCommand as Command).ChangeCanExecute();
@@ -146,14 +164,14 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         ConduitsGroup selectedDuctKey;
 
-        public ObservableCollection<ConduitsGroup> DuctKeyList
+        public ObservableCollection<DuctSession> DuctKeyList
         {
             get
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
-                    conn.CreateTable<ConduitsGroup>();
-                    var table = conn.Table<ConduitsGroup>().Where(a=>(a.HosTagNumber == Session.tag_number)&&(a.OwnerKey ==  Session.ownerkey)).ToList();
+                    conn.CreateTable<DuctSession>();
+                    var table = conn.Table<DuctSession>().Where(a=>(a.HosTagNumber == Session.tag_number)&&(a.OwnerKey ==  Session.ownerkey)).ToList();
                     var temp = 0;
                     foreach (var col in table)
                     {
@@ -162,7 +180,7 @@ namespace FTCollectorApp.ViewModel
                             temp = iTmp;                        
                     }
                     Session.MAX_DIR_CNT = temp;
-                    return new ObservableCollection<ConduitsGroup>(table);
+                    return new ObservableCollection<DuctSession>(table);
                 }
             }
         }

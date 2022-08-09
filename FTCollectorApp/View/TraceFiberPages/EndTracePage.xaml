@@ -6,14 +6,14 @@
     <ContentPage.Content>
         <StackLayout Padding="20">
             <Label Text="End Trace" FontSize="Large" HorizontalOptions="Center" Padding="10" />
-            <Grid RowDefinitions="0.2*,0.5*" ColumnDefinitions="*,*">
+            <Grid RowDefinitions="0.2*,0.5*, 0.2*, 0.2*" ColumnDefinitions="*,*">
                 <Label Text="Type End of Site" />
                 <Entry Grid.Row="1" Text="{Binding SearchTag, Mode=TwoWay}" />
                 <Label Text="Click here > Complete" Grid.Column="1" />
                 <Button  Grid.Row="1" Grid.Column="1" Text="New Site" Command="{Binding CreateNewCommand}"/>
-            </Grid>
-            <StackLayout IsVisible="{Binding IsSearching, Mode=TwoWay}" HeightRequest="150">
-                <ListView ItemsSource="{Binding SiteInListView}" SelectedItem="{Binding SelectedSiteIn, Mode=TwoWay}" 
+
+                <ListView Grid.Row="2" Grid.RowSpan="2" IsVisible="{Binding IsSearching, Mode=TwoWay}"
+                    ItemsSource="{Binding SiteInListView}" SelectedItem="{Binding SelectedSiteIn, Mode=TwoWay}" 
                       
                        BackgroundColor="LightGray">
                     <ListView.ItemTemplate>
@@ -22,7 +22,10 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </StackLayout>
+            </Grid>
+            <!--<StackLayout IsVisible="{Binding IsSearching, Mode=TwoWay}" HeightRequest="150">
+
+            </StackLayout>-->
             
             <Grid RowDefinitions="0.2*,0.5*,0.2*,0.5*,0.2*,0.5*,0.2*,0.5*" ColumnDefinitions="*,*" IsVisible="{Binding IsEntriesDiplayed, Mode=TwoWay}">
                     <Label Text="Site type" />

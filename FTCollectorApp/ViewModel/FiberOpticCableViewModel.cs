@@ -72,9 +72,14 @@ namespace FTCollectorApp.ViewModel
                 SetProperty(ref selectedFiberCable, value);
                 if (value.CableIdDesc != null) {
                     if (value.CableIdDesc.Equals("New")){
-                        NewFiber = true; OnPropertyChanged(nameof(NewFiber));
+                        NewFiber = true; 
                         // add other TODO when New fiber cable selected
                     }
+                    else
+                    {
+                        NewFiber = false;
+                    }
+                    OnPropertyChanged(nameof(NewFiber));
                 }
             }
         }
@@ -165,7 +170,7 @@ namespace FTCollectorApp.ViewModel
                     });
 
                     conn.CreateTable<AFiberCable>();
-                    var table = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
+                    var table = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey && a.JobNumber == Session.jobnum).ToList();
                     temp.AddRange(table);
                     foreach (var col in table)
                     {
@@ -231,7 +236,7 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<CableType>();
                     var table = conn.Table<CableType>().ToList();
                     if(SelectedFiberCable != null)
-                        table = conn.Table<CableType>().Where(a => a.CodeCableKey == SelectedFiberCable.CableIdDesc  .CableType).ToList();
+                        table = conn.Table<CableType>().Where(a => a.CodeCableKey == SelectedFiberCable.CableType).ToList();
                     return new ObservableCollection<CableType>(table);
                 }
             }

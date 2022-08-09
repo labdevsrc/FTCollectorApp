@@ -25,24 +25,197 @@ namespace FTCollectorApp.ViewModel
         string[] colorFiberHex = { "#0000FF", "#FFA500", "#008000", "#A52A2A", "#708090", "#FFFFFF", "#FF0000", "#00000", "#FFFF00", "#963D7F", "#FF00FF", "#00FFFF" };
         string[] colorFiber = { "Blue", "Orange", "Green", "Brown", "Slate", "White", "Red", "Black", "Yellow", "Violet", "Rose", "Aqua" };
 
+        /// UOM autocomplete - start              
+        UnitOfMeasure selectedUOM;
+        public UnitOfMeasure SelectedUOM
+        {
+            get => selectedUOM;
+            set
+            {
+                SetProperty(ref (selectedUOM), value);
+                SearchUOM = value.UOMUnit;
+                //OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchUOM));
+            }
+        }
 
         [ObservableProperty]
+        bool isSearchingUOM = false;
+
+        string searchUOM;
+        public string SearchUOM
+        {
+            get => searchUOM;
+            set
+            {
+                IsSearchingUOM = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchUOM), value);
+                OnPropertyChanged(nameof(UnitOfMeasures));
+                Console.WriteLine();
+            }
+        }
+        /// UOM autocomplete - end  
+
+
+        /// Install methode autocomplete - start              
+        DuctInstallType selectedDuctInstall;
+        public DuctInstallType SelectedDuctInstall
+        {
+            get => selectedDuctInstall;
+            set
+            {
+                SetProperty(ref (selectedDuctInstall), value);
+                SearchInstallType = value.DuctInstallDesc;
+                //OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchInstallType));
+            }
+        }
+        [ObservableProperty]
+        bool isSearchInstallType = false;
+
+        string searchInstallType;
+        public string SearchInstallType
+        {
+            get => searchInstallType;
+            set
+            {
+                IsSearchInstallType = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchInstallType), value);
+                OnPropertyChanged(nameof(DuctInstallList));
+                Console.WriteLine();
+            }
+        }
+        /// UOM autocomplete - end  
+
+
+        /// AutoComplete Cable1 - start              
         AFiberCable selectedCable1;
-
+        public AFiberCable SelectedCable1
+        {
+            get => selectedCable1;
+            set
+            {
+                SetProperty(ref (selectedCable1), value);
+                SearchCable1 = value.CableIdDesc;
+                //OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchCable1));
+            }
+        }
         [ObservableProperty]
+        bool isSearchingCable1 = false;
+
+        string searchCable1;
+        public string SearchCable1
+        {
+            get => searchCable1;
+            set
+            {
+                IsSearchingCable1 = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchCable1), value);
+                OnPropertyChanged(nameof(aFiberCableList1));
+                Console.WriteLine();
+            }
+        }
+        /// AutoComplete Cable1 - end    
+
+        /// AutoComplete Cable2 - start              
         AFiberCable selectedCable2;
-
+        public AFiberCable SelectedCable2
+        {
+            get => selectedCable1;
+            set
+            {
+                SetProperty(ref (selectedCable2), value);
+                SearchCable2 = value.CableIdDesc;
+                //OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchCable2));
+            }
+        }
         [ObservableProperty]
+        bool isSearchingCable2 = false;
+
+        string searchCable2;
+        public string SearchCable2
+        {
+            get => searchCable2;
+            set
+            {
+                IsSearchingCable2 = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchCable2), value);
+                OnPropertyChanged(nameof(aFiberCableList2));
+                Console.WriteLine();
+            }
+        }
+        /// AutoComplete Cable2 - end 
+
+        /// AutoComplete Cable3 - start              
         AFiberCable selectedCable3;
-
-
+        public AFiberCable SelectedCable3
+        {
+            get => selectedCable3;
+            set
+            {
+                SetProperty(ref (selectedCable3), value);
+                SearchCable3 = value.CableIdDesc;
+                //OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchCable3));
+            }
+        }
         [ObservableProperty]
+        bool isSearchingCable3 = false;
+
+        string searchCable3;
+        public string SearchCable3
+        {
+            get => searchCable3;
+            set
+            {
+                IsSearchingCable3 = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchCable3), value);
+                OnPropertyChanged(nameof(aFiberCableList3));
+                Console.WriteLine();
+            }
+        }
+        /// AutoComplete Cable3 - end 
+
+        /// AutoComplete Cable4 - start              
         AFiberCable selectedCable4;
+        public AFiberCable SelectedCable4
+        {
+            get => selectedCable4;
+            set
+            {
+                SetProperty(ref (selectedCable4), value);
+                SearchCable4 = value.CableIdDesc;
+                //OnPropertyChanged(nameof(DuctConduitDatas));
+                OnPropertyChanged(nameof(SearchCable4));
+            }
+        }
+        [ObservableProperty]
+        bool isSearchingCable4 = false;
+
+        string searchCable4;
+        public string SearchCable4
+        {
+            get => searchCable4;
+            set
+            {
+                IsSearchingCable4 = string.IsNullOrEmpty(value) ? false : true;
+
+                SetProperty(ref (searchCable4), value);
+                OnPropertyChanged(nameof(aFiberCableList4));
+                Console.WriteLine();
+            }
+        }
+        /// AutoComplete Cable4 - end 
 
 
-        //[ObservableProperty]
-        //[AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
-        //[AlsoNotifyChangeFor(nameof(SearchTag))]
+
         ConduitsGroup selectedTagNum;
         public ConduitsGroup SelectedTagNum {
             get => selectedTagNum;
@@ -100,12 +273,6 @@ namespace FTCollectorApp.ViewModel
 
             }
         }
-
-        [ObservableProperty]
-        DuctInstallType selectedDuctInstall;
-
-        [ObservableProperty]
-        UnitOfMeasure selectedUOM;
 
 
         [ObservableProperty]
@@ -179,46 +346,37 @@ namespace FTCollectorApp.ViewModel
 
         private void ExecuteRemoveCable1Command()
         {
-            //SelectedCable1.CableIdDesc = "";
-            //SelectedCable1.CableType = "";
-            //SelectedCable1.AFRKey = "0";
-            SelectedCable1 = null;
+            SearchCable1 = "";
+            //SelectedCable1 = null;
             Console.WriteLine();
             SheathMark1 = "";
         }
 
         private void ExecuteRemoveCable2Command()
         {
-            //SelectedCable2.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            //SelectedCable2.CableType = "";
-            //SelectedCable2.AFRKey = "0";
-            SelectedCable2 = null;
+            SearchCable2 = "";
+            //SelectedCable2 = null;
             Console.WriteLine();
             SheathMark2 = "";
         }
 
         private void ExecuteRemoveCable3Command()
         {
-            //SelectedCable3.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            //SelectedCable3.CableType = "";
-            //SelectedCable3.AFRKey = "0";
+            SearchCable3 = "";
             Console.WriteLine();
-            SelectedCable3 = null;
+            //SelectedCable3 = null;
             SheathMark3 = "";
         }
 
         private void ExecuteRemoveCable4Command()
         {
-            //SelectedCable4.CableIdDesc = ""; // = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            //SelectedCable4.CableType = "";
-            //SelectedCable4.AFRKey = "0";
-            SelectedCable4 = null;
+            SearchCable4 = "";
+            //SelectedCable4 = null;
             Console.WriteLine();
             SheathMark4 = "";
         }
 
-
-        public ObservableCollection<AFiberCable> aFiberCableList
+        public ObservableCollection<AFiberCable> aFiberCableList1
         {
             get
             {
@@ -226,16 +384,109 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<AFiberCable>();
                     // City of Port St Lucie for Demo purpose
-                    var table = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
-                    foreach (var col in table)
+                    var AFRAll = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey && a.JobNumber == Session.jobnum).ToList();
+                    foreach (var col in AFRAll)
                     {
                         col.CableIdDesc = HttpUtility.HtmlDecode(col.CableIdDesc); // should use for escape char "
                     }
-                    Console.WriteLine();
-                    return new ObservableCollection<AFiberCable>(table);
+
+                    if (SearchCable1 != null)
+                    {
+                        var table = AFRAll.Where(i => i.CableIdDesc.ToLower().Contains(SearchCable1.ToLower())).
+                            GroupBy(b => b.CableIdDesc).Select(g => g.First()).ToList();
+
+                        Console.WriteLine();
+                        return new ObservableCollection<AFiberCable>(table);
+                    }
+                    return new ObservableCollection<AFiberCable>(AFRAll);
                 }
             }
         }
+
+        public ObservableCollection<AFiberCable> aFiberCableList2
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<AFiberCable>();
+                    // City of Port St Lucie for Demo purpose
+                    var AFRAll = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey && a.JobNumber == Session.jobnum).ToList();
+                    foreach (var col in AFRAll)
+                    {
+                        col.CableIdDesc = HttpUtility.HtmlDecode(col.CableIdDesc); // should use for escape char "
+                    }
+
+                    if (SearchCable2 != null)
+                    {
+                        var table = AFRAll.Where(i => i.CableIdDesc.ToLower().Contains(SearchCable2.ToLower())).
+                            GroupBy(b => b.CableIdDesc).Select(g => g.First()).ToList();
+
+                        Console.WriteLine();
+                        return new ObservableCollection<AFiberCable>(table);
+                    }
+                    return new ObservableCollection<AFiberCable>(AFRAll);
+                }
+            }
+        }
+
+        public ObservableCollection<AFiberCable> aFiberCableList3
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<AFiberCable>();
+                    // City of Port St Lucie for Demo purpose
+                    var AFRAll = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey && a.JobNumber == Session.jobnum).ToList();
+                    foreach (var col in AFRAll)
+                    {
+                        col.CableIdDesc = HttpUtility.HtmlDecode(col.CableIdDesc); // should use for escape char "
+                    }
+
+                    if (SearchCable3 != null)
+                    {
+                        var table = AFRAll.Where(i => i.CableIdDesc.ToLower().Contains(SearchCable3.ToLower())).
+                            GroupBy(b => b.CableIdDesc).Select(g => g.First()).ToList();
+
+                        Console.WriteLine();
+                        return new ObservableCollection<AFiberCable>(table);
+                    }
+                    return new ObservableCollection<AFiberCable>(AFRAll);
+                }
+            }
+        }
+
+
+        public ObservableCollection<AFiberCable> aFiberCableList4
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<AFiberCable>();
+                    // City of Port St Lucie for Demo purpose
+                    var AFRAll = conn.Table<AFiberCable>().Where(a => a.OwnerKey == Session.ownerkey && a.JobNumber == Session.jobnum).ToList();
+                    foreach (var col in AFRAll)
+                    {
+                        col.CableIdDesc = HttpUtility.HtmlDecode(col.CableIdDesc); // should use for escape char "
+                    }
+
+                    if (SearchCable4 != null)
+                    {
+                        var table = AFRAll.Where(i => i.CableIdDesc.ToLower().Contains(SearchCable4.ToLower())).
+                            GroupBy(b => b.CableIdDesc).Select(g => g.First()).ToList();
+
+                        Console.WriteLine();
+                        return new ObservableCollection<AFiberCable>(table);
+                    }
+                    return new ObservableCollection<AFiberCable>(AFRAll);
+                }
+            }
+        }
+
+
+
         public ObservableCollection<DuctInstallType> DuctInstallList
         {
             get
@@ -244,6 +495,12 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<DuctInstallType>();
                     var table = conn.Table<DuctInstallType>().ToList();
+                    if (SearchInstallType != null)
+                    {
+                        table = conn.Table<DuctInstallType>().Where(i => i.DuctInstallDesc.ToLower().Contains(SearchInstallType.ToLower())).
+                            GroupBy(b => b.DuctInstallDesc).Select(g => g.First()).ToList();
+
+                    }
                     return new ObservableCollection<DuctInstallType>(table);
                 }
             }
@@ -256,6 +513,12 @@ namespace FTCollectorApp.ViewModel
                 {
                     conn.CreateTable<UnitOfMeasure>();
                     var table = conn.Table<UnitOfMeasure>().ToList();
+                    if (SearchUOM != null)
+                    {
+                        table = conn.Table<UnitOfMeasure>().Where(i => i.UOMUnit.ToLower().Contains(SearchUOM.ToLower())).
+                            GroupBy(b => b.UOMUnit).Select(g => g.First()).ToList();
+
+                    }
                     return new ObservableCollection<UnitOfMeasure>(table);
                 }
             }
@@ -351,26 +614,6 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("from_site_duct_direction", SelectedDuct?.Direction is null ? "":SelectedDuct.Direction),
                 new KeyValuePair<string, string>("from_site_duct_direction_count", SelectedDuct?.DirCnt is null ? "":SelectedDuct.DirCnt),
-
-
-                /*new KeyValuePair<string, string>("sheath_mark1", SheathMark1),
-                new KeyValuePair<string, string>("sheath_mark2", SheathMark2),
-                new KeyValuePair<string, string>("sheath_mark3", SheathMark3),
-                new KeyValuePair<string, string>("sheath_mark4", SheathMark4),
-                new KeyValuePair<string, string>("cable_id1", SelectedCable1?.CableIdDesc is null ? "":SelectedCable1.CableIdDesc),
-                new KeyValuePair<string, string>("cable_id2", SelectedCable2?.CableIdDesc is null ? "":SelectedCable2.CableIdDesc),
-                new KeyValuePair<string, string>("cable_id3", SelectedCable3?.CableIdDesc is null ? "":SelectedCable3.CableIdDesc),
-                new KeyValuePair<string, string>("cable_id4", SelectedCable4?.CableIdDesc is null ? "":SelectedCable4.CableIdDesc),
-
-                new KeyValuePair<string, string>("cable_type1", SelectedCable1?.CableType is null ? "":SelectedCable1.CableType),
-                new KeyValuePair<string, string>("cable_type2", SelectedCable2?.CableType is null ? "":SelectedCable2.CableType),
-                new KeyValuePair<string, string>("cable_type3", SelectedCable3?.CableType is null ? "":SelectedCable3.CableType),
-                new KeyValuePair<string, string>("cable_type4", SelectedCable4?.CableType is null ? "":SelectedCable4.CableType),
-
-                new KeyValuePair<string, string>("cable_id1_key", SelectedCable1?.AFRKey is null ? "":SelectedCable1.AFRKey),
-                new KeyValuePair<string, string>("cable_id2_key", SelectedCable2?.AFRKey is null ? "":SelectedCable2.AFRKey),
-                new KeyValuePair<string, string>("cable_id3_key", SelectedCable3?.AFRKey is null ? "":SelectedCable3.AFRKey),
-                new KeyValuePair<string, string>("cable_id4_key", SelectedCable4?.AFRKey is null ? "":SelectedCable4.AFRKey),*/
 
 
             };
