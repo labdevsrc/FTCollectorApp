@@ -11,13 +11,13 @@ using Xamarin.Forms.Xaml;
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class RecordInnerDuct : ContentPage
+    public partial class StructureSitePageView : ContentPage
     {
-        public RecordInnerDuct()
+        public StructureSitePageView(string minorType, string tagNumber)
         {
             InitializeComponent();
-            BindingContext = new RecordInnerDuctViewModel(); 
+            var MajorMinorType = $"Structure - {minorType}";
+            BindingContext = new StructureSitePageViewModel(MajorMinorType, tagNumber);
         }
-
     }
 }

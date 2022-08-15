@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FTCollectorApp.Model;
 using FTCollectorApp.Utils;
+using FTCollectorApp.ViewModel;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -18,9 +19,10 @@ namespace FTCollectorApp.View.SitesPage
         public OffsetGPSPopUp()
         {
             InitializeComponent();
+            BindingContext = new OffsetGPSPopUpViewModel();
         }
 
-        protected override void OnAppearing()
+        /*protected override void OnAppearing()
         {
             base.OnAppearing();
             btnClose.Clicked += (s, e) => PopupNavigation.Instance.PopAsync(true);
@@ -54,6 +56,6 @@ namespace FTCollectorApp.View.SitesPage
             Session.longitude2 = newPos.Longitude.ToString();
 
             await PopupNavigation.Instance.PopAsync(true);
-        }
+        }*/
     }
 }

@@ -64,6 +64,7 @@ namespace FTCollectorApp.ViewModel
             BackCommand = new Command(() => ExecuteBackCommand());
             SendDialogResultCommand = new Command(result => ExecuteSendDialogResultCommand(result as BasicAllertResult));
             Console.WriteLine();
+            Session.current_page = "PortConn";
         }
 
         private async void ExecuteBackCommand()

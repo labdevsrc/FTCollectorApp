@@ -341,11 +341,11 @@ namespace FTCollectorApp.ViewModel
                         else if (SelectedMajorType.Equals("Pull Box"))
                         {
                             Console.WriteLine();
-                            await Application.Current.MainPage.Navigation.PushAsync(new PullBoxSitePage(SelectedMinorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new PullBoxSitePageView(SelectedMinorType, TagNumber));
                         }
                         else if (SelectedMajorType.Equals("Structure"))
                         {
-                            await Application.Current.MainPage.Navigation.PushAsync(new StructureSitePage(SelectedMinorType, TagNumber));
+                            await Application.Current.MainPage.Navigation.PushAsync(new StructureSitePageView(SelectedMinorType, TagNumber));
                         }
                     }
                 }

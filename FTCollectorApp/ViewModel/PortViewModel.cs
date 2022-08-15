@@ -224,6 +224,7 @@ namespace FTCollectorApp.ViewModel
             FinishCommand = new Command(async () => ExecuteFinishCommand());
             RefreshPortsKeyListCommand = new Command(() => ExecuteRefreshPortsKeyListCommand());
             RefreshBladeListCommand = new Command(() => ExecuteRefreshBladeListCommand());
+            Session.current_page = "Ports";
         }
         private async void ExecuteFinishCommand()
         {

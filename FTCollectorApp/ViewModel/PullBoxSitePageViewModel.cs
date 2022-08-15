@@ -1,11 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FTCollectorApp.Model;
-using FTCollectorApp.Model.Reference;
-using FTCollectorApp.Service;
-using FTCollectorApp.View;
-using FTCollectorApp.View.SitesPage;
-using FTCollectorApp.View.Utils;
+using System.Collections.Generic;
+using System.Text;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -16,10 +12,15 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
+using FTCollectorApp.Model;
+using FTCollectorApp.Model.Reference;
+using FTCollectorApp.View.SitesPage;
+using FTCollectorApp.Service;
+using FTCollectorApp.View.Utils;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class CabinetSitePageViewModel : ObservableObject
+    public partial class PullBoxSitePageViewModel : ObservableObject
     {
         [ObservableProperty]
         string siteType;
@@ -70,7 +71,7 @@ namespace FTCollectorApp.ViewModel
         string isSiteClearZone;
 
         [ObservableProperty]
-        string isHaveSunShield;
+        string isSpliceVault;
 
         [ObservableProperty]
         string isBucketTruck;
@@ -87,10 +88,12 @@ namespace FTCollectorApp.ViewModel
         string selectedRackCount;
 
         bool isKeyTypeDisplay;
-        public bool IsKeyTypeDisplay{
-            get =>isKeyTypeDisplay;
-            set{
-                if(IsHasKey.Equals("Yes"))
+        public bool IsKeyTypeDisplay
+        {
+            get => isKeyTypeDisplay;
+            set
+            {
+                if (IsHasKey.Equals("Yes"))
                     SetProperty(ref isKeyTypeDisplay, true);
                 else
                     SetProperty(ref isKeyTypeDisplay, false);
@@ -123,7 +126,7 @@ namespace FTCollectorApp.ViewModel
                 var yesno = new List<string>();
                 yesno.Add("Yes");
                 yesno.Add("No");
-                    Console.WriteLine();
+                Console.WriteLine();
                 return new ObservableCollection<string>(yesno);
             }
         }
@@ -142,31 +145,31 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-
-        public CabinetSitePageViewModel(string siteType, string tagNumber)
+        public PullBoxSitePageViewModel(string siteType, string tagNumber)
         {
             Console.WriteLine();
-            ShowDuctPageCommand = new Command(async () => ExecuteNavigateToDuctPageCommand());
+            //ShowDuctPageCommand = new Command(async () => ExecuteNavigateToDuctPageCommand());
             ShowRackPageCommand = new Command(async () => ExecuteNavigateToRackPageCommand());
             ShowActiveDevicePageCommand = new Command(async () => ExecuteNavigateToActiveDevicePageCommand());
             SendResultCommand = new Command(resultPage => ExecuteGetResultCommand(ResultPage));
-            //CaptureCommand = new Command(ExecuteCaptureCommand);
-            //SaveContinueCommand = new Command(ExecuteSaveContinueCommand);
-            //CompleteSiteCommand = new Command(ExecuteCompleteSiteCommand);
+            CaptureCommand = new Command(ExecuteCaptureCommand);
+            SaveContinueCommand = new Command(ExecuteSaveContinueCommand);
+            CompleteSiteCommand = new Command(ExecuteCompleteSiteCommand);
             Console.WriteLine();
             SiteType = siteType;
             TagNumber = tagNumber;
             OwnerName = Session.OwnerName;
             Session.current_page = "Site";
         }
-        //public ICommand CompleteSiteCommand { get; set; }
-        //public ICommand SaveContinueCommand { get; set; }
-        //public ICommand CaptureCommand { get; set; }
+        public ICommand CompleteSiteCommand { get; set; }
+        public ICommand SaveContinueCommand { get; set; }
+        public ICommand CaptureCommand { get; set; }
         ////////////
         ///
         public ICommand SendResultCommand { get; set; }
-        public ICommand ShowDuctPageCommand { get; set; }
-        private async Task ExecuteNavigateToDuctPageCommand()
+        //public ICommand ShowDuctPageCommand { get; set; }
+        [ICommand]
+        private async Task NavigateToDuctPage()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new DuctPage());
         }
@@ -222,7 +225,7 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<Mounting>();
-                    var mountingTable = conn.Table<Mounting>().OrderBy(a => a.MountingType).ToList();
+                    var mountingTable = conn.Table<Mounting>().ToList();
                     return new ObservableCollection<Mounting>(mountingTable);
                 }
             }
@@ -483,6 +486,18 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string installedAt;
 
+        [ObservableProperty]
+        string distance2Tralance = string.Empty;
+
+        [ObservableProperty]
+        string lidPieces = string.Empty;
+
+        [ObservableProperty]
+        bool isGravelBottoms;
+
+        [ObservableProperty]
+        bool isHasAppron;
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             /*url: 'ajaxSavecabinet.php',      
@@ -524,9 +539,9 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("pid", ""),
                 new KeyValuePair<string, string>("loct", ""),
                 new KeyValuePair<string, string>("staddr", StreetAddress), // site_address
-                new KeyValuePair<string, string>("pscode", PostalCode),
+                new KeyValuePair<string, string>("pscode", ""),// PostalCode),
 
-                new KeyValuePair<string, string>("btype", SelectedBuilding?.BuildingTypeKey is null ? "":SelectedBuilding.BuildingTypeKey),
+                new KeyValuePair<string, string>("btype",""),// SelectedBuilding?.BuildingTypeKey is null ? "":SelectedBuilding.BuildingTypeKey),
                 new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
 
                 new KeyValuePair<string, string>("laneclosure", IsLaneClosure.Equals("Yes") ? "1":"0"),
@@ -547,22 +562,22 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("intersect2", SelectedIntersection?.IntersectionKey is null ? "": SelectedIntersection.IntersectionKey),
                 new KeyValuePair<string, string>("material2", SelectedMatCode?.MaterialKey is null ? "":SelectedMatCode.MaterialKey),
-                new KeyValuePair<string, string>("mounting2", SelectedMounting?.MountingKey is null ? "":SelectedMounting.MountingKey),
+                new KeyValuePair<string, string>("mounting2", ""), //SelectedMounting?.MountingKey is null ? "":SelectedMounting.MountingKey),
                 new KeyValuePair<string, string>("offilter2", ""),//FilterTypeSelected),
                 new KeyValuePair<string, string>("fltrsize2", ""),//FilterSizeKeySelected),
-                new KeyValuePair<string, string>("sunshield2", IsHaveSunShield.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("sunshield2",""), //IsHaveSunShield.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
 
-
-                new KeyValuePair<string, string>("gravel_bottom","" ),
-                new KeyValuePair<string, string>("lid_pieces", ""),
-                new KeyValuePair<string, string>("has_apron", ""),
+                new KeyValuePair<string, string>("gravel_bottom",IsGravelBottoms.Equals("Yes") ? "1":"0" ),
+                new KeyValuePair<string, string>("lid_pieces", LidPieces),
+                new KeyValuePair<string, string>("has_apron", IsHasAppron.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("rack_count", ""),
 
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
-                new KeyValuePair<string, string>("vault2", ""),
-                new KeyValuePair<string, string>("trlane2", ""),
+                new KeyValuePair<string, string>("vault2", IsSpliceVault.Equals("Yes") ? "1":"0"),
+                new KeyValuePair<string, string>("trlane2", Distance2Tralance),
                 new KeyValuePair<string, string>("bucket2", IsBucketTruck.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("serialno", SerialNumber),
                 new KeyValuePair<string, string>("key", ""),
@@ -590,8 +605,8 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        [ICommand]
-        async void SaveContinue()
+
+        async void ExecuteSaveContinueCommand()
         {
             Console.WriteLine();
             var KVPair = keyvaluepair();
@@ -608,26 +623,17 @@ namespace FTCollectorApp.ViewModel
 
         }
 
-        [ICommand]
-        async void CompleteSite()
+
+        async void ExecuteCompleteSiteCommand()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new CompleteSitePage());
         }
 
-        [ICommand]
-        async void Capture()
+        async void ExecuteCaptureCommand()
         {
 
             await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
         }
-
-        [ICommand]
-        async void ReturnToMain()
-        {
-            if (Session.stage.Equals("A"))
-                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
-            if (Session.stage.Equals("I"))
-                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
-        }
     }
+
 }

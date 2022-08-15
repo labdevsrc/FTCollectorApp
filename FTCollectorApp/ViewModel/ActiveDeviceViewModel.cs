@@ -219,6 +219,7 @@ namespace FTCollectorApp.ViewModel
             UpdateChassisCommand = new Command(() => ExecuteUpdateChassisCommand());
             SendDialogResultCommand = new Command( result => ExecuteSendDialogResultCommand(result as BasicAllertResult));
             Session.RowId = "0"; // reset RowId chassis table
+            Session.current_page = "ActiveDevice";
         }
 
 

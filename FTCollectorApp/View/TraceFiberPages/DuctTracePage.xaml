@@ -229,7 +229,8 @@
                     </Grid>
 
                 <Button Text="Save and Start Tracing" Command="{Binding SaveAndContinueCommand}"/>
-                <!--<Button Text="Save Locally "  Command="{Binding SaveLocallyAndContinueCommand}"/>
+                <Button Text="Return to Main Menu" Command="{Binding ReturnToMainCommand}"/>                
+                <!--<Button Text="Save Locally "  Command="{Binding SaveLocallyCommand}"/>
                 <Button Text="Show Pending List " Command="{Binding DisplayTaskCommand}"/>-->
 
             </StackLayout>

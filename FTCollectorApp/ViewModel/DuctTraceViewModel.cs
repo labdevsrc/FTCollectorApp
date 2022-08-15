@@ -87,7 +87,7 @@ namespace FTCollectorApp.ViewModel
                 Console.WriteLine();
             }
         }
-        /// UOM autocomplete - end  
+        ///  Install methode autocomplete  - end  
 
 
         /// AutoComplete Cable1 - start              
@@ -290,11 +290,11 @@ namespace FTCollectorApp.ViewModel
 
 
         ObservableCollection<ConduitsGroup> ConduitsGroupListTable;
-        ObservableCollection<ColorCode> ColorHextList;
+        public ObservableCollection<ColorCode> ColorHextList;
 
 
         public ICommand SaveAndContinueCommand { get; set; }
-        public ICommand SaveLocallyAndContinueCommand { get; set; }
+        //public ICommand SaveLocallyAndContinueCommand { get; set; }
         public ICommand RemoveCable1Command { get; set; }
 
         public ICommand RemoveCable2Command { get; set; }
@@ -303,7 +303,7 @@ namespace FTCollectorApp.ViewModel
         public DuctTraceViewModel()
         {
             SaveAndContinueCommand = new Command(ExecuteSaveAndContinueCommand);
-            SaveLocallyAndContinueCommand = new Command(ExecuteSaveLocally);
+            //SaveLocallyAndContinueCommand = new Command(ExecuteSaveLocally);
             RemoveCable1Command = new Command(ExecuteRemoveCable1Command);
             RemoveCable2Command = new Command(ExecuteRemoveCable2Command);
             RemoveCable3Command = new Command(ExecuteRemoveCable3Command);
@@ -313,7 +313,7 @@ namespace FTCollectorApp.ViewModel
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<ConduitsGroup>();
-                var table1 = conn.Table<ConduitsGroup>().ToList();
+                var table1 = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
                 ConduitsGroupListTable = new ObservableCollection<ConduitsGroup>(table1);
 
                 conn.CreateTable<ColorCode>();
@@ -322,17 +322,11 @@ namespace FTCollectorApp.ViewModel
 
 
             }
-
-            /*SelectedCable1 = new AFiberCable { CableIdDesc ="", FiberSegmentIdx = "0" };
-            SelectedCable2 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            SelectedCable3 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            SelectedCable4 = new AFiberCable { CableIdDesc = "", FiberSegmentIdx = "0" };
-            SelectedDuct = new ConduitsGroup();
-            SelectedTagNum = new ConduitsGroup();*/
-
+            Session.current_page = "DuctTracer";
         }
 
-        void ExecuteSaveLocally()
+        [ICommand]
+        void SaveLocally()
         {
             Insert2SQLite();
         }
@@ -866,10 +860,10 @@ namespace FTCollectorApp.ViewModel
                         };
                         conn.Insert(test);*/
                         A_Fiber_Segment.AWSid2 = maxId++;
-                        A_Fiber_Segment.sheath_out = SheathMark3;
-                        A_Fiber_Segment.cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc;
-                        A_Fiber_Segment.cable_id_key = SelectedCable3?.AFRKey is null ? "" : SelectedCable3.AFRKey;
-                        A_Fiber_Segment.cable_type = SelectedCable3?.CableType is null ? "" : SelectedCable3.CableType;
+                        A_Fiber_Segment.sheath_out = SheathMark4;
+                        A_Fiber_Segment.cable_id = SelectedCable4?.CableIdDesc is null ? "" : SelectedCable4.CableIdDesc;
+                        A_Fiber_Segment.cable_id_key = SelectedCable4?.AFRKey is null ? "" : SelectedCable4.AFRKey;
+                        A_Fiber_Segment.cable_type = SelectedCable4?.CableType is null ? "" : SelectedCable4.CableType;
 
                         conn.Insert(A_Fiber_Segment);
 
@@ -979,7 +973,7 @@ namespace FTCollectorApp.ViewModel
 
                         Session.GpsPointMaxIdx = contentResponse?.locatepointkey is null ? "0" : contentResponse.locatepointkey;
 
-
+                    Insert2SQLite();
 
                 }
             }
@@ -992,5 +986,15 @@ namespace FTCollectorApp.ViewModel
 
             await Application.Current.MainPage.Navigation.PushAsync(new LocatePointPage());
         }                                                                   
+
+
+    [ICommand]
+    async void ReturnToMain()
+    {
+        if (Session.stage.Equals("A"))
+            await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
+        if (Session.stage.Equals("I"))
+            await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
+    }
     }
 }

@@ -13,13 +13,13 @@
         VerticalOptions="Center"     
             >
             <Label Text="Bearing:"/>
-            <local:BorderEntry x:Name="entryBearing" 
+            <local:BorderEntry Text="{Binding Bearing,Mode=TwoWay}"
                    />
             <Label Text="Distance:"/>
-            <local:BorderEntry x:Name="entryDistance" />
+            <local:BorderEntry   Text="{Binding Distance,Mode=TwoWay}" />
             <Grid ColumnDefinitions="*,*,*,*">
-                <Button x:Name="btnSave" Grid.Column="2" Text="Save" Clicked="btnSave_Clicked"/>
-                <Button x:Name="btnClose" Grid.Column="3" Text="Close" />
+                <Button  Grid.Column="2" Text="Save"  Command="{Binding SaveCommand}"/>
+                <Button  Grid.Column="3" Text="Close"  Command="{Binding CloseCommand}"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

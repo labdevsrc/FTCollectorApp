@@ -35,6 +35,7 @@ namespace FTCollectorApp
         public const string ajaxUpdateIpAddr = "ajaxUpdateipaddr.php";
 
 
+        public const string ajaxSavePicture = "ajaxSavePicture.php";
         public const string ajaxSaveTraceWire = "ajaxSaveTraceWire.php";
         public const string ajaxSaveDuctTrace = "ajaxSaveDuctTrace.php";
         public const string ajaxSaveEndDuctTrace = "ajaxSaveEndDuctTrace.php";

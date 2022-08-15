@@ -7,7 +7,7 @@
     <ContentPage.Content>
         <ScrollView>
         <StackLayout Padding="20">
-            <Label Text="Fiber Optic Cable" FontSize="Large" HorizontalOptions="Center" WidthRequest="80" />
+            <Label Text="Fiber Optic Cable" FontSize="Large" HorizontalOptions="Center" Padding="20" />
             <Label Text="Enter cable Id" HorizontalOptions="Start" />
                 <Picker x:Name="pCableId" HorizontalOptions="FillAndExpand" 
                                 ItemsSource="{Binding aFiberCableList}"
@@ -37,20 +37,20 @@
                         ItemsSource="{Binding CableTypeList}" 
                         ItemDisplayBinding="{Binding CodeCableDesc}" IsEnabled="{Binding NewFiber}"/>
                 <Label Text="Manufacturer" HorizontalOptions="Start" />
-            <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand"
+                <Picker x:Name="pManufacturer" HorizontalOptions="FillAndExpand" IsEnabled="{Binding NewFiber}"
                     
                             ItemsSource="{Binding ManufacturerList} " 
                             SelectedItem="{Binding SelectedManufacturer, Mode=TwoWay}"
                             ItemDisplayBinding="{Binding ManufName}"
-                            Title="--Select  Manufacturer--"
+                            Title="{Binding SelectedFiberCable.Manufacturer}"
                             TitleColor="Gray" />
                 <Label Text="Model" HorizontalOptions="Start" />
-            <Picker x:Name="pModel" 
+                <Picker x:Name="pModel"  IsEnabled="{Binding NewFiber}"
                            ItemsSource="{Binding ModelDetailList}" 
                             SelectedItem="{Binding SelectedModelDetail, Mode=TwoWay}"
                             ItemDisplayBinding="{Binding ModelNumber}"
                             HorizontalOptions="FillAndExpand"
-                            Title="--Select  Model--"
+                            Title="{Binding SelectedFiberCable.Model}"
                             TitleColor="Gray" />                            
             <Label Text="Enter Label" HorizontalOptions="Start" />
             <local:BorderEntry x:Name="entryLabel" HorizontalOptions="FillAndExpand" Text="{Binding TextLabel, Mode=TwoWay}"
@@ -142,7 +142,8 @@
                             SelectedItem="{Binding SelectedInstallType, Mode=TwoWay, FallbackValue=''}"                           
                             
                             />
-                <Button x:Name="btnSave"  Text="Save and Continue" HorizontalOptions="FillAndExpand" Command="{Binding SaveCommand}"/>
+                <Button Text="Save and Continue" HorizontalOptions="FillAndExpand" Command="{Binding SaveCommand}"/>
+                <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

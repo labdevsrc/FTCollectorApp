@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
+using FTCollectorApp.View;
 using FTCollectorApp.View.SitesPage;
 using FTCollectorApp.View.Utils;
 using SQLite;
@@ -155,6 +156,8 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine();
             SiteType = siteType;
             TagNumber = tagNumber;
+            OwnerName = Session.OwnerName;
+            Session.current_page = "Site";
 
         }
 
@@ -248,7 +251,7 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<Mounting>();
-                    var mountingTable = conn.Table<Mounting>().ToList();
+                    var mountingTable = conn.Table<Mounting>().OrderBy(a => a.MountingType).ToList();
                     Console.WriteLine();
                     return new ObservableCollection<Mounting>(mountingTable);
                 }
@@ -570,8 +573,10 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("sitname2", SiteName),
 
 
-                new KeyValuePair<string, string>("mfr2", ""),  // manufacturer , for Cabinet, pull box
-                new KeyValuePair<string, string>("mfd2", Manufactured),
+                new KeyValuePair<string, string>("manufacturer", ""),  // manufacturer , for Cabinet, pull box
+                new KeyValuePair<string, string>("manufacturer_key", ""),  // manufacturer , for Cabinet, pull box
+
+                new KeyValuePair<string, string>("manufactured_date", Manufactured),
                 new KeyValuePair<string, string>("mod2", ""), /// model name, Building : x,  Cabinet/Pull Box : o
                 new KeyValuePair<string, string>("pic2", ""),
                 new KeyValuePair<string, string>("otag", ""),
@@ -608,6 +613,11 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("sunshield2", IsHaveSunShield.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
+
+                new KeyValuePair<string, string>("gravel_bottom","" ),
+                new KeyValuePair<string, string>("lid_pieces", ""),
+                new KeyValuePair<string, string>("has_apron", ""),
+                new KeyValuePair<string, string>("rack_count", SelectedRackCount is null ? "" : SelectedRackCount),
 
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
@@ -671,6 +681,16 @@ namespace FTCollectorApp.ViewModel
         {
 
             await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
+        }
+
+
+        [ICommand]
+        async void ReturnToMain()
+        {
+            if(Session.stage.Equals("A"))
+                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
+            if (Session.stage.Equals("I"))
+                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
         }
     }
 }

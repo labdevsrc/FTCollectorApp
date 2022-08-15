@@ -1,47 +1,66 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.TraceFiberPages.ResumeTracer">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="10">
 
-            <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" />
-            <Label Padding="0,20,0,20" Text="TagNumber" />
-            <local:Dropdown x:Name="pTagNumber" ItemsSource="{Binding BeginningSiteList }" 
-                            ItemDisplayBinding="{Binding HosTagNumber}" SelectedItem="{Binding SelectedTagNum}"/>
+            <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" HorizontalOptions="Center" />
+            <Label Text="TagNumber" />
+            <Entry Text="{Binding SearchFromSite, Mode=TwoWay}" />
+            <ListView 
+                HasUnevenRows="True" RowHeight="5"
+                IsVisible="{Binding IsSearching1, Mode=TwoWay}"
+                    ItemsSource="{Binding FilterCableSite}" SelectedItem="{Binding SelectedBeginSite, Mode=TwoWay}" 
+                      
+                       BackgroundColor="LightGray">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding from_site}"  />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <Label Padding="0,20,0,20" Text="Duct" />
-            <local:BorderEntry Text="" />
+            <local:Dropdown Grid.Column="0" Grid.Row="7" 
+                                 ItemsSource="{Binding DuctConduitDatas}" 
+                                 ItemDisplayBinding="{Binding WhichDucts}"
+                                 SelectedItem="{Binding SelectedDuct,Mode=TwoWay}"
+                                 />
             <Label Padding="0,20,0,20" Text="Fiber Cable" />
-            <local:BorderEntry Text="" />
- 
+            <local:Dropdown Grid.Column="0" Grid.Row="7" 
+                                 ItemsSource="{Binding FilterCableSite}" 
+                                 ItemDisplayBinding="{Binding cable_id}" />
+
             <Button Padding="10" Text="Resume Tracing" Command="{Binding ResumeCommand}"/>
             <Button Padding="10" Text="View Suspended fiber tracig activity" Command="{Binding ViewSuspendedCommand}"/>
-            <Grid ColumnDefinitions="*,*,*, *">
-                <Label Text="Site" />
-                <Label Text="S.Key" />
-                <Label Text="Duct" />
-                <Label Text="Action" />                
-            </Grid>
-            <ListView ItemsSource="{Binding SspTraceList}" >
+
+            <ListView IsVisible="{Binding IsViewing, Mode=TwoWay}"
+                    ItemsSource="{Binding SelectedCableListView}" SelectedItem="{Binding SelectedFromSelCable, Mode=TwoWay}" 
+                      HasUnevenRows="True"
+                      BackgroundColor="Transparent">
+                <ListView.Header>
+                    <Grid ColumnDefinitions="0.1*,*, *,0.3*" Padding="10">
+                        <Label Grid.Column="0" Text="#" />
+                        <Label Grid.Column="1" Text="Site" />                        
+                        <Label Grid.Column="2" Text="Cable" />
+                        <Label Grid.Column="3" Text="S-O" />
+                    </Grid>
+                </ListView.Header>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Padding="10" >
-                                <Grid ColumnDefinitions="*,*,*,*">
-                                    <Label  Text="{Binding FromDuctSite}"/>
-                                    <Label Grid.Column="1" Text="{Binding FromDuctSiteKey}"/>
-                                    <Label Grid.Column="2" Text="{Binding FromDuctKey}"/>
-                                    <Button Text="GET" Command="{Binding GetDataCommand}" />
-                                </Grid>
-                            </StackLayout>
+                            <Grid RowDefinitions="0.2*,0.2" ColumnDefinitions="0.1*,*,*,0.3*" Padding="10">
+                                <Label Grid.Column="0" IsEnabled="False" Text="{Binding AWSid2}" />
+                                <Label Grid.Column="1" IsEnabled="False" Text="{Binding from_site}" />
+                                <Label Grid.Column="2" IsEnabled="False" Text="{Binding cable_id}" />
+                                <Label Grid.Column="3" IsEnabled="False"  Text="{Binding sheath_out}" />
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                
-                
-                
             </ListView>
-        
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

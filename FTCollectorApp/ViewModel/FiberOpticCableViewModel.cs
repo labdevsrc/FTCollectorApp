@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model.Reference;
 using System;
 using System.Collections.Generic;
@@ -25,34 +26,46 @@ namespace FTCollectorApp.ViewModel
 
         public FiberOpticCableViewModel()
         {
+            Session.current_page = "FiberOptic";
             Console.WriteLine();
+        }
 
-            
-            SaveCommand = new Command(
-                execute: async () =>
+
+
+        [ICommand]
+        async void Save()
+        {
+            Console.WriteLine();
+            var KVPair = keyvaluepair();
+            Console.WriteLine();
+            string result = await CloudDBService.PostSaveFiberOpticCable(KVPair);
+            if (result.Equals("OK"))
+            {
+                var choice = await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "TRACE", "DONE");
+                if (choice)
                 {
-                    Console.WriteLine();
-                    var KVPair = keyvaluepair();
-                    Console.WriteLine();
-                    string result = await CloudDBService.PostSaveFiberOpticCable(KVPair);
-                    if (result.Equals("OK"))
-                    {
-                        //await DisplayAlert("Success", "Uploading Data Done", "OK");
-                    }
+                    if (Session.stage.Equals("A"))
+                        await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
+                    if (Session.stage.Equals("I"))
+                        await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Fail", "Uploading Data Fail. Check internet Connection", "RETRY", "DONE");
+            }
+        }
 
-                });
-            SaveBackCommand = new Command(
-                execute: async () =>
-                {
-                    var KVPair = keyvaluepair();
-                    string result = await CloudDBService.PostSaveFiberOpticCable(KVPair);
-                    if (result.Equals("OK"))
-                    {
-                        //await DisplayAlert("Success", "Uploading Data Done", "OK");
-                        await Application.Current.MainPage.Navigation.PopAsync();
-                    }
-
-                });
+        [ICommand]
+        async void SaveBack()
+        {
+            var KVPair = keyvaluepair();
+            string result = await CloudDBService.PostSaveFiberOpticCable(KVPair);
+            if (result.Equals("OK"))
+            {
+                //await DisplayAlert("Success", "Uploading Data Done", "OK");
+                await Application.Current.MainPage.Navigation.PopAsync();
+            }
         }
 
         [ObservableProperty]
@@ -269,8 +282,17 @@ namespace FTCollectorApp.ViewModel
         }
 
         public ICommand ResultCommand { get; set; }
-        public ICommand SaveCommand { get; set; }
-        public ICommand SaveBackCommand { get; set; }
+        //public ICommand SaveCommand { get; set; }
+        //public ICommand SaveBackCommand { get; set; }
+
+        [ICommand]
+        async void ReturnToMain()
+        {
+            if (Session.stage.Equals("A"))
+                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
+            if (Session.stage.Equals("I"))
+                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
+        }
         List<KeyValuePair<string, string>> keyvaluepair()
         {
 

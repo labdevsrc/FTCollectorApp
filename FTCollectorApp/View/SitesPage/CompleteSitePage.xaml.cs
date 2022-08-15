@@ -13,42 +13,58 @@ using Xamarin.Forms.Xaml;
 using FTCollectorApp.Model;
 using PCLStorage;
 using Xamarin.CommunityToolkit.UI.Views;
+using Amazon.S3.Model;
+using FTCollectorApp.Service;
 
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CompleteSitePage : ContentPage
     {
+        private readonly IAmazonS3 _awsS3Client;
+
         public CompleteSitePage()
         {
             InitializeComponent();
             BindingContext = this;
             crewleader.Text = Session.crew_leader;
+            _awsS3Client = new AmazonS3Client(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.GetBySystemName(Constants.BUCKET_REGION));
+        }
+
+        
+        bool isBusy = false;
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                if (isBusy == value)
+                    return;
+                isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+
+        }
+
+
+
+        bool isEnableBtn = true;
+        public bool IsEnableBtn
+        {
+            get => isEnableBtn;
+            set
+            {
+                if (isEnableBtn == value)
+                    return;
+                isEnableBtn = value;
+                OnPropertyChanged(nameof(IsEnableBtn));
+            }
+
         }
 
 
         private async void SaveBtn_Clicked(object sender, EventArgs e)
         {
-
-            IsBusy = true;
-
-            /*try
-            {
-                Console.WriteLine($"Start capture stream from {App.SignatureFileLocation}");
-                Stream image = await signaturePad.GetImageStreamAsync(SignaturePad.Forms.SignatureImageFormat.Png);
-
-                using (FileStream fs = new FileStream(App.SignatureFileLocation, FileMode.Create, FileAccess.Write))
-                {
-                    image.CopyTo(fs);
-
-                }
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine($"Exception {exp.ToString()}");
-
-            }*/
-
 
             ///////////////////////// S3 Bucket  Upload ////////////////////////////
 
@@ -73,19 +89,80 @@ namespace FTCollectorApp.View.SitesPage
                     image.CopyTo(fs);
                 }
 
+                //await fileTransferUtility.UploadAsync(file.Path.ToString(), Constants.BUCKET_NAME);
+
+                IsBusy = true;
+                IsEnableBtn = false;
                 await fileTransferUtility.UploadAsync(file.Path.ToString(), Constants.BUCKET_NAME);
-                //await fileTransferUtility.UploadAsync(App.SignatureFileLocation, Constants.BUCKET_NAME);
+                IsEnableBtn = true;
+                IsBusy = false;
+
+                if (IsFileExists(pictnaming))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Upload OK", pictnaming + "DONE Uploading", "DONE");
+                    var KVPair = keyvaluepair(pictnaming);
+                    await CloudDBService.PostPictureSave(KVPair); // async upload to AWS table
+
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
             }
             catch (Exception exp)
             {
                 Console.WriteLine($"Exception {exp.ToString()}");
+                await Application.Current.MainPage.DisplayAlert("Upload Fail", exp.ToString(), "CONTINUE");
             }
-
-
-
-
-            IsBusy = false;
         }
+        List<KeyValuePair<string, string>> keyvaluepair(string imgfname)
+        {
+            var keyValues = new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+                new KeyValuePair<string, string>("owner_key", Session.ownerkey),
+                new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
+                new KeyValuePair<string, string>("tag", Session.tag_number),  // 2
+                new KeyValuePair<string, string>("fname", imgfname),  // 3
+                new KeyValuePair<string, string>("lattitude", Session.live_lattitude),  // 4
+                new KeyValuePair<string, string>("longitude",  Session.live_longitude),  // 5
+                new KeyValuePair<string, string>("page", Session.current_page),
+            };
+
+
+            return keyValues;
+
+        }
+        public bool IsFileExists(string fileName)
+        {
+            try
+            {
+                GetObjectMetadataRequest request = new GetObjectMetadataRequest()
+                {
+                    BucketName = Constants.BUCKET_NAME,
+                    Key = fileName
+                };
+
+                var response = _awsS3Client.GetObjectMetadataAsync(request).Result;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException is AmazonS3Exception awsEx)
+                {
+                    if (string.Equals(awsEx.ErrorCode, "NoSuchBucket"))
+                        return false;
+
+                    else if (string.Equals(awsEx.ErrorCode, "NotFound"))
+                        return false;
+                }
+
+                throw;
+            }
+        }
+
+
 
         private void ClearBtn_Clicked(object sender, EventArgs e)
         {

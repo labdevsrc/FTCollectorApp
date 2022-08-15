@@ -151,18 +151,13 @@
 
                         </Grid>
 
-                    <Button Text="Record Inner Duct" Command="{Binding SetupInnerDuctCommand}"/>
+                        <Button Text="Record Inner Duct" Command="{Binding RecordInnerCommand}"/>
 
                         <Button Text="Save and Continue" Command="{Binding SaveCommand}"/>
 
                         <Button Text="Finished Duct Recording" Command="{Binding SaveBackCommand}"/>
+                        <Button Text="Return to Main Menu" HorizontalOptions="FillAndExpand"  Command="{Binding ReturnToMainCommand}"/>
 
-
-                    <!--<Button Text="Record Inner Duct" x:Name="btnRecInner" Clicked="btnRecInner_Clicked"/>
-
-                    <Button Text="Save and Continue" x:Name="btnSaveStart" Clicked="btnSaveStart_Clicked"/>
-
-                    <Button Text="Finished Duct Recording" x:Name="btnFinishDRect" Clicked="btnFinishDRect_Clicked"/>-->                    
                     </StackLayout>
 
                 </ScrollView>

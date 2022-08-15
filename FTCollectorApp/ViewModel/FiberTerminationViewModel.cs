@@ -20,6 +20,7 @@ namespace FTCollectorApp.ViewModel
         {
             ShowPopupCommand = new Command(async _ => await ExecuteShowPopupCommand());
             ColorSelectedCommand = new Command(ductcolor => ExecuteColorSelectedCommand(ductcolor as ColorCode));
+            Session.current_page = "FiberOptic";
         }
 
         // color popup implementation - start

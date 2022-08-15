@@ -14,6 +14,9 @@ using Amazon;
 using FTCollectorApp.Model;
 using FTCollectorApp.Utils;
 using PCLStorage;
+using Amazon.S3.Model;
+using Amazon.S3;
+using FTCollectorApp.Service;
 
 namespace FTCollectorApp.View.Utils
 {
@@ -21,11 +24,14 @@ namespace FTCollectorApp.View.Utils
 	{
 		// Note: not all options of the CameraView are on this page, make sure to discover them for yourself!
 		string fullpathFile;
+		private readonly IAmazonS3 _awsS3Client;
 		public CameraViewPage()
 		{
 			InitializeComponent();
 			BindingContext = this;
 			zoomLabel.Text = string.Format("Zoom: {0}", zoomSlider.Value);
+			_awsS3Client = new AmazonS3Client(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.GetBySystemName(Constants.BUCKET_REGION));
+
 		}
 
 		void ZoomSlider_ValueChanged(object? sender, ValueChangedEventArgs e)
@@ -84,13 +90,43 @@ namespace FTCollectorApp.View.Utils
 			zoomSlider.IsEnabled = e;
 		}
 
+
+		bool isBusy = false;
+		public bool IsBusy
+        {
+			get => isBusy;
+            set
+            {
+				if (isBusy == value)
+					return;
+				isBusy = value;
+				OnPropertyChanged(nameof(IsBusy));
+            }
+
+		}
+
+
+		bool isEnableBtn = true;
+		public bool IsEnableBtn
+		{
+			get => isEnableBtn;
+			set
+			{
+				if (isEnableBtn == value)
+					return;
+				isEnableBtn = value;
+				OnPropertyChanged(nameof(IsEnableBtn));
+			}
+
+		}
+
 		async void CameraView_MediaCaptured(object? sender, MediaCapturedEventArgs e)
 		{
-			IsBusy = true;
+
 			var fileTransferUtility = new TransferUtility(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.USEast2);
 			try
 			{
-				var pictnaming = $"{Session.OwnerName}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png";
+				var pictnaming = $"{Session.OwnerName}_{Session.current_page}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png";
 				IFolder rootFolder = FileSystem.Current.LocalStorage;
 				IFolder folder = await rootFolder.CreateFolderAsync("images",
 					CreationCollisionOption.OpenIfExists);
@@ -105,21 +141,85 @@ namespace FTCollectorApp.View.Utils
 				{
 					await fs.WriteAsync(e.ImageData, 0, e.ImageData.Length);
 				}
-
+				
+				IsBusy = true;
+				IsEnableBtn = false;
 				await fileTransferUtility.UploadAsync(file.Path.ToString(), Constants.BUCKET_NAME);
+				IsEnableBtn = true;
+				IsBusy = false;
+
+				if (IsFileExists(pictnaming))
+				{
+					await Application.Current.MainPage.DisplayAlert("Upload OK", pictnaming + "DONE Uploading", "DONE");
+					var KVPair = keyvaluepair(pictnaming);
+					await CloudDBService.PostPictureSave(KVPair); // async upload to AWS table
+				}
+				else
+				{
+					Console.WriteLine();
+				}
 			}
 			catch (Exception exp)
 			{
 				Console.WriteLine($"Exception {exp.ToString()}");
-
+				await Application.Current.MainPage.DisplayAlert("Upload Fail", exp.ToString(), "CONTINUE");
 			}
 
 
-			IsBusy = false;
+
 
 		}
 
-        private void btnCamera(object sender, EventArgs e)
+		List<KeyValuePair<string, string>> keyvaluepair(string imgfname)
+		{
+			var keyValues = new List<KeyValuePair<string, string>>{
+				new KeyValuePair<string, string>("uid", Session.uid.ToString()),
+				new KeyValuePair<string, string>("owner_key", Session.ownerkey),
+				new KeyValuePair<string, string>("OWNER_CD", Session.ownerCD), // 
+                new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),  // 1
+                new KeyValuePair<string, string>("tag", Session.tag_number),  // 2
+                new KeyValuePair<string, string>("fname", imgfname),  // 3
+                new KeyValuePair<string, string>("lattitude", Session.live_lattitude),  // 4
+                new KeyValuePair<string, string>("longitude",  Session.live_longitude),  // 5
+                new KeyValuePair<string, string>("page", Session.current_page),  
+            };
+
+
+			return keyValues;
+
+		}
+
+		public bool IsFileExists(string fileName)
+		{
+			try
+			{
+				GetObjectMetadataRequest request = new GetObjectMetadataRequest()
+				{
+					BucketName = Constants.BUCKET_NAME,
+					Key = fileName
+				};
+
+				var response = _awsS3Client.GetObjectMetadataAsync(request).Result;
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				if (ex.InnerException != null && ex.InnerException is AmazonS3Exception awsEx)
+				{
+					if (string.Equals(awsEx.ErrorCode, "NoSuchBucket"))
+						return false;
+
+					else if (string.Equals(awsEx.ErrorCode, "NotFound"))
+						return false;
+				}
+
+				throw;
+			}
+		}
+
+
+		private void btnCamera(object sender, EventArgs e)
         {
 
         }

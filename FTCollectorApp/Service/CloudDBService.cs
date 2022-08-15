@@ -1143,6 +1143,40 @@ namespace FTCollectorApp.Service
             return "FAIL";
         }
 
+
+        
+        public static async Task<string> PostPictureSave(List<KeyValuePair<string, string>> keyValues)
+        {
+            // this Httpconten will work for Content-type : x-wwww-url-formencoded REST
+            HttpContent content = new FormUrlEncodedContent(keyValues);
+            var json = JsonConvert.SerializeObject(keyValues);
+            Console.WriteLine($"PostDuctTrace Json : {json}");
+            HttpResponseMessage response = null;
+
+            if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+            {
+                try
+                {
+                    //response = await client.PostAsync(Constants.ajaxSaveTraceWire, content);
+
+                    response = await client.PostAsync(Constants.ajaxSavePicture, content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var isi = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"[PostPictureSave]Response from  OK = 200 , content :" + isi);
+                        Session.Result = "PostPictureSaveeOK";
+                        return isi;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Session.Result = "PostPictureSaveFAIL";
+                    return e.ToString();
+                }
+            }
+            return "FAIL";
+        }
         public static async Task<string> PostDuctTrace(List<KeyValuePair<string, string>> keyValues)
         {
             // this Httpconten will work for Content-type : x-wwww-url-formencoded REST

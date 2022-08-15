@@ -106,6 +106,7 @@ namespace FTCollectorApp.ViewModel
                 RdGpstimer.Start();
             }
 
+            Session.current_page = "DuctLocate";
 
         }
 

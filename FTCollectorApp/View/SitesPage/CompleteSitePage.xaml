@@ -4,7 +4,8 @@
              xmlns:forms="clr-namespace:SignaturePad.Forms;assembly=SignaturePad.Forms" 
              x:Class="FTCollectorApp.View.SitesPage.CompleteSitePage">
     <ContentPage.Content>
-        <StackLayout Padding="20">
+        <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout Padding="20" HorizontalOptions="FillAndExpand">
             <Label Padding="20"  FontSize="Large" x:Name="crewleader" HorizontalOptions="Center"/>            
             <Label Padding="20,5,20,20"  FontSize="Large" Text="Signature" HorizontalOptions="Center"/>
             <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
@@ -13,14 +14,23 @@
       StrokeWidth="3"  
       WidthRequest="280"  
       HeightRequest="120"/>
-            <Button x:Name="SaveBtn"  
-                  Text="Save and Continue"  
-                  BackgroundColor="Gray"  
+            <Button x:Name="SaveBtn"  IsEnabled="{Binding IsEnableBtn}" HorizontalOptions="FillAndExpand"
+                  Text="Save and Continue"   
                   Clicked="SaveBtn_Clicked"/>
             <Button x:Name="ClearBtn"  
                   Text="Reset"  
-                  BackgroundColor="Gray"  
                   Clicked="ClearBtn_Clicked"/>
-        </StackLayout>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" 
+                 AbsoluteLayout.LayoutFlags="PositionProportional"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color ="{StaticResource blueColor}"/>
+
+                <Label Text="Uploading..." HorizontalOptions="Center" TextColor="White"/>
+
+            </StackLayout>
+        </AbsoluteLayout>
+        
     </ContentPage.Content>
 </ContentPage>

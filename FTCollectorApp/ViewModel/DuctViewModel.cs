@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using FTCollectorApp.View.SitesPage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model;
 using FTCollectorApp.Service;
 using Newtonsoft.Json;
@@ -120,6 +121,7 @@ namespace FTCollectorApp.ViewModel
             {
                 conn.CreateTable<DuctSession>();
             }
+            Session.current_page = "Duct";
 
         }
         public ICommand SaveCommand { get; set; }
@@ -155,6 +157,21 @@ namespace FTCollectorApp.ViewModel
             Console.WriteLine();
         }
 
+
+        [ICommand]
+        async void ReturnToMain()
+        {
+            if (Session.stage.Equals("A"))
+                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
+            if (Session.stage.Equals("I"))
+                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
+        }
+
+        [ICommand]
+        async void RecordInner()
+        {
+            await Application.Current.MainPage.Navigation.PushAsync(new RecordInnerDuct());
+        }
 
 
         /// get selected color from popup - end
@@ -313,5 +330,7 @@ namespace FTCollectorApp.ViewModel
             return keyValues;
 
         }
+
+
     }
 }

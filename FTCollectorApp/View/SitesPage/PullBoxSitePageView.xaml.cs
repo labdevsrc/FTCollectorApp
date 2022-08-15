@@ -11,13 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace FTCollectorApp.View.SitesPage
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class RecordInnerDuct : ContentPage
+    public partial class PullBoxSitePageView : ContentPage
     {
-        public RecordInnerDuct()
+
+        public PullBoxSitePageView(string minorType, string tagNumber)
         {
             InitializeComponent();
-            BindingContext = new RecordInnerDuctViewModel(); 
+            var MajorMinorType = $"Pull Box - {minorType}";
+            BindingContext = new PullBoxSitePageViewModel(MajorMinorType, tagNumber);
         }
-
     }
 }

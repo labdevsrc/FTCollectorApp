@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model.Reference;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using FTCollectorApp.Service;
 using Newtonsoft.Json;
 using FTCollectorApp.View;
+using FTCollectorApp.Model.AWS;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -28,22 +30,87 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         bool isEntriesDiplayed = true;
 
+        string sheathIn;
+        public string SheathIn
+        {
+            get => sheathIn;
+            set
+            {
+
+                SetProperty(ref sheathIn, value);
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    
+                    conn.CreateTable<a_fiber_segment>();
+                    conn.Update(new a_fiber_segment
+                    {
+                        id = SelectedFromSelCable.id,
+                        AWSid2 = SelectedFromSelCable.AWSid2,
+                        from_site = SelectedFromSelCable.from_site,
+                        sheath_in = value
+                    });
+                    OnPropertyChanged(nameof(SelectedCableListView));
+                    OnPropertyChanged(nameof(SelectedCableList));
+                }
+            }
+        }
+        // Auto Complete for Beginning Tag - Start
         // flag for Hide or show listview 
         [ObservableProperty]
-        bool isSearching = false;
+        bool isSearching1 = false;
+
+        [ObservableProperty]
+        a_fiber_segment selectedFromSelCable;
+
+        a_fiber_segment selectedBeginSite;
+        public a_fiber_segment SelectedBeginSite
+        {
+            get=>selectedBeginSite;
+            
+            set 
+            {
+                Console.WriteLine();
+                SetProperty(ref (selectedBeginSite), value);
+                SearchFromSite = value.from_site;
+                OnPropertyChanged(nameof(SearchFromSite));
+            }
+
+        }
 
 
+        // search bar object
+        string searchFromSite;
+        public string SearchFromSite
+        {
+            get => searchFromSite;
+            set
+            {
+                IsSearching1 = string.IsNullOrEmpty(value) ? false:true;
+                IsEntriesDiplayed = true;
+                SetProperty(ref (searchFromSite), value);
+
+                OnPropertyChanged(nameof(SelectedCableListView));
+                Console.WriteLine(  );
+            }
+        }
+
+        // Auto Complete for Beginning Tag - End
+
+
+        // Auto Complete for End Site Tag - Start
+        [ObservableProperty]
+        bool isSearching2 = false;
         // selected tag num in listview
         ConduitsGroup selectedSiteIn;
         public ConduitsGroup SelectedSiteIn
         {
             get
             {
-                Console.WriteLine(  );
+                Console.WriteLine();
 
                 return selectedSiteIn;
             }
-            set 
+            set
             {
                 Console.WriteLine();
                 SetProperty(ref (selectedSiteIn), value);
@@ -53,8 +120,6 @@ namespace FTCollectorApp.ViewModel
             }
 
         }
-
-
         // search bar object
         string searchTag;
         public string SearchTag
@@ -66,12 +131,12 @@ namespace FTCollectorApp.ViewModel
             }
             set
             {
-                IsSearching = string.IsNullOrEmpty(value) ? false:true;
+                IsSearching2 = string.IsNullOrEmpty(value) ? false : true;
                 IsEntriesDiplayed = true;
                 SetProperty(ref (searchTag), value);
 
-                OnPropertyChanged(nameof(SiteInListView));
-                Console.WriteLine(  );
+                OnPropertyChanged(nameof(EndSiteListView));
+                Console.WriteLine();
             }
         }
 
@@ -99,6 +164,9 @@ namespace FTCollectorApp.ViewModel
 
             }
         }
+        // end of site - end
+        // Auto Complete for End Site Tag - End
+
 
         [ObservableProperty]
         ConduitsGroup toDuct;
@@ -106,8 +174,10 @@ namespace FTCollectorApp.ViewModel
         ObservableCollection<ConduitsGroup> ConduitsGroupListTable;
         ObservableCollection<ColorCode> ColorHextList;
 
-        public ICommand CompleteFiberCommand { get; set; }
-        public ICommand SuspendCommand { get; set; }
+        ObservableCollection<a_fiber_segment> SQLite_a_fiber_segment;
+
+        //public ICommand CompleteFiberCommand { get; set; }
+        //public ICommand SuspendCommand { get; set; }
         public ICommand BrokenTraceWireCommand { get; set; }
         public ICommand DeleteTraceCommand { get; set; }
         public ICommand CreateNewCommand { get; set; }
@@ -125,35 +195,91 @@ namespace FTCollectorApp.ViewModel
 
 
                 conn.CreateTable<ConduitsGroup>();
-                var table1 = conn.Table<ConduitsGroup>().ToList();
+                var table1 = conn.Table<ConduitsGroup>().Where(b => b.OwnerKey  == Session.ownerkey).ToList();
                 ConduitsGroupListTable = new ObservableCollection<ConduitsGroup>(table1);
 
                 conn.CreateTable<ColorCode>();
                 var table2 = conn.Table<ColorCode>().ToList();
                 ColorHextList = new ObservableCollection<ColorCode>(table2);
+
+
+
             }
 
-            CompleteFiberCommand = new Command(ExecuteCompleteFiberCommand);
-            SuspendCommand = new Command(ExecuteSuspendCommand);
+            //CompleteFiberCommand = new Command(ExecuteCompleteFiberCommand);
+            //SuspendCommand = new Command(ExecuteSuspendCommand);
             BrokenTraceWireCommand = new Command(ExecuteBrokenTraceWireCommand);
             DeleteTraceCommand = new Command(ExecuteDeleteTraceCommand);
             CreateNewCommand = new Command(ExecuteCreateNewCommand);
+
+            Session.current_page = "DuctTrace";
         }
 
         void ExecuteCreateNewCommand()
         {
             IsEntriesDiplayed = false;
-            IsSearching = false;
+            IsSearching2 = false;
 
             OnPropertyChanged(nameof(SelectedSiteIn));
             Console.WriteLine();
         }
 
 
+        [ObservableProperty]
+        bool isViewing = false;
+        [ICommand]
+        async void DisplayTraceCables()
+        {
+            IsViewing = !IsViewing;
+        }
+        ///list of SQLite storage
+
+        public ObservableCollection<a_fiber_segment> SelectedCableList
+        {
+            get{
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    //var table = SQLite_a_fiber_segment.Where(a=> a.from_site == BeginningSite).To
+                    conn.CreateTable<a_fiber_segment>();
+                    var table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).ToList();
+                    //var table4 = table3.Where(a => a.from_site == SearchBeginSite);
+
+                    if (SearchFromSite != null)
+                    {
+
+                        table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).Where(i => i.from_site.ToLower().Contains(SearchFromSite.ToLower())).
+                            GroupBy(b => b.from_site).Select(g => g.First()).ToList();
+                    }
+                    return new ObservableCollection<a_fiber_segment>(table);
+                }
+            }
+       }
+
+        public ObservableCollection<a_fiber_segment> SelectedCableListView
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    //var table = SQLite_a_fiber_segment.Where(a=> a.from_site == BeginningSite).To
+                    conn.CreateTable<a_fiber_segment>();
+                    var table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).ToList();
+                    //var table4 = table3.Where(a => a.from_site == SearchBeginSite);
+
+                    if (SearchFromSite != null)
+                    {
+
+                        table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).Where(i => i.from_site.ToLower().Contains(SearchFromSite.ToLower())).
+                            GroupBy(b => b.from_site).Select(g => g.First()).ToList();
+                    }
+                    return new ObservableCollection<a_fiber_segment>(table);
+                }
+            }
+        }
+
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             //Session.GpsPointMaxIdx = (int.Parse(maxGPSpoint?.MaxId) + 1).ToString();
-
             var keyValues = new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>("uid", Session.uid.ToString()),
                 new KeyValuePair<string, string>("time", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
@@ -172,13 +298,11 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("from_site_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
 
             };
-
             return keyValues;
-
         }
 
-
-        async void ExecuteSuspendCommand()
+        [ICommand]
+        async void Suspend()
         {
             Application.Current.Properties[Constants.SavedFromDuctTagNumber] = Session.FromDuct?.HosTagNumber;
             Application.Current.Properties[Constants.SavedFromDuctTagNumberKey] = Session.FromDuct?.ConduitKey;
@@ -224,7 +348,8 @@ namespace FTCollectorApp.ViewModel
             }
         }
         
-        async void ExecuteCompleteFiberCommand()
+        [ICommand]
+        async void CompleteFiber()
         {
             // put to key map before convert to json
             var KVPair = keyvaluepair();
@@ -281,7 +406,7 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
-        public ObservableCollection<ConduitsGroup> SiteInList
+        public ObservableCollection<ConduitsGroup> EndSiteListView
         {
             get
             {
@@ -295,33 +420,26 @@ namespace FTCollectorApp.ViewModel
                     });
 
                     var table = ConduitsGroupListTable.GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
-
-                    temp.AddRange(table);
-
-                    Console.WriteLine();
-                    return new ObservableCollection<ConduitsGroup>(temp);
-                }
-            }
-        }
-
-        public ObservableCollection<ConduitsGroup> SiteInListView
-        {
-            get
-            {
-                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-                {
-
-                    var table = ConduitsGroupListTable.GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
                     if (SearchTag != null)
                     {
                         Console.WriteLine();
                         table = ConduitsGroupListTable.Where(i => i.HosTagNumber.ToLower().Contains(SearchTag.ToLower())).
                             GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
                     }
+                    temp.AddRange(table);
                     Console.WriteLine();
-                    return new ObservableCollection<ConduitsGroup>(table);
+                    return new ObservableCollection<ConduitsGroup>(temp);
                 }
             }
+        }
+
+        [ICommand]
+        async void ReturnToMain()
+        {
+            if (Session.stage.Equals("A"))
+                await Application.Current.MainPage.Navigation.PushAsync(new AsBuiltDocMenu());
+            if (Session.stage.Equals("I"))
+                await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
         }
     }
 

@@ -46,7 +46,7 @@ namespace FTCollectorApp.Model
         public static string gps_offset_bearing { get; set; }
         public static string gps_offset_distance { get; set; }
 
-
+        public static string current_page { get; set; }
         public static string tag_number { get; set; }
         public static string site_key { get; set; }
         public static string site_type_key { get; set; }

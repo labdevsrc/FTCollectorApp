@@ -9,6 +9,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
 using FTCollectorApp.Service;
+using FTCollectorApp.Model.AWS;
+using FTCollectorApp.Model;
+using System.Web;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -17,41 +20,124 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         ConduitsGroup selectedTagNum;
 
+        [ObservableProperty]
+        bool isViewing = false;
 
-        string from_duct_tag;
-        string from_duct_key;
-        public ObservableCollection<SuspendedTrace> SspTraceList;
+
         public ResumeTraceViewModel()
         {
 
-            /*if (Application.Current.Properties.ContainsKey(Constants.SavedFromDuctTagNumber))
+            Session.current_page = "Trace";
+        }
+
+        // Auto Complete for Beginning Tag - Start
+        // flag for Hide or show listview 
+        [ObservableProperty]
+        bool isSearching1 = false;
+
+        [ObservableProperty]
+        a_fiber_segment selectedFromSelCable;
+
+        a_fiber_segment selectedBeginSite;
+        public a_fiber_segment SelectedBeginSite
+        {
+            get => selectedBeginSite;
+
+            set
             {
-                from_duct_tag = (string) Application.Current.Properties[Constants.SavedFromDuctTagNumber];
+                Console.WriteLine();
+                SetProperty(ref (selectedBeginSite), value);
+                SearchFromSite = value.from_site;
+                OnPropertyChanged(nameof(SearchFromSite));
             }
-
-            if (Application.Current.Properties.ContainsKey(Constants.SavedFromDuctTagNumberKey))
-            {
-                from_duct_key = (string) Application.Current.Properties[Constants.SavedFromDuctTagNumberKey];
-            }*/
-
 
         }
 
-        public ObservableCollection<ConduitsGroup> BeginningSiteList
+
+        // search bar object
+        string searchFromSite;
+        public string SearchFromSite
+        {
+            get => searchFromSite;
+            set
+            {
+                IsSearching1 = string.IsNullOrEmpty(value) ? false : true;
+                //IsEntriesDiplayed = true;
+                SetProperty(ref (searchFromSite), value);
+
+                OnPropertyChanged(nameof(FilterCableSite));
+                Console.WriteLine();
+            }
+        }
+
+        // Auto Complete for Beginning Tag - End
+
+
+        public ObservableCollection<a_fiber_segment> FilterCableSite
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    //var table = SQLite_a_fiber_segment.Where(a=> a.from_site == BeginningSite).To
+                    conn.CreateTable<a_fiber_segment>();
+                    var table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).ToList();
+                    //var table4 = table3.Where(a => a.from_site == SearchBeginSite);
+
+                    if (SearchFromSite != null)
+                    {
+
+                        table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).Where(i => i.from_site.ToLower().Contains(SearchFromSite.ToLower())).
+                            GroupBy(b => b.from_site).Select(g => g.First()).ToList();
+                    }
+                    return new ObservableCollection<a_fiber_segment>(table);
+                }
+            }
+        }
+
+        [ObservableProperty]
+        ConduitsGroup selectedDuct;
+
+
+        public ObservableCollection<ConduitsGroup> DuctConduitDatas
         {
             get
             {
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<ConduitsGroup>();
-
-                    var table = conn.Table<ConduitsGroup>().GroupBy(b => b.HosTagNumber).Select(g => g.First()).ToList();
-                    Console.WriteLine("BeginningSite");
+                    
+                    var table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
+                    if (SelectedTagNum?.HosTagNumber != null)
+                    {
+                        table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey).Where(b => b.HosTagNumber == SelectedTagNum.HosTagNumber).ToList();
+                        Console.WriteLine();
+                    }
+                    foreach (var col in table)
+                    {
+                        col.DuctSize = HttpUtility.HtmlDecode(col.DuctSize);
+                        col.WhichDucts = col.Direction + " " + col.DirCnt;
+                    }
+                    Console.WriteLine("DuctConduitDatas ");
                     return new ObservableCollection<ConduitsGroup>(table);
                 }
             }
         }
 
+        public ObservableCollection<a_fiber_segment> SelectedCableListView
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+
+                    conn.CreateTable<a_fiber_segment>();
+                    var table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).ToList();
+
+                    return new ObservableCollection<a_fiber_segment>(table);
+                }
+            }
+        }
 
         [ICommand]
         async void Resume()
@@ -62,16 +148,7 @@ namespace FTCollectorApp.ViewModel
         [ICommand]
         async void ViewSuspended()
         {
-            var suspList = await CloudDBService.GetSuspendedTrace(); //gps_point
-
-            using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
-            {
-                conn.CreateTable<SuspendedTrace>();
-                conn.DeleteAll<SuspendedTrace>();
-                conn.InsertAll(suspList);
-                var table = conn.Table<SuspendedTrace>().ToList();
-                SspTraceList = new ObservableCollection<SuspendedTrace>(table);
-            }
+            IsViewing = !IsViewing;
 
         }
     }

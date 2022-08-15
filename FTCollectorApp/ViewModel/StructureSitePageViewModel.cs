@@ -19,7 +19,7 @@ using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
-    public partial class CabinetSitePageViewModel : ObservableObject
+    public partial class StructureSitePageViewModel : ObservableObject
     {
         [ObservableProperty]
         string siteType;
@@ -87,10 +87,12 @@ namespace FTCollectorApp.ViewModel
         string selectedRackCount;
 
         bool isKeyTypeDisplay;
-        public bool IsKeyTypeDisplay{
-            get =>isKeyTypeDisplay;
-            set{
-                if(IsHasKey.Equals("Yes"))
+        public bool IsKeyTypeDisplay
+        {
+            get => isKeyTypeDisplay;
+            set
+            {
+                if (IsHasKey.Equals("Yes"))
                     SetProperty(ref isKeyTypeDisplay, true);
                 else
                     SetProperty(ref isKeyTypeDisplay, false);
@@ -123,7 +125,7 @@ namespace FTCollectorApp.ViewModel
                 var yesno = new List<string>();
                 yesno.Add("Yes");
                 yesno.Add("No");
-                    Console.WriteLine();
+                Console.WriteLine();
                 return new ObservableCollection<string>(yesno);
             }
         }
@@ -143,7 +145,7 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        public CabinetSitePageViewModel(string siteType, string tagNumber)
+        public StructureSitePageViewModel(string siteType, string tagNumber)
         {
             Console.WriteLine();
             ShowDuctPageCommand = new Command(async () => ExecuteNavigateToDuctPageCommand());
@@ -157,7 +159,6 @@ namespace FTCollectorApp.ViewModel
             SiteType = siteType;
             TagNumber = tagNumber;
             OwnerName = Session.OwnerName;
-            Session.current_page = "Site";
         }
         //public ICommand CompleteSiteCommand { get; set; }
         //public ICommand SaveContinueCommand { get; set; }
@@ -222,7 +223,7 @@ namespace FTCollectorApp.ViewModel
                 using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
                 {
                     conn.CreateTable<Mounting>();
-                    var mountingTable = conn.Table<Mounting>().OrderBy(a => a.MountingType).ToList();
+                    var mountingTable = conn.Table<Mounting>().ToList();
                     return new ObservableCollection<Mounting>(mountingTable);
                 }
             }
@@ -483,6 +484,11 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string installedAt;
 
+        [ObservableProperty]
+        bool isSpliceVault;
+
+        [ObservableProperty]
+        string poleID;
         List<KeyValuePair<string, string>> keyvaluepair()
         {
             /*url: 'ajaxSavecabinet.php',      
@@ -516,6 +522,7 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("manufacturer", SelectedManuf?.ManufName is null ? "" : SelectedManuf.ManufName ),  // manufacturer , for Cabinet, pull box
                 new KeyValuePair<string, string>("manufacturer_key", SelectedManuf?.ManufKey is null ? "" : SelectedManuf.ManufKey ),  // manufacturer , for Cabinet, pull box
+
                 new KeyValuePair<string, string>("manufactured_date", Manufactured),
                 new KeyValuePair<string, string>("mod2", ""), /// model name, Building : x,  Cabinet/Pull Box : o
                 new KeyValuePair<string, string>("pic2", ""),
@@ -554,14 +561,14 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("installed2", InstalledAt),
                 new KeyValuePair<string, string>("comment2", Notes), // Notes, pr description
 
-
-                new KeyValuePair<string, string>("gravel_bottom","" ),
+                new KeyValuePair<string, string>("gravel_bottom",""),
                 new KeyValuePair<string, string>("lid_pieces", ""),
                 new KeyValuePair<string, string>("has_apron", ""),
+                new KeyValuePair<string, string>("rack_count", ""),
 
                 new KeyValuePair<string, string>("etc2", ""),
                 new KeyValuePair<string, string>("fosc2", ""),
-                new KeyValuePair<string, string>("vault2", ""),
+                new KeyValuePair<string, string>("vault2", IsSpliceVault.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("trlane2", ""),
                 new KeyValuePair<string, string>("bucket2", IsBucketTruck.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("serialno", SerialNumber),
@@ -591,7 +598,7 @@ namespace FTCollectorApp.ViewModel
 
 
         [ICommand]
-        async void SaveContinue()
+       async void SaveContinue()
         {
             Console.WriteLine();
             var KVPair = keyvaluepair();
@@ -621,6 +628,7 @@ namespace FTCollectorApp.ViewModel
             await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
         }
 
+
         [ICommand]
         async void ReturnToMain()
         {
@@ -630,4 +638,5 @@ namespace FTCollectorApp.ViewModel
                 await Application.Current.MainPage.Navigation.PushAsync(new MainMenuInstall());
         }
     }
+
 }
