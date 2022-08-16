@@ -159,6 +159,7 @@ namespace FTCollectorApp.ViewModel
             SiteType = siteType;
             TagNumber = tagNumber;
             OwnerName = Session.OwnerName;
+            Session.current_page = "structure";
         }
         //public ICommand CompleteSiteCommand { get; set; }
         //public ICommand SaveContinueCommand { get; set; }

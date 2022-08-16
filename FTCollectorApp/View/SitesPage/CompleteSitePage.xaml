@@ -11,9 +11,7 @@
             <forms:SignaturePadView x:Name="signaturePad"  BackgroundImage="sign_bg.png"
       BackgroundColor="LightGray"  
       StrokeColor="Black"  
-      StrokeWidth="3"  
-      WidthRequest="280"  
-      HeightRequest="120"/>
+      StrokeWidth="3" />
             <Button x:Name="SaveBtn"  IsEnabled="{Binding IsEnableBtn}" HorizontalOptions="FillAndExpand"
                   Text="Save and Continue"   
                   Clicked="SaveBtn_Clicked"/>

@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:FTCollectorApp.Utils"
              x:Class="FTCollectorApp.View.SitesPage.ActiveDevicePage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem  Clicked="btnCamera" IconImageSource="cam_white.png" 
+        <ToolbarItem  IconImageSource="cam_white.png" 
                  Order="Primary"
-                 Priority="0" />
+                 Priority="0" Command="{Binding}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

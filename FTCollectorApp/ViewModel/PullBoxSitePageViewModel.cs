@@ -159,7 +159,7 @@ namespace FTCollectorApp.ViewModel
             SiteType = siteType;
             TagNumber = tagNumber;
             OwnerName = Session.OwnerName;
-            Session.current_page = "Site";
+            Session.current_page = "pullbox";
         }
         public ICommand CompleteSiteCommand { get; set; }
         public ICommand SaveContinueCommand { get; set; }

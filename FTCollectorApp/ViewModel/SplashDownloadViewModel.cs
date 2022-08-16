@@ -30,6 +30,25 @@ namespace FTCollectorApp.ViewModel
             //DisplayAllertCommand?.Execute(null);
         }
 
+        string version = "v0816"; // change here for release
+
+        string apkVersion;
+        public string ApkVersion
+        {
+            get
+            {
+                if (Constants.BaseUrl.Equals(Constants.LiveDBurl))
+                {
+                    return version + "LiveDB";
+                }
+                else if (Constants.BaseUrl.Equals(Constants.TestDBurl))
+                {
+                    return version + "TestDB";
+                }
+                else
+                    return version;
+            }
+        }
 
         public ICommand LoginCommand { get; set; }
         public ICommand DisplayPendingTaskCommand { get; set; }

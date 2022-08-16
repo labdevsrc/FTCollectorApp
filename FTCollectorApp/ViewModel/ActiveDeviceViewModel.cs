@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FTCollectorApp.Model.Reference;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using Newtonsoft.Json;
 using Rg.Plugins.Popup.Services;
 using FTCollectorApp.View;
 using System.Threading.Tasks;
+using FTCollectorApp.View.Utils;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -219,7 +221,7 @@ namespace FTCollectorApp.ViewModel
             UpdateChassisCommand = new Command(() => ExecuteUpdateChassisCommand());
             SendDialogResultCommand = new Command( result => ExecuteSendDialogResultCommand(result as BasicAllertResult));
             Session.RowId = "0"; // reset RowId chassis table
-            Session.current_page = "ActiveDevice";
+            Session.current_page = "active_device";
         }
 
 
@@ -505,6 +507,14 @@ namespace FTCollectorApp.ViewModel
         {
             await Application.Current.MainPage.Navigation.PushAsync(new SlotBladePage());
         }
-        
+
+
+        [ICommand]
+        async void Capture()
+        {
+
+            await Application.Current.MainPage.Navigation.PushAsync(new CameraViewPage());
+        }
+
     }
 }

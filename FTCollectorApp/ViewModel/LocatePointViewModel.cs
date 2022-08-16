@@ -106,7 +106,7 @@ namespace FTCollectorApp.ViewModel
                 RdGpstimer.Start();
             }
 
-            Session.current_page = "DuctLocate";
+            Session.current_page = "duct";
 
         }
 
@@ -147,7 +147,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("tag_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
                 new KeyValuePair<string, string>("duct_from", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
                 new KeyValuePair<string, string>("duct_from_key", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
-                new KeyValuePair<string, string>("cable_id1", Session.Cable1.AFRKey),
+                new KeyValuePair<string, string>("cable_key", Session.Cable1.AFRKey),
                 new KeyValuePair<string, string>("cable_type", Session.Cable1.CableType),
 
                 new KeyValuePair<string, string>("lattitude", Session.lattitude2),

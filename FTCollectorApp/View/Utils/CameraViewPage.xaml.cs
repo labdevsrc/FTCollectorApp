@@ -126,7 +126,7 @@ namespace FTCollectorApp.View.Utils
 			var fileTransferUtility = new TransferUtility(Constants.ACCES_KEY_ID, Constants.SECRET_ACCESS_KEY, RegionEndpoint.USEast2);
 			try
 			{
-				var pictnaming = $"{Session.OwnerName}_{Session.current_page}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png";
+				var pictnaming = $"{Session.OwnerName}_{Session.tag_number}_{Session.current_page}_{Session.lattitude2}_{Session.longitude2}_{DateTime.Now.ToString("yyyy-M-d_HH-mm-ss")}_{Session.ownerkey}.png";
 				IFolder rootFolder = FileSystem.Current.LocalStorage;
 				IFolder folder = await rootFolder.CreateFolderAsync("images",
 					CreationCollisionOption.OpenIfExists);
@@ -150,9 +150,16 @@ namespace FTCollectorApp.View.Utils
 
 				if (IsFileExists(pictnaming))
 				{
-					await Application.Current.MainPage.DisplayAlert("Upload OK", pictnaming + "DONE Uploading", "DONE");
-					var KVPair = keyvaluepair(pictnaming);
-					await CloudDBService.PostPictureSave(KVPair); // async upload to AWS table
+					var result = await Application.Current.MainPage.DisplayAlert("Upload OK", pictnaming + "\nUploading DONE ", "TAKE MORE PICT", "BACK TO PAGE");
+					if (!result)
+					{
+						var KVPair = keyvaluepair(pictnaming);
+						await CloudDBService.PostPictureSave(KVPair); // async upload to AWS table
+						await Application.Current.MainPage.Navigation.PopAsync();
+					}
+					else
+						return;
+
 				}
 				else
 				{

@@ -212,7 +212,7 @@ namespace FTCollectorApp.ViewModel
             DeleteTraceCommand = new Command(ExecuteDeleteTraceCommand);
             CreateNewCommand = new Command(ExecuteCreateNewCommand);
 
-            Session.current_page = "DuctTrace";
+            Session.current_page = "duct";
         }
 
         void ExecuteCreateNewCommand()

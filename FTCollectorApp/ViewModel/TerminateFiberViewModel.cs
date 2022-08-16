@@ -19,6 +19,7 @@ namespace FTCollectorApp.ViewModel
         public TerminateFiberViewModel()
         {
             SaveCommand = new Command(() => ExecuteSaveCommand());
+            Session.current_page = "cable";
         }
 
         private async void ExecuteSaveCommand()

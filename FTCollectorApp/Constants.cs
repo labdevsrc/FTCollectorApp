@@ -9,7 +9,10 @@ namespace FTCollectorApp
     {
         public const bool AutoSyncAWSTables = false;
 
-        public const string BaseUrl = "https://collector.fibertrak.com/FTService/";
+        public const string LiveDBurl = "https://collector.fibertrak.com/FTService/";  //live db
+        public const string TestDBurl = "https://collector.fibertrak.com/testmobile/";  //test db
+        public static string BaseUrl = TestDBurl;
+        
         public const string InsertTimeSheetUrl = "xPostTimesCheck.php";
         public const string GetJobTableUrl = "xamarinJob.php";
         public const string GetEndUserTableUrl = "xamarinLogin.php";
@@ -35,7 +38,7 @@ namespace FTCollectorApp
         public const string ajaxUpdateIpAddr = "ajaxUpdateipaddr.php";
 
 
-        public const string ajaxSavePicture = "ajaxSavePicture.php";
+        public const string ajaxSavepicturename = "ajaxSavepicturename.php";
         public const string ajaxSaveTraceWire = "ajaxSaveTraceWire.php";
         public const string ajaxSaveDuctTrace = "ajaxSaveDuctTrace.php";
         public const string ajaxSaveEndDuctTrace = "ajaxSaveEndDuctTrace.php";

@@ -1159,7 +1159,7 @@ namespace FTCollectorApp.Service
                 {
                     //response = await client.PostAsync(Constants.ajaxSaveTraceWire, content);
 
-                    response = await client.PostAsync(Constants.ajaxSavePicture, content);
+                    response = await client.PostAsync(Constants.ajaxSavepicturename, content);
                     if (response.IsSuccessStatusCode)
                     {
                         var isi = await response.Content.ReadAsStringAsync();

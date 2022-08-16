@@ -107,6 +107,8 @@ namespace FTCollectorApp.View.SitesPage
                 else
                 {
                     Console.WriteLine();
+                   
+                    await Application.Current.MainPage.DisplayAlert("Upload Error", "Picture NOT Found in S3 bucket. Check connection", "CONTINUE");
                 }
             }
             catch (Exception exp)

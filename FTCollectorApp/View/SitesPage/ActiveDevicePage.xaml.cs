@@ -35,7 +35,7 @@ namespace FTCollectorApp.View.SitesPage
 
 
 
-        protected override async void OnAppearing()
+        /*protected override async void OnAppearing()
         {
 
             base.OnAppearing();
@@ -58,7 +58,7 @@ namespace FTCollectorApp.View.SitesPage
         private void btnCamera(object sender, EventArgs e)
         {
             Navigation.PushAsync(new CameraViewPage());
-        }
+        }*/
 
     }
 }

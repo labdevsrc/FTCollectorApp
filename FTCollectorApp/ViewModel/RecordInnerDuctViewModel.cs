@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,6 +7,7 @@ using FTCollectorApp.Model.Reference;
 using System.Collections.ObjectModel;
 using SQLite;
 using FTCollectorApp.Model;
+using Xamarin.Forms;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -24,7 +26,7 @@ namespace FTCollectorApp.ViewModel
         CompassDirection selectedDirection;
 
         [ObservableProperty]
-        string DuctDirNum;
+        string ductDirNum;
 
         [ObservableProperty]
         string selectedDuctSize;
@@ -40,6 +42,18 @@ namespace FTCollectorApp.ViewModel
         
         [ObservableProperty]
         bool inUseIsChecked;
+
+        [ICommand]
+        async void Submit()
+        {
+            await Application.Current.MainPage.DisplayAlert("Page Under Construction", "This button have no activity", "OK");
+        }
+
+        [ICommand]
+        async void Back()
+        {
+            await Application.Current.MainPage.Navigation.PopAsync();
+        }
 
 
         public ObservableCollection<CompassDirection> TravelDirectionList

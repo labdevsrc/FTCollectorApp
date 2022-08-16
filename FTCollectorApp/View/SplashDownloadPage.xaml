@@ -51,7 +51,7 @@
                     </Button.Triggers>
                 </Button>-->
             </StackLayout>
-            <Label VerticalOptions="End" HorizontalOptions="Center" Text="v0815"/>
+            <Label VerticalOptions="End" HorizontalOptions="Center" Text="{Binding ApkVersion}"/>
         </StackLayout>
         
     </ContentPage.Content>

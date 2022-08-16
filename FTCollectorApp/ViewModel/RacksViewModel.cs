@@ -51,7 +51,7 @@ namespace FTCollectorApp.ViewModel
                     IsBusy = false;
                     Console.WriteLine();
                 });
-            Session.current_page = "Racks";
+            Session.current_page = "racks";
         }
 
         void InsertRackNumber()

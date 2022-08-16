@@ -31,6 +31,8 @@ namespace FTCollectorApp.ViewModel
             RefreshBladeKeyListCommand = new Command(() => ExecuteRefreshBladeKeyListCommand());
             ShowPortPageCommand = new Command(async () => ExecuteShowPortPageCommand());
             ShowPortConnPageCommand = new Command(async () => ExecuteShowPortConnPageCommand());
+
+            Session.current_page = "slot";
         }
         
         [ObservableProperty]

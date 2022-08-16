@@ -26,7 +26,7 @@ namespace FTCollectorApp.ViewModel
 
         public FiberOpticCableViewModel()
         {
-            Session.current_page = "FiberOptic";
+            Session.current_page = "cable";
             Console.WriteLine();
         }
 

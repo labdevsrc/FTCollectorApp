@@ -101,6 +101,10 @@ namespace FTCollectorApp.ViewModel
                 SearchCable1 = value.CableIdDesc;
                 //OnPropertyChanged(nameof(DuctConduitDatas));
                 OnPropertyChanged(nameof(SearchCable1));
+
+                // For locate point page, gps_point table
+                Session.Cable1.AFRKey = value.AFRKey;
+                Session.Cable1.CableType = value.CableType;
             }
         }
         [ObservableProperty]
@@ -125,13 +129,17 @@ namespace FTCollectorApp.ViewModel
         AFiberCable selectedCable2;
         public AFiberCable SelectedCable2
         {
-            get => selectedCable1;
+            get => selectedCable2;
             set
             {
                 SetProperty(ref (selectedCable2), value);
                 SearchCable2 = value.CableIdDesc;
                 //OnPropertyChanged(nameof(DuctConduitDatas));
                 OnPropertyChanged(nameof(SearchCable2));
+
+                // For locate point page, gps_point table
+                Session.Cable1.AFRKey = value.AFRKey;
+                Session.Cable1.CableType = value.CableType;
             }
         }
         [ObservableProperty]
@@ -163,6 +171,10 @@ namespace FTCollectorApp.ViewModel
                 SearchCable3 = value.CableIdDesc;
                 //OnPropertyChanged(nameof(DuctConduitDatas));
                 OnPropertyChanged(nameof(SearchCable3));
+
+                // For locate point page, gps_point table
+                Session.Cable1.AFRKey = value.AFRKey;
+                Session.Cable1.CableType = value.CableType;
             }
         }
         [ObservableProperty]
@@ -194,6 +206,10 @@ namespace FTCollectorApp.ViewModel
                 SearchCable4 = value.CableIdDesc;
                 //OnPropertyChanged(nameof(DuctConduitDatas));
                 OnPropertyChanged(nameof(SearchCable4));
+
+                // For locate point page, gps_point table
+                Session.Cable1.AFRKey = value.AFRKey;
+                Session.Cable1.CableType = value.CableType;
             }
         }
         [ObservableProperty]
@@ -223,8 +239,15 @@ namespace FTCollectorApp.ViewModel
             {
                 SetProperty(ref (selectedTagNum), value);
                 SearchTag = value.HosTagNumber;
+                Console.WriteLine("SelectedTagNum");
                 OnPropertyChanged(nameof(DuctConduitDatas));
+                Console.WriteLine("After DuctConduitDatas");
                 OnPropertyChanged(nameof(SearchTag));
+                Console.WriteLine();
+
+                Session.FromDuct.HosTagNumber = value.HosTagNumber;
+                Session.FromDuct.HostSiteKey = value.HostSiteKey;
+                Session.FromDuct.ConduitKey = value.ConduitKey;
             }
         }
 
@@ -295,19 +318,19 @@ namespace FTCollectorApp.ViewModel
 
         public ICommand SaveAndContinueCommand { get; set; }
         //public ICommand SaveLocallyAndContinueCommand { get; set; }
-        public ICommand RemoveCable1Command { get; set; }
+        //public ICommand RemoveCable1Command { get; set; }
 
-        public ICommand RemoveCable2Command { get; set; }
-        public ICommand RemoveCable3Command { get; set; }
-        public ICommand RemoveCable4Command { get; set; }
+        //public ICommand RemoveCable2Command { get; set; }
+        //public ICommand RemoveCable3Command { get; set; }
+        //public ICommand RemoveCable4Command { get; set; }
         public DuctTraceViewModel()
         {
             SaveAndContinueCommand = new Command(ExecuteSaveAndContinueCommand);
             //SaveLocallyAndContinueCommand = new Command(ExecuteSaveLocally);
-            RemoveCable1Command = new Command(ExecuteRemoveCable1Command);
-            RemoveCable2Command = new Command(ExecuteRemoveCable2Command);
-            RemoveCable3Command = new Command(ExecuteRemoveCable3Command);
-            RemoveCable4Command = new Command(ExecuteRemoveCable4Command);
+            //RemoveCable1Command = new Command(ExecuteRemoveCable1Command);
+            //RemoveCable2Command = new Command(ExecuteRemoveCable2Command);
+            //RemoveCable3Command = new Command(ExecuteRemoveCable3Command);
+            //RemoveCable4Command = new Command(ExecuteRemoveCable4Command);
 
 
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
@@ -322,7 +345,9 @@ namespace FTCollectorApp.ViewModel
 
 
             }
-            Session.current_page = "DuctTracer";
+            Session.current_page = "duct";
+
+            
         }
 
         [ICommand]
@@ -337,8 +362,9 @@ namespace FTCollectorApp.ViewModel
             await Application.Current.MainPage.Navigation.PushAsync(new SyncPage());
         }
 
-
-        private void ExecuteRemoveCable1Command()
+        [ICommand]
+        void RemoveCable1()
+        //private void ExecuteRemoveCable1Command()
         {
             SearchCable1 = "";
             //SelectedCable1 = null;
@@ -346,7 +372,9 @@ namespace FTCollectorApp.ViewModel
             SheathMark1 = "";
         }
 
-        private void ExecuteRemoveCable2Command()
+        [ICommand]
+        void RemoveCable2()
+        //private void ExecuteRemoveCable2Command()
         {
             SearchCable2 = "";
             //SelectedCable2 = null;
@@ -354,7 +382,9 @@ namespace FTCollectorApp.ViewModel
             SheathMark2 = "";
         }
 
-        private void ExecuteRemoveCable3Command()
+        [ICommand]
+        void RemoveCable3()
+        //private void ExecuteRemoveCable3Command()
         {
             SearchCable3 = "";
             Console.WriteLine();
@@ -362,7 +392,9 @@ namespace FTCollectorApp.ViewModel
             SheathMark3 = "";
         }
 
-        private void ExecuteRemoveCable4Command()
+        [ICommand]
+        void RemoveCable4()
+        //private void ExecuteRemoveCable4Command()
         {
             SearchCable4 = "";
             //SelectedCable4 = null;
@@ -715,28 +747,6 @@ namespace FTCollectorApp.ViewModel
                     if (SelectedCable1 != null)
                     {
 
-                        /*var test = new a_fiber_segment
-                        {
-                            owner_key = Session.ownerkey,
-                            OWNER_CD = Session.ownerCD,
-                            job = Session.jobnum,
-                            job_key = Session.jobkey,
-                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
-                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
-                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
-                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
-                            stage = Session.stage,
-                            AWSid2 = maxId++,
-                            sheath_out = SheathMark1,
-                            cable_id = SelectedCable1?.CableIdDesc is null ? "" : SelectedCable1.CableIdDesc,
-                            cable_id_key = SelectedCable1?.AFRKey is null ? "" : SelectedCable1.AFRKey,
-                            cable_type = SelectedCable1?.CableType is null ? "" : SelectedCable1.CableType,
-                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            created_by = Session.uid,
-                            SyncStatus = "NOTSYNC"
-                        };*/
                         A_Fiber_Segment.AWSid2 = maxId++;
                         A_Fiber_Segment.sheath_out = SheathMark1;
                         A_Fiber_Segment.cable_id = SelectedCable1?.CableIdDesc is null ? "" : SelectedCable1.CableIdDesc;
@@ -755,28 +765,6 @@ namespace FTCollectorApp.ViewModel
                     // Insert 1 row with Cable2
                     if (SelectedCable2 != null)
                     {
-                        /*var test = new a_fiber_segment
-                        {
-                            owner_key = Session.ownerkey,
-                            OWNER_CD = Session.ownerCD,
-                            job = Session.jobnum,
-                            job_key = Session.jobkey,
-                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
-                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
-                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
-                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
-                            stage = Session.stage,
-                            AWSid2 = maxId++,
-                            sheath_out = SheathMark2,
-                            cable_id = SelectedCable2?.CableIdDesc is null ? "" : SelectedCable2.CableIdDesc,
-                            cable_id_key = SelectedCable2?.AFRKey is null ? "" : SelectedCable2.AFRKey,
-                            cable_type = SelectedCable2?.CableType is null ? "" : SelectedCable2.CableType,
-                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            created_by = Session.uid,
-                            SyncStatus = "NOTSYNC"
-                        };*/
 
                         A_Fiber_Segment.AWSid2 = maxId++;
                         A_Fiber_Segment.sheath_out = SheathMark2;
@@ -797,28 +785,7 @@ namespace FTCollectorApp.ViewModel
                     // Insert 1 row with Cable3
                     if (SelectedCable3 != null)
                     {
-                        /*var test = new a_fiber_segment
-                        {
-                            owner_key = Session.ownerkey,
-                            OWNER_CD = Session.ownerCD,
-                            job = Session.jobnum,
-                            job_key = Session.jobkey,
-                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
-                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
-                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
-                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
-                            stage = Session.stage,
-                            AWSid2 = maxId++,
-                            sheath_out = SheathMark3,
-                            cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc,
-                            cable_id_key = SelectedCable3?.AFRKey is null ? "" : SelectedCable3.AFRKey,
-                            cable_type = SelectedCable3?.CableType is null ? "" : SelectedCable3.CableType,
-                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            created_by = Session.uid,
-                            SyncStatus = "NOTSYNC"
-                        };*/
+
                         A_Fiber_Segment.AWSid2 = maxId++;
                         A_Fiber_Segment.sheath_out = SheathMark3;
                         A_Fiber_Segment.cable_id = SelectedCable3?.CableIdDesc is null ? "" : SelectedCable3.CableIdDesc;
@@ -837,28 +804,7 @@ namespace FTCollectorApp.ViewModel
                     // Insert 1 row with Cable3
                     if (SelectedCable4 != null)
                     {
-                        /*var test = new a_fiber_segment
-                        {
-                            owner_key = Session.ownerkey,
-                            OWNER_CD = Session.ownerCD,
-                            job = Session.jobnum,
-                            job_key = Session.jobkey,
-                            from_site = SelectedTagNum?.HosTagNumber is null ? "0" : SelectedTagNum.HosTagNumber,
-                            from_site_key = SelectedTagNum?.HostSiteKey is null ? "0" : SelectedTagNum.HostSiteKey,
-                            from_site_duct = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            from_site_duct_key = SelectedDuct?.ConduitKey is null ? "0" : SelectedDuct.ConduitKey,
-                            install_method = SelectedDuctInstall?.DuctInstallKey is null ? "0" : SelectedDuctInstall.DuctInstallKey,
-                            uom = selectedUOM?.UOMKey is null ? "0" : selectedUOM.UOMKey,
-                            AWSid2 = maxId++,
-                            sheath_out = SheathMark4,
-                            cable_id = SelectedCable4?.CableIdDesc is null ? "" : SelectedCable4.CableIdDesc,
-                            cable_id_key = SelectedCable4?.AFRKey is null ? "" : SelectedCable4.AFRKey,
-                            cable_type = SelectedCable4?.CableType is null ? "" : SelectedCable4.CableType,
-                            created_on = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                            created_by = Session.uid,
-                            SyncStatus = "NOTSYNC"
-                        };
-                        conn.Insert(test);*/
+
                         A_Fiber_Segment.AWSid2 = maxId++;
                         A_Fiber_Segment.sheath_out = SheathMark4;
                         A_Fiber_Segment.cable_id = SelectedCable4?.CableIdDesc is null ? "" : SelectedCable4.CableIdDesc;
