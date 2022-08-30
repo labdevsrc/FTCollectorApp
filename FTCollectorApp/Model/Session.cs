@@ -57,7 +57,7 @@ namespace FTCollectorApp.Model
         // tracing params at page Duct Trace
         public static string duct_from { get; set; }
         public static string site_from { get; set; }
-
+        public static string show_all { get; set; }
         public static string? GpsPointMaxIdx { get; set; }
         public static string? LocpointnumberEnd { get; set; }
         public static string? LocpointnumberStart { get; set; }

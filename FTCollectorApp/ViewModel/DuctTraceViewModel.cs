@@ -103,8 +103,11 @@ namespace FTCollectorApp.ViewModel
                 OnPropertyChanged(nameof(SearchCable1));
 
                 // For locate point page, gps_point table
-                Session.Cable1.AFRKey = value.AFRKey;
-                Session.Cable1.CableType = value.CableType;
+                Session.Cable1 = new AFiberCable
+                {
+                    AFRKey = value.AFRKey,
+                    CableType = value.CableType
+                };
             }
         }
         [ObservableProperty]
@@ -138,8 +141,11 @@ namespace FTCollectorApp.ViewModel
                 OnPropertyChanged(nameof(SearchCable2));
 
                 // For locate point page, gps_point table
-                Session.Cable1.AFRKey = value.AFRKey;
-                Session.Cable1.CableType = value.CableType;
+                Session.Cable1 = new AFiberCable
+                {
+                    AFRKey = value.AFRKey,
+                    CableType = value.CableType
+                };
             }
         }
         [ObservableProperty]
@@ -173,8 +179,11 @@ namespace FTCollectorApp.ViewModel
                 OnPropertyChanged(nameof(SearchCable3));
 
                 // For locate point page, gps_point table
-                Session.Cable1.AFRKey = value.AFRKey;
-                Session.Cable1.CableType = value.CableType;
+                Session.Cable1 = new AFiberCable
+                {
+                    AFRKey = value.AFRKey,
+                    CableType = value.CableType
+                };
             }
         }
         [ObservableProperty]
@@ -208,8 +217,11 @@ namespace FTCollectorApp.ViewModel
                 OnPropertyChanged(nameof(SearchCable4));
 
                 // For locate point page, gps_point table
-                Session.Cable1.AFRKey = value.AFRKey;
-                Session.Cable1.CableType = value.CableType;
+                Session.Cable1 = new AFiberCable
+                {
+                    AFRKey = value.AFRKey,
+                    CableType = value.CableType
+                };
             }
         }
         [ObservableProperty]
@@ -241,13 +253,20 @@ namespace FTCollectorApp.ViewModel
                 SearchTag = value.HosTagNumber;
                 Console.WriteLine("SelectedTagNum");
                 OnPropertyChanged(nameof(DuctConduitDatas));
-                Console.WriteLine("After DuctConduitDatas");
                 OnPropertyChanged(nameof(SearchTag));
-                Console.WriteLine();
 
-                Session.FromDuct.HosTagNumber = value.HosTagNumber;
-                Session.FromDuct.HostSiteKey = value.HostSiteKey;
-                Session.FromDuct.ConduitKey = value.ConduitKey;
+
+                // populate FromDuct , it wiill be use in Locate point (gps_point table)and in End Trace page (a_fiber_cable)
+                Session.FromDuct = new ConduitsGroup {
+                    ConduitKey = value.ConduitKey,
+                    Direction = value.Direction,
+                    DirCnt = value.DirCnt,
+                    HosTagNumber = value.HosTagNumber,
+                    HostSiteKey = value.HostSiteKey,
+                    HostType = value.HostType,
+                    HostTypeKey = value.HostTypeKey
+                };
+
             }
         }
 

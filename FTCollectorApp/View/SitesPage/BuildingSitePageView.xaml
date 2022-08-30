@@ -151,9 +151,9 @@
 
                     <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
                     <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" />
-                    <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" />
+                    <!--<Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" />-->
                     <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" />
-                    <Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand"  />
+                    <!--<Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand"  />-->
                     <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
                     <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
                     <Button Text="Save and Continue" HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>

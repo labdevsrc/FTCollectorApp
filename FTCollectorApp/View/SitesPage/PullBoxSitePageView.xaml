@@ -66,21 +66,6 @@
                         <local:BorderEntry Grid.Row="1" Grid.Column="2" Text="{Binding SelectedModelDetail.width}" IsEnabled="False"/>
                     </Grid>
                     
-                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
-                        <Label Grid.Row="0" Grid.Column="0"  Text="Lane closure required"/>
-                        <Label Grid.Row="0" Grid.Column="1" Text="Enter the dot disctrict"/>
-                        <Label Grid.Row="0" Grid.Column="2" Text="Has Power disconnect"/>
-                        <local:Dropdown Grid.Row="1" Grid.Column="0" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsLaneClosure, Mode=TwoWay}"/>
-                        <local:Dropdown Grid.Row="1" Grid.Column="1" 
-                                            ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}" />
-                        <local:Dropdown Grid.Row="1" Grid.Column="2" x:Name="pickerHasPowerDisconnect" ItemsSource="{Binding YesNo}" SelectedItem="{Binding IsHasPowerDisconnect, Mode=TwoWay}"/>
-                        <Label Grid.Row="2" Grid.Column="0" Text="Enter electric site key"/>
-                        <Label Grid.Row="2" Grid.Column="1" Text="3rd party comms"/>
-                        <Label Grid.Row="2" Grid.Column="2" Text="Enter Comms provider"/>
-                        <local:Dropdown Grid.Row="3" Grid.Column="0" ItemsSource="{Binding DotDistrict}" SelectedItem="{Binding SelectedElectSiteKey, Mode=TwoWay}"/>
-                        <local:Dropdown Grid.Row="3" Grid.Column="1" ItemsSource="{Binding YesNo}" SelectedItem="{Binding Is3rdComms, Mode=TwoWay}"/>
-                        <local:BorderEntry Grid.Row="3"  Grid.Column="2" Text="{Binding CommsProvider, Mode=TwoWay}"/>
-                    </Grid>
                     <Label Text="Enter Site Street Address" HorizontalOptions="Start"/>
                     <local:BorderEntry Text="{Binding StreetAddress, Mode=TwoWay}"  HorizontalOptions="FillAndExpand"/>
 
@@ -126,7 +111,7 @@
                     <Editor Text="{Binding Notes,Mode=TwoWay}" Placeholder="Enter notes here" 
                                 HorizontalOptions="FillAndExpand" MaxLength="250"   />
 
-                    <Grid Padding="0,5,10,5" RowDefinitions="0.1*,0.2*,0.1*,0.2*,0.1*,0.2*,0.1*,0.2*" ColumnDefinitions="*,*,*">
+                    <Grid Padding="0,5,10,5" RowDefinitions="*,*,*,*,*,*,*,*" ColumnDefinitions="*,*,*">
                         <Label Grid.Row="0" Grid.Column="0" Text="Is Splice Vault?"/>
                         <Label Grid.Row="0" Grid.Column="1" Text="Has Ground Rod"/>
                         <Label Grid.Row="0" Grid.Column="2" Text="Has Key"/>
@@ -182,10 +167,8 @@
                                 SelectedItem="{Binding SelectedOrientation, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
 
                     <Button Text="Record Ducts" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowDuctPageCommand}"/>
-                    <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnFiber" />
-                    <Button Text="Tracer" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnTracer"/>
-                    <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnConnectDevice"/>
-                    <Button Text="Complete This Trace" IsEnabled="False" HorizontalOptions="FillAndExpand" x:Name="btnComplete" />
+                    <Button Text="Fiber" IsEnabled="False" HorizontalOptions="FillAndExpand" />
+                    <Button Text="Connect Devices" IsEnabled="False" HorizontalOptions="FillAndExpand"/>
                     <Button Text="Record Racks" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowRackPageCommand}" />
                     <Button Text="Active Device" IsEnabled="False" HorizontalOptions="FillAndExpand" Command="{Binding ShowActiveDevicePageCommand}"/>
                     <Button Text="Save and Continue" HorizontalOptions="FillAndExpand"  Command="{Binding SaveContinueCommand}"/>

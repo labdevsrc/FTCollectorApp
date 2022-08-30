@@ -58,25 +58,25 @@ namespace FTCollectorApp.ViewModel
         string notes;
 
         [ObservableProperty]
-        string isLaneClosure;
+        string isLaneClosure = "No";
 
         [ObservableProperty]
-        string isHasPowerDisconnect;
+        string isHasPowerDisconnect = "No";
 
         [ObservableProperty]
-        string is3rdComms;
+        string is3rdComms = "No";
 
         [ObservableProperty]
-        string isSiteClearZone;
+        string isSiteClearZone = "No";
 
         [ObservableProperty]
-        string isHaveSunShield;
+        string isHaveSunShield = "No";
 
         [ObservableProperty]
-        string isBucketTruck;
+        string isBucketTruck = "No";
 
         [ObservableProperty]
-        string isHasGround;
+        string isHasGround = "No";
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(IsKeyTypeDisplay))]
@@ -86,7 +86,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string selectedRackCount;
 
-        bool isKeyTypeDisplay;
+        bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay
         {
             get => isKeyTypeDisplay;
@@ -100,7 +100,7 @@ namespace FTCollectorApp.ViewModel
         }
 
         [ObservableProperty]
-        string isInClearZone;
+        string isInClearZone = "No";
         public ObservableCollection<string> DotDistrict
         {
             get
@@ -486,7 +486,7 @@ namespace FTCollectorApp.ViewModel
         string installedAt;
 
         [ObservableProperty]
-        bool isSpliceVault;
+        string isSpliceVault = "No";
 
         [ObservableProperty]
         string poleID;
@@ -598,20 +598,28 @@ namespace FTCollectorApp.ViewModel
         }
 
 
-        [ICommand]
+      [ICommand]
        async void SaveContinue()
-        {
+       {
             Console.WriteLine();
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostSaveBuilding(KVPair);
-            if (result.Equals("OK"))
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
+                var KVPair = keyvaluepair();
+                var result = await CloudDBService.PostSaveBuilding(KVPair);
+                if (result.Equals("OK"))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
 
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception : " + e.ToString());
+                await Application.Current.MainPage.DisplayAlert("Warning", "Data Insert Problem", "BACK");
             }
 
         }

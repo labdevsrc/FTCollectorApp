@@ -8,19 +8,10 @@
 
             <Label Padding="0,20,0,20" Text="Resume Tracer" FontSize="Large" HorizontalOptions="Center" />
             <Label Text="TagNumber" />
-            <Entry Text="{Binding SearchFromSite, Mode=TwoWay}" />
-            <ListView 
-                HasUnevenRows="True" RowHeight="5"
-                IsVisible="{Binding IsSearching1, Mode=TwoWay}"
-                    ItemsSource="{Binding FilterCableSite}" SelectedItem="{Binding SelectedBeginSite, Mode=TwoWay}" 
-                      
-                       BackgroundColor="LightGray">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding from_site}"  />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Picker Grid.Column="0" Grid.Row="7" 
+                                 ItemsSource="{Binding DuctTagList}" 
+                                 ItemDisplayBinding="{Binding from_site}" SelectedItem="{Binding SelectedBeginSite}" />
+            
             <Label Padding="0,20,0,20" Text="Duct" />
             <local:Dropdown Grid.Column="0" Grid.Row="7" 
                                  ItemsSource="{Binding DuctConduitDatas}" 
@@ -28,25 +19,21 @@
                                  SelectedItem="{Binding SelectedDuct,Mode=TwoWay}"
                                  />
             <Label Padding="0,20,0,20" Text="Fiber Cable" />
-            <local:Dropdown Grid.Column="0" Grid.Row="7" 
-                                 ItemsSource="{Binding FilterCableSite}" 
-                                 ItemDisplayBinding="{Binding cable_id}" />
+            <local:BorderColorEntry Text="{Binding DuctTagList.cable_id}" />
+
 
             <Button Padding="10" Text="Resume Tracing" Command="{Binding ResumeCommand}"/>
             <Button Padding="10" Text="View Suspended fiber tracig activity" Command="{Binding ViewSuspendedCommand}"/>
-
+            <Grid ColumnDefinitions="0.1*,*, *,0.3*" Padding="10" IsVisible="{Binding IsViewing, Mode=TwoWay}">
+                <Label Grid.Column="0" Text="#" />
+                <Label Grid.Column="1" Text="Site" />
+                <Label Grid.Column="2" Text="Cable" />
+                <Label Grid.Column="3" Text="S-O" />
+            </Grid>
             <ListView IsVisible="{Binding IsViewing, Mode=TwoWay}"
                     ItemsSource="{Binding SelectedCableListView}" SelectedItem="{Binding SelectedFromSelCable, Mode=TwoWay}" 
                       HasUnevenRows="True"
                       BackgroundColor="Transparent">
-                <ListView.Header>
-                    <Grid ColumnDefinitions="0.1*,*, *,0.3*" Padding="10">
-                        <Label Grid.Column="0" Text="#" />
-                        <Label Grid.Column="1" Text="Site" />                        
-                        <Label Grid.Column="2" Text="Cable" />
-                        <Label Grid.Column="3" Text="S-O" />
-                    </Grid>
-                </ListView.Header>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

@@ -59,25 +59,27 @@ namespace FTCollectorApp.ViewModel
         string notes;
 
         [ObservableProperty]
-        string isLaneClosure;
+        string isLaneClosure = "No";
 
         [ObservableProperty]
-        string isHasPowerDisconnect;
+        string isHasPowerDisconnect = "No";
 
         [ObservableProperty]
-        string is3rdComms;
+        string is3rdComms = "No";
 
         [ObservableProperty]
-        string isSiteClearZone;
+        string isSiteClearZone = "No";
+
 
         [ObservableProperty]
-        string isSpliceVault;
+        string isSpliceVault = "No";
+
 
         [ObservableProperty]
-        string isBucketTruck;
+        string isBucketTruck = "No";
 
         [ObservableProperty]
-        string isHasGround;
+        string isHasGround = "No";
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(IsKeyTypeDisplay))]
@@ -87,7 +89,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string selectedRackCount;
 
-        bool isKeyTypeDisplay;
+        bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay
         {
             get => isKeyTypeDisplay;
@@ -101,7 +103,7 @@ namespace FTCollectorApp.ViewModel
         }
 
         [ObservableProperty]
-        string isInClearZone;
+        string isInClearZone = "No";
         public ObservableCollection<string> DotDistrict
         {
             get
@@ -153,7 +155,7 @@ namespace FTCollectorApp.ViewModel
             ShowActiveDevicePageCommand = new Command(async () => ExecuteNavigateToActiveDevicePageCommand());
             SendResultCommand = new Command(resultPage => ExecuteGetResultCommand(ResultPage));
             CaptureCommand = new Command(ExecuteCaptureCommand);
-            SaveContinueCommand = new Command(ExecuteSaveContinueCommand);
+            //SaveContinueCommand = new Command(ExecuteSaveContinueCommand);
             CompleteSiteCommand = new Command(ExecuteCompleteSiteCommand);
             Console.WriteLine();
             SiteType = siteType;
@@ -162,7 +164,7 @@ namespace FTCollectorApp.ViewModel
             Session.current_page = "pullbox";
         }
         public ICommand CompleteSiteCommand { get; set; }
-        public ICommand SaveContinueCommand { get; set; }
+        //public ICommand SaveContinueCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
         ////////////
         ///
@@ -493,10 +495,10 @@ namespace FTCollectorApp.ViewModel
         string lidPieces = string.Empty;
 
         [ObservableProperty]
-        bool isGravelBottoms;
+        string isGravelBottoms = "No";
 
         [ObservableProperty]
-        bool isHasAppron;
+        string isHasAppron = "No";
 
         List<KeyValuePair<string, string>> keyvaluepair()
         {
@@ -606,19 +608,29 @@ namespace FTCollectorApp.ViewModel
 
 
 
-        async void ExecuteSaveContinueCommand()
+        [ICommand]
+        async void SaveContinue()
         {
             Console.WriteLine();
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostSaveBuilding(KVPair);
-            if (result.Equals("OK"))
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
+                Console.WriteLine();
+                var KVPair = keyvaluepair();
+                var result = await CloudDBService.PostSaveBuilding(KVPair);
+                if (result.Equals("OK"))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
 
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception : " + e.ToString());
+                await Application.Current.MainPage.DisplayAlert("Warning", "Data Insert Problem", "BACK");
             }
 
         }

@@ -18,19 +18,25 @@
     <Compile Remove="ViewModel\FOCViewModel.cs" />
     <Compile Remove="ViewModel\MapViewModel.cs" />
     <Compile Remove="View\ChooseColorPopUp.xaml.cs" />
+    <Compile Remove="View\SitesPage\BuildingSitePage.xaml.cs" />
     <Compile Remove="View\SitesPage\CabinetSitePage.xaml.cs" />
     <Compile Remove="View\SitesPage\Fiber\FiberOpticCable.xaml.cs" />
     <Compile Remove="View\SitesPage\Fiber\MMColorCodePopUp.xaml.cs" />
+    <Compile Remove="View\SitesPage\PullBoxSitePage.xaml.cs" />
     <Compile Remove="View\SitesPage\SiteInputPage.xaml.cs" />
+    <Compile Remove="View\SitesPage\StructureSitePage.xaml.cs" />
     <Compile Remove="View\StartTimePopUpViewNew.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="View\ChooseColorPopUp.xaml" />
+    <EmbeddedResource Remove="View\SitesPage\BuildingSitePage.xaml" />
     <EmbeddedResource Remove="View\SitesPage\CabinetSitePage.xaml" />
     <EmbeddedResource Remove="View\SitesPage\Fiber\FiberOpticCable.xaml" />
     <EmbeddedResource Remove="View\SitesPage\Fiber\MMColorCodePopUp.xaml" />
+    <EmbeddedResource Remove="View\SitesPage\PullBoxSitePage.xaml" />
     <EmbeddedResource Remove="View\SitesPage\SiteInputPage.xaml" />
+    <EmbeddedResource Remove="View\SitesPage\StructureSitePage.xaml" />
     <EmbeddedResource Remove="View\StartTimePopUpViewNew.xaml" />
   </ItemGroup>
 
@@ -100,9 +106,6 @@
     <EmbeddedResource Update="View\SitesPage\ActiveDevicePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\SitesPage\BuildingSitePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="View\EqCheckInPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -154,9 +157,6 @@
     <EmbeddedResource Update="View\SitesPage\PortPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\SitesPage\PullBoxSitePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\PullBoxSitePageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -167,9 +167,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\SitesPage\SlotBladePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\SitesPage\StructureSitePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\SplashDownloadPage.xaml">

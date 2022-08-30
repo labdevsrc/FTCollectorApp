@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FTCollectorApp.Model;
+using FTCollectorApp.Model.Reference;
 using FTCollectorApp.Service;
 using FTCollectorApp.Utils;
 using FTCollectorApp.View;
@@ -61,6 +62,11 @@ namespace FTCollectorApp.ViewModel
         [AlsoNotifyChangeFor(nameof(JobNumbers))]
         Job selectedJobOwner;
 
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(JobNumbers))]
+        Owner selectedOwner;
+
         public ObservableCollection<Job> JobsByOwner
         {
             get
@@ -76,6 +82,24 @@ namespace FTCollectorApp.ViewModel
             }
         }
 
+        public ObservableCollection<Owner> OwnerList
+        {
+            get
+            {
+                Console.WriteLine();
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    conn.CreateTable<Owner>();
+                    var jobdetails = conn.Table<Owner>().ToList();
+                    Console.WriteLine();
+                    var ownerNames = jobdetails.Where(a => a.EndUserKey == Session.uid.ToString() || a.AltOwnerKey == Session.uid.ToString()).GroupBy(b => b.OwnerName).Select(g => g.First()).ToList();
+                    Console.WriteLine();
+                    return new ObservableCollection<Owner>(ownerNames);
+                }
+            }
+        }
+
+
         public ObservableCollection<Job> JobNumbers
         {
             get
@@ -87,9 +111,9 @@ namespace FTCollectorApp.ViewModel
                     var table = conn.Table<Job>().ToList();
                     // add "?" to make an object nullable.
                     // without nullable var, it will raise exception when it is null value
-                    if (SelectedJobOwner?.OwnerName != null){
+                    if (SelectedOwner?.OwnerName != null){
                         Console.WriteLine();
-                        table = conn.Table<Job>().Where(a => a.OwnerName == SelectedJobOwner.OwnerName).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
+                        table = conn.Table<Job>().Where(a => a.OwnerName == SelectedOwner.OwnerName).GroupBy(b => b.JobNumber).Select(g => g.First()).ToList();
                         Console.WriteLine();
                     }
                     return new ObservableCollection<Job>(table);

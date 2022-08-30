@@ -58,25 +58,25 @@ namespace FTCollectorApp.ViewModel
         string notes;
 
         [ObservableProperty]
-        string isLaneClosure;
+        string isLaneClosure = "No";
 
         [ObservableProperty]
-        string isHasPowerDisconnect;
+        string isHasPowerDisconnect = "No";
 
         [ObservableProperty]
-        string is3rdComms;
+        string is3rdComms = "No";
 
         [ObservableProperty]
-        string isSiteClearZone;
+        string isSiteClearZone = "No";
 
         [ObservableProperty]
-        string isHaveSunShield;
+        string isHaveSunShield = "No";
 
         [ObservableProperty]
-        string isBucketTruck;
+        string isBucketTruck = "No";
 
         [ObservableProperty]
-        string isHasGround;
+        string isHasGround = "No";
 
         [ObservableProperty]
         [AlsoNotifyChangeFor(nameof(IsKeyTypeDisplay))]
@@ -86,7 +86,7 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         string selectedRackCount;
 
-        bool isKeyTypeDisplay;
+        bool isKeyTypeDisplay = false;
         public bool IsKeyTypeDisplay{
             get =>isKeyTypeDisplay;
             set{
@@ -98,7 +98,7 @@ namespace FTCollectorApp.ViewModel
         }
 
         [ObservableProperty]
-        string isInClearZone;
+        string isInClearZone = "No";
         public ObservableCollection<string> DotDistrict
         {
             get
@@ -524,7 +524,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("pid", ""),
                 new KeyValuePair<string, string>("loct", ""),
                 new KeyValuePair<string, string>("staddr", StreetAddress), // site_address
-                new KeyValuePair<string, string>("pscode", PostalCode),
+                new KeyValuePair<string, string>("pscode", PostalCode), // break point 1
 
                 new KeyValuePair<string, string>("btype", SelectedBuilding?.BuildingTypeKey is null ? "":SelectedBuilding.BuildingTypeKey),
                 new KeyValuePair<string, string>("orientation", SelectedOrientation?.CompasKey is null ? "" : SelectedOrientation.CompasKey),
@@ -532,7 +532,7 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("laneclosure", IsLaneClosure.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("dotdis",  SelectedDistrict is null ? "" : SelectedDistrict),
                 new KeyValuePair<string, string>("powr", IsHasPowerDisconnect.Equals("Yes") ? "1":"0"),
-                new KeyValuePair<string, string>("elecsite", SelectedElectSiteKey),
+                new KeyValuePair<string, string>("elecsite", SelectedElectSiteKey is null ? "" : SelectedElectSiteKey),
                 new KeyValuePair<string, string>("comm", Is3rdComms.Equals("Yes") ? "1":"0"),
                 new KeyValuePair<string, string>("commprovider", CommsProvider),
                 new KeyValuePair<string, string>("sitaddr", StreetAddress), // site_street_addres
@@ -540,9 +540,6 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("rs2", "L"),
 
-                //new KeyValuePair<string, string>("height2", entryHeight.Text),
-                //new KeyValuePair<string, string>("depth2", entryDepth.Text),
-                //new KeyValuePair<string, string>("width2", entryWidth.Text),
                 new KeyValuePair<string, string>("CLEAR_ZONE_IND2", IsSiteClearZone.Equals("Yes") ? "1":"0"),
 
                 new KeyValuePair<string, string>("intersect2", SelectedIntersection?.IntersectionKey is null ? "": SelectedIntersection.IntersectionKey),
@@ -581,7 +578,7 @@ namespace FTCollectorApp.ViewModel
 
                 new KeyValuePair<string, string>("plansheet","0"),
                 new KeyValuePair<string, string>("psitem","0"),
-                new KeyValuePair<string, string>("stage", Session.stage),
+                new KeyValuePair<string, string>("stage", Session.stage)
             };
 
 
@@ -594,17 +591,27 @@ namespace FTCollectorApp.ViewModel
         async void SaveContinue()
         {
             Console.WriteLine();
-            var KVPair = keyvaluepair();
-            var result = await CloudDBService.PostSaveBuilding(KVPair);
-            if (result.Equals("OK"))
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
+                var KVPair = keyvaluepair();
+                var result = await CloudDBService.PostSaveBuilding(KVPair);
+                Console.WriteLine();
+                if (result.Equals("OK"))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Uploading Data Done", "OK");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Warning", result, "RETRY");
 
+                }
             }
+            catch(Exception e)
+            {
+                Console.WriteLine("Exception : "+ e.ToString());
+                await Application.Current.MainPage.DisplayAlert("Warning", "Data Insert Problem", "BACK");
+            }
+
 
         }
 

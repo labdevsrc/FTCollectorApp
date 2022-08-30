@@ -30,8 +30,8 @@
             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Owner*"/>
             <Label Grid.Row="1"  Grid.Column="2" Text="Job Number*"/>
             <Picker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                ItemsSource="{Binding JobsByOwner}" ItemDisplayBinding="{Binding OwnerName}" 
-                            SelectedItem="{Binding SelectedJobOwner, Mode=TwoWay}" TextColor="Black" />
+                ItemsSource="{Binding OwnerList}" ItemDisplayBinding="{Binding OwnerName}" 
+                            SelectedItem="{Binding SelectedOwner, Mode=TwoWay}" TextColor="Black" />
             <Picker Grid.Row="2" Grid.Column="2" 
                 ItemsSource="{Binding JobNumbers}" ItemDisplayBinding="{Binding JobNumber}" 
                             SelectedItem="{Binding SelectedJob, Mode=TwoWay}" TextColor="Black" />

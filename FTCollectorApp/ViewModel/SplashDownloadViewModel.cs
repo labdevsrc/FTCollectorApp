@@ -30,7 +30,7 @@ namespace FTCollectorApp.ViewModel
             //DisplayAllertCommand?.Execute(null);
         }
 
-        string version = "v0816"; // change here for release
+        string version = "v0824"; // change here for release
 
         string apkVersion;
         public string ApkVersion
@@ -254,6 +254,11 @@ namespace FTCollectorApp.ViewModel
                     conn.DeleteAll<GpsPoint>();
                     conn.InsertAll(max_gps_point);
 
+
+                    conn.CreateTable<Owner>();
+                    conn.DeleteAll<Owner>();
+                    conn.InsertAll(contentOwner);
+                    
 
                     conn.CreateTable<CodeLocatePoint>();
                     conn.DeleteAll<CodeLocatePoint>();

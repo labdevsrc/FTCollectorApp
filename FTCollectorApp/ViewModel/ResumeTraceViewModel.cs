@@ -12,6 +12,7 @@ using FTCollectorApp.Service;
 using FTCollectorApp.Model.AWS;
 using FTCollectorApp.Model;
 using System.Web;
+using FTCollectorApp.View.TraceFiberPages;
 
 namespace FTCollectorApp.ViewModel
 {
@@ -38,7 +39,12 @@ namespace FTCollectorApp.ViewModel
         [ObservableProperty]
         a_fiber_segment selectedFromSelCable;
 
+
+        [ObservableProperty]
+        [AlsoNotifyChangeFor(nameof(DuctConduitDatas))]
         a_fiber_segment selectedBeginSite;
+
+        /*a_fiber_segment selectedBeginSite;
         public a_fiber_segment SelectedBeginSite
         {
             get => selectedBeginSite;
@@ -93,11 +99,53 @@ namespace FTCollectorApp.ViewModel
                     return new ObservableCollection<a_fiber_segment>(table);
                 }
             }
+        }*/
+
+        public ObservableCollection<a_fiber_segment> DuctTagList
+        {
+            get
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
+                {
+                    //var table = SQLite_a_fiber_segment.Where(a=> a.from_site == BeginningSite).To
+                    conn.CreateTable<a_fiber_segment>();
+                    var table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).
+                        GroupBy(b => b.from_site).Select(g => g.First()).ToList();
+ 
+                    /*if (SearchFromSite != null)
+                    {
+
+                        table = conn.Table<a_fiber_segment>().Where(b => b.owner_key == Session.ownerkey).Where(i => i.from_site.ToLower().Contains(SearchFromSite.ToLower())).
+                            GroupBy(b => b.from_site).Select(g => g.First()).ToList();
+                    }*/
+                    return new ObservableCollection<a_fiber_segment>(table);
+                }
+            }
         }
 
-        [ObservableProperty]
+
+        
         ConduitsGroup selectedDuct;
 
+        public ConduitsGroup SelectedDuct {
+            get => selectedDuct;
+            set
+            {
+                SetProperty(ref (selectedDuct), value);
+                // populate FromDuct , it wiill be use in Locate point (gps_point table)and in End Trace page (a_fiber_cable)
+                Console.WriteLine();
+                Session.FromDuct = new ConduitsGroup
+                {
+                    ConduitKey = value.ConduitKey,
+                    Direction = value.Direction,
+                    DirCnt = value.DirCnt,
+                    HosTagNumber = value.HosTagNumber,
+                    HostSiteKey = value.HostSiteKey,
+                    HostType = value.HostType,
+                    HostTypeKey = value.HostTypeKey
+                };
+            }
+    }
 
         public ObservableCollection<ConduitsGroup> DuctConduitDatas
         {
@@ -108,9 +156,9 @@ namespace FTCollectorApp.ViewModel
                     conn.CreateTable<ConduitsGroup>();
                     
                     var table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey).ToList();
-                    if (SelectedTagNum?.HosTagNumber != null)
+                    if (SelectedBeginSite?.from_site != null)
                     {
-                        table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey).Where(b => b.HosTagNumber == SelectedTagNum.HosTagNumber).ToList();
+                        table = conn.Table<ConduitsGroup>().Where(a => a.OwnerKey == Session.ownerkey).Where(b => b.HosTagNumber == SelectedBeginSite.from_site).ToList();
                         Console.WriteLine();
                     }
                     foreach (var col in table)
@@ -142,11 +190,12 @@ namespace FTCollectorApp.ViewModel
         [ICommand]
         async void Resume()
         {
-
+            await Application.Current.MainPage.Navigation.PushAsync(new LocatePointPage());
+            //await Application.Current.MainPage.Navigation.PushAsync(new LocatePointPage());
         }
 
         [ICommand]
-        async void ViewSuspended()
+        void ViewSuspended()
         {
             IsViewing = !IsViewing;
 

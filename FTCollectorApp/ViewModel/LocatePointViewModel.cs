@@ -20,14 +20,15 @@ namespace FTCollectorApp.ViewModel
     public partial class LocatePointViewModel : ObservableObject
     {
 
-        string accuracy;
+        string gPSAccuracy;
         public string GPSAccuracy
         {
-            get => location.Accuracy.ToString();
+            get => LocationService.Coords.Accuracy.ToString();
             set
             {
-                SetProperty(ref accuracy, value);
+                SetProperty(ref (gPSAccuracy), value);
             }
+            
         }
 
 
@@ -61,16 +62,18 @@ namespace FTCollectorApp.ViewModel
         public ICommand FinishCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
 
-        GpsPoint? maxGPSpoint;
+        GpsPoint maxGPSpoint;
         int LocPointNumber = 0;
         ReadGPSTimer RdGpstimer;
 
         public LocatePointViewModel()
         {
 
-            // Get accuracy
-            location = LocationService.Coords;
 
+            maxGPSpoint = new GpsPoint
+            {
+                MaxId = "1"
+            };
 
             CaptureCommand = new Command(() => ExecuteCaptureCommand());
             FinishCommand = new Command(() => ExecuteFinishCommand());
@@ -81,11 +84,11 @@ namespace FTCollectorApp.ViewModel
             using (SQLiteConnection conn = new SQLiteConnection(App.DatabaseLocation))
             {
                 conn.CreateTable<GpsPoint>();
-                maxGPSpoint = conn.Table<GpsPoint>().First();
-
-                // compare with from gps_point MAX(id)
-                if (int.Parse(maxGPSpoint?.MaxId) != int.Parse(Session.GpsPointMaxIdx))
+                maxGPSpoint = conn.Table<GpsPoint>().First(); // table gps_point only contain single row
+                if (int.Parse(maxGPSpoint.MaxId) < int.Parse(Session.GpsPointMaxIdx))
                     maxGPSpoint.MaxId = Session.GpsPointMaxIdx;
+                // compare with from gps_point MAX(id)
+
 
                 LocPointNumber = int.Parse(Session.GpsPointMaxIdx) + 1;
 
@@ -117,12 +120,13 @@ namespace FTCollectorApp.ViewModel
                 await LocationService.GetLocation();
 
                 Session.accuracy = String.Format("{0:0.######}", LocationService.Coords.Accuracy);
-                //Session.longitude2 = String.Format("{0:0.######}", LocationService.Coords.Longitude);
-                //Session.lattitude2 = String.Format("{0:0.######}", LocationService.Coords.Latitude);
+
                 Session.live_longitude = String.Format("{0:0.######}", LocationService.Coords.Longitude);
                 Session.live_lattitude = String.Format("{0:0.######}", LocationService.Coords.Latitude);
                 Session.altitude = String.Format("{0:0.######}", LocationService.Coords.Altitude);
-                //{ String.Format("{0:0.#######}", _location.Latitude.ToString())}
+
+                OnPropertyChanged(nameof(GPSAccuracy));
+
             }
             catch(Exception e)
             {
@@ -147,8 +151,8 @@ namespace FTCollectorApp.ViewModel
                 new KeyValuePair<string, string>("tag_from_key", Session.FromDuct?.HostSiteKey is null ? "0" :Session.FromDuct.HostSiteKey ),
                 new KeyValuePair<string, string>("duct_from", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
                 new KeyValuePair<string, string>("duct_from_key", Session.FromDuct?.ConduitKey is null ? "0" :Session.FromDuct.ConduitKey ),
-                new KeyValuePair<string, string>("cable_key", Session.Cable1.AFRKey),
-                new KeyValuePair<string, string>("cable_type", Session.Cable1.CableType),
+                new KeyValuePair<string, string>("cable_key", Session.Cable1?.AFRKey is null ? "0" : Session.Cable1.AFRKey),
+                new KeyValuePair<string, string>("cable_type", Session.Cable1?.CableType is null ? "0" : Session.Cable1.CableType),
 
                 new KeyValuePair<string, string>("lattitude", Session.lattitude2),
                 new KeyValuePair<string, string>("longitude", Session.longitude2),

@@ -16,7 +16,14 @@ namespace FTCollectorApp.View.TraceFiberPages
         public LocatePointPage()
         {
             InitializeComponent();
-            BindingContext = new LocatePointViewModel();
+            try
+            {
+                BindingContext = new LocatePointViewModel();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }
